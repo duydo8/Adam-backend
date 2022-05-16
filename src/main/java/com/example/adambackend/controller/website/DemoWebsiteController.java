@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoWebsiteController {
     @GetMapping("/user")
     public String user() {
-        return "User Board.";
+        return "Welcome to user";
     }
     @GetMapping("/auth")
     public String auth(){
