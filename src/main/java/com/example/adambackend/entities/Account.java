@@ -3,9 +3,12 @@ package com.example.adambackend.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 @Data
 @AllArgsConstructor
@@ -33,5 +36,11 @@ public class Account {
         this.email = email;
         this.password = password;
     }
+    @OneToMany(mappedBy = "account")
+    @ToString.Exclude
+    List<Address> addresses= new ArrayList<>();
+    @OneToMany(mappedBy = "account")
+    @ToString.Exclude
+    List<Comment> comments= new ArrayList<>();
 
 }

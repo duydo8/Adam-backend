@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class SignUpRequest {
     private String username;
     private String email;
