@@ -1,17 +1,17 @@
 package com.example.adambackend.payload.request;
 
+import com.example.adambackend.enums.ERoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignUpRequest {
     private String username;
     private String email;
-    private Set<String> role;
+    private String roleName;
     private String password;
 
 }

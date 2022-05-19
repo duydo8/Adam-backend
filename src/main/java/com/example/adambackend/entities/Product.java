@@ -20,12 +20,17 @@ public class Product {
     private Long id;
     private String productName;
     private String description;
-    private boolean delete;
+    private boolean isDelete;
+    private String image;
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
-    private String image;
-    @OneToMany(mappedBy = "account")
-    @ToString.Exclude
+
+    @OneToMany(mappedBy = "product")
     List<Comment> comments= new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    List<Favorite> favorites= new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    List<DetailProduct> detailProducts= new ArrayList<>();
+
 }

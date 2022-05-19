@@ -1,11 +1,8 @@
 package com.example.adambackend.payload.response;
 
-import lombok.AllArgsConstructor;
+import com.example.adambackend.enums.ERoleName;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import java.util.List;
 @Data
 
 public class JwtResponse {
@@ -14,10 +11,10 @@ public class JwtResponse {
     private Long id;
     private String username;
     private String email;
-    private List<String> roles;
+    private String roles;
 
 
-    public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+    public JwtResponse(String accessToken, Long id, String username, String email, String roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;

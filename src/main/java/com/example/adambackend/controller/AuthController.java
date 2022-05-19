@@ -2,13 +2,14 @@ package com.example.adambackend.controller;
 
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.entities.Role;
+
+
+import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
 import com.example.adambackend.payload.request.SignUpRequest;
 import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.payload.response.MessageResponse;
 import com.example.adambackend.repository.AccountRepository;
-import com.example.adambackend.repository.RoleRepository;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.service.impl.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,7 @@ public class AuthController {
     @Autowired
     AccountRepository accountRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+
 
     @Autowired
     PasswordEncoder encoder;
@@ -54,9 +54,9 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        String roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority()).toString();
+
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -82,39 +82,15 @@ public class AuthController {
 
         Account account = new Account(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByRoleName("User")
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByRoleName("Admin")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "user":
-                        Role userRole = roleRepository.findByRoleName("User")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-
-                        break;
-                    default:
-                        Role guest = roleRepository.findByRoleName("Guest")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(guest);
-                }
-            });
+                encoder.encode(signUpRequest.getPassword())
+                 );
+        if(signUpRequest.getRoleName().equals(ERoleName.Admin)){
+            account.setRoleName(ERoleName.Admin);
+        }else{
+            account.setRoleName(ERoleName.User);
         }
 
-        account.setRoles(roles);
+
        Account account1= accountRepository.save(account);
 
         return ResponseEntity.ok().body(account1);

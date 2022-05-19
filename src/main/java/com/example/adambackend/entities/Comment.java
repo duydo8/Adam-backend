@@ -20,7 +20,6 @@ public class Comment {
     private Long id;
     private String content;
     @Column(name="time_create")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timeCreated;
     @ManyToOne
     @JoinColumn(name="account_id")

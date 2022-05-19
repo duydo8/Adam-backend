@@ -17,7 +17,10 @@ public class DetailProduct {
     private Long id;
     private int quantity;
     private Double price;
+    @Column(name="is_delete")
     private Boolean isDelete;
+    @Column(name="product_image")
+    private String productImage;
     @ManyToOne
     @JoinColumn(name="product_id")
     private Product product;
@@ -27,7 +30,9 @@ public class DetailProduct {
     @ManyToOne
     @JoinColumn(name="size_id")
     private Size size;
+
     @ManyToOne
-    @JoinColumn(name="product_image_id")
-    private ProductImage productImage;
+    @JoinColumn(name="detail_order_id")
+    private DetailOrder detailOrder;
+
 }

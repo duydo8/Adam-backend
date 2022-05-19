@@ -25,6 +25,5 @@ public class Category {
     @Column(name="category_parent_id")
     private int categoryParentId;
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
-    @ToString.Exclude
     List<Product> products= new ArrayList<>();
 }

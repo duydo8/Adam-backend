@@ -21,6 +21,6 @@ public class Color {
     @Column(name="color_name")
     private  String colorName;
     @OneToMany(mappedBy = "color",cascade = CascadeType.ALL)
-    @ToString.Exclude
+
     private List<DetailProduct> detailProducts= new ArrayList<>();
 }
