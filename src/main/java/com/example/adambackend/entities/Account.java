@@ -4,7 +4,6 @@ import com.example.adambackend.enums.ERoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,15 +33,17 @@ public class Account {
     }
     @OneToMany(mappedBy = "account")
 
-    List<Address> addresses= new ArrayList<>();
+    List<Address> addresses = new ArrayList<>();
     @OneToMany(mappedBy = "account")
 
-    List<Comment> comments= new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "account")
 
-    List<Favorite> favorites= new ArrayList<>();
+    List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "account")
 
-    List<CartItems> cartItems= new ArrayList<>();
+    List<CartItems> cartItems = new ArrayList<>();
+    @OneToMany(mappedBy = "account")
+    List<Order> orders = new ArrayList<>();
 
 }

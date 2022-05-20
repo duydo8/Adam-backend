@@ -10,19 +10,20 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="favorites")
 @Entity
-public class Favorite {
+@Table(name="events")
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="time_create")
-    private LocalDateTime time_create;
-    @ManyToOne
-    @JoinColumn(name="account_id")
-    private Account account;
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
+    @Column(name="name_event")
+    private String nameEvent;
+    @Column(name="start_time")
+    private LocalDateTime startTime;
+    @Column(name="end_time")
+    private LocalDateTime endTime;
+    private Boolean status;
+    @Column(name="is_delete")
+    private Boolean isDelete;
 
 }

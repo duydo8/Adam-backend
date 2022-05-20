@@ -1,8 +1,8 @@
 package com.example.adambackend.service.impl;
 
-import com.example.adambackend.service.RoleService;
+import com.example.adambackend.service.TagService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class TagServiceImpl implements TagService {
 }

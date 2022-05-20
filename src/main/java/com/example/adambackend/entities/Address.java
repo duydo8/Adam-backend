@@ -23,5 +23,4 @@ public class Address {
     @ManyToOne
     @JoinColumn(name="account_id")
     private Account account;
-
 }

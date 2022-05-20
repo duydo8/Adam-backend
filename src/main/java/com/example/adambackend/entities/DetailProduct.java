@@ -23,21 +23,19 @@ public class DetailProduct {
     private Boolean isDelete;
     @Column(name="product_image")
     private String productImage;
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
-    @ManyToOne
-    @JoinColumn(name="color_id")
-    private Color color;
-    @ManyToOne
-    @JoinColumn(name="size_id")
-    private Size size;
-
-    @ManyToOne
-    @JoinColumn(name="detail_order_id")
-    private DetailOrder detailOrder;
     @OneToMany(mappedBy = "detailProduct")
 
-    List<CartItems> cartItems= new ArrayList<>();
+    List<CartItems> cartItems = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "color_id")
+    private Color color;
+    @ManyToOne
+    @JoinColumn(name = "size_id")
+    private Size size;
+    @OneToMany(mappedBy = "detailProduct")
+    private List<DetailOrder> detailOrders= new ArrayList<>();
 
 }

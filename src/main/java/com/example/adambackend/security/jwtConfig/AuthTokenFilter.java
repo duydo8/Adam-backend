@@ -1,6 +1,6 @@
 package com.example.adambackend.security.jwtConfig;
 
-import com.example.adambackend.service.impl.AccountDetailsServiceImpl;
+import com.example.adambackend.security.AccountDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

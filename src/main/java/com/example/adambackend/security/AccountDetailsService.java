@@ -1,4 +1,4 @@
-package com.example.adambackend.service.impl;
+package com.example.adambackend.security;
 
 import com.example.adambackend.entities.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class AccountDetailsService implements UserDetails {
     private static final long serialVersionUID = 1L;

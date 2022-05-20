@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,11 +20,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String address;
-    @Column(name="address_detail")
+    @Column(name = "address_detail")
     private String addressDetail;
-    @Column(name="time_create")
+    @Column(name = "time_create")
     private LocalDateTime timeCreate;
     private OrderStatus status;
     private String fullName;
     private String phoneNumber;
+    @ManyToOne
+    @JoinColumn(name = "history_order_id")
+    private HistoryOrder historyOrder;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+    @OneToMany(mappedBy = "order")
+    private List<DetailOrder> detailOrders = new ArrayList<>();
+
+
 }

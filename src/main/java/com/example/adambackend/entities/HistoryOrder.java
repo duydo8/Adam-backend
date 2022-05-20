@@ -5,16 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="tags")
 @Entity
-public class Tag {
+@Table(name = "history_order")
+public class HistoryOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="tag_name")
-    private String tagName;
+    @Column(name = "date_create")
+    private LocalDateTime dateCreate;
+    private String description;
+    @OneToMany(mappedBy = "historyOrder")
+    private List<Order> orderList;
 }

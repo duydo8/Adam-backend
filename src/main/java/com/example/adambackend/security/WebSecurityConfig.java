@@ -2,7 +2,6 @@ package com.example.adambackend.security;
 
 import com.example.adambackend.security.jwtConfig.AuthEntryPointJwt;
 import com.example.adambackend.security.jwtConfig.AuthTokenFilter;
-import com.example.adambackend.service.impl.AccountDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-//                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .authorizeRequests().antMatchers("/api/admin/**").hasAuthority("Admin")
                 .and().authorizeRequests().antMatchers("/api/user/**").hasAuthority("User")
                 .antMatchers("/**").permitAll()

@@ -11,7 +11,7 @@ import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.payload.response.MessageResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
-import com.example.adambackend.service.impl.AccountDetailsService;
+import com.example.adambackend.security.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,11 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
