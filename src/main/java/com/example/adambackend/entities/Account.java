@@ -41,4 +41,8 @@ public class Account {
     @OneToMany(mappedBy = "account")
 
     List<Favorite> favorites= new ArrayList<>();
+    @OneToMany(mappedBy = "account")
+
+    List<CartItems> cartItems= new ArrayList<>();
+
 }

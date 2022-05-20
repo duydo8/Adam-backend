@@ -54,15 +54,14 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
-        String roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority()).toString();
+        ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRoleName();
 
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles));
+                String.valueOf(roles)));
     }
 
     @PostMapping("/signup")
@@ -84,7 +83,7 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword())
                  );
-        if(signUpRequest.getRoleName().equals(ERoleName.Admin)){
+        if(signUpRequest.getRoleName().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
             account.setRoleName(ERoleName.Admin);
         }else{
             account.setRoleName(ERoleName.User);

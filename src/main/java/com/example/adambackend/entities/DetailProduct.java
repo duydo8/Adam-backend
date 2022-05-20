@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -34,5 +36,8 @@ public class DetailProduct {
     @ManyToOne
     @JoinColumn(name="detail_order_id")
     private DetailOrder detailOrder;
+    @OneToMany(mappedBy = "detailProduct")
+
+    List<CartItems> cartItems= new ArrayList<>();
 
 }

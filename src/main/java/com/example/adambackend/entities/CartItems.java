@@ -4,29 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="comments")
+@Table(name="cart_items")
 @Entity
-public class Comment {
+public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
-    @Column(name="time_create")
-    private LocalDateTime timeCreated;
-    @Column(name="is_active")
-    private boolean isActive;
+    private int quantity;
     @ManyToOne
     @JoinColumn(name="account_id")
     private Account account;
     @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
+    @JoinColumn(name="detail_product_id")
+    private DetailProduct detailProduct;
 }
