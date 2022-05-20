@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -16,4 +17,25 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> findAll() {
         return accountRepository.findAll();
     }
+
+    @Override
+    public Account create(Account account) {
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+    accountRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Account> findById(Long id) {
+        return accountRepository.findById(id);
+    }
+
+    @Override
+    public List<Account> findByRoleName(String roleName) {
+        return accountRepository.findByRoleName(roleName);
+    }
+
 }
