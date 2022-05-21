@@ -1,6 +1,6 @@
 package com.example.adambackend.service.impl;
 
-import com.example.adambackend.entities.Account;
+import com.example.adambackend.enums.entities.Account;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.example.adambackend.entities;
+package com.example.adambackend.enums.entities;
 
 import com.example.adambackend.enums.ERoleName;
 import lombok.AllArgsConstructor;

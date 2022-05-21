@@ -1,7 +1,7 @@
 package com.example.adambackend.controller;
 
 
-import com.example.adambackend.entities.Account;
+import com.example.adambackend.enums.entities.Account;
 
 
 import com.example.adambackend.enums.ERoleName;

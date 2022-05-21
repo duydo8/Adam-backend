@@ -1,4 +1,4 @@
-package com.example.adambackend.entities;
+package com.example.adambackend.enums.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
