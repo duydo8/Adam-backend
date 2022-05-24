@@ -1,6 +1,6 @@
 package com.example.adambackend.security;
 
-import com.example.adambackend.entities.Account;
+import com.example.adambackend.enums.entities.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
