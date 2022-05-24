@@ -1,25 +1,28 @@
-package com.example.adambackend.enums.entities;
+package com.example.adambackend.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="cart_items")
+@Table(name="favorites")
 @Entity
-public class CartItems {
+public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity;
+    @Column(name="time_create")
+    private LocalDateTime time_create;
     @ManyToOne
     @JoinColumn(name="account_id")
     private Account account;
     @ManyToOne
-    @JoinColumn(name="detail_product_id")
-    private DetailProduct detailProduct;
+    @JoinColumn(name="product_id")
+    private Product product;
+
 }
