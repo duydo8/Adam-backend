@@ -23,8 +23,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     AccountRepository accountRepository;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -56,8 +55,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void register(Account account, String siteURL) throws UnsupportedEncodingException, MessagingException {
-        String encodedPassword = bCryptPasswordEncoder.encode(account.getPassword());
-        account.setPassword(encodedPassword);
+        BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+
+
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
 
         String randomCode = RandomString.make(64);
         account.setVerificationCode(randomCode);

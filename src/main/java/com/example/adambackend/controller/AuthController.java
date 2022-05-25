@@ -78,7 +78,7 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword())
                  );
-        if(signUpRequest.getRoleName().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
+        if(signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
             account.setRole(ERoleName.Admin);
         }else{
             account.setRole(ERoleName.User);

@@ -17,8 +17,9 @@ public class AccountController {
     @Autowired
     AccountService accountService;
     @PostMapping("/process_register")
-    public ResponseEntity<?> processRegister(Account account, HttpServletRequest request)
+    public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
+        System.out.println(account.toString());
         accountService.register(account, getSiteURL(request));
 
         return ResponseEntity.ok(new IGenericResponse<Account>(account,200,"register successfully please check email before loginning"));

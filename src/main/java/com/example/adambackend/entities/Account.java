@@ -24,6 +24,7 @@ public class Account {
     @Column(name="full_name")
     private String fullName;
     private String email;
+
     private String password;
     private ERoleName role;
     private String photo;
