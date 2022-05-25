@@ -76,11 +76,11 @@ public class AccountServiceImpl implements AccountService {
         String fromAddress = "adamstoreservice@gmail.com";
         String senderName = "Adam Store";
         String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
+        String content = "Dear name,<br>"
                 + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "<h3><a href=\"URL\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
-                + "Your company name.";
+                + "Adam Store";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -89,10 +89,10 @@ public class AccountServiceImpl implements AccountService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
 
-        content = content.replace("[[name]]", account.getFullName());
+        content = content.replace("name", account.getFullName());
         String verifyURL = siteURL + "/verify?code=" + account.getVerificationCode();
 
-        content = content.replace("[[URL]]", verifyURL);
+        content = content.replace("URL", verifyURL);
 
         helper.setText(content, true);
 

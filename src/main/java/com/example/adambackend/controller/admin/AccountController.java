@@ -24,7 +24,7 @@ public class AccountController {
 
         return ResponseEntity.ok(new IGenericResponse<Account>(account,200,"register successfully please check email before loginning"));
     }
-    @GetMapping("/verify")
+    @RequestMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
         if (accountService.verify(code)) {
             return ResponseEntity.ok(new IGenericResponse<>(200,"verify_success"));

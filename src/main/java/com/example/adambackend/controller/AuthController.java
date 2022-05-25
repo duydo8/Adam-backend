@@ -7,6 +7,7 @@ import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
 import com.example.adambackend.payload.request.SignUpRequest;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.payload.response.MessageResponse;
 import com.example.adambackend.repository.AccountRepository;
@@ -60,17 +61,17 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
         if (accountRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new IGenericResponse(400,"Username has been used"));
         }
 
         if (accountRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new IGenericResponse(400,"Email has been used"));
         }
 
 
@@ -87,6 +88,6 @@ public class AuthController {
 
        Account account1= accountRepository.save(account);
 
-        return ResponseEntity.ok().body(account1);
+        return ResponseEntity.ok().body(new IGenericResponse(account1,200,"đăng ký thành công"));
     }
 }
