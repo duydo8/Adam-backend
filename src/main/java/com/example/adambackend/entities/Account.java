@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +20,22 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String username;
-
+    @Column(name="full_name")
+    private String fullName;
     private String email;
-
     private String password;
     private ERoleName role;
     private String photo;
+    @Column(name="is_active")
     private boolean isActive;
+    @Column(name="is_delete")
     private boolean isDelete;
     private float rate;
+    @Column(name = "verification_code")
+    private String verificationCode;
+    @Column(name="time_valid",columnDefinition = "DATE")
+    private LocalDateTime timeValid;
     public Account(String username, String email, String password) {
         this.username = username;
         this.email = email;

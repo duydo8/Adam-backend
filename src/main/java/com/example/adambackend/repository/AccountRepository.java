@@ -16,4 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Boolean existsByEmail(String email);
     @Query(value = "select * from Account a where a.roleName=?1",nativeQuery = true)
     List<Account>  findByRoleName(String role);
+    @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
+    public Account findByVerificationCode(String code);
 }
