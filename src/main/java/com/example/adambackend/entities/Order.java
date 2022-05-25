@@ -25,7 +25,10 @@ public class Order {
     @Column(name = "time_create")
     private LocalDateTime timeCreate;
     private OrderStatus status;
+
+    @Column(name="full_name")
     private String fullName;
+    @Column(name="phone_number")
     private String phoneNumber;
     @ManyToOne
     @JoinColumn(name = "history_order_id")

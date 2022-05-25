@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="detail_products")
+@Table(name = "detail_products")
 @Entity
 public class DetailProduct {
     @Id
@@ -19,9 +19,9 @@ public class DetailProduct {
     private Long id;
     private int quantity;
     private Double price;
-    @Column(name="is_delete")
+    @Column(name = "is_delete")
     private Boolean isDelete;
-    @Column(name="product_image")
+    @Column(name = "product_image")
     private String productImage;
     @OneToMany(mappedBy = "detailProduct")
 
@@ -36,6 +36,9 @@ public class DetailProduct {
     @JoinColumn(name = "size_id")
     private Size size;
     @OneToMany(mappedBy = "detailProduct")
-    private List<DetailOrder> detailOrders= new ArrayList<>();
+    private List<DetailOrder> detailOrders = new ArrayList<>();
+    @OneToMany(mappedBy = "detailProduct")
+    private List<Discount> discounts= new ArrayList<>();
+
 
 }

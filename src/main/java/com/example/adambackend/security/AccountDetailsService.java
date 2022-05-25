@@ -14,16 +14,16 @@ import java.util.Objects;
 public class AccountDetailsService implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private final Long id;
 
-    private String username;
+    private final String username;
 
-    private String email;
+    private final String email;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public AccountDetailsService(Long id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -35,7 +35,7 @@ public class AccountDetailsService implements UserDetails {
     }
 
     public static AccountDetailsService build(Account user) {
-        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getRoleName().toString()));
+        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString()));
 
 
         return new AccountDetailsService(

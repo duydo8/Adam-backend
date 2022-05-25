@@ -24,8 +24,11 @@ public class Account {
     private String email;
 
     private String password;
-    private ERoleName roleName;
-
+    private ERoleName role;
+    private String photo;
+    private boolean isActive;
+    private boolean isDelete;
+    private float rate;
     public Account(String username, String email, String password) {
         this.username = username;
         this.email = email;

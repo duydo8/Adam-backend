@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +27,6 @@ public class Event {
     private Boolean status;
     @Column(name="is_delete")
     private Boolean isDelete;
-
+    @OneToMany(mappedBy = "event")
+    private List<Discount> discounts= new ArrayList<>();
 }

@@ -49,7 +49,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
-        ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRoleName();
+        ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
 
 
         return ResponseEntity.ok(new JwtResponse(jwt,
@@ -79,9 +79,9 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword())
                  );
         if(signUpRequest.getRoleName().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
-            account.setRoleName(ERoleName.Admin);
+            account.setRole(ERoleName.Admin);
         }else{
-            account.setRoleName(ERoleName.User);
+            account.setRole(ERoleName.User);
         }
 
 

@@ -5,29 +5,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="address")
 @Entity
-public class Address {
+@Table(name="districts")
+public class District {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="address_detail")
-    private String addressDetail;
-
-    @ManyToOne
-    @JoinColumn(name="account_id")
-    private Account account;
+    private String name;
+    private String prefix;
     @ManyToOne
     @JoinColumn(name="province_id")
     private Province province;
-    @ManyToOne
-    @JoinColumn(name="district_id")
-    private District district;
-    @ManyToOne
-    @JoinColumn(name="ward_id")
-    private Ward ward;
+    @OneToMany(mappedBy = "district")
+    private List<Ward> wards= new ArrayList<>();
+    @OneToMany(mappedBy = "district")
+    private List<Address> addresses= new ArrayList<>();
+
+
+
 }
