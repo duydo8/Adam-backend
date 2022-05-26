@@ -12,24 +12,24 @@ import java.util.Optional;
 @Service
 public class SizeServiceImpl implements SizeService {
     @Autowired
-    SizeRepository SizeRepository;
+    SizeRepository sizeRepository;
     @Override
     public List<Size> findAll() {
-        return SizeRepository.findAll();
+        return sizeRepository.findAll();
     }
 
     @Override
     public Size create(Size Size) {
-        return SizeRepository.save(Size);
+        return sizeRepository.save(Size);
     }
 
     @Override
     public void deleteById(Long id) {
-        SizeRepository.deleteById(id);
+        sizeRepository.deleteById(id);
     }
 
     @Override
     public Optional<Size> findById(Long id) {
-        return SizeRepository.findById(id);
+        return sizeRepository.findById(id);
     }
 }

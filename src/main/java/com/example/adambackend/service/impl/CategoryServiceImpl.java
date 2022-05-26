@@ -12,24 +12,24 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
-    CategoryRepository CategoryRepository;
+    CategoryRepository categoryRepository;
     @Override
     public List<Category> findAll() {
-        return CategoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     @Override
     public Category create(Category Category) {
-        return CategoryRepository.save(Category);
+        return categoryRepository.save(Category);
     }
 
     @Override
     public void deleteById(Long id) {
-        CategoryRepository.deleteById(id);
+        categoryRepository.deleteById(id);
     }
 
     @Override
     public Optional<Category> findById(Long id) {
-        return CategoryRepository.findById(id);
+        return categoryRepository.findById(id);
     }
 }

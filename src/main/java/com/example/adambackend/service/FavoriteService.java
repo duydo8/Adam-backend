@@ -11,7 +11,7 @@ public interface FavoriteService {
 
 	void deleteById(Long id);
 
-	Favorite create(Favorite Favorite);
+	Favorite create(Favorite favorite);
 
 	List<Favorite> findAll();
 }

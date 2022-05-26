@@ -13,24 +13,24 @@ import java.util.Optional;
 @Service
 public class CartItemServiceImpl implements CartItemService {
     @Autowired
-    CartItemRepository CartItemRepository;
+    CartItemRepository cartItemRepository;
     @Override
     public List<CartItems> findAll() {
-        return CartItemRepository.findAll();
+        return cartItemRepository.findAll();
     }
 
     @Override
     public CartItems create(CartItems CartItem) {
-        return CartItemRepository.save(CartItem);
+        return cartItemRepository.save(CartItem);
     }
 
     @Override
     public void deleteById(Long id) {
-        CartItemRepository.deleteById(id);
+        cartItemRepository.deleteById(id);
     }
 
     @Override
     public Optional<CartItems> findById(Long id) {
-        return CartItemRepository.findById(id);
+        return cartItemRepository.findById(id);
     }
 }

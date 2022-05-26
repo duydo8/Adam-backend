@@ -12,24 +12,24 @@ import java.util.Optional;
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
-    FavoriteRepository FavoriteRepository;
+    FavoriteRepository favoriteRepository;
     @Override
     public List<Favorite> findAll() {
-        return FavoriteRepository.findAll();
+        return favoriteRepository.findAll();
     }
 
     @Override
     public Favorite create(Favorite Favorite) {
-        return FavoriteRepository.save(Favorite);
+        return favoriteRepository.save(Favorite);
     }
 
     @Override
     public void deleteById(Long id) {
-        FavoriteRepository.deleteById(id);
+        favoriteRepository.deleteById(id);
     }
 
     @Override
     public Optional<Favorite> findById(Long id) {
-        return FavoriteRepository.findById(id);
+        return favoriteRepository.findById(id);
     }
 }

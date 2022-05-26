@@ -12,24 +12,28 @@ import java.util.Optional;
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
-    CommentRepository CommentRepository;
+    CommentRepository commentRepository;
     @Override
     public List<Comment> findAll() {
-        return CommentRepository.findAll();
+        return commentRepository.findAll();
     }
 
     @Override
     public Comment create(Comment Comment) {
-        return CommentRepository.save(Comment);
+        return commentRepository.save(Comment);
     }
 
     @Override
     public void deleteById(Long id) {
-        CommentRepository.deleteById(id);
+        commentRepository.deleteById(id);
     }
 
     @Override
     public Optional<Comment> findById(Long id) {
-        return CommentRepository.findById(id);
+        return commentRepository.findById(id);
+    }
+
+    public Integer countCommentByAccountIdAndProductId(){
+        return  commentRepository.countCommentByAccountIdAndProductId();
     }
 }

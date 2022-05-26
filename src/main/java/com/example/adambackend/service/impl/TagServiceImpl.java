@@ -12,24 +12,24 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
     @Autowired
-    TagRepository TagRepository;
+    TagRepository tagRepository;
     @Override
     public List<Tag> findAll() {
-        return TagRepository.findAll();
+        return tagRepository.findAll();
     }
 
     @Override
     public Tag create(Tag Tag) {
-        return TagRepository.save(Tag);
+        return tagRepository.save(Tag);
     }
 
     @Override
     public void deleteById(Long id) {
-        TagRepository.deleteById(id);
+        tagRepository.deleteById(id);
     }
 
     @Override
     public Optional<Tag> findById(Long id) {
-        return TagRepository.findById(id);
+        return tagRepository.findById(id);
     }
 }

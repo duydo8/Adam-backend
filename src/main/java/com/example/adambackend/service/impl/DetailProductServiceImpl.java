@@ -14,25 +14,25 @@ import com.example.adambackend.service.DetailProductService;
 @Service
 public class DetailProductServiceImpl implements DetailProductService {
     @Autowired
-    DetailProductRepository DetailProductRepository;
+    DetailProductRepository detailProductRepository;
     @Override
     public List<DetailProduct> findAll() {
-        return DetailProductRepository.findAll();
+        return detailProductRepository.findAll();
     }
 
     @Override
     public DetailProduct create(DetailProduct DetailProduct) {
-        return DetailProductRepository.save(DetailProduct);
+        return detailProductRepository.save(DetailProduct);
     }
 
     @Override
     public void deleteById(Long id) {
-        DetailProductRepository.deleteById(id);
+        detailProductRepository.deleteById(id);
     }
 
     @Override
     public Optional<DetailProduct> findById(Long id) {
-        return DetailProductRepository.findById(id);
+        return detailProductRepository.findById(id);
     }
 
 

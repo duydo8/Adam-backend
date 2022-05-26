@@ -23,6 +23,7 @@ public class DetailProduct {
     private Boolean isDelete;
     @Column(name = "product_image")
     private String productImage;
+
     @OneToMany(mappedBy = "detailProduct")
 
     List<CartItems> cartItems = new ArrayList<>();

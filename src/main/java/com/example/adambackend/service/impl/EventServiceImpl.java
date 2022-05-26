@@ -12,24 +12,24 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService {
     @Autowired
-    EventRepository EventRepository;
+    EventRepository eventRepository;
     @Override
     public List<Event> findAll() {
-        return EventRepository.findAll();
+        return eventRepository.findAll();
     }
 
     @Override
     public Event create(Event Event) {
-        return EventRepository.save(Event);
+        return eventRepository.save(Event);
     }
 
     @Override
     public void deleteById(Long id) {
-        EventRepository.deleteById(id);
+        eventRepository.deleteById(id);
     }
 
     @Override
     public Optional<Event> findById(Long id) {
-        return EventRepository.findById(id);
+        return eventRepository.findById(id);
     }
 }

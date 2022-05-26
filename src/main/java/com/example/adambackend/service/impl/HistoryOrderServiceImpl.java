@@ -13,24 +13,24 @@ import java.util.Optional;
 @Service
 public class HistoryOrderServiceImpl implements HistoryOrderService {
     @Autowired
-    HistoryOrderRepository HistoryOrderRepository;
+    HistoryOrderRepository historyOrderRepository;
     @Override
     public List<HistoryOrder> findAll() {
-        return HistoryOrderRepository.findAll();
+        return historyOrderRepository.findAll();
     }
 
     @Override
     public HistoryOrder create(HistoryOrder HistoryOrder) {
-        return HistoryOrderRepository.save(HistoryOrder);
+        return historyOrderRepository.save(HistoryOrder);
     }
 
     @Override
     public void deleteById(Long id) {
-        HistoryOrderRepository.deleteById(id);
+        historyOrderRepository.deleteById(id);
     }
 
     @Override
     public Optional<HistoryOrder> findById(Long id) {
-        return HistoryOrderRepository.findById(id);
+        return historyOrderRepository.findById(id);
     }
 }
