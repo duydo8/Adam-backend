@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public Product create(Product Product) {
+    public Product save(Product Product) {
         return productRepository.save(Product);
     }
 

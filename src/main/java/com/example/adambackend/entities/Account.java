@@ -24,10 +24,8 @@ public class Account {
     @Column(name="full_name")
     private String fullName;
     private String email;
-
     private String password;
     private ERoleName role;
-    private String photo;
     @Column(name="is_active")
     private boolean isActive;
     @Column(name="is_delete")
@@ -35,7 +33,7 @@ public class Account {
     private float rate;
     @Column(name = "verification_code")
     private String verificationCode;
-    @Column(name="time_valid",columnDefinition = "DATE")
+    @Column(name="time_valid")
     private LocalDateTime timeValid;
     public Account(String username, String email, String password) {
         this.username = username;
@@ -43,16 +41,12 @@ public class Account {
         this.password = password;
     }
     @OneToMany(mappedBy = "account")
-
     List<Address> addresses = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-
     List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-
     List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-
     List<CartItems> cartItems = new ArrayList<>();
     @OneToMany(mappedBy = "account")
     List<Order> orders = new ArrayList<>();

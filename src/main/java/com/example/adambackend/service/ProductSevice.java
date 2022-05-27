@@ -12,7 +12,7 @@ public interface ProductSevice {
 
 	void deleteById(Long id);
 
-	Product create(Product product);
+	Product save(Product product);
 
 	List<Product> findAll();
 	Page<Product>  findPage (int page, int size);

@@ -21,7 +21,7 @@ public class DetailProductServiceImpl implements DetailProductService {
     }
 
     @Override
-    public DetailProduct create(DetailProduct DetailProduct) {
+    public DetailProduct save(DetailProduct DetailProduct) {
         return detailProductRepository.save(DetailProduct);
     }
 

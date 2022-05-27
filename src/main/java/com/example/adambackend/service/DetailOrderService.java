@@ -12,7 +12,7 @@ public interface DetailOrderService {
 
 	void deleteById(Long id);
 
-	DetailOrder create(DetailOrder detailOrder);
+	DetailOrder save(DetailOrder detailOrder);
 
 	List<DetailOrder> findAll();
 

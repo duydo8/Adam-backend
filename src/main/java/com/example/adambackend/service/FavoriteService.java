@@ -11,7 +11,9 @@ public interface FavoriteService {
 
 	void deleteById(Long id);
 
-	Favorite create(Favorite favorite);
+	Favorite save(Favorite favorite);
 
 	List<Favorite> findAll();
+
+    Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 }

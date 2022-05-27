@@ -11,7 +11,7 @@ public interface HistoryOrderService {
 
 	void deleteById(Long id);
 
-	HistoryOrder create(HistoryOrder historyOrder);
+	HistoryOrder save(HistoryOrder historyOrder);
 
 	List<HistoryOrder> findAll();
 }

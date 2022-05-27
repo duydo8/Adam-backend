@@ -20,7 +20,7 @@ public class HistoryOrderServiceImpl implements HistoryOrderService {
     }
 
     @Override
-    public HistoryOrder create(HistoryOrder HistoryOrder) {
+    public HistoryOrder save(HistoryOrder HistoryOrder) {
         return historyOrderRepository.save(HistoryOrder);
     }
 

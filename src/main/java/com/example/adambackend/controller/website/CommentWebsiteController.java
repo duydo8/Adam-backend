@@ -1,8 +1,11 @@
 package com.example.adambackend.controller.website;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CommentController {
+@RequestMapping("comment")
+public class CommentWebsiteController {
+
 
 }

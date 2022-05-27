@@ -19,7 +19,7 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public Size create(Size Size) {
+    public Size save(Size Size) {
         return sizeRepository.save(Size);
     }
 

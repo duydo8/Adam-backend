@@ -20,7 +20,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItems create(CartItems CartItem) {
+    public CartItems save(CartItems CartItem) {
         return cartItemRepository.save(CartItem);
     }
 

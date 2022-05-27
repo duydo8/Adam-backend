@@ -19,7 +19,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Favorite create(Favorite Favorite) {
+    public Favorite save(Favorite Favorite) {
         return favoriteRepository.save(Favorite);
     }
 
@@ -31,5 +31,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public Optional<Favorite> findById(Long id) {
         return favoriteRepository.findById(id);
+    }
+    @Override
+    public Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct) {
+        return  favoriteRepository.countFavoriteByAccountIdAndProductId(idAccount,idProduct);
     }
 }

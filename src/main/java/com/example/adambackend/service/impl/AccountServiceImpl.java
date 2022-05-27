@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -33,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account create(Account account) {
+    public Account save(Account account) {
         return accountRepository.save(account);
     }
 
@@ -52,7 +51,14 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByRoleName(roleName);
     }
 
-
+    @Override
+    public Boolean existsByUsername(String username){
+        return accountRepository.existsByUsername(username);
+    }
+    @Override
+    public Boolean existsByEmail(String email){
+        return accountRepository.existsByEmail(email);
+    }
     @Override
     public void register(Account account, String siteURL) throws UnsupportedEncodingException, MessagingException {
         BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
@@ -64,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
         account.setVerificationCode(randomCode);
         account.setActive(false);
 
-        account.setTimeValid(LocalDateTime.now().plusMinutes(5));
+        account.setTimeValid(LocalDateTime.now().plusMinutes(30));
         accountRepository.save(account);
 
         sendVerificationEmail(account, siteURL);

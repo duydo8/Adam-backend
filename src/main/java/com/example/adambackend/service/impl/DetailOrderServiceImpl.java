@@ -20,7 +20,7 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     }
 
     @Override
-    public DetailOrder create(DetailOrder detailOrder) {
+    public DetailOrder save(DetailOrder detailOrder) {
         return detailOrderRepository.save(detailOrder);
     }
 

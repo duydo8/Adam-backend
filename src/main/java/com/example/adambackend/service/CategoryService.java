@@ -11,7 +11,9 @@ public interface CategoryService {
 
 	void deleteById(Long id);
 
-	Category create(Category category);
+	Category save(Category category);
 
 	List<Category> findAll();
+
+    List<Category> findAllCategoryParentId();
 }

@@ -11,7 +11,7 @@ public interface SizeService {
 
 	void deleteById(Long id);
 
-	Size create(Size size);
+	Size save(Size size);
 
 	List<Size> findAll();
 }

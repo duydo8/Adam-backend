@@ -11,7 +11,7 @@ public interface CartItemService {
 
 	void deleteById(Long id);
 
-	CartItems create(CartItems cartItems);
+	CartItems save(CartItems cartItems);
 
 	List<CartItems> findAll();
 }

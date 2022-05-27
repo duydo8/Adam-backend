@@ -10,10 +10,14 @@ import java.util.Optional;
 public interface AccountService {
 
     List<Account> findAll();
-    Account create(Account account);
+    Account save(Account account);
     void deleteById(Long id);
     Optional<Account> findById(Long id);
     List<Account> findByRoleName(String roleName);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 
     void register(Account account, String siteURL) throws UnsupportedEncodingException, MessagingException;
 

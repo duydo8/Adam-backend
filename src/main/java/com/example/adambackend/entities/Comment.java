@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.enums.CommentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,8 @@ public class Comment {
     private String content;
     @Column(name="time_create")
     private LocalDateTime timeCreated;
-    @Column(name="is_active")
-    private boolean isActive;
+    @Column(name="status")
+    private CommentStatus commentStatus;
     @ManyToOne
     @JoinColumn(name="account_id")
     private Account account;

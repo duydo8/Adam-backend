@@ -11,7 +11,11 @@ public interface CommentService {
 
 	void deleteById(Long id);
 
-	Comment create(Comment comment);
+	Comment save(Comment comment);
 
 	List<Comment> findAll();
+
+    Integer countCommentByAccountIdAndProductId(Long idAccount,Long idProduct);
+
+	List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct);
 }

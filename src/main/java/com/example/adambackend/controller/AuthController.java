@@ -7,12 +7,14 @@ import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
 import com.example.adambackend.payload.request.SignUpRequest;
+import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
-import com.example.adambackend.payload.response.MessageResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.security.AccountDetailsService;
+import com.example.adambackend.service.AccountService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -39,6 +45,10 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
@@ -60,34 +70,28 @@ public class AuthController {
                 String.valueOf(roles)));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
-        if (accountRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new IGenericResponse(400,"Username has been used"));
+
+
+    @PostMapping("/process_register")
+    public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
+            throws UnsupportedEncodingException, MessagingException {
+        System.out.println(account.toString());
+        account.setRole(ERoleName.User);
+        accountService.register(account, getSiteURL(request));
+        AccountDto accountDto = modelMapper.map(account,AccountDto.class);
+
+        return ResponseEntity.ok(new IGenericResponse<AccountDto>(accountDto,200,"register successfully please check email before loginning"));
+    }
+    @RequestMapping("/verify")
+    public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
+        if (accountService.verify(code)) {
+            return ResponseEntity.ok(new IGenericResponse<>(200,"verify_success"));
+        } else {
+            return ResponseEntity.ok(new IGenericResponse<>(400,"verify_fail"));
         }
-
-        if (accountRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new IGenericResponse(400,"Email has been used"));
-        }
-
-
-        Account account = new Account(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword())
-                 );
-        if(signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
-            account.setRole(ERoleName.Admin);
-        }else{
-            account.setRole(ERoleName.User);
-        }
-
-
-       Account account1= accountRepository.save(account);
-
-        return ResponseEntity.ok().body(new IGenericResponse(account1,200,"đăng ký thành công"));
+    }
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 }

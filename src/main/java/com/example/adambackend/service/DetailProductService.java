@@ -11,7 +11,7 @@ public interface DetailProductService {
 
 	void deleteById(Long id);
 
-	DetailProduct create(DetailProduct detailProduct);
+	DetailProduct save(DetailProduct detailProduct);
 
 	List<DetailProduct> findAll();
 }

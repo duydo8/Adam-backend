@@ -19,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment create(Comment Comment) {
+    public Comment save(Comment Comment) {
         return commentRepository.save(Comment);
     }
 
@@ -33,7 +33,12 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(id);
     }
 
-    public Integer countCommentByAccountIdAndProductId(){
-        return  commentRepository.countCommentByAccountIdAndProductId();
+    @Override
+    public Integer countCommentByAccountIdAndProductId(Long idAccount,Long idProduct){
+        return  commentRepository.countCommentByAccountIdAndProductId(idAccount,idProduct);
+    }
+    @Override
+    public List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct){
+        return commentRepository.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
     }
 }

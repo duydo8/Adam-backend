@@ -1,0 +1,24 @@
+package com.example.adambackend.controller.admin;
+
+import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.service.CommentService;
+import com.example.adambackend.service.FavoriteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("admin/favorite")
+public class FavoriteController {
+    @Autowired
+    FavoriteService favoriteService;
+    @GetMapping("countFavoriteByAccountIdAndProductId")
+    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId (@RequestParam("id_account") int idAccount, @RequestParam("id_product") int idProduct){
+        return ResponseEntity.ok().body(new IGenericResponse<Integer>(favoriteService.countFavoriteByAccountIdAndProductId(idAccount,idProduct),200,"countFavoriteByAccountIdAndProductId"));
+    }
+
+
+}

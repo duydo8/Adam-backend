@@ -14,7 +14,7 @@ public interface AddressService {
 
 	void deleteById(Long id);
 
-	Address create(Address address);
+	Address save(Address address);
 
 	List<Address> findAll();
 
