@@ -23,7 +23,7 @@ public class CommentController {
     ModelMapper modelMapper;
 
     @GetMapping("countCommentByAccountIdAndProductId")
-    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("id_account") Long idAccount, @RequestParam("id_product") Long idProduct) {
+    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Long idAccount, @RequestParam("product_id") Long idProduct) {
         return ResponseEntity.ok().body(new IGenericResponse<Integer>(commentService.countCommentByAccountIdAndProductId(idAccount, idProduct), 200, "countCommentByAccountIdAndProductId"));
     }
 
@@ -57,7 +57,7 @@ public class CommentController {
             List<CommentDto> commentDtos=comments.stream().map(c->new CommentDto(c.getId(),c.getContent(),c.getTimeCreated(),c.getCommentStatus())).collect(Collectors.toList());
             return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
         } else {
-            return ResponseEntity.ok().body(new IGenericResponse(404, "not found comment by account id: " + accountId
+            return ResponseEntity.ok().body(new IGenericResponse(400, "not found comment by account id: " + accountId
                     + " product id: " + productId));
         }
     }

@@ -35,5 +35,10 @@ public class DetailProductServiceImpl implements DetailProductService {
         return detailProductRepository.findById(id);
     }
 
+    @Override
+    public List<DetailProduct> findAllByProductId(Long idProduct){
+        return detailProductRepository.findAllByProductId(idProduct);
+    }
+
 
 }

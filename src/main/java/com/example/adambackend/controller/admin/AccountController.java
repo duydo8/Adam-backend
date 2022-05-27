@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -23,7 +24,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
     @Autowired
     ModelMapper modelMapper;
     @PostMapping("/process_register")
@@ -72,9 +73,10 @@ public class AccountController {
         }
 
 
-        Account account1= accountService.create(account);
+        Account account1= accountService.save(account);
         AccountDto accountDto= modelMapper.map(account1,AccountDto.class);
 
         return ResponseEntity.ok().body(new IGenericResponse(accountDto,200,"sign up succrssfully"));
     }
+
 }

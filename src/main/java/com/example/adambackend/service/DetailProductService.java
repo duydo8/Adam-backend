@@ -14,4 +14,6 @@ public interface DetailProductService {
 	DetailProduct save(DetailProduct detailProduct);
 
 	List<DetailProduct> findAll();
+
+    List<DetailProduct> findAllByProductId(Long idProduct);
 }
