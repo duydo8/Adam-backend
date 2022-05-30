@@ -25,4 +25,9 @@ public class Favorite {
     @JoinColumn(name="product_id")
     private Product product;
 
+    public Favorite(LocalDateTime time_create, Account account, Product product) {
+        this.time_create = time_create;
+        this.account = account;
+        this.product = product;
+    }
 }

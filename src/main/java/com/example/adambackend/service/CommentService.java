@@ -1,9 +1,11 @@
 package com.example.adambackend.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.adambackend.entities.Comment;
+import com.example.adambackend.enums.CommentStatus;
 
 public interface CommentService {
 
@@ -18,4 +20,11 @@ public interface CommentService {
     Integer countCommentByAccountIdAndProductId(Long idAccount,Long idProduct);
 
 	List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct);
+
+
+
+
+	Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus);
+
+	List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId);
 }

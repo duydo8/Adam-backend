@@ -17,7 +17,5 @@ public interface DetailOrderService {
 	List<DetailOrder> findAll();
 
 
-
-
-
+    List<DetailOrder> findAllByOrderId(Long orderId);
 }

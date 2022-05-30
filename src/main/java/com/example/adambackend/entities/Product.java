@@ -17,14 +17,17 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name="product_name")
     private String productName;
     private String description;
+    @Column(name="is_delete")
     private boolean isDelete;
     private String image;
+    private String brand;
+    private String material;
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
-
     @OneToMany(mappedBy = "product")
     List<Comment> comments= new ArrayList<>();
     @OneToMany(mappedBy = "product")

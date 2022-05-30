@@ -22,7 +22,8 @@ public class Province {
     private List<District> districts = new ArrayList<>();
     @OneToMany(mappedBy = "province")
     private List<Ward> wards= new ArrayList<>();
-   @OneToMany(mappedBy = "province")
+    @OneToMany(mappedBy = "province")
     private List<Address> addresses = new ArrayList<>();
+
 
 }

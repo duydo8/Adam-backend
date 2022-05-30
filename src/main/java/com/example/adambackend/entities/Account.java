@@ -24,6 +24,8 @@ public class Account {
     @Column(name="full_name")
     private String fullName;
     private String email;
+    @Column(name="phone_number")
+    private String phoneNumber;
     private String password;
     private ERoleName role;
     @Column(name="is_active")

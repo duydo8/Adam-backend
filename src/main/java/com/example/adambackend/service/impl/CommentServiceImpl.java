@@ -1,11 +1,13 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Comment;
+import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.repository.CommentRepository;
 import com.example.adambackend.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,5 +42,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct){
         return commentRepository.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
+    }
+    @Override
+    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus){
+
+        return  commentRepository.createAccountwithAccountIdAndProductId(content,localDateTime,productId,accountId,commentStatus);
+    }
+    @Override
+    public List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId){
+        return commentRepository.findAllCommentByProductIdAndStatusIsActive(productId);
     }
 }

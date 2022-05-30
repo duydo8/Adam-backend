@@ -8,4 +8,5 @@ public enum OrderStatus {
     payback,// doi tra
     delay,// hoan don hang
     checking,//kiem tra lai don hang hoan tra hoac cancel
+    success // thành công
 }
