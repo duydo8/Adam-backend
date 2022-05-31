@@ -2,6 +2,7 @@ package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Favorite;
+import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -47,7 +48,8 @@ public class FavoriteWebsiteController {
     public ResponseEntity<?> createFavorite(@RequestParam("product_id")Long productId,@RequestParam("account_id")Long accountId){
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId,productId);
         if(favorite==null){
-            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(favoriteService.save(new Favorite(LocalDateTime.now(),
+            FavoriteId favoriteId= new FavoriteId(accountId,productId);
+            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(favoriteService.save(new Favorite(favoriteId,LocalDateTime.now(),
                     accountService.findById(accountId).get(),productSevice.findById(productId).get())),200,""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"Exist"));

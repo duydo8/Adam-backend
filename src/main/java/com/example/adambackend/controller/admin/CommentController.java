@@ -39,7 +39,11 @@ public class CommentController {
                 comment.get().setCommentStatus(CommentStatus.PENDING);
             } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.DELETE))) {
                 comment.get().setCommentStatus(CommentStatus.DELETE);
-            } else {
+            }else if(status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED))) {
+                comment.get().setCommentStatus(CommentStatus.UPDATED);
+            } else if(status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED_ACTIVE))) {
+                comment.get().setCommentStatus(CommentStatus.UPDATED_ACTIVE);
+            }else {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "not found status"));
             }
             commentService.save(comment.get());

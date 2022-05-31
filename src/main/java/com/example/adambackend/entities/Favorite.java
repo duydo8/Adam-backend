@@ -13,21 +13,19 @@ import java.time.LocalDateTime;
 @Table(name="favorites")
 @Entity
 public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private FavoriteId favoriteId;
     @Column(name="time_create")
     private LocalDateTime time_create;
-    @ManyToOne
-    @JoinColumn(name="account_id")
-    private Account account;
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
 
-    public Favorite(LocalDateTime time_create, Account account, Product product) {
-        this.time_create = time_create;
-        this.account = account;
-        this.product = product;
-    }
+    @ManyToOne
+    @MapsId("accountId")
+    @JoinColumn(name="account_id")
+    private Account account = new Account();
+
+    @ManyToOne
+    @MapsId("productId")
+    @JoinColumn(name="product_id")
+    private Product product = new Product();
+
 }
