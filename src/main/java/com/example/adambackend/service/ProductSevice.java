@@ -16,4 +16,6 @@ public interface ProductSevice {
 
 	List<Product> findAll();
 	Page<Product>  findPage (int page, int size);
+
+    List<Product>findTop10productByCreateDate();
 }

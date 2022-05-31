@@ -26,4 +26,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query(value = "select c from comments c join products p on c.product_id=p.id where p.id=?1 and c.status='active'",nativeQuery = true)
     List<Comment>findAllCommentByProductIdAndStatusIsActive(Long productId);
+    @Query(value = "select top(10) c from comments c join products p on c.product_id=p.id where p.id=?1 order by c.time_create")
+    List<Comment> findTop10CommentByProductId(Long productId);
 }

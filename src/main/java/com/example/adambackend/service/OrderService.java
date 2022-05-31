@@ -13,4 +13,6 @@ public interface OrderService {
     void deleteById(Long id);
 
     Optional<Order> findById(Long id);
+
+    List<Order> findTop5OrderByCreateTime(Long accountId);
 }

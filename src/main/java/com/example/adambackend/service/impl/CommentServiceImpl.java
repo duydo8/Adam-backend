@@ -51,5 +51,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId){
         return commentRepository.findAllCommentByProductIdAndStatusIsActive(productId);
+
+    }
+    @Override
+    public List<Comment> findTop10CommentByProductId(Long productId){
+        return commentRepository.findTop10CommentByProductId(productId);
     }
 }

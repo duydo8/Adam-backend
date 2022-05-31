@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/product")
 public class ProductWebsiteController {
@@ -25,6 +27,9 @@ public class ProductWebsiteController {
         return  ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1,200,"Page product"));
     }
 
-
+    @GetMapping("findTop10productByCreateDate")
+    public ResponseEntity<?>findTop10productByCreateDate(){
+        return  ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(),200,""));
+    }
 
 }

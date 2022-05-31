@@ -21,10 +21,9 @@ public interface CommentService {
 
 	List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct);
 
-
-
-
 	Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus);
 
 	List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId);
+
+    List<Comment> findTop10CommentByProductId(Long productId);
 }

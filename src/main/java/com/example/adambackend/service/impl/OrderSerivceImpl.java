@@ -4,10 +4,11 @@ import com.example.adambackend.entities.Order;
 import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class OrderSerivceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
@@ -30,4 +31,9 @@ public class OrderSerivceImpl implements OrderService {
     public Optional<Order> findById(Long id) {
         return orderRepository.findById(id);
     }
+    @Override
+    public List<Order> findTop5OrderByCreateTime(Long accountId){
+        return orderRepository.findTop5OrderByCreateTime(accountId);
+    }
+
 }

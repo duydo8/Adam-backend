@@ -6,7 +6,6 @@ import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +38,9 @@ public class ProductServiceImpl implements ProductSevice {
     @Override
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
+    }
+    @Override
+    public List<Product>findTop10productByCreateDate(){
+        return productRepository.findTop10productByCreateDate();
     }
 }

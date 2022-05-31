@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.adambackend.entities.DetailOrder;
+import com.example.adambackend.entities.Product;
 
 
 public interface DetailOrderService {
@@ -18,4 +19,6 @@ public interface DetailOrderService {
 
 
     List<DetailOrder> findAllByOrderId(Long orderId);
+
+    List<Product> findTop10ProductByCountQuantityInOrderDetail();
 }

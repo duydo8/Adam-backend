@@ -1,6 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.DetailOrder;
+import com.example.adambackend.entities.Product;
 import com.example.adambackend.repository.DetailOrderRepository;
 import com.example.adambackend.service.DetailOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     public List<DetailOrder> findAllByOrderId(Long orderId){
         return  detailOrderRepository.findAllByOrderId(orderId);
     }
-
+    @Override
+    public List<Product> findTop10ProductByCountQuantityInOrderDetail(){
+        return  detailOrderRepository.findTop10ProductByCountQuantityInOrderDetail();
+    }
 
 }

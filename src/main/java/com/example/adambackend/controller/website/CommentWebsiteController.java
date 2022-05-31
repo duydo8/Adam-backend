@@ -4,6 +4,7 @@ import com.example.adambackend.entities.Comment;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.CommentService;
 import com.example.adambackend.service.ProductSevice;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("comment")
@@ -62,7 +64,25 @@ public class CommentWebsiteController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found Product"));
     }
-
+    @GetMapping("findTop10CommentByProductId")
+    public  ResponseEntity<?>findTop10CommentByProductId(@RequestParam("productId") Long productId){
+        Optional<Product> product= productSevice.findById(productId);
+        if(product.isPresent()){
+            return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId),200,""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found Product"));
+    }
+    @GetMapping("findAllByAccountIdAndProductId")
+    public ResponseEntity<IGenericResponse> changeStatusComment(@RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
+        List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
+        if (comments.size() > 0) {
+            List<CommentDto> commentDtos=comments.stream().map(c->new CommentDto(c.getId(),c.getContent(),c.getTimeCreated(),c.getCommentStatus())).collect(Collectors.toList());
+            return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
+        } else {
+            return ResponseEntity.ok().body(new IGenericResponse(400, "not found comment by account id: " + accountId
+                    + " product id: " + productId));
+        }
+    }
 
 
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class Product {
     private String image;
     private String brand;
     private String material;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
