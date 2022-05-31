@@ -1,7 +1,6 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.HistoryOrder;
-import com.example.adambackend.entities.HistoryOrder;
 import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.HistoryOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import java.util.Optional;
 public class HistoryOrderServiceImpl implements HistoryOrderService {
     @Autowired
     HistoryOrderRepository historyOrderRepository;
+
     @Override
     public List<HistoryOrder> findAll() {
         return historyOrderRepository.findAll();

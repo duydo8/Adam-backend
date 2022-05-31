@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="cart_items")
+@Table(name = "cart_items")
 @Entity
 public class CartItems {
     @Id
@@ -17,9 +17,9 @@ public class CartItems {
     private Long id;
     private int quantity;
     @ManyToOne
-    @JoinColumn(name="account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
     @ManyToOne
-    @JoinColumn(name="detail_product_id")
+    @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;
 }

@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductSevice {
     @Autowired
     ProductRepository productRepository;
+
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -22,7 +23,7 @@ public class ProductServiceImpl implements ProductSevice {
 
     @Override
     public Page<Product> findPage(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page,size));
+        return productRepository.findAll(PageRequest.of(page, size));
     }
 
     @Override
@@ -39,8 +40,9 @@ public class ProductServiceImpl implements ProductSevice {
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
+
     @Override
-    public List<Product>findTop10productByCreateDate(){
+    public List<Product> findTop10productByCreateDate() {
         return productRepository.findTop10productByCreateDate();
     }
 }

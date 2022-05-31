@@ -15,6 +15,7 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
+
     @Override
     public List<Comment> findAll() {
         return commentRepository.findAll();
@@ -36,25 +37,29 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Integer countCommentByAccountIdAndProductId(Long idAccount,Long idProduct){
-        return  commentRepository.countCommentByAccountIdAndProductId(idAccount,idProduct);
+    public Integer countCommentByAccountIdAndProductId(Long idAccount, Long idProduct) {
+        return commentRepository.countCommentByAccountIdAndProductId(idAccount, idProduct);
     }
-    @Override
-    public List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct){
-        return commentRepository.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
-    }
-    @Override
-    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus){
 
-        return  commentRepository.createAccountwithAccountIdAndProductId(content,localDateTime,productId,accountId,commentStatus);
-    }
     @Override
-    public List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId){
+    public List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct) {
+        return commentRepository.findCommentByIdAccountAndIdProduct(idAccount, idProduct);
+    }
+
+    @Override
+    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus) {
+
+        return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus);
+    }
+
+    @Override
+    public List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId) {
         return commentRepository.findAllCommentByProductIdAndStatusIsActive(productId);
 
     }
+
     @Override
-    public List<Comment> findTop10CommentByProductId(Long productId){
+    public List<Comment> findTop10CommentByProductId(Long productId) {
         return commentRepository.findTop10CommentByProductId(productId);
     }
 }

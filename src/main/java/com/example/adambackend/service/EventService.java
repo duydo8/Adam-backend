@@ -1,17 +1,17 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Event;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.example.adambackend.entities.Event;
-
 public interface EventService {
 
-	Optional<Event> findById(Long id);
+    Optional<Event> findById(Long id);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Event save(Event event);
+    Event save(Event event);
 
-	List<Event> findAll();
+    List<Event> findAll();
 }

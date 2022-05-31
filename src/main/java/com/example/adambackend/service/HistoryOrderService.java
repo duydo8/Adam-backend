@@ -1,17 +1,17 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.HistoryOrder;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.example.adambackend.entities.HistoryOrder;
-
 public interface HistoryOrderService {
 
-	Optional<HistoryOrder> findById(Long id);
+    Optional<HistoryOrder> findById(Long id);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	HistoryOrder save(HistoryOrder historyOrder);
+    HistoryOrder save(HistoryOrder historyOrder);
 
-	List<HistoryOrder> findAll();
+    List<HistoryOrder> findAll();
 }

@@ -1,21 +1,18 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Address;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.example.adambackend.entities.Address;
-import com.example.adambackend.repository.AddressRepository;
-
 public interface AddressService {
 
-	Optional<Address> findById(Long id);
+    Optional<Address> findById(Long id);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Address save(Address address);
+    Address save(Address address);
 
-	List<Address> findAll();
+    List<Address> findAll();
 
 }

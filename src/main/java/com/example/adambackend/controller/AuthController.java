@@ -2,17 +2,14 @@ package com.example.adambackend.controller;
 
 
 import com.example.adambackend.entities.Account;
-
-
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
-import com.example.adambackend.payload.request.SignUpRequest;
 import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.repository.AccountRepository;
-import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.security.AccountDetailsService;
+import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.service.AccountService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +34,6 @@ public class AuthController {
 
     @Autowired
     AccountRepository accountRepository;
-
 
 
     @Autowired
@@ -71,25 +67,26 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/process_register")
     public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         System.out.println(account.toString());
         account.setRole(ERoleName.User);
         accountService.register(account, getSiteURL(request));
-        AccountDto accountDto = modelMapper.map(account,AccountDto.class);
+        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
 
-        return ResponseEntity.ok(new IGenericResponse<AccountDto>(accountDto,200,"register successfully please check email before loginning"));
+        return ResponseEntity.ok(new IGenericResponse<AccountDto>(accountDto, 200, "register successfully please check email before loginning"));
     }
+
     @RequestMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
         if (accountService.verify(code)) {
-            return ResponseEntity.ok(new IGenericResponse<>(200,"verify_success"));
+            return ResponseEntity.ok(new IGenericResponse<>(200, "verify_success"));
         } else {
-            return ResponseEntity.ok(new IGenericResponse<>(400,"verify_fail"));
+            return ResponseEntity.ok(new IGenericResponse<>(400, "verify_fail"));
         }
     }
+
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");

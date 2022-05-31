@@ -13,20 +13,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="events")
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="name_event")
+    @Column(name = "name_event")
     private String nameEvent;
-    @Column(name="start_time")
+    @Column(name = "start_time")
     private LocalDateTime startTime;
-    @Column(name="end_time")
+    @Column(name = "end_time")
     private LocalDateTime endTime;
     private Boolean status;
-    @Column(name="is_delete")
+    @Column(name = "is_delete")
     private Boolean isDelete;
     @OneToMany(mappedBy = "event")
-    private List<Discount> discounts= new ArrayList<>();
+    private List<Discount> discounts = new ArrayList<>();
 }

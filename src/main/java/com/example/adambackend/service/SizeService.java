@@ -1,17 +1,17 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Size;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.example.adambackend.entities.Size;
-
 public interface SizeService {
 
-	Optional<Size> findById(Long id);
+    Optional<Size> findById(Long id);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Size save(Size size);
+    Size save(Size size);
 
-	List<Size> findAll();
+    List<Size> findAll();
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="orders")
+@Table(name = "orders")
 @Entity
 public class Order {
     @Id
@@ -26,9 +26,9 @@ public class Order {
     private LocalDateTime timeCreate;
     private OrderStatus status;
 
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
     @ManyToOne
     @JoinColumn(name = "history_order_id")

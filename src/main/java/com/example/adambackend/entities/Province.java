@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="provinces")
+@Table(name = "provinces")
 public class Province {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Province {
     @OneToMany(mappedBy = "province")
     private List<District> districts = new ArrayList<>();
     @OneToMany(mappedBy = "province")
-    private List<Ward> wards= new ArrayList<>();
+    private List<Ward> wards = new ArrayList<>();
     @OneToMany(mappedBy = "province")
     private List<Address> addresses = new ArrayList<>();
 

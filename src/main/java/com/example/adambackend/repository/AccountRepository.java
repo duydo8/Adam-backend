@@ -12,10 +12,14 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUsername(String username);
+
     Boolean existsByUsername(String username);
+
     Boolean existsByEmail(String email);
-    @Query(value = "select * from Account a where a.roleName=?1",nativeQuery = true)
-    List<Account>  findByRoleName(String role);
+
+    @Query(value = "select * from Account a where a.roleName=?1", nativeQuery = true)
+    List<Account> findByRoleName(String role);
+
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
     public Account findByVerificationCode(String code);
 }

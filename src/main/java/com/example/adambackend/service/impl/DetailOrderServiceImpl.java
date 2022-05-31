@@ -14,6 +14,7 @@ import java.util.Optional;
 public class DetailOrderServiceImpl implements DetailOrderService {
     @Autowired
     DetailOrderRepository detailOrderRepository;
+
     @Override
     public List<DetailOrder> findAll() {
         return detailOrderRepository.findAll();
@@ -26,20 +27,22 @@ public class DetailOrderServiceImpl implements DetailOrderService {
 
     @Override
     public void deleteById(Long id) {
-    	detailOrderRepository.deleteById(id);
+        detailOrderRepository.deleteById(id);
     }
 
     @Override
     public Optional<DetailOrder> findById(Long id) {
         return detailOrderRepository.findById(id);
     }
+
     @Override
-    public List<DetailOrder> findAllByOrderId(Long orderId){
-        return  detailOrderRepository.findAllByOrderId(orderId);
+    public List<DetailOrder> findAllByOrderId(Long orderId) {
+        return detailOrderRepository.findAllByOrderId(orderId);
     }
+
     @Override
-    public List<Product> findTop10ProductByCountQuantityInOrderDetail(){
-        return  detailOrderRepository.findTop10ProductByCountQuantityInOrderDetail();
+    public List<Product> findTop10ProductByCountQuantityInOrderDetail() {
+        return detailOrderRepository.findTop10ProductByCountQuantityInOrderDetail();
     }
 
 }

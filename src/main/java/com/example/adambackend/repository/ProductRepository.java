@@ -12,7 +12,8 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p")
     List<Product> findAll(Sort sort);
-    @Query(value = "select top(10) p from Product p order by p.createDate",nativeQuery = true)
+
+    @Query(value = "select top(10) p from Product p order by p.createDate", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
 }

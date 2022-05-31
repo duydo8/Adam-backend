@@ -9,12 +9,12 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="tags")
+@Table(name = "tags")
 @Entity
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="tag_name")
+    @Column(name = "tag_name")
     private String tagName;
 }

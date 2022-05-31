@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface HistoryOrderRepository extends JpaRepository<HistoryOrder, Long> {
     @Query("select hs from HistoryOrder  hs join Order o on o.")
-    List<Order>findTop5HistoryOrderByCreateTime();
+    List<Order> findTop5HistoryOrderByCreateTime();
 }

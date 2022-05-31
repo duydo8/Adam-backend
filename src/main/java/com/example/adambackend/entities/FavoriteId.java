@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Data
@@ -15,9 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class FavoriteId implements Serializable {
-    @Column(name="account_id")
+    @Column(name = "account_id")
     private Long accountId;
-    @Column(name="product_id")
+    @Column(name = "product_id")
     private Long productId;
 
 }

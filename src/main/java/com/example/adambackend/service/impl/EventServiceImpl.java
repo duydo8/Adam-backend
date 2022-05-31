@@ -13,6 +13,7 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
     @Autowired
     EventRepository eventRepository;
+
     @Override
     public List<Event> findAll() {
         return eventRepository.findAll();

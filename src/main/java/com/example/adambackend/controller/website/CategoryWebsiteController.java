@@ -16,9 +16,10 @@ import java.util.List;
 public class CategoryWebsiteController {
     @Autowired
     CategoryService categoryService;
+
     @GetMapping("findAllCategoryParentId")
-    public ResponseEntity<IGenericResponse> findAllCategoryParentId(){
-        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAllCategoryParentId(),200,"findAll Category parent successfully"));
+    public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
+        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAllCategoryParentId(), 200, "findAll Category parent successfully"));
 
     }
 }

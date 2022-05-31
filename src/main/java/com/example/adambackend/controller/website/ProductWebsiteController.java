@@ -21,15 +21,16 @@ public class ProductWebsiteController {
     ProductSevice productSevice;
     @Autowired
     ModelMapper modelMapper;
+
     @GetMapping("findAllByPageble")
-    public ResponseEntity<?> findAllByPageble(@RequestParam("page")int page,@RequestParam("size")int size){
-       Page<Product>page1= productSevice.findPage(page,size);
-        return  ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1,200,"Page product"));
+    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
+        Page<Product> page1 = productSevice.findPage(page, size);
+        return ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1, 200, "Page product"));
     }
 
     @GetMapping("findTop10productByCreateDate")
-    public ResponseEntity<?>findTop10productByCreateDate(){
-        return  ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(),200,""));
+    public ResponseEntity<?> findTop10productByCreateDate() {
+        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(), 200, ""));
     }
 
 }

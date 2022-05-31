@@ -1,17 +1,17 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Color;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.example.adambackend.entities.Color;
-
 public interface ColorService {
 
-	Optional<Color> findById(Long id);
+    Optional<Color> findById(Long id);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Color save(Color color);
+    Color save(Color color);
 
-	List<Color> findAll();
+    List<Color> findAll();
 }

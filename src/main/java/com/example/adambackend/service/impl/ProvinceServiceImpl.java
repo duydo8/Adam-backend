@@ -13,6 +13,7 @@ import java.util.Optional;
 public class ProvinceServiceImpl implements ProvinceService {
     @Autowired
     ProvinceRepository provinceRepository;
+
     @Override
     public List<Province> findAll() {
         return provinceRepository.findAll();

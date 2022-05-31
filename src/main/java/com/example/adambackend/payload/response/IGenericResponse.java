@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IGenericResponse <T>{
-     private T entity;
-     private int status;
-     private String message;
+public class IGenericResponse<T> {
+    private T entity;
+    private int status;
+    private String message;
 
-     public IGenericResponse(int status, String message) {
-          this.status = status;
-          this.message = message;
-     }
+    public IGenericResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 }

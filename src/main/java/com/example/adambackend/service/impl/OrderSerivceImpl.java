@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class OrderSerivceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
+
     @Override
     public List<Order> findAll() {
         return orderRepository.findAll();
@@ -31,8 +33,9 @@ public class OrderSerivceImpl implements OrderService {
     public Optional<Order> findById(Long id) {
         return orderRepository.findById(id);
     }
+
     @Override
-    public List<Order> findTop5OrderByCreateTime(Long accountId){
+    public List<Order> findTop5OrderByCreateTime(Long accountId) {
         return orderRepository.findTop5OrderByCreateTime(accountId);
     }
 

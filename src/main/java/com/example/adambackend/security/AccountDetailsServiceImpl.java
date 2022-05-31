@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 public class AccountDetailsServiceImpl implements UserDetailsService {
     @Autowired
     AccountRepository accountRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

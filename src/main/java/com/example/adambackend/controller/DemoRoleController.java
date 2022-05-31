@@ -13,12 +13,14 @@ public class DemoRoleController {
     public String admin() {
         return "Welcome to admin";
     }
+
     @GetMapping("/user")
     public String user() {
         return "Welcome to user";
     }
+
     @GetMapping("/auth")
-    public String auth(){
+    public String auth() {
         return "dont have any role";
     }
 }

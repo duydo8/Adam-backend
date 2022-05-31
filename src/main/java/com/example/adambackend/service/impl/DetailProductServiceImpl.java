@@ -1,20 +1,20 @@
 package com.example.adambackend.service.impl;
 
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.DetailProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DetailProductServiceImpl implements DetailProductService {
     @Autowired
     DetailProductRepository detailProductRepository;
+
     @Override
     public List<DetailProduct> findAll() {
         return detailProductRepository.findAll();
@@ -36,7 +36,7 @@ public class DetailProductServiceImpl implements DetailProductService {
     }
 
     @Override
-    public List<DetailProduct> findAllByProductId(Long idProduct){
+    public List<DetailProduct> findAllByProductId(Long idProduct) {
         return detailProductRepository.findAllByProductId(idProduct);
     }
 

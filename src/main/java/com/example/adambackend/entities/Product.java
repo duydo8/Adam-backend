@@ -12,30 +12,30 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="products")
+@Table(name = "products")
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="product_name")
+    @Column(name = "product_name")
     private String productName;
     private String description;
-    @Column(name="is_delete")
+    @Column(name = "is_delete")
     private boolean isDelete;
     private String image;
     private String brand;
     private String material;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
     @OneToMany(mappedBy = "product")
-    List<Comment> comments= new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "product")
-    List<Favorite> favorites= new ArrayList<>();
+    List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "product")
-    List<DetailProduct> detailProducts= new ArrayList<>();
+    List<DetailProduct> detailProducts = new ArrayList<>();
 
 }

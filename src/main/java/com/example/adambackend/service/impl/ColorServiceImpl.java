@@ -1,7 +1,6 @@
 package com.example.adambackend.service.impl;
 
 
-
 import com.example.adambackend.entities.Color;
 import com.example.adambackend.repository.ColorRepository;
 import com.example.adambackend.service.ColorService;
@@ -15,6 +14,7 @@ import java.util.Optional;
 public class ColorServiceImpl implements ColorService {
     @Autowired
     ColorRepository colorRepository;
+
     @Override
     public List<Color> findAll() {
         return colorRepository.findAll();

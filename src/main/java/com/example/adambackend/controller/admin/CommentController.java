@@ -39,11 +39,11 @@ public class CommentController {
                 comment.get().setCommentStatus(CommentStatus.PENDING);
             } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.DELETE))) {
                 comment.get().setCommentStatus(CommentStatus.DELETE);
-            }else if(status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED))) {
+            } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED))) {
                 comment.get().setCommentStatus(CommentStatus.UPDATED);
-            } else if(status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED_ACTIVE))) {
+            } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED_ACTIVE))) {
                 comment.get().setCommentStatus(CommentStatus.UPDATED_ACTIVE);
-            }else {
+            } else {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "not found status"));
             }
             commentService.save(comment.get());
@@ -58,7 +58,7 @@ public class CommentController {
     public ResponseEntity<IGenericResponse> changeStatusComment(@RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
         List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
         if (comments.size() > 0) {
-            List<CommentDto> commentDtos=comments.stream().map(c->new CommentDto(c.getId(),c.getContent(),c.getTimeCreated(),c.getCommentStatus())).collect(Collectors.toList());
+            List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
             return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
         } else {
             return ResponseEntity.ok().body(new IGenericResponse(400, "not found comment by account id: " + accountId

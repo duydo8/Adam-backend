@@ -13,6 +13,7 @@ import java.util.Optional;
 public class WardServiceImpl implements WardService {
     @Autowired
     WardRepository wardRepository;
+
     @Override
     public List<Ward> findAll() {
         return wardRepository.findAll();

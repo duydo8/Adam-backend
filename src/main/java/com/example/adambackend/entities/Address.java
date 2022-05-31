@@ -9,25 +9,25 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="address")
+@Table(name = "address")
 @Entity
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="address_detail")
+    @Column(name = "address_detail")
     private String addressDetail;
 
     @ManyToOne
-    @JoinColumn(name="account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
     @ManyToOne
-    @JoinColumn(name="province_id")
+    @JoinColumn(name = "province_id")
     private Province province;
     @ManyToOne
-    @JoinColumn(name="district_id")
+    @JoinColumn(name = "district_id")
     private District district;
     @ManyToOne
-    @JoinColumn(name="ward_id")
+    @JoinColumn(name = "ward_id")
     private Ward ward;
 }

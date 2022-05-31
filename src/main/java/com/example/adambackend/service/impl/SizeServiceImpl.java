@@ -13,6 +13,7 @@ import java.util.Optional;
 public class SizeServiceImpl implements SizeService {
     @Autowired
     SizeRepository sizeRepository;
+
     @Override
     public List<Size> findAll() {
         return sizeRepository.findAll();

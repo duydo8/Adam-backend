@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="wards")
+@Table(name = "wards")
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,11 @@ public class Ward {
     private String name;
     private String prefix;
     @ManyToOne
-    @JoinColumn(name="province_id")
+    @JoinColumn(name = "province_id")
     private Province province;
     @ManyToOne
-    @JoinColumn(name="district_id")
+    @JoinColumn(name = "district_id")
     private District district;
     @OneToMany(mappedBy = "ward")
-    private List<Address> addresses= new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 }

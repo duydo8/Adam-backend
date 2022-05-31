@@ -13,6 +13,7 @@ import java.util.Optional;
 public class TagServiceImpl implements TagService {
     @Autowired
     TagRepository tagRepository;
+
     @Override
     public List<Tag> findAll() {
         return tagRepository.findAll();

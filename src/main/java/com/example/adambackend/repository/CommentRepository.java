@@ -14,18 +14,20 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select count(c) from Comment c join Account a on c.account.id= a.id join Product  p on c.product.id= p.id where a.id=?1 and p.id=?2")
-    Integer countCommentByAccountIdAndProductId(Long idAccount,Long idProduct);
+    Integer countCommentByAccountIdAndProductId(Long idAccount, Long idProduct);
+
     @Query("select c from Comment  c join Account a on c.account.id= a.id join Product  p on c.product.id= p.id  where a.id=?1 and p.id=?2")
     List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct);
 
 
     @Transactional
     @Modifying
-    @Query(value = "insert into Comment(content,time_create,product_id,account_id,status) values (?1,?2,?3,?4,?5)",nativeQuery = true)
+    @Query(value = "insert into Comment(content,time_create,product_id,account_id,status) values (?1,?2,?3,?4,?5)", nativeQuery = true)
     Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus);
 
-    @Query(value = "select c from comments c join products p on c.product_id=p.id where p.id=?1 and c.status='active'",nativeQuery = true)
-    List<Comment>findAllCommentByProductIdAndStatusIsActive(Long productId);
+    @Query(value = "select c from comments c join products p on c.product_id=p.id where p.id=?1 and c.status='active'", nativeQuery = true)
+    List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId);
+
     @Query(value = "select top(10) c from comments c join products p on c.product_id=p.id where p.id=?1 order by c.time_create")
     List<Comment> findTop10CommentByProductId(Long productId);
 }

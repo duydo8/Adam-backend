@@ -13,6 +13,7 @@ import java.util.Optional;
 public class DiscountServiceImpl implements DiscountService {
     @Autowired
     DiscountRepository discountRepository;
+
     @Override
     public List<Discount> findAll() {
         return discountRepository.findAll();

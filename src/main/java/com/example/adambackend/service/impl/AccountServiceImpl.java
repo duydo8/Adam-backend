@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteById(Long id) {
-    accountRepository.deleteById(id);
+        accountRepository.deleteById(id);
     }
 
     @Override
@@ -52,16 +52,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean existsByUsername(String username){
+    public Boolean existsByUsername(String username) {
         return accountRepository.existsByUsername(username);
     }
+
     @Override
-    public Boolean existsByEmail(String email){
+    public Boolean existsByEmail(String email) {
         return accountRepository.existsByEmail(email);
     }
+
     @Override
     public void register(Account account, String siteURL) throws UnsupportedEncodingException, MessagingException {
-        BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
         account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -104,10 +106,11 @@ public class AccountServiceImpl implements AccountService {
 
         mailSender.send(message);
     }
+
     @Override
     public boolean verify(String verificationCode) {
         Account account = accountRepository.findByVerificationCode(verificationCode);
-        LocalDateTime localDateTime= LocalDateTime.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
         if (account == null || account.getTimeValid().isBefore(localDateTime)) {
             return false;
         } else {
