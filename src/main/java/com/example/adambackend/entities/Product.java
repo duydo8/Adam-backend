@@ -24,8 +24,7 @@ public class Product {
     @Column(name = "is_delete")
     private boolean isDelete;
     private String image;
-    private String brand;
-    private String material;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne
@@ -37,5 +36,14 @@ public class Product {
     List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "product")
     List<DetailProduct> detailProducts = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="material_id")
+    private Material material;
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+    @ManyToOne
+    @JoinColumn(name="tag_id")
+    private Tag tag;
 
 }

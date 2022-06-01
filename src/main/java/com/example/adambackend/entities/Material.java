@@ -5,23 +5,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
-@Table(name = "discounts")
-public class Discount {
+@Table(name="materials")
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double discount;
-    @ManyToOne
-    @JoinColumn(name = "detail_product_id")
-    private DetailProduct detailProduct;
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @Column(name="material_name")
+    private String materialName;
+    @OneToMany(mappedBy = "material")
+    List<Product> products= new ArrayList<>();
     @ManyToOne
     @JoinColumn(name="tag_id")
     private Tag tag;
