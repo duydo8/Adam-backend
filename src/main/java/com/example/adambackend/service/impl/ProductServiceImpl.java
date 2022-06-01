@@ -45,4 +45,8 @@ public class ProductServiceImpl implements ProductSevice {
     public List<Product> findTop10productByCreateDate() {
         return productRepository.findTop10productByCreateDate();
     }
+    @Override
+    public List<Product> findByColorSizePriceBrandAndMaterial(String colorName,String sizeName,String brand,String material,double bottomPrice,double topPrice){
+        return productRepository.findByColorSizePriceBrandAndMaterial(colorName,sizeName,brand,material,bottomPrice,topPrice);
+    }
 }

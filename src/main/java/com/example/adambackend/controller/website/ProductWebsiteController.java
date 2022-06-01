@@ -32,5 +32,16 @@ public class ProductWebsiteController {
     public ResponseEntity<?> findTop10productByCreateDate() {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(), 200, ""));
     }
+    @GetMapping("findByColorSizePriceBrandAndMaterial")
+    public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestParam("color_name") String colorName,
+                                                              @RequestParam("size_name")String sizeName,
+                                                              @RequestParam("brand")String brand,
+                                                              @RequestParam("material")String material,
+                                                              @RequestParam("bottom_price")double bottomPrice,
+                                                              @RequestParam("top_price")double topPrice){
+        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findByColorSizePriceBrandAndMaterial(colorName,
+                sizeName, brand, material, bottomPrice, topPrice),200,"success"));
+
+    }
 
 }

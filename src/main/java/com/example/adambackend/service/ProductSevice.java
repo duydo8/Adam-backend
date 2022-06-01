@@ -19,4 +19,6 @@ public interface ProductSevice {
     Page<Product> findPage(int page, int size);
 
     List<Product> findTop10productByCreateDate();
+
+    List<Product> findByColorSizePriceBrandAndMaterial(String colorName, String sizeName, String brand, String material, double bottomPrice, double topPrice);
 }
