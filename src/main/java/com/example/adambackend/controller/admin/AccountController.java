@@ -26,42 +26,38 @@ public class AccountController {
     PasswordEncoder passwordEncoder;
     @Autowired
     ModelMapper modelMapper;
-
     @PostMapping("/process_register")
     public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         System.out.println(account.toString());
         accountService.register(account, getSiteURL(request));
 
-        return ResponseEntity.ok(new IGenericResponse<Account>(account, 200, "register successfully please check email before loginning"));
+        return ResponseEntity.ok(new IGenericResponse<Account>(account,200,"register successfully please check email before loginning"));
     }
-
     @RequestMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
         if (accountService.verify(code)) {
-            return ResponseEntity.ok(new IGenericResponse<>(200, "verify_success"));
+            return ResponseEntity.ok(new IGenericResponse<>(200,"verify_success"));
         } else {
-            return ResponseEntity.ok(new IGenericResponse<>(400, "verify_fail"));
+            return ResponseEntity.ok(new IGenericResponse<>(400,"verify_fail"));
         }
     }
-
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
-
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
         if (accountService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new IGenericResponse(400, "Username has been used"));
+                    .body(new IGenericResponse(400,"Username has been used"));
         }
 
         if (accountService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new IGenericResponse(400, "Email has been used"));
+                    .body(new IGenericResponse(400,"Email has been used"));
         }
 
 
@@ -69,31 +65,30 @@ public class AccountController {
                 signUpRequest.getEmail(),
                 passwordEncoder.encode(signUpRequest.getPassword())
         );
-        if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
+        if(signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))){
             account.setRole(ERoleName.Admin);
-        } else {
+        }else{
             account.setRole(ERoleName.User);
         }
 
 
-        Account account1 = accountService.save(account);
-        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+        Account account1= accountService.save(account);
+        AccountDto accountDto= modelMapper.map(account1,AccountDto.class);
 
-        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
+        return ResponseEntity.ok().body(new IGenericResponse(accountDto,200,"sign up succrssfully"));
     }
-
     @PostMapping("/createAccountWithRoleIsAdmin")
     public ResponseEntity<?> registerAdmin(@RequestBody SignUpRequest signUpRequest) {
         if (accountService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new HandleExceptionDemo(400, "Username has been used"));
+                    .body(new HandleExceptionDemo(400,"Username has been used"));
         }
 
         if (accountService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new HandleExceptionDemo(400, "Email has been used"));
+                    .body(new HandleExceptionDemo(400,"Email has been used"));
         }
 
 
@@ -104,10 +99,10 @@ public class AccountController {
         account.setRole(ERoleName.Admin);
         account.setActive(true);
 
-        Account account1 = accountService.save(account);
-        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+        Account account1= accountService.save(account);
+        AccountDto accountDto= modelMapper.map(account1,AccountDto.class);
 
-        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
+        return ResponseEntity.ok().body(new IGenericResponse(accountDto,200,"sign up succrssfully"));
     }
 
 }

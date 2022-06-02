@@ -42,8 +42,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name="brand_id")
     private Brand brand;
-    @ManyToOne
-    @JoinColumn(name="tag_id")
-    private Tag tag;
+
 
 }

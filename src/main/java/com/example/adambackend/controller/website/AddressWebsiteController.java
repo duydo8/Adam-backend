@@ -25,9 +25,9 @@ public class AddressWebsiteController {
         Optional<Account> account = accountService.findById(accountId);
         if (account.isPresent()) {
             Address address1=addressService.save(address);
-            List<Address> addresses=account.get().getAddresses();
+            List<Address> addresses=account.get().getAddressList();
             addresses.add(address);
-            account.get().setAddresses(addresses);
+            account.get().setAddressList(addresses);
             accountService.save(account.get());
             return ResponseEntity.ok().body(new IGenericResponse<Address>(address1,200,"successfully"));
 
@@ -43,9 +43,9 @@ public class AddressWebsiteController {
 
 
             Address address2=addressService.save(address);
-            List<Address> addresses=account.get().getAddresses();
+            List<Address> addresses=account.get().getAddressList();
             addresses.add(address);
-            account.get().setAddresses(addresses);
+            account.get().setAddressList(addresses);
             accountService.save(account.get());
             return ResponseEntity.ok().body(new IGenericResponse<Address>(address2,200,"successfully"));
 
@@ -58,9 +58,9 @@ public class AddressWebsiteController {
         Optional<Account> account = accountService.findById(accountId);
         Optional<Address> address1= addressService.findById(accountId);
         if (account.isPresent()&& address1.isPresent()) {
-            List<Address> addresses= account.get().getAddresses();
+            List<Address> addresses= account.get().getAddressList();
             addresses.remove(address1.get());
-            account.get().setAddresses(addresses);
+            account.get().setAddressList(addresses);
             accountService.save(account.get());
             addressService.deleteById(addressId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200,"successfully"));

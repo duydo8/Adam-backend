@@ -25,7 +25,6 @@ public class DetailProduct {
     private String productImage;
 
     @OneToMany(mappedBy = "detailProduct")
-
     List<CartItems> cartItems = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "product_id")

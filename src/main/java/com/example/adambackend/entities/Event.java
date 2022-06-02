@@ -29,7 +29,5 @@ public class Event {
     private Boolean isDelete;
     @OneToMany(mappedBy = "event")
     private List<Discount> discounts = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name="tag_id")
-    private Tag tag;
+
 }

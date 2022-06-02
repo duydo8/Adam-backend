@@ -30,14 +30,11 @@ public class Order {
     private String fullName;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @ManyToOne
-    @JoinColumn(name = "history_order_id")
-    private HistoryOrder historyOrder;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();
-
 
 }

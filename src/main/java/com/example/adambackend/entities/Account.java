@@ -29,10 +29,10 @@ public class Account {
     private ERoleName role;
     @Column(name = "is_active")
     private boolean isActive;
-    @Column(name = "is_delete")
+    @Column(name = "is_deleted")
     private boolean isDelete;
-    private float rate;
-    @Column(name = "verification_code")
+    private int priority;
+            @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
@@ -44,14 +44,14 @@ public class Account {
     }
 
     @OneToMany(mappedBy = "account")
-    List<Address> addresses = new ArrayList<>();
+    List<Address> addressList = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-    List<Comment> comments = new ArrayList<>();
+    List<Comment> commentList = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-    List<Favorite> favorites = new ArrayList<>();
+    List<Favorite> favoriteList = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-    List<CartItems> cartItems = new ArrayList<>();
+    List<CartItems> cartItemsList = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-    List<Order> orders = new ArrayList<>();
+    List<Order> orderList = new ArrayList<>();
 
 }

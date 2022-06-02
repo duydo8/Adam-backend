@@ -25,7 +25,5 @@ public class Category {
     private int categoryParentId;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name="tag_id")
-    private Tag tag;
+
 }

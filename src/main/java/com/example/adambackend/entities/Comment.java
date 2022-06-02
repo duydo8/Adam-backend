@@ -18,6 +18,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private int vote;
     @Column(name = "time_create")
     private LocalDateTime timeCreated;
     @Column(name = "status")
