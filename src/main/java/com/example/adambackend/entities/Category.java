@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +20,11 @@ public class Category {
     private Long id;
     @Column(name = "category_name")
     private String categoryName;
-    @Column(name = "is_delete")
-    private Boolean isDelete;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
     @Column(name = "category_parent_id")
-    private int categoryParentId;
+    private Integer categoryParentId;
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 

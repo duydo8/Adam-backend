@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,5 +43,9 @@ public class CategoryController {
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
         }
+    }
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAll(),200,""));
     }
 }

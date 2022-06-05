@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class Color {
     private Long id;
     @Column(name = "color_name")
     private String colorName;
+    @JsonIgnore
     @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
-
     private List<DetailProduct> detailProducts = new ArrayList<>();
 }

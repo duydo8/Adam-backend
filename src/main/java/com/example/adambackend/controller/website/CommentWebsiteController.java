@@ -27,13 +27,13 @@ public class CommentWebsiteController {
     ModelMapper modelMapper;
     @Autowired
     ProductSevice productSevice;
-
+//
     @PostMapping("create")
     public ResponseEntity<?> createComment(@RequestParam("content") String content, @RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
         return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(content,
                 LocalDateTime.now(), productId, accountId, CommentStatus.PENDING), 200, ""));
     }
-
+//
     @PutMapping("update")
     public ResponseEntity<?> updateComment(@RequestParam("comment_id") Long id,
                                            @RequestParam("content") String content) {
@@ -46,7 +46,7 @@ public class CommentWebsiteController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found comment"));
     }
-
+//
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Long id) {
         Optional<Comment> comment1 = commentService.findById(id);

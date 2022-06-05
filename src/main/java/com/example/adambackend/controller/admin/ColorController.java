@@ -1,5 +1,6 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +19,10 @@ import java.util.Optional;
 public class ColorController {
     @Autowired
     ColorService colorService;
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAll(),200,""));
+    }
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody Color color){
 

@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,6 @@ public class Material {
     private Long id;
     @Column(name="material_name")
     private String materialName;
-    @OneToMany(mappedBy = "material")
-    List<Product> products= new ArrayList<>();
+
 
 }

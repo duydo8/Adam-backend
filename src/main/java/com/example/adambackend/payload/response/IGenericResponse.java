@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IGenericResponse<T> {
-    private T entity;
+    private T data;
     private int status;
     private String message;
 

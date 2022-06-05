@@ -36,12 +36,7 @@ public class Product {
     List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "product")
     List<DetailProduct> detailProducts = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name="material_id")
-    private Material material;
-    @ManyToOne
-    @JoinColumn(name="brand_id")
-    private Brand brand;
+
 
 
 }
