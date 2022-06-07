@@ -18,8 +18,11 @@ public class DetailProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantity;
-    private Double price;
-    @Column(name = "is_delete")
+    @Column(name="price_import")
+    private Double priceImport;
+    @Column(name="price_export")
+    private Double priceExport;
+    @Column(name = "is_deleted")
     private Boolean isDelete;
     @Column(name = "product_image")
     private String productImage;

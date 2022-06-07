@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "product_name")
     private String productName;
     private String description;
-    @Column(name = "is_delete")
+    @Column(name = "is_deleted")
     private boolean isDelete;
     private String image;
 

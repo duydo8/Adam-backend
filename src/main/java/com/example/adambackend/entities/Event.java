@@ -25,7 +25,7 @@ public class Event {
     @Column(name = "end_time")
     private LocalDateTime endTime;
     private Boolean status;
-    @Column(name = "is_delete")
+    @Column(name = "is_deleted")
     private Boolean isDelete;
     @OneToMany(mappedBy = "event")
     private List<Discount> discounts = new ArrayList<>();

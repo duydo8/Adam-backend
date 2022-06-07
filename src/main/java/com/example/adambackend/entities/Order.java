@@ -22,8 +22,8 @@ public class Order {
     private String address;
     @Column(name = "address_detail")
     private String addressDetail;
-    @Column(name = "time_create")
-    private LocalDateTime timeCreate;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
     private OrderStatus status;
 
     @Column(name = "full_name")
