@@ -24,11 +24,14 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String username;
     @Column(name = "full_name")
     private String fullName;
+    @Column(unique = true)
     private String email;
-    @Column(name = "phone_number")
+
+    @Column(name = "phone_number",unique = true)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
@@ -40,12 +43,13 @@ public class Account {
     private boolean isActive;
     @Column(name = "is_deleted")
     private boolean isDelete;
-    private int priority;
-            @Column(name = "verification_code")
+
+    @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
     private String providerId;
+    private double priority;
 
     public Account(String username, String email, String password) {
         this.username = username;

@@ -18,13 +18,15 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "product_name")
     private String productName;
     private String description;
     @Column(name = "is_deleted")
     private boolean isDelete;
     private String image;
-
+    @Column(name="vote_average")
+private double voteAverage;
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne
@@ -36,6 +38,14 @@ public class Product {
     List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "product")
     List<DetailProduct> detailProducts = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private  Brand brand;
+    @ManyToOne
+    @JoinColumn(name="material_id")
+    private Material material;
+    @OneToMany(mappedBy = "product")
+    private List<TagProduct> tagProducts= new ArrayList<>();
 
 
 

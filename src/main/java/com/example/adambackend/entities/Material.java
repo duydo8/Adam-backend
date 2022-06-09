@@ -21,5 +21,6 @@ public class Material {
     @Column(name="material_name")
     private String materialName;
 
-
+    @OneToMany(mappedBy = "material")
+    private List<Product> products= new ArrayList<>();
 }

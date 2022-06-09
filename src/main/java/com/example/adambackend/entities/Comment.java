@@ -19,7 +19,7 @@ public class Comment {
     private Long id;
     private String content;
     private int vote;
-    @Column(name = "time_create")
+    @Column(name = "create_date ")
     private LocalDateTime timeCreated;
     @Column(name = "status")
     private CommentStatus commentStatus;

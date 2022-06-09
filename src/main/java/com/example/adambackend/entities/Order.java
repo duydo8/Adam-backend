@@ -19,9 +19,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String address;
-    @Column(name = "address_detail")
-    private String addressDetail;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
     private OrderStatus status;

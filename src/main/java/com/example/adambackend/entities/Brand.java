@@ -21,6 +21,9 @@ public class Brand {
     @Column(name="brand_name")
     private String brandName;
 
+   @OneToMany(mappedBy = "brand")
+    List<Product> products = new ArrayList<>();
+
 
 
 }

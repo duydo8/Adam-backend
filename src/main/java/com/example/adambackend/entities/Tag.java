@@ -19,6 +19,10 @@ public class Tag {
     private Long id;
     @Column(name = "tag_name")
     private String tagName;
+    @Column(name="is_deleted")
+    private Boolean isDelete;
+    @OneToMany(mappedBy = "tag")
+    private List<TagProduct> tagProducts= new ArrayList<>();
 
 
 }
