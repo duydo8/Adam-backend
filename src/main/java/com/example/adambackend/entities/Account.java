@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.enums.AuthProvider;
 import com.example.adambackend.enums.ERoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +14,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "accounts")
 @Entity
+@Table(name = "accounts", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email"),
+        @UniqueConstraint(columnNames = "phone_number")
+})
+
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +30,10 @@ public class Account {
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
     private String password;
     private ERoleName role;
     @Column(name = "is_active")
@@ -36,6 +45,7 @@ public class Account {
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
+    private String providerId;
 
     public Account(String username, String email, String password) {
         this.username = username;
