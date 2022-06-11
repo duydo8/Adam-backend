@@ -22,5 +22,5 @@ public class Material {
     private String materialName;
 
     @OneToMany(mappedBy = "material")
-    private List<Product> products= new ArrayList<>();
+    private List<MaterialProduct> materialProducts= new ArrayList<>();
 }

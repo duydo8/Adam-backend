@@ -22,4 +22,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
     public Account findByVerificationCode(String code);
+
 }

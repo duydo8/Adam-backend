@@ -27,7 +27,5 @@ public class Event {
     private Boolean status;
     @Column(name = "is_deleted")
     private Boolean isDelete;
-    @OneToMany(mappedBy = "event")
-    private List<Discount> discounts = new ArrayList<>();
-
+ 
 }

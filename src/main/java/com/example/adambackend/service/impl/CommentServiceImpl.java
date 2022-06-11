@@ -47,9 +47,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus) {
+    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus, int vote) {
 
-        return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus);
+        return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus,vote);
     }
 
     @Override
@@ -61,5 +61,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findTop10CommentByProductId(Long productId) {
         return commentRepository.findTop10CommentByProductId(productId);
+    }
+
+    @Override
+    public Integer countCommentByProduct(Long productId) {
+        return commentRepository.countCommentByProduct(productId);
     }
 }

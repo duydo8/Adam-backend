@@ -22,4 +22,5 @@ public class CategoryWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAllCategoryParentId(), 200, "findAll Category parent successfully"));
 
     }
+
 }

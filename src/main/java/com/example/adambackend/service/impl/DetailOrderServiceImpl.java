@@ -45,4 +45,9 @@ public class DetailOrderServiceImpl implements DetailOrderService {
         return detailOrderRepository.findTop10ProductByCountQuantityInOrderDetail();
     }
 
+    @Override
+    public void deleteAllByOrderId(Long orderId) {
+         detailOrderRepository.deleteAllByOrderId(orderId);
+    }
+
 }

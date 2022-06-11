@@ -34,5 +34,7 @@ public class Order {
     private Account account;
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();
+   @OneToMany(mappedBy = "order")
+    private List<AccountEvent> accountEventList= new ArrayList<>();
 
 }

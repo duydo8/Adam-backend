@@ -14,4 +14,5 @@ public interface TagService {
     Tag save(Tag tag);
 
     List<Tag> findAll();
+    Optional<Tag> findByTagName(String tagName);
 }

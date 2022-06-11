@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class AccountEventPK {
+public class AccountEventPK implements Serializable {
+    private static final long serialVersionUID = -7524270329897682645L;
     @Column(name="account_id")
     private Long accountId;
     @Column(name="event_id")

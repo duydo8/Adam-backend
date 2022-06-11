@@ -1,8 +1,12 @@
 package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.entities.Tag;
+import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.ProductSevice;
+import com.example.adambackend.service.TagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
@@ -21,6 +26,8 @@ public class ProductWebsiteController {
     ProductSevice productSevice;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    TagService tagService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -42,6 +49,15 @@ public class ProductWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findByColorSizePriceBrandAndMaterial(colorName,
                 sizeName, brand, material, bottomPrice, topPrice),200,"success"));
 
+    }
+    @GetMapping("findProductByTagName")
+    public ResponseEntity<?> findProductByTag(@RequestParam("tag_name") String tagName){
+        Optional<Tag> tagOptional= tagService.findByTagName(tagName);
+        if(tagOptional.isPresent()){
+            return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findAllByTagName(tagName),200,""));
+        }else{
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        }
     }
 
 }

@@ -1,26 +1,53 @@
 package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.exception.ResourceNotFoundException;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.security.CurrentUser;
 import com.example.adambackend.security.UserPrincipal;
+import com.example.adambackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("account")
 public class AccountWebsiteController {
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
+    @PostMapping("forgotPassword")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email")String email,
+                                            @RequestParam("password")String password,
+                                            @RequestParam("confirm")String confirm){
+        Optional<Account> accountOptional= accountService.findByEmail(email);
+        if(accountOptional.isPresent()){
+            if(password.equals(confirm)){
+                accountOptional.get().setPassword(passwordEncoder.encode(password));
+                ;
+                return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()),200,""));
+            }else{
+               return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"confirm is not equal password"));
 
-    public Account getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return accountRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+            }
+
+        }else{
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found account"));
+        }
+
     }
+
 
 
 }

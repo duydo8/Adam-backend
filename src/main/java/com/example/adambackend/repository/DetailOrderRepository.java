@@ -16,4 +16,6 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Long> 
     @Query(value = "select top(10) p from Detail_Orders  do join Detail_Products dp on do.detail_Product_id=dp.id join Products p on p.id=dp.product_id group by do.detail_Product_id" +
             ",dp.id,p.id,dp.product_id order by count(do.quantity) DESC ", nativeQuery = true)
     List<Product> findTop10ProductByCountQuantityInOrderDetail();
+    @Query(value = "delete from detail_orders where order_id=?1",nativeQuery = true)
+    void deleteAllByOrderId(Long orderId);
 }

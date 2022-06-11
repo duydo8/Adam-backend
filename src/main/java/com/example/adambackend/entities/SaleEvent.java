@@ -19,6 +19,7 @@ public class SaleEvent {
     @Column(name="sale_event_name")
     private String SaleEventName;
     private String description;
+    private double promotion;
     @OneToMany(mappedBy = "saleEvent")
     private  List<AccountEvent> accountEvents= new ArrayList<>();
 }

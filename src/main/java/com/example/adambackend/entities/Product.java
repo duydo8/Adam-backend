@@ -41,11 +41,11 @@ private double voteAverage;
     @ManyToOne
     @JoinColumn(name="brand_id")
     private  Brand brand;
-    @ManyToOne
-    @JoinColumn(name="material_id")
-    private Material material;
+
     @OneToMany(mappedBy = "product")
     private List<TagProduct> tagProducts= new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    private List<MaterialProduct> materialProducts= new ArrayList<>();
 
 
 

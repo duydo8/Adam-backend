@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +32,7 @@ public class AccountEvent {
     @MapsId("code")
     @JoinColumn(name = "code")
     private SaleEvent saleEvent = new SaleEvent();
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private Order order= new Order();
 }

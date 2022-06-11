@@ -14,5 +14,5 @@ public interface OrderService {
 
     Optional<Order> findById(Long id);
 
-    List<Order> findTop5OrderByCreateTime(Long accountId);
+    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Long accountId);
 }

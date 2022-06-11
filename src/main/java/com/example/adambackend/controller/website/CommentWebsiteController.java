@@ -1,11 +1,13 @@
 package com.example.adambackend.controller.website;
 
+import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Comment;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.CommentService;
 import com.example.adambackend.service.ProductSevice;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,20 +30,36 @@ public class CommentWebsiteController {
     ModelMapper modelMapper;
     @Autowired
     ProductSevice productSevice;
+    @Autowired
+    AccountService accountService;
+
 //
     @PostMapping("create")
-    public ResponseEntity<?> createComment(@RequestParam("content") String content, @RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
-        return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(content,
-                LocalDateTime.now(), productId, accountId, CommentStatus.PENDING), 200, ""));
+    public ResponseEntity<?> createComment(@RequestBody Comment comment, @RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
+        Optional<Product> productOptional= productSevice.findById(productId);
+        Optional<Account> accountOptional= accountService.findById(accountId);
+        if(comment.getVote()==0||productOptional.isPresent()||accountOptional.isPresent() ){
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"can't create comment"));
+        }else{
+            int commentTotal= commentService.countCommentByProduct(productId);
+
+           double voteAverage= productOptional.get().getVoteAverage();
+           voteAverage=(voteAverage*commentTotal+comment.getVote())/(commentTotal+1);
+            System.out.println(voteAverage);
+            productOptional.get().setVoteAverage(voteAverage);
+            productSevice.save(productOptional.get());
+        return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(comment.getContent(),
+
+                LocalDateTime.now(), productId, accountId, CommentStatus.PENDING,comment.getVote()), 200, ""));
     }
-//
+}
     @PutMapping("update")
     public ResponseEntity<?> updateComment(@RequestParam("comment_id") Long id,
                                            @RequestParam("content") String content) {
         Optional<Comment> comment1 = commentService.findById(id);
         if (comment1.isPresent()) {
             comment1.get().setContent(content);
-            comment1.get().setCommentStatus(CommentStatus.PENDING);
+            comment1.get().setCommentStatus(CommentStatus.UPDATED);
             comment1.get().setTimeCreated(LocalDateTime.now());
             return ResponseEntity.ok(new IGenericResponse<Comment>(commentService.save(comment1.get()), 200, ""));
         }
@@ -51,7 +70,14 @@ public class CommentWebsiteController {
     public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Long id) {
         Optional<Comment> comment1 = commentService.findById(id);
         if (comment1.isPresent()) {
+            int vote= comment1.get().getVote();
+            int commentTotal= commentService.countCommentByProduct(comment1.get().getProduct().getId());
 
+            double voteAverage= comment1.get().getProduct().getVoteAverage();
+            voteAverage=(voteAverage*commentTotal-comment1.get().getVote())/(voteAverage-1);
+            Product p = comment1.get().getProduct();
+            p.setVoteAverage(voteAverage);
+            productSevice.save(p);
             commentService.deleteById(id);
             return ResponseEntity.ok(new IGenericResponse(200, ""));
         }

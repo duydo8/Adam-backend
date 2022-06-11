@@ -27,5 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (m.material_name like ?4 or ?4 is null)" +
             "and p.product_export between ISNULL(?5) or IsNull(?6)",nativeQuery = true)
     List<Product> findByColorSizePriceBrandAndMaterial(String colorName,String sizeName,String brand,String material,double bottomPrice,double topPrice);
-
+   @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id join tags t on t.id=tp.tag_id where t.tag_name=?1 ",nativeQuery = true)
+    List<Product> findAllByTagName(String tagName);
 }

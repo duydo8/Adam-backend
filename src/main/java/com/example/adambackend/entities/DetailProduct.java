@@ -40,8 +40,7 @@ public class DetailProduct {
     private Size size;
     @OneToMany(mappedBy = "detailProduct")
     private List<DetailOrder> detailOrders = new ArrayList<>();
-    @OneToMany(mappedBy = "detailProduct")
-    private List<Discount> discounts = new ArrayList<>();
+
 
 
 }

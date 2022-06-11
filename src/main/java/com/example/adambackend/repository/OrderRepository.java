@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("select o from Order  o join  Account  a on a.id=o.account.id where a.id=?1 order by o.createDate")
-    List<Order> findTop5OrderByCreateTime(Long accountId);
+
+    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Long accountId);
 }

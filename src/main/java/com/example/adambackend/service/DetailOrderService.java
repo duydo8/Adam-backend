@@ -21,4 +21,5 @@ public interface DetailOrderService {
     List<DetailOrder> findAllByOrderId(Long orderId);
 
     List<Product> findTop10ProductByCountQuantityInOrderDetail();
+    void deleteAllByOrderId(Long orderId);
 }

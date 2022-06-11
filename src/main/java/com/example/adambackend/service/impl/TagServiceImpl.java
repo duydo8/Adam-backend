@@ -20,6 +20,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Optional<Tag> findByTagName(String tagName) {
+        return tagRepository.findByTagName(tagName);
+    }
+
+    @Override
     public Tag save(Tag Tag) {
         return tagRepository.save(Tag);
     }
@@ -33,4 +38,6 @@ public class TagServiceImpl implements TagService {
     public Optional<Tag> findById(Long id) {
         return tagRepository.findById(id);
     }
+
+
 }
