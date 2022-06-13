@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="sale_events")
-public class SaleEvent {
+@Table(name="sale_event_code")
+public class SaleEventCode {
     @Id
     private String code;
     @Column(name="sale_event_name")
