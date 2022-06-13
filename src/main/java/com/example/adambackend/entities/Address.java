@@ -17,7 +17,8 @@ public class Address {
     private Long id;
     @Column(name = "address_detail")
     private String addressDetail;
-
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

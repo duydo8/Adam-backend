@@ -20,7 +20,8 @@ public class Material {
     private Long id;
     @Column(name="material_name")
     private String materialName;
-
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @OneToMany(mappedBy = "material")
     private List<MaterialProduct> materialProducts= new ArrayList<>();
 }

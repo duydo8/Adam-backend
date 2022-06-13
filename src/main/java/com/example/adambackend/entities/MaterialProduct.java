@@ -14,6 +14,8 @@ import javax.persistence.*;
 public class MaterialProduct {
     @EmbeddedId
     private MaterialProductPK materialProductPK;
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @MapsId("materialId")
     @JoinColumn(name = "material_id")

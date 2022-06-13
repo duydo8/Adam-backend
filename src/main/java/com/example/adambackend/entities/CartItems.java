@@ -16,6 +16,8 @@ public class CartItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantity;
+    @Column(name="total_price")
+    private double totalPrice;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

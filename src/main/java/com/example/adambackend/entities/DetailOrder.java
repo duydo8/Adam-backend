@@ -18,6 +18,8 @@ public class DetailOrder {
     private Long id;
     private int quantity;
     private double price;
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;

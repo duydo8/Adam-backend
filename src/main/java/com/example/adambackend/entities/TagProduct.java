@@ -14,6 +14,8 @@ import javax.persistence.*;
 public class TagProduct {
     @EmbeddedId
     private TagProductPK tagProductPK;
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @MapsId("tagId")
     @JoinColumn(name = "tag_id")

@@ -20,6 +20,8 @@ public class Color {
     private Long id;
     @Column(name = "color_name")
     private String colorName;
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @JsonIgnore
     @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
     private List<DetailProduct> detailProducts = new ArrayList<>();

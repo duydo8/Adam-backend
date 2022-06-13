@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,17 @@ public class SaleEventCode {
     @Column(name="sale_event_name")
     private String SaleEventName;
     private String description;
-    private double promotion;
-    @OneToMany(mappedBy = "saleEvent")
+    @Column(name="create_date")
+    private LocalDateTime createDate;
+    @Column(name="start_time")
+    private LocalDateTime startTime;
+    @Column(name="end_date")
+    private LocalDateTime endDate;
+    @OneToMany(mappedBy = "saleEventCode")
     private  List<AccountEvent> accountEvents= new ArrayList<>();
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
+    @ManyToOne
+    @JoinColumn(name="promotion_id")
+    private Promotion promotion;
 }

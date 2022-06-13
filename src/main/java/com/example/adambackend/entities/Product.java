@@ -38,9 +38,7 @@ private double voteAverage;
     List<Favorite> favorites = new ArrayList<>();
     @OneToMany(mappedBy = "product")
     List<DetailProduct> detailProducts = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name="brand_id")
-    private  Brand brand;
+
 
     @OneToMany(mappedBy = "product")
     private List<TagProduct> tagProducts= new ArrayList<>();

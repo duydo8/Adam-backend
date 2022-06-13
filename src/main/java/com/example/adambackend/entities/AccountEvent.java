@@ -17,13 +17,16 @@ import java.util.List;
 public class AccountEvent {
     @EmbeddedId
     private AccountEventPK accountEventPK;
+    @Column(name="time_use")
+    private LocalDateTime timeUse;
     @Column(name="time_valid")
     private LocalDateTime timeValid;
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id")
     private Account account = new Account();
-
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @MapsId("eventId")
     @JoinColumn(name = "event_id")
@@ -31,7 +34,9 @@ public class AccountEvent {
     @ManyToOne
     @MapsId("code")
     @JoinColumn(name = "code")
-    private SaleEvent saleEvent = new SaleEvent();
+    private SaleEventCode saleEventCode = new SaleEventCode();
+
+
     @ManyToOne
     @JoinColumn(name="order_id")
     private Order order= new Order();

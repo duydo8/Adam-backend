@@ -50,7 +50,8 @@ public class FavoriteWebsiteController {
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
         if (favorite == null) {
             FavoriteId favoriteId = new FavoriteId(accountId, productId);
-            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(favoriteService.save(new Favorite(favoriteId, LocalDateTime.now(),
+            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(favoriteService.save(new Favorite(favoriteId,
+                    LocalDateTime.now(),false,
                     accountService.findById(accountId).get(), productSevice.findById(productId).get())), 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Exist"));

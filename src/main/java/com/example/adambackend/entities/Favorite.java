@@ -17,7 +17,8 @@ public class Favorite {
     private FavoriteId favoriteId;
     @Column(name = "time_create")
     private LocalDateTime time_create;
-
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id")

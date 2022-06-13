@@ -19,6 +19,8 @@ public class Size {
     private Long id;
     @Column(name = "size_name")
     private String sizeName;
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
     @OneToMany(mappedBy = "size", cascade = CascadeType.ALL)
 
     private List<DetailProduct> detailProducts = new ArrayList<>();
