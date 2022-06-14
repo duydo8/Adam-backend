@@ -26,12 +26,12 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         cartItemRepository.deleteById(id);
     }
 
     @Override
-    public Optional<CartItems> findById(Long id) {
+    public Optional<CartItems> findById(Integer id) {
         return cartItemRepository.findById(id);
     }
 }

@@ -27,44 +27,44 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         commentRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Comment> findById(Long id) {
+    public Optional<Comment> findById(Integer id) {
         return commentRepository.findById(id);
     }
 
     @Override
-    public Integer countCommentByAccountIdAndProductId(Long idAccount, Long idProduct) {
+    public Integer countCommentByAccountIdAndProductId(Integer idAccount, Integer idProduct) {
         return commentRepository.countCommentByAccountIdAndProductId(idAccount, idProduct);
     }
 
     @Override
-    public List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct) {
+    public List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct) {
         return commentRepository.findCommentByIdAccountAndIdProduct(idAccount, idProduct);
     }
 
     @Override
-    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus, int vote) {
+    public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus, int vote) {
 
         return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus,vote);
     }
 
     @Override
-    public List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId) {
+    public List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId) {
         return commentRepository.findAllCommentByProductIdAndStatusIsActive(productId);
 
     }
 
     @Override
-    public List<Comment> findTop10CommentByProductId(Long productId) {
+    public List<Comment> findTop10CommentByProductId(Integer productId) {
         return commentRepository.findTop10CommentByProductId(productId);
     }
 
     @Override
-    public Integer countCommentByProduct(Long productId) {
+    public Integer countCommentByProduct(Integer productId) {
         return commentRepository.countCommentByProduct(productId);
     }
 }

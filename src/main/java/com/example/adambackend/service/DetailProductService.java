@@ -7,13 +7,14 @@ import java.util.Optional;
 
 public interface DetailProductService {
 
-    Optional<DetailProduct> findById(Long id);
+    Optional<DetailProduct> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     DetailProduct save(DetailProduct detailProduct);
 
     List<DetailProduct> findAll();
 
-    List<DetailProduct> findAllByProductId(Long idProduct);
+    List<DetailProduct> findAllByProductId(Integer idProduct);
+
 }

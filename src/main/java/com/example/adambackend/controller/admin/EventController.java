@@ -34,7 +34,7 @@ public class EventController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Integer id) {
         Optional<Event> eventOptional = eventService.findById(id);
         if (eventOptional.isPresent()) {
             eventService.deleteById(id);

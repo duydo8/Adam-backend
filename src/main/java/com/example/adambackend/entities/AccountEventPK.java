@@ -13,11 +13,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class AccountEventPK implements Serializable {
-    private static final long serialVersionUID = -7524270329897682645L;
+    private static final Long serialVersionUID = -7524270329897682645L;
     @Column(name="account_id")
-    private Long accountId;
+    private Integer accountId;
     @Column(name="event_id")
-    private Long eventId;
+    private Integer eventId;
     @Column(name="code")
     private String code;
 

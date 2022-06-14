@@ -16,7 +16,7 @@ import java.util.List;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "tag_name")
     private String tagName;
     @Column(name="is_deleted")

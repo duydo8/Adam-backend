@@ -21,7 +21,7 @@ public class DetailProductController {
     @Autowired
     ProductSevice productSevice;
     @PostMapping("create")
-    public ResponseEntity<?> createDetailProduct(@RequestParam("product_id")Long productId, @RequestBody DetailProduct detailProduct){
+    public ResponseEntity<?> createDetailProduct(@RequestParam("product_id")Integer productId, @RequestBody DetailProduct detailProduct){
         Optional<Product> product= productSevice.findById(productId);
         if(product.isPresent()){
             detailProductService.save(detailProduct);
@@ -36,7 +36,7 @@ public class DetailProductController {
 
     }
     @PutMapping("update")
-    public ResponseEntity<?> updateDetailProduct(@RequestParam("product_id")Long productId, @RequestBody DetailProduct detailProduct){
+    public ResponseEntity<?> updateDetailProduct(@RequestParam("product_id")Integer productId, @RequestBody DetailProduct detailProduct){
         Optional<Product> product= productSevice.findById(productId);
         if(product.isPresent()){
         List<DetailProduct> detailProducts= product.get().getDetailProducts();
@@ -58,7 +58,7 @@ public class DetailProductController {
 
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteDetailProduct(@RequestParam("product_id")Long productId,@RequestParam("detail_product_id")Long detailProductId) {
+    public ResponseEntity<?> deleteDetailProduct(@RequestParam("product_id")Integer productId,@RequestParam("detail_product_id")Integer detailProductId) {
         Optional<Product> product = productSevice.findById(productId);
         Optional<DetailProduct> detailProduct = detailProductService.findById(detailProductId);
         if (product.isPresent() && detailProduct.isPresent()) {

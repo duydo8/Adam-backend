@@ -10,7 +10,7 @@ public interface ProvinceService {
 
     Province save(Province province);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<Province> findById(Long id);
+    Optional<Province> findById(Integer id);
 }

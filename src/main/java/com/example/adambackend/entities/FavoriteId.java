@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Embeddable
 public class FavoriteId implements Serializable {
     @Column(name = "account_id")
-    private Long accountId;
+    private Integer accountId;
     @Column(name = "product_id")
-    private Long productId;
+    private Integer productId;
 
 }

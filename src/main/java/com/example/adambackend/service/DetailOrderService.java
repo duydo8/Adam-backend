@@ -9,17 +9,20 @@ import java.util.Optional;
 
 public interface DetailOrderService {
 
-    Optional<DetailOrder> findById(Long id);
+    Optional<DetailOrder> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     DetailOrder save(DetailOrder detailOrder);
 
     List<DetailOrder> findAll();
 
 
-    List<DetailOrder> findAllByOrderId(Long orderId);
+    List<DetailOrder> findAllByOrderId(Integer orderId);
 
     List<Product> findTop10ProductByCountQuantityInOrderDetail();
-    void deleteAllByOrderId(Long orderId);
+    void deleteAllByOrderId(Integer orderId);
+
+
+    List<Integer> findProductIdByOrder();
 }

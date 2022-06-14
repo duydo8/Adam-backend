@@ -37,7 +37,7 @@ public class ColorController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("color_id")Long colorId){
+    public ResponseEntity<?> delete(@RequestParam("color_id")Integer colorId){
         Optional<Color> colorOptional= colorService.findById(colorId);
         if(colorOptional.isPresent()){
             colorService.deleteById(colorId);

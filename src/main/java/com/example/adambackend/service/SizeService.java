@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface SizeService {
 
-    Optional<Size> findById(Long id);
+    Optional<Size> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Size save(Size size);
 

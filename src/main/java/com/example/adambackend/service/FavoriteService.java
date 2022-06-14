@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface FavoriteService {
 
-    Optional<Favorite> findById(Long id);
+    Optional<Favorite> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Favorite save(Favorite favorite);
 
@@ -18,11 +18,11 @@ public interface FavoriteService {
 
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
-    Product findProductFavoriteByAccountId(Long id);
+    Product findProductFavoriteByAccountId(Integer id);
 
     List<Product> findTop10FavoriteProduct();
 
-    Favorite findByAccountIdAndProductId(Long accountId, Long productId);
+    Favorite findByAccountIdAndProductId(Integer accountId, Integer productId);
 
-    void deleteFavoriteByAccountIdAndProductId(Long accountId, Long productId);
+    void deleteFavoriteByAccountIdAndProductId(Integer accountId, Integer productId);
 }

@@ -25,12 +25,12 @@ public class WardServiceImpl implements WardService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         wardRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Ward> findById(Long id) {
+    public Optional<Ward> findById(Integer id) {
         return wardRepository.findById(id);
     }
 }

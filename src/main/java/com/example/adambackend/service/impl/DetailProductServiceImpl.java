@@ -26,19 +26,20 @@ public class DetailProductServiceImpl implements DetailProductService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         detailProductRepository.deleteById(id);
     }
 
     @Override
-    public Optional<DetailProduct> findById(Long id) {
+    public Optional<DetailProduct> findById(Integer id) {
         return detailProductRepository.findById(id);
     }
 
     @Override
-    public List<DetailProduct> findAllByProductId(Long idProduct) {
+    public List<DetailProduct> findAllByProductId(Integer idProduct) {
         return detailProductRepository.findAllByProductId(idProduct);
     }
+
 
 
 }

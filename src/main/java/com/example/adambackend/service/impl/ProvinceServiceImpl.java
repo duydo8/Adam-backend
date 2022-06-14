@@ -25,12 +25,12 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         provinceRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Province> findById(Long id) {
+    public Optional<Province> findById(Integer id) {
         return provinceRepository.findById(id);
     }
 }

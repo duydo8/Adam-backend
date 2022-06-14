@@ -20,7 +20,7 @@ public class DetailOrderWebsiteController {
     DetailOrderService detailOrderService;
 
     @GetMapping("findAllByOrderId")
-    public ResponseEntity<?> findAllByOrderId(@RequestParam("order_id") Long orderId) {
+    public ResponseEntity<?> findAllByOrderId(@RequestParam("order_id") Integer orderId) {
         return ResponseEntity.ok().body(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAllByOrderId(orderId), 200, ""));
     }
 

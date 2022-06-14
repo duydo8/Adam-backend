@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface ProductSevice {
 
-    Optional<Product> findById(Long id);
+    Optional<Product> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Product save(Product product);
 

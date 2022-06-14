@@ -37,12 +37,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         accountRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Account> findById(Long id) {
+    public Optional<Account> findById(Integer id) {
         return accountRepository.findById(id);
     }
 

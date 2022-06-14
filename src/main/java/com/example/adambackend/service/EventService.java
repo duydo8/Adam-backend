@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface EventService {
 
-    Optional<Event> findById(Long id);
+    Optional<Event> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Event save(Event event);
 

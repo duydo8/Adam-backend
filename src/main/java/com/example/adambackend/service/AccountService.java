@@ -13,9 +13,9 @@ public interface AccountService {
 
     Account save(Account account);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<Account> findById(Long id);
+    Optional<Account> findById(Integer id);
 
     List<Account> findByRoleName(String roleName);
 

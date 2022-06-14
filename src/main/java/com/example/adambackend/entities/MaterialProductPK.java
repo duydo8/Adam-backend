@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Embeddable
 public class MaterialProductPK implements Serializable {
     @Column(name = "material_id")
-    private Long materialId;
+    private Integer materialId;
     @Column(name = "product_id")
-    private Long productId;
+    private Integer productId;
 }

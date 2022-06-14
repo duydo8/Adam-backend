@@ -17,7 +17,7 @@ import java.util.List;
 public class Color {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "color_name")
     private String colorName;
     @Column(name="is_deleted")

@@ -35,7 +35,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("category_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("category_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (categoryOptional.isPresent()) {
             categoryService.deleteById(id);

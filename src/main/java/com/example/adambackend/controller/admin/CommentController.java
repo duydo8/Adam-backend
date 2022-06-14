@@ -24,12 +24,12 @@ public class CommentController {
     ModelMapper modelMapper;
 
     @GetMapping("countCommentByAccountIdAndProductId")
-    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Long idAccount, @RequestParam("product_id") Long idProduct) {
+    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {
         return ResponseEntity.ok().body(new IGenericResponse<Integer>(commentService.countCommentByAccountIdAndProductId(idAccount, idProduct), 200, "countCommentByAccountIdAndProductId"));
     }
 
     @PutMapping("changeStatusComment")
-    public ResponseEntity<?> changeStatusComment(@RequestParam("comment_id") Long commentId,
+    public ResponseEntity<?> changeStatusComment(@RequestParam("comment_id") Integer commentId,
                                                                 @RequestParam("status") String status) {
         //Comment comment= commentService.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
         Optional<Comment> comment = commentService.findById(commentId);
@@ -56,7 +56,7 @@ public class CommentController {
     }
 
     @GetMapping("findAllByAccountIdAndProductId")
-    public ResponseEntity<?> changeStatusComment(@RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
+    public ResponseEntity<?> changeStatusComment(@RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
         List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
         if (comments.size() > 0) {
             List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());

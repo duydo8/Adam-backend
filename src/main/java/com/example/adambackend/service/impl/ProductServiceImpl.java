@@ -32,12 +32,12 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         productRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
+    public Optional<Product> findById(Integer id) {
         return productRepository.findById(id);
     }
 

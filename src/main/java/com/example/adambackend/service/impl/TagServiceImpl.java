@@ -30,12 +30,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         tagRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Tag> findById(Long id) {
+    public Optional<Tag> findById(Integer id) {
         return tagRepository.findById(id);
     }
 

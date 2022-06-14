@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface CategoryService {
 
-    Optional<Category> findById(Long id);
+    Optional<Category> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Category save(Category category);
 

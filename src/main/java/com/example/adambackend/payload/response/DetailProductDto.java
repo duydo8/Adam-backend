@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailProductDto {
-    private Long id;
+    private Integer id;
     private int quantity;
     private Double price;
     private Boolean isDelete;

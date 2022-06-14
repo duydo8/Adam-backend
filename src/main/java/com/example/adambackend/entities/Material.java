@@ -17,7 +17,7 @@ import java.util.List;
 public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name="material_name")
     private String materialName;
     @Column(name="is_deleted")

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class AccountDetailsService implements UserDetails {
-    private static final long serialVersionUID = 1L;
+    private static final Long serialVersionUID = 1L;
 
-    private final Long id;
+    private final Integer id;
 
     private final String username;
 
@@ -25,7 +25,7 @@ public class AccountDetailsService implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public AccountDetailsService(Long id, String username, String email, String password,
+    public AccountDetailsService(Integer id, String username, String email, String password,
                                  Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -51,7 +51,7 @@ public class AccountDetailsService implements UserDetails {
         return authorities;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

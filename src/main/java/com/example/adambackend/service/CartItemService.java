@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface CartItemService {
 
-    Optional<CartItems> findById(Long id);
+    Optional<CartItems> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     CartItems save(CartItems cartItems);
 

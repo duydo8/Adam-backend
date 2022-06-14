@@ -13,9 +13,9 @@ import java.io.Serializable;
 @Embeddable
 public class TagProductPK implements Serializable {
     @Column(name = "tag_id")
-    private Long tagId;
+    private Integer tagId;
     @Column(name = "product_id")
-    private Long productId;
+    private Integer productId;
 
 }
 

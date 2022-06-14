@@ -41,7 +41,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("product_id")Long sizeId){
+    public ResponseEntity<?> delete(@RequestParam("product_id")Integer sizeId){
         Optional<Product> product1= productSevice.findById(sizeId);
         if(product1.isPresent()){
             productSevice.deleteById(sizeId);

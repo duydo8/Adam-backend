@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface AddressService {
 
-    Optional<Address> findById(Long id);
+    Optional<Address> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Address save(Address address);
 

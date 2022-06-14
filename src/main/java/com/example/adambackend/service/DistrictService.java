@@ -10,7 +10,7 @@ public interface DistrictService {
 
     District save(District district);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<District> findById(Long id);
+    Optional<District> findById(Integer id);
 }

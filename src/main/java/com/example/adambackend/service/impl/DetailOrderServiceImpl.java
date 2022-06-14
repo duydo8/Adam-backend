@@ -26,17 +26,17 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         detailOrderRepository.deleteById(id);
     }
 
     @Override
-    public Optional<DetailOrder> findById(Long id) {
+    public Optional<DetailOrder> findById(Integer id) {
         return detailOrderRepository.findById(id);
     }
 
     @Override
-    public List<DetailOrder> findAllByOrderId(Long orderId) {
+    public List<DetailOrder> findAllByOrderId(Integer orderId) {
         return detailOrderRepository.findAllByOrderId(orderId);
     }
 
@@ -46,8 +46,12 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     }
 
     @Override
-    public void deleteAllByOrderId(Long orderId) {
+    public void deleteAllByOrderId(Integer orderId) {
          detailOrderRepository.deleteAllByOrderId(orderId);
     }
 
+    @Override
+    public List<Integer> findProductIdByOrder(){
+        return  detailOrderRepository.findProductIdByOrder();
+    }
 }

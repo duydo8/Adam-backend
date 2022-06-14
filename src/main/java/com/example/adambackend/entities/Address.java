@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "address_detail")
     private String addressDetail;
     @Column(name="is_deleted")

@@ -25,12 +25,12 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         districtRepository.deleteById(id);
     }
 
     @Override
-    public Optional<District> findById(Long id) {
+    public Optional<District> findById(Integer id) {
         return districtRepository.findById(id);
     }
 }

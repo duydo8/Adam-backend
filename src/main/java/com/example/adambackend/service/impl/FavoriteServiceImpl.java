@@ -26,12 +26,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         favoriteRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Favorite> findById(Long id) {
+    public Optional<Favorite> findById(Integer id) {
         return favoriteRepository.findById(id);
     }
 
@@ -41,7 +41,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Product findProductFavoriteByAccountId(Long id) {
+    public Product findProductFavoriteByAccountId(Integer id) {
         return favoriteRepository.findProductFavoriteByAccountId(id);
     }
 
@@ -51,12 +51,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Favorite findByAccountIdAndProductId(Long accountId, Long productId) {
+    public Favorite findByAccountIdAndProductId(Integer accountId, Integer productId) {
         return favoriteRepository.findByAccountIdAndProductId(accountId, productId);
     }
 
     @Override
-    public void deleteFavoriteByAccountIdAndProductId(Long accountId, Long productId) {
+    public void deleteFavoriteByAccountIdAndProductId(Integer accountId, Integer productId) {
         favoriteRepository.deleteFavoriteByAccountIdAndProductId(accountId, productId);
     }
 }

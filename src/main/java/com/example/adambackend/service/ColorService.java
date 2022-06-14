@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface ColorService {
 
-    Optional<Color> findById(Long id);
+    Optional<Color> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Color save(Color color);
 

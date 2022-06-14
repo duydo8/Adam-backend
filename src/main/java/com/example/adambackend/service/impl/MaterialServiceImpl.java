@@ -25,12 +25,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         materialRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Material> findById(Long id) {
+    public Optional<Material> findById(Integer id) {
         return materialRepository.findById(id);
     }
 }

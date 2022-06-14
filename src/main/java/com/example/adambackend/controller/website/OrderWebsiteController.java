@@ -25,7 +25,7 @@ public class OrderWebsiteController {
     DetailOrderService detailOrderService;
 
 //    @GetMapping("findTop5OrderByCreateTime")
-//    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Long accountId) {
+//    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
 //        Optional<Account> account = accountService.findById(accountId);
 //        if (account.isPresent()) {
 //            return ResponseEntity.ok().body(new IGenericResponse<List<Order>>(orderService.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId), 200, ""));
@@ -37,7 +37,7 @@ public class OrderWebsiteController {
         return  ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order),200,""));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?>deleteOrder(@RequestParam("order_id")Long orderId){
+    public ResponseEntity<?>deleteOrder(@RequestParam("order_id")Integer orderId){
         Optional<Order> optionalOrder= orderService.findById(orderId);
         if(optionalOrder.isPresent()){
             detailOrderService.deleteAllByOrderId(orderId);
@@ -47,6 +47,7 @@ public class OrderWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
     }
+    
 
 
 }

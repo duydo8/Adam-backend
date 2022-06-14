@@ -29,7 +29,7 @@ public class SizeController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("size_id")Long sizeId){
+    public ResponseEntity<?> delete(@RequestParam("size_id")Integer sizeId){
         Optional<Size> size1= sizeService.findById(sizeId);
         if(size1.isPresent()){
             sizeService.deleteById(sizeId);

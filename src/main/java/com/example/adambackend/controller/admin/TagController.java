@@ -27,7 +27,7 @@ public class TagController {
     }
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody Tag tag,
-                                    @RequestParam("product_id") Long productId){
+                                    @RequestParam("product_id") Integer productId){
         Optional<Product> productOptional=productSevice.findById(productId);
         if(productOptional.isPresent()){
             return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
@@ -36,7 +36,7 @@ public class TagController {
     }
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Tag tag,
-                                    @RequestParam("product_id") Long productId){
+                                    @RequestParam("product_id") Integer productId){
         Optional<Product> productOptional=productSevice.findById(productId);
         Optional<Tag>tagOptional= tagService.findById(tag.getId());
         if(productOptional.isPresent()&& tagOptional.isPresent()){
@@ -45,7 +45,7 @@ public class TagController {
         return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("tag_id") Long id) {
+    public ResponseEntity<?> delete(@RequestParam("tag_id") Integer id) {
         Optional<Tag> tagOptional = tagService.findById(id);
         if (tagOptional.isPresent()) {
             tagService.deleteById(id);

@@ -10,9 +10,9 @@ public interface OrderService {
 
     Order save(Order order);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<Order> findById(Long id);
+    Optional<Order> findById(Integer id);
 
-//    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Long accountId);
+//    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }

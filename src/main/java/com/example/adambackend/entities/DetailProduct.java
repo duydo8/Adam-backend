@@ -16,7 +16,7 @@ import java.util.List;
 public class DetailProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private int quantity;
     @Column(name="price_import")
     private Double priceImport;

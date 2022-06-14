@@ -9,22 +9,22 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Optional<Comment> findById(Long id);
+    Optional<Comment> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Comment save(Comment comment);
 
     List<Comment> findAll();
 
-    Integer countCommentByAccountIdAndProductId(Long idAccount, Long idProduct);
+    Integer countCommentByAccountIdAndProductId(Integer idAccount, Integer idProduct);
 
-    List<Comment> findCommentByIdAccountAndIdProduct(Long idAccount, Long idProduct);
+    List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct);
 
-    Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Long productId, Long accountId, CommentStatus commentStatus,int vote);
+    Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus,int vote);
 
-    List<Comment> findAllCommentByProductIdAndStatusIsActive(Long productId);
+    List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId);
 
-    List<Comment> findTop10CommentByProductId(Long productId);
-    Integer countCommentByProduct(Long productId);
+    List<Comment> findTop10CommentByProductId(Integer productId);
+    Integer countCommentByProduct(Integer productId);
 }

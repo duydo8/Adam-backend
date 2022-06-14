@@ -33,7 +33,7 @@ public class DistrictController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Integer id) {
         Optional<District> districtOptional = districtService.findById(id);
         if (districtOptional.isPresent()) {
             districtService.deleteById(id);

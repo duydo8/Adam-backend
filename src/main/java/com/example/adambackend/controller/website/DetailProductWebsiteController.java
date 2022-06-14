@@ -26,7 +26,7 @@ public class DetailProductWebsiteController {
     ProductSevice productSevice;
 
     @GetMapping("findByProductId")
-    public ResponseEntity<?> findByProductId(@RequestParam("product_id") Long productId) {
+    public ResponseEntity<?> findByProductId(@RequestParam("product_id") Integer productId) {
         Optional<Product> product = productSevice.findById(productId);
         if (product.isPresent()) {
             List<DetailProduct> detailProducts = detailProductService.findAllByProductId(productId);

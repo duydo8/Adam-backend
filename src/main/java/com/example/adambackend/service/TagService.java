@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface TagService {
 
-    Optional<Tag> findById(Long id);
+    Optional<Tag> findById(Integer id);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Tag save(Tag tag);
 

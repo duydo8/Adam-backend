@@ -26,12 +26,12 @@ public class ColorServiceImpl implements ColorService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         colorRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Color> findById(Long id) {
+    public Optional<Color> findById(Integer id) {
         return colorRepository.findById(id);
     }
 }

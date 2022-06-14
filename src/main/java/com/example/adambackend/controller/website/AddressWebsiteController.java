@@ -21,7 +21,7 @@ public class AddressWebsiteController {
     @Autowired
     AccountService accountService;
     @PostMapping("create")
-    public ResponseEntity<?> createAddress(@RequestParam("account_id")Long accountId, @RequestBody Address address){
+    public ResponseEntity<?> createAddress(@RequestParam("account_id")Integer accountId, @RequestBody Address address){
         Optional<Account> account = accountService.findById(accountId);
         if (account.isPresent()) {
             Address address1=addressService.save(address);
@@ -36,7 +36,7 @@ public class AddressWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found account"));
     }
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestParam("account_id")Long accountId, @RequestBody Address address){
+    public ResponseEntity<?> update(@RequestParam("account_id")Integer accountId, @RequestBody Address address){
         Optional<Account> account = accountService.findById(accountId);
         Optional<Address> address1= addressService.findById(address.getId());
         if (account.isPresent()&& address1.isPresent()) {
@@ -54,7 +54,7 @@ public class AddressWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
     }
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("address_id") Long addressId,@RequestParam("account_id") Long accountId ){
+    public ResponseEntity<?> delete(@RequestParam("address_id") Integer addressId,@RequestParam("account_id") Integer accountId ){
         Optional<Account> account = accountService.findById(accountId);
         Optional<Address> address1= addressService.findById(accountId);
         if (account.isPresent()&& address1.isPresent()) {

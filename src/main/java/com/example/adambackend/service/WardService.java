@@ -10,7 +10,7 @@ public interface WardService {
 
     Ward save(Ward ward);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<Ward> findById(Long id);
+    Optional<Ward> findById(Integer id);
 }

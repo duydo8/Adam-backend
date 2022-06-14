@@ -10,7 +10,7 @@ public interface MaterialService {
 
     Material save(Material Tag);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
-    Optional<Material> findById(Long id);
+    Optional<Material> findById(Integer id);
 }

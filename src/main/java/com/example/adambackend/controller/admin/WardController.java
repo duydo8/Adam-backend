@@ -33,7 +33,7 @@ public class WardController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("ward_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("ward_id") Integer id) {
         Optional<Ward> wardOptional = wardService.findById(id);
         if (wardOptional.isPresent()) {
             wardService.deleteById(id);

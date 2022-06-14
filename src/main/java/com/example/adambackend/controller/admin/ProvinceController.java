@@ -33,7 +33,7 @@ public class ProvinceController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Integer id) {
         Optional<Province> provinceOptional = provinceService.findById(id);
         if (provinceOptional.isPresent()) {
             provinceService.deleteById(id);

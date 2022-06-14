@@ -42,7 +42,7 @@ public class MaterialControler {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("material_id") Long id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("material_id") Integer id) {
         Optional<Material> materialOptional = materialService.findById(id);
         if (materialOptional.isPresent()) {
             materialService.deleteById(id);

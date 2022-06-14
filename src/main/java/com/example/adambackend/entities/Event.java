@@ -17,7 +17,7 @@ import java.util.List;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "name_event")
     private String nameEvent;
     @Column(name = "start_time")

@@ -7,9 +7,7 @@ import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.AccountService;
-import com.example.adambackend.service.CommentService;
-import com.example.adambackend.service.ProductSevice;
+import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,29 +30,39 @@ public class CommentWebsiteController {
     ProductSevice productSevice;
     @Autowired
     AccountService accountService;
+    @Autowired
+    DetailOrderService detailOrderService;
 
 //
     @PostMapping("create")
-    public ResponseEntity<?> createComment(@RequestBody Comment comment, @RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
-        Optional<Product> productOptional= productSevice.findById(productId);
-        Optional<Account> accountOptional= accountService.findById(accountId);
-        if(comment.getVote()==0||productOptional.isPresent()||accountOptional.isPresent() ){
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"can't create comment"));
-        }else{
-            int commentTotal= commentService.countCommentByProduct(productId);
+    public ResponseEntity<?> createComment(@RequestBody Comment comment, @RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
+//        if(productId)
+        List<Integer> listProductId= detailOrderService.findProductIdByOrder();
+        for (Integer id: listProductId
+             ) {
+            if(id==productId){
+                Optional<Product> productOptional= productSevice.findById(productId);
+                Optional<Account> accountOptional= accountService.findById(accountId);
+                if(comment.getVote()==0||productOptional.isPresent()||accountOptional.isPresent() ){
+                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"can't create comment"));
+                }else{
+                    int commentTotal= commentService.countCommentByProduct(productId);
 
-           double voteAverage= productOptional.get().getVoteAverage();
-           voteAverage=(voteAverage*commentTotal+comment.getVote())/(commentTotal+1);
-            System.out.println(voteAverage);
-            productOptional.get().setVoteAverage(voteAverage);
-            productSevice.save(productOptional.get());
-        return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(comment.getContent(),
+                    double voteAverage= productOptional.get().getVoteAverage();
+                    voteAverage=(voteAverage*commentTotal+comment.getVote())/(commentTotal+1);
+                    System.out.println(voteAverage);
+                    productOptional.get().setVoteAverage(voteAverage);
+                    productSevice.save(productOptional.get());
+                    return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(comment.getContent(),
 
-                LocalDateTime.now(), productId, accountId, CommentStatus.PENDING,comment.getVote()), 200, ""));
-    }
+                            LocalDateTime.now(), productId, accountId, CommentStatus.PENDING,comment.getVote()), 200, ""));
+                }
+            }
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not contains in order"));
 }
     @PutMapping("update")
-    public ResponseEntity<?> updateComment(@RequestParam("comment_id") Long id,
+    public ResponseEntity<?> updateComment(@RequestParam("comment_id") Integer id,
                                            @RequestParam("content") String content) {
         Optional<Comment> comment1 = commentService.findById(id);
         if (comment1.isPresent()) {
@@ -67,14 +75,14 @@ public class CommentWebsiteController {
     }
 //
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Long id) {
+    public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Integer id) {
         Optional<Comment> comment1 = commentService.findById(id);
         if (comment1.isPresent()) {
             int vote= comment1.get().getVote();
             int commentTotal= commentService.countCommentByProduct(comment1.get().getProduct().getId());
 
             double voteAverage= comment1.get().getProduct().getVoteAverage();
-            voteAverage=(voteAverage*commentTotal-comment1.get().getVote())/(voteAverage-1);
+            voteAverage=(voteAverage*commentTotal-vote)/(voteAverage-1);
             Product p = comment1.get().getProduct();
             p.setVoteAverage(voteAverage);
             productSevice.save(p);
@@ -85,7 +93,7 @@ public class CommentWebsiteController {
     }
 
     @GetMapping("findAllCommentByProductIdAndStatusIsActive")
-    public ResponseEntity<?> findAllCommentByProductIdAndStatusIsActive(@RequestParam("product_id") Long productId) {
+    public ResponseEntity<?> findAllCommentByProductIdAndStatusIsActive(@RequestParam("product_id") Integer productId) {
         Optional<Product> product = productSevice.findById(productId);
         if (product.isPresent()) {
 
@@ -95,7 +103,7 @@ public class CommentWebsiteController {
     }
 
     @GetMapping("findTop10CommentByProductId")
-    public ResponseEntity<?> findTop10CommentByProductId(@RequestParam("productId") Long productId) {
+    public ResponseEntity<?> findTop10CommentByProductId(@RequestParam("productId") Integer productId) {
         Optional<Product> product = productSevice.findById(productId);
         if (product.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId), 200, ""));
@@ -104,7 +112,7 @@ public class CommentWebsiteController {
     }
 
     @GetMapping("findAllByAccountIdAndProductId")
-    public ResponseEntity<IGenericResponse> changeStatusComment(@RequestParam("account_id") Long accountId, @RequestParam("product_id") Long productId) {
+    public ResponseEntity<IGenericResponse> changeStatusComment(@RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
         List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
         if (comments.size() > 0) {
             List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());

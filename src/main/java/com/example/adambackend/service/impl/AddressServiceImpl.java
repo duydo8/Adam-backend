@@ -25,12 +25,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         addressRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Address> findById(Long id) {
+    public Optional<Address> findById(Integer id) {
         return addressRepository.findById(id);
     }
 }

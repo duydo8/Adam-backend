@@ -31,7 +31,7 @@ public class FavoriteWebsiteController {
     AccountService accountService;
 
     @GetMapping("findProductFavoriteByAccountId")
-    public ResponseEntity<?> findProductFavoriteByAccountId(@RequestParam("account_id") Long accountId) {
+    public ResponseEntity<?> findProductFavoriteByAccountId(@RequestParam("account_id") Integer accountId) {
         Optional<Account> account = accountService.findById(accountId);
         if (account.isPresent()) {
             ProductDto productDto = modelMapper.map(favoriteService.findProductFavoriteByAccountId(accountId), ProductDto.class);
@@ -46,7 +46,7 @@ public class FavoriteWebsiteController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> createFavorite(@RequestParam("product_id") Long productId, @RequestParam("account_id") Long accountId) {
+    public ResponseEntity<?> createFavorite(@RequestParam("product_id") Integer productId, @RequestParam("account_id") Integer accountId) {
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
         if (favorite == null) {
             FavoriteId favoriteId = new FavoriteId(accountId, productId);
@@ -59,7 +59,7 @@ public class FavoriteWebsiteController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteFavorite(@RequestParam("product_id") Long productId, @RequestParam("account_id") Long accountId) {
+    public ResponseEntity<?> deleteFavorite(@RequestParam("product_id") Integer productId, @RequestParam("account_id") Integer accountId) {
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
         if (favorite == null) {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Not Exist"));

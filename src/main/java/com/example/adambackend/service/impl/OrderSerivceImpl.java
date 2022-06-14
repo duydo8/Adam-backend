@@ -25,17 +25,17 @@ public class OrderSerivceImpl implements OrderService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         orderRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
+    public Optional<Order> findById(Integer id) {
         return orderRepository.findById(id);
     }
 
 //    @Override
-//    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Long accountId) {
+//    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
 //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
 //    }
 
