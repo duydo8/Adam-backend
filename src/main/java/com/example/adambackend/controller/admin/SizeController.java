@@ -1,5 +1,6 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -36,5 +38,9 @@ public class SizeController {
             return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+    }
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAll(),200,""));
     }
 }

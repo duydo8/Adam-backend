@@ -15,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "accounts", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email"),
-        @UniqueConstraint(columnNames = "phone_number")
-})
+@Table(name = "accounts")
 
 public class Account {
     @Id

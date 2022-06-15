@@ -38,9 +38,5 @@ public class DetailProduct {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
-    @OneToMany(mappedBy = "detailProduct")
-    private List<DetailOrder> detailOrders = new ArrayList<>();
-
-
 
 }
