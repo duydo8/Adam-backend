@@ -1,1 +1,1 @@
-web: java -jar target/Adam-backend.jar
+web: java -jar target/adam-backend.jar
