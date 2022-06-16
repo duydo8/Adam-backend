@@ -16,7 +16,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
     @Query("select p from Favorite  fa join Product p on fa.product.id=p.id join Account a on a.id=fa.account.id where a.id=?1")
-    Product findProductFavoriteByAccountId(Integer accountId);
+    List<Product> findProductFavoriteByAccountId(Integer accountId);
 
     @Query(value = "select top(10) p from products p join favorites fa on p.id=fa.product_id group by p.id,fa.product_id orderby count(fa) desc ", nativeQuery = true)
     List<Product> findTop10FavoriteProduct();
@@ -26,6 +26,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "delete from favorites fa join accounts a on a.id=fa.account_id join products p on p.id=fa.product_id where a.id=?1 and p.id=?2", nativeQuery = true)
+    @Query(value = "delete from favorites  where account_id=?1 and product_id=?2", nativeQuery = true)
     void deleteFavoriteByAccountIdAndProductId(Integer accountId, Integer productId);
 }

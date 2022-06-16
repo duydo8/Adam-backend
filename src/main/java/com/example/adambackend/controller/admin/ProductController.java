@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> createSize(@RequestBody Product product){
+    public ResponseEntity<IGenericResponse<Product>> create(@RequestBody Product product){
 
         return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product),200,"success"));
     }

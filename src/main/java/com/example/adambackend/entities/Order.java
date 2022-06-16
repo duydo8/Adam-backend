@@ -1,6 +1,7 @@
 package com.example.adambackend.entities;
 
 import com.example.adambackend.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,8 +33,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();
+    @JsonIgnore
    @OneToMany(mappedBy = "order")
     private List<AccountEvent> accountEventList= new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,10 @@ public class District {
     @ManyToOne
     @JoinColumn(name = "province_id")
     private Province province;
+    @JsonIgnore
     @OneToMany(mappedBy = "district")
     private List<Ward> wards = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "district")
     private List<Address> addresses = new ArrayList<>();
 

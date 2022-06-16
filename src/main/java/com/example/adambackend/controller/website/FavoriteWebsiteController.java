@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@RestController("favorite")
+@RestController
+@RequestMapping("favorite")
 public class FavoriteWebsiteController {
     @Autowired
     FavoriteService favoriteService;
@@ -34,8 +35,8 @@ public class FavoriteWebsiteController {
     public ResponseEntity<?> findProductFavoriteByAccountId(@RequestParam("account_id") Integer accountId) {
         Optional<Account> account = accountService.findById(accountId);
         if (account.isPresent()) {
-            ProductDto productDto = modelMapper.map(favoriteService.findProductFavoriteByAccountId(accountId), ProductDto.class);
-            return ResponseEntity.ok().body(new IGenericResponse<ProductDto>(productDto, 200, ""));
+//            ProductDto productDto = modelMapper.map(, ProductDto.class);
+            return ResponseEntity.ok().body(new IGenericResponse(favoriteService.findProductFavoriteByAccountId(accountId), 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Account"));
     }
@@ -48,11 +49,14 @@ public class FavoriteWebsiteController {
     @PostMapping("create")
     public ResponseEntity<?> createFavorite(@RequestParam("product_id") Integer productId, @RequestParam("account_id") Integer accountId) {
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
-        if (favorite == null) {
+        Optional<Account>accountOptional= accountService.findById(accountId);
+        Optional<Product> productOptional= productSevice.findById(productId);
+        if (favorite == null && productOptional.isPresent() && accountOptional.isPresent()) {
             FavoriteId favoriteId = new FavoriteId(accountId, productId);
-            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(favoriteService.save(new Favorite(favoriteId,
-                    LocalDateTime.now(),false,
-                    accountService.findById(accountId).get(), productSevice.findById(productId).get())), 200, ""));
+            Favorite fa=favoriteService.save(new Favorite(favoriteId,
+                    LocalDateTime.now(),false,accountOptional.get(),productOptional.get()
+                    ));
+            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Exist"));
 

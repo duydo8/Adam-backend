@@ -22,5 +22,9 @@ public class CategoryWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAllCategoryParentId(), 200, "findAll Category parent successfully"));
 
     }
+    @GetMapping("findAll")
+    public ResponseEntity<?>findAll(){
+        return  ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAll(),200,""));
+    }
 
 }

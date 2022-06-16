@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class SaleEventCode {
     private LocalDateTime startTime;
     @Column(name="end_date")
     private LocalDateTime endDate;
+    @JsonIgnore
     @OneToMany(mappedBy = "saleEventCode")
     private  List<AccountEvent> accountEvents= new ArrayList<>();
     @Column(name="is_deleted")

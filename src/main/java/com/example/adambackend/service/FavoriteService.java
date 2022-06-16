@@ -18,7 +18,7 @@ public interface FavoriteService {
 
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
-    Product findProductFavoriteByAccountId(Integer id);
+    List<Product> findProductFavoriteByAccountId(Integer id);
 
     List<Product> findTop10FavoriteProduct();
 

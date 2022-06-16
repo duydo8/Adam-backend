@@ -27,5 +27,10 @@ public class Event {
     private Boolean status;
     @Column(name = "is_deleted")
     private Boolean isDelete;
+    @ManyToOne
+    @JoinColumn(name="promotion_id")
+    private Promotion promotion;
+    @OneToMany(mappedBy = "event")
+    List<AccountEvent> accountEvents= new ArrayList<>();
  
 }

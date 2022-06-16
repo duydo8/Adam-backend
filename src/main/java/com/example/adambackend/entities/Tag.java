@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Tag {
     private String tagName;
     @Column(name="is_deleted")
     private Boolean isDelete;
+    @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<TagProduct> tagProducts= new ArrayList<>();
 

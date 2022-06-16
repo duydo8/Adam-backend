@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,12 +22,16 @@ public class Favorite {
     private Boolean isDeleted;
     @ManyToOne
     @MapsId("accountId")
-    @JoinColumn(name = "account_id")
+    @JsonBackReference
+    @JoinColumn(name = "account_id",insertable = false,updatable = false)
     private Account account = new Account();
 
     @ManyToOne
     @MapsId("productId")
-    @JoinColumn(name = "product_id")
+    @JsonBackReference
+    @JoinColumn(name = "product_id",insertable = false,updatable = false)
     private Product product = new Product();
+
+
 
 }

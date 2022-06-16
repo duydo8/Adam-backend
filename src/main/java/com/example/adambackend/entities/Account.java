@@ -2,6 +2,8 @@ package com.example.adambackend.entities;
 
 import com.example.adambackend.enums.AuthProvider;
 import com.example.adambackend.enums.ERoleName;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,15 +55,19 @@ public class Account {
         this.email = email;
         this.password = password;
     }
-
+@JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Address> addressList = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Comment> commentList = new ArrayList<>();
     @OneToMany(mappedBy = "account")
-    List<Favorite> favoriteList = new ArrayList<>();
+            @JsonBackReference
+    List<Favorite> favoriteList ;
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<CartItems> cartItemsList = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Order> orderList = new ArrayList<>();
 

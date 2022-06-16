@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class DetailProduct {
     private Boolean isDelete;
     @Column(name = "image_product")
     private String productImage;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "detailProduct")
     List<CartItems> cartItems = new ArrayList<>();
     @ManyToOne

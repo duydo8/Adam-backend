@@ -15,10 +15,10 @@ public class FavoriteController {
     @Autowired
     FavoriteService favoriteService;
 
-    @GetMapping("countFavoriteByAccountIdAndProductId")
-    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") int idAccount, @RequestParam("product_id") int idProduct) {
-        return ResponseEntity.ok().body(new IGenericResponse<Integer>(favoriteService.countFavoriteByAccountIdAndProductId(idAccount, idProduct), 200, "countFavoriteByAccountIdAndProductId"));
-    }
+//    @GetMapping("countFavoriteByAccountIdAndProductId")
+//    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") int idAccount, @RequestParam("product_id") int idProduct) {
+//        return ResponseEntity.ok().body(new IGenericResponse<Integer>(favoriteService.countFavoriteByAccountIdAndProductId(idAccount, idProduct), 200, "countFavoriteByAccountIdAndProductId"));
+//    }
 
 
 }

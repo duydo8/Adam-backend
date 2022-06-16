@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Data
@@ -17,5 +19,7 @@ public class FavoriteId implements Serializable {
     private Integer accountId;
     @Column(name = "product_id")
     private Integer productId;
+
+
 
 }

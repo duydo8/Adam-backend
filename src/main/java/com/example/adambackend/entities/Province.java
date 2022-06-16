@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,13 @@ public class Province {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @JsonIgnore
     @OneToMany(mappedBy = "province")
     private List<District> districts = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "province")
     private List<Ward> wards = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "province")
     private List<Address> addresses = new ArrayList<>();
 
