@@ -1,14 +1,10 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.entities.Product;
-import com.example.adambackend.entities.Tag;
-import com.example.adambackend.entities.Ward;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.MaterialService;
 import com.example.adambackend.service.ProductSevice;
-import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

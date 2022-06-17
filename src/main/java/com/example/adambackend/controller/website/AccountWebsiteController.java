@@ -2,16 +2,15 @@ package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.exception.ResourceNotFoundException;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.AccountRepository;
-import com.example.adambackend.security.CurrentUser;
-import com.example.adambackend.security.UserPrincipal;
 import com.example.adambackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 

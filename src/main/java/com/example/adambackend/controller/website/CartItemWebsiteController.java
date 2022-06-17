@@ -1,7 +1,6 @@
 package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.CartItems;
-import com.example.adambackend.entities.DetailOrder;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.CartItemService;

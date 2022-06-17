@@ -4,14 +4,16 @@ import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.TagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;

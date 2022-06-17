@@ -1,6 +1,5 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;

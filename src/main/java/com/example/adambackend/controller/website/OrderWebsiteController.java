@@ -1,6 +1,5 @@
 package com.example.adambackend.controller.website;
 
-import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Order;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

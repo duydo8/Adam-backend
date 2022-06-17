@@ -6,7 +6,6 @@ import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.payload.response.ProductDto;
 import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.FavoriteService;
 import com.example.adambackend.service.ProductSevice;

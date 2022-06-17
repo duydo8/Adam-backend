@@ -1,6 +1,5 @@
 package com.example.adambackend.entities;
 
-import com.example.adambackend.enums.AuthProvider;
 import com.example.adambackend.enums.ERoleName;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,8 +32,6 @@ public class Account {
     @Column(name = "phone_number",unique = true)
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
 
     private String password;
     private ERoleName role;
@@ -47,7 +44,7 @@ public class Account {
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
-    private String providerId;
+
     private double priority;
 
     public Account(String username, String email, String password) {

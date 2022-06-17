@@ -1,7 +1,6 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Product;
-import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.ProductDto;

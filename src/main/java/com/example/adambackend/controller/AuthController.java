@@ -46,7 +46,7 @@ public class AuthController {
     @Autowired
     ModelMapper modelMapper;
 
-    @PostMapping("/signin")
+    @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(

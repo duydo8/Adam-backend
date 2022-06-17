@@ -1,12 +1,9 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Color;
-import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.ColorService;
-import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
