@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("admin/favorite")
 public class FavoriteController {
     @Autowired

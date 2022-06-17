@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("favorite")
 public class FavoriteWebsiteController {
     @Autowired

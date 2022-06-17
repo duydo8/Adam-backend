@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("admin/size")
 public class SizeController {
     @Autowired

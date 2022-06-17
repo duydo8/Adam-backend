@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("user/order")
 public class OrderWebsiteController {
     @Autowired

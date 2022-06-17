@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("account")
 public class AccountWebsiteController {
     @Autowired
