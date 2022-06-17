@@ -1,1 +1,1 @@
-web: java -jar target/adam-backend.jar
+web: java -Dserver.port=$PORT -jar target/*.jar
