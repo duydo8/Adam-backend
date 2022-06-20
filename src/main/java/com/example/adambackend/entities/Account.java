@@ -52,14 +52,14 @@ public class Account {
         this.email = email;
         this.password = password;
     }
-@JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Address> addressList = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Comment> commentList = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
-            @JsonBackReference
     List<Favorite> favoriteList ;
     @JsonIgnore
     @OneToMany(mappedBy = "account")

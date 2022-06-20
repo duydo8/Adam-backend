@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin("*")
 @RequestMapping("admin/comment")
 public class CommentController {
     @Autowired

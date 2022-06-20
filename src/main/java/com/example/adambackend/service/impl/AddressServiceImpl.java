@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Address;
-import com.example.adambackend.repository.AddressRepository;
+import com.example.adambackend.security.jwtConfig.repository.AddressRepository;
 import com.example.adambackend.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

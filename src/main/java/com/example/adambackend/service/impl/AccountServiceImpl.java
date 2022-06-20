@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.repository.AccountRepository;
+import com.example.adambackend.security.jwtConfig.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;

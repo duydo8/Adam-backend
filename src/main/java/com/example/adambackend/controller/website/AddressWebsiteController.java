@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin("*")
 @RequestMapping("address")
 public class AddressWebsiteController {
     @Autowired
@@ -41,8 +41,6 @@ public class AddressWebsiteController {
         Optional<Account> account = accountService.findById(accountId);
         Optional<Address> address1= addressService.findById(address.getId());
         if (account.isPresent()&& address1.isPresent()) {
-
-
             Address address2=addressService.save(address);
             List<Address> addresses=account.get().getAddressList();
             addresses.add(address);

@@ -2,7 +2,7 @@ package com.example.adambackend.service.impl;
 
 
 import com.example.adambackend.entities.CartItems;
-import com.example.adambackend.repository.CartItemRepository;
+import com.example.adambackend.security.jwtConfig.repository.CartItemRepository;
 import com.example.adambackend.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

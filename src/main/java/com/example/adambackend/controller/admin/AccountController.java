@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin("*")
 @RequestMapping("/admin/account")
 public class AccountController {
     @Autowired

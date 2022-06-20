@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin("*")
 @RequestMapping("/api")
 public class DemoRoleController {
     @GetMapping("/admin/demo")

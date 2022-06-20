@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.District;
-import com.example.adambackend.repository.DistrictRepository;
+import com.example.adambackend.security.jwtConfig.repository.DistrictRepository;
 import com.example.adambackend.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

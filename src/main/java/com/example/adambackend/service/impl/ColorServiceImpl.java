@@ -2,7 +2,7 @@ package com.example.adambackend.service.impl;
 
 
 import com.example.adambackend.entities.Color;
-import com.example.adambackend.repository.ColorRepository;
+import com.example.adambackend.security.jwtConfig.repository.ColorRepository;
 import com.example.adambackend.service.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

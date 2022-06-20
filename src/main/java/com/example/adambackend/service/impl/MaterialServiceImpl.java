@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.repository.MaterialRepository;
+import com.example.adambackend.security.jwtConfig.repository.MaterialRepository;
 import com.example.adambackend.service.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

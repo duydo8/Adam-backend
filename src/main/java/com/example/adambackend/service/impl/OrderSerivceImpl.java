@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Order;
-import com.example.adambackend.repository.OrderRepository;
+import com.example.adambackend.security.jwtConfig.repository.OrderRepository;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

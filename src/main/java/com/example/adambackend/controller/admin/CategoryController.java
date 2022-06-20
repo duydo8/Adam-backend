@@ -2,8 +2,10 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Category;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.CategoryDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.CategoryService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +14,20 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin("*")
 @RequestMapping("admin/category")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @PostMapping("create")
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
+        Category category= new Category();
+        category.setCategoryName(categoryDTO.getCategoryName());
+        category.setCategoryParentId(categoryDTO.getCategoryParentId());
+        category.setIsDeleted(false);
         return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
 
     }
