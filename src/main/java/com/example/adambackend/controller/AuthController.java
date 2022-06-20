@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
 
 
 @RestController
-
+@CrossOrigin("/*")
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-
+@CrossOrigin("/*")
 @RequestMapping("address")
 public class AddressWebsiteController {
     @Autowired

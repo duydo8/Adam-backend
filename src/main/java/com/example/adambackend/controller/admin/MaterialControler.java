@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 @RestController
-
+@CrossOrigin("/*")
 @RequestMapping("admin/material")
 public class MaterialControler {
     @Autowired
