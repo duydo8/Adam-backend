@@ -2,6 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Material;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.MaterialDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.MaterialService;
 import com.example.adambackend.service.ProductSevice;
@@ -22,8 +23,11 @@ public class MaterialControler {
     public ResponseEntity<?> findAll(){
         return  ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(),200,""));
     }
-    @GetMapping("create")
-    public ResponseEntity<?> createWard(@RequestBody Material material) {
+    @PostMapping("create")
+    public ResponseEntity<?> createWard(@RequestBody MaterialDTO materialDTO) {
+        Material material= new Material();
+        material.setMaterialName(materialDTO.getMaterialName());
+        material.setIsDeleted(false);
         return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
     }
 

@@ -23,7 +23,6 @@ public class DetailProductDTO {
     private int quantity;
     private Double priceImport;
     private Double priceExport;
-    private Boolean isDelete;
     private String productImage;
     private Integer productId;
     private Integer colorId;

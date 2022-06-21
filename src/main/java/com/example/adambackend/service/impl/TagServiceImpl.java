@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Tag;
-import com.example.adambackend.security.jwtConfig.repository.TagRepository;
+import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

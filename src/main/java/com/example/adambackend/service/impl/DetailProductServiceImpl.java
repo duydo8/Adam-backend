@@ -2,7 +2,7 @@ package com.example.adambackend.service.impl;
 
 
 import com.example.adambackend.entities.DetailProduct;
-import com.example.adambackend.security.jwtConfig.repository.DetailProductRepository;
+import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.DetailProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

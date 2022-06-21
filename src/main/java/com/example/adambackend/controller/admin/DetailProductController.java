@@ -5,10 +5,13 @@ import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.DetailProductDTO;
 import com.example.adambackend.payload.request.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.service.ColorService;
 import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.ProductSevice;
+import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +28,28 @@ public class DetailProductController {
     DetailProductService detailProductService;
     @Autowired
     ProductSevice productSevice;
+    @Autowired
+    ColorService colorService;
+    @Autowired
+    SizeService sizeService;
     @PostMapping("create")
-    public ResponseEntity<?> createDetailProduct(@RequestParam("product_id")Integer productId, @RequestBody DetailProduct detailProduct){
-        Optional<Product> product= productSevice.findById(productId);
-        if(product.isPresent()){
+    public ResponseEntity<?> createDetailProduct( @RequestBody DetailProductDTO detailProductDTO){
+        Optional<Product> product= productSevice.findById(detailProductDTO.getProductId());
+        Optional<Color> color=  colorService.findById(detailProductDTO.getColorId());
+        Optional<Size>size = sizeService.findById(detailProductDTO.getSizeId());
+        if(product.isPresent()&& colorService.findById(detailProductDTO.getColorId()).isPresent()
+                && sizeService.findById(detailProductDTO.getSizeId()).isPresent()){
+
+            DetailProduct detailProduct= new DetailProduct();
+            detailProduct.setQuantity(detailProductDTO.getQuantity());
+            detailProduct.setProduct(product.get());
+            detailProduct.setProductImage(detailProductDTO.getProductImage());
+            detailProduct.setPriceImport(detailProductDTO.getPriceImport());
+            detailProduct.setPriceExport(detailProductDTO.getPriceExport());
+            detailProduct.setIsDelete(false);
+            detailProduct.setColor(color.get());
+            detailProduct.setSize(size.get());
+
             detailProductService.save(detailProduct);
             List<DetailProduct> detailProducts= product.get().getDetailProducts();
             detailProducts.add(detailProduct);
@@ -37,7 +58,7 @@ public class DetailProductController {
             detailProduct.setProduct(product.get());
             return  ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct),200,"success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found product"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
 
     }
     @PutMapping("update")
@@ -84,8 +105,26 @@ public class DetailProductController {
     @PostMapping("createArrayOptionValueDetailProduct")
     public ResponseEntity<?> createArrayOptionValueDetailProduct(@RequestBody DetailProductRequest detailProductRequest){
         Optional<Product> productOptional= productSevice.findById(detailProductRequest.getProductId());
-        List<Color> colorList= detailProductRequest.getColorList();
-        List<Size> sizeList= detailProductRequest.getSizeList();
+        List<Color> colorList=new ArrayList<>();
+        List<Size> sizeList= new ArrayList<>();
+        for (Integer colorId: detailProductRequest.getColorIdList()
+             ) {
+
+            Optional<Color> color= colorService.findById(colorId);
+            if(color.isPresent()) {
+                colorList.add(color.get());
+            }
+        }
+        for (Integer s: detailProductRequest.getSizeIdList()
+        ) {
+            Optional<Size> size= sizeService.findById(s);
+            if(size.isPresent()) {
+                sizeList.add(size.get());
+            }
+
+        }
+
+
         List<DetailProduct> detailProductList= new ArrayList<>();
         if(productOptional.isPresent()){
             for (int i=0;i<sizeList.size();i++) {
@@ -95,6 +134,7 @@ public class DetailProductController {
                     detailProduct.setPriceImport(detailProductRequest.getPriceImport());
                     detailProduct.setPriceExport(detailProductRequest.getPriceExport());
                     detailProduct.setQuantity(detailProductRequest.getQuantity());
+                    detailProduct.setIsDelete(false);
                     detailProduct.setColor(colorList.get(j));
                     detailProduct.setSize(sizeList.get(i));
                     detailProductList.add( detailProduct);

@@ -1,4 +1,4 @@
-package com.example.adambackend.security.jwtConfig.repository;
+package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Favorite;
 import com.example.adambackend.entities.Product;

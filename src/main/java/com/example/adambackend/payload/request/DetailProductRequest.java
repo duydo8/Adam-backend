@@ -17,9 +17,10 @@ public class DetailProductRequest {
     int quantity;
     double priceImport;
     double priceExport;
+
     @ElementCollection
-    List<Color> colorList;
+    List<Integer> colorIdList;
     @ElementCollection
-    List<Size> sizeList;
+    List<Integer> sizeIdList;
 
 }

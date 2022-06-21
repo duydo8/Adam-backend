@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Size;
-import com.example.adambackend.security.jwtConfig.repository.SizeRepository;
+import com.example.adambackend.repository.SizeRepository;
 import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

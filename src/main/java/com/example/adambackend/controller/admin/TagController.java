@@ -3,6 +3,7 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.TagDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.TagService;
@@ -25,20 +26,19 @@ public class TagController {
         return  ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(),200,""));
     }
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody Tag tag,
-                                    @RequestParam("product_id") Integer productId){
-        Optional<Product> productOptional=productSevice.findById(productId);
-        if(productOptional.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
-        }
-        return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
+    public ResponseEntity<?> create(@RequestBody TagDTO tagDTO){
+        Tag tag= new Tag();
+        tag.setTagName(tagDTO.getTagName());
+        tag.setIsDelete(false);
+        tagService.save(tag);
+        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
     }
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Tag tag,
-                                    @RequestParam("product_id") Integer productId){
-        Optional<Product> productOptional=productSevice.findById(productId);
+    public ResponseEntity<?> update(@RequestBody Tag tag
+                                    ){
+
         Optional<Tag>tagOptional= tagService.findById(tag.getId());
-        if(productOptional.isPresent()&& tagOptional.isPresent()){
+        if( tagOptional.isPresent()){
             return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
         }
         return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));

@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
-import com.example.adambackend.security.jwtConfig.repository.ProductRepository;
+import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

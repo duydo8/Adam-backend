@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Ward;
-import com.example.adambackend.security.jwtConfig.repository.WardRepository;
+import com.example.adambackend.repository.WardRepository;
 import com.example.adambackend.service.WardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

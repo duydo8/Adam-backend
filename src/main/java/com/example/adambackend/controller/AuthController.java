@@ -7,7 +7,7 @@ import com.example.adambackend.payload.request.AccountLoginRequestDto;
 import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
-import com.example.adambackend.security.jwtConfig.repository.AccountRepository;
+import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.security.AccountDetailsService;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.service.AccountService;
