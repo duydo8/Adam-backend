@@ -39,7 +39,7 @@ public class ProductWebsiteController {
     @GetMapping("findByColorSizePriceBrandAndMaterial")
     public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestParam("color_name") String colorName,
                                                               @RequestParam("size_name")String sizeName,
-                                                              @RequestParam("brand")String brand,
+
                                                               @RequestParam("material")String material,
                                                               @RequestParam("bottom_price")double bottomPrice,
                                                               @RequestParam("top_price")double topPrice){

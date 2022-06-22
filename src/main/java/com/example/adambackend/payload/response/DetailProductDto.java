@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 public class DetailProductDto {
     private Integer id;
     private int quantity;
-    private Double price;
+    private Double priceImport;
+    private Double priceExport;
     private Boolean isDelete;
     private String productImage;
     private String productName;

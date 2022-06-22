@@ -27,7 +27,7 @@ public class Product {
     private boolean isDelete;
     private String image;
     @Column(name="vote_average")
-private double voteAverage;
+    private double voteAverage;
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne

@@ -54,4 +54,5 @@ public class DetailOrderWebsiteController {
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(),200,""));
     }
+
 }
