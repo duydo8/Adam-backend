@@ -44,7 +44,7 @@ public class ProductWebsiteController {
                                                               @RequestParam("bottom_price")double bottomPrice,
                                                               @RequestParam("top_price")double topPrice){
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findByColorSizePriceBrandAndMaterial(colorName,
-                sizeName, brand, material, bottomPrice, topPrice),200,"success"));
+                sizeName, material, bottomPrice, topPrice),200,"success"));
 
     }
     @GetMapping("findProductByTagName")
@@ -55,6 +55,11 @@ public class ProductWebsiteController {
         }else{
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
         }
+    }
+    @GetMapping("findTop10ProductBestSale")
+    public ResponseEntity<?> findTop10ProductBestSale(){
+        return  ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10ProductBestSale(),200,""));
+
     }
 
 }

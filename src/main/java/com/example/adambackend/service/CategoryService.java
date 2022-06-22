@@ -16,4 +16,6 @@ public interface CategoryService {
     List<Category> findAll();
 
     List<Category> findAllCategoryParentId();
+
+    List <Category> findByCategoryParentId(int id);
 }

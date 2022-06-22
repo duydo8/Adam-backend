@@ -21,5 +21,7 @@ public interface ProductSevice {
     List<Product> findTop10productByCreateDate();
 
    List<Product> findAllByTagName(String tagName);
-    List<Product> findByColorSizePriceBrandAndMaterial(String colorName, String sizeName, String brand, String material, double bottomPrice, double topPrice);
+    List<Product> findByColorSizePriceBrandAndMaterial(String colorName, String sizeName, String material, double bottomPrice, double topPrice);
+
+    List<Product> findTop10ProductBestSale();
 }

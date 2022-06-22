@@ -31,7 +31,11 @@ public class CategoryController {
         return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
 
     }
+    @GetMapping("findAllCategoryParentId")
+    public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
+        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAllCategoryParentId(), 200, "findAll Category parent successfully"));
 
+    }
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody Category category) {
         Optional<Category> categoryOptional = categoryService.findById(category.getId());
@@ -57,4 +61,15 @@ public class CategoryController {
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAll(),200,""));
     }
+    @GetMapping("findCategoryByParentId")
+    public  ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id")Integer id){
+        Optional<Category> categoryOptional= categoryService.findById(id);
+        if(categoryOptional.isPresent()){
+            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id),200,""));
+
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+
+    }
+
 }
