@@ -31,8 +31,6 @@ public class Account {
 
     @Column(name = "phone_number",unique = true)
     private String phoneNumber;
-
-
     private String password;
     private ERoleName role;
     @Column(name = "is_active")
