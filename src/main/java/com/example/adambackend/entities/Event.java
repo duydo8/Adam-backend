@@ -34,5 +34,7 @@ public class Event {
     List<AccountEvent> accountEvents= new ArrayList<>();
     @Column(name="is_active")
     private Boolean isActive;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
  
 }

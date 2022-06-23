@@ -27,6 +27,8 @@ public class AccountEvent {
     private Account account = new Account();
     @Column(name="is_deleted")
     private Boolean isDeleted;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
     @ManyToOne
     @MapsId("eventId")
     @JoinColumn(name = "event_id")

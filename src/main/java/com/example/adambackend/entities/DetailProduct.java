@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +42,7 @@ public class DetailProduct {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 
 }

@@ -131,8 +131,8 @@ public class ProductController {
                     if (material.isPresent() && tagOptional.isPresent()) {
                         MaterialProduct materialProduct = new MaterialProduct
                                 (new MaterialProductPK(j, product.getId()),
-                                        false, material.get(),false, product);
-                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(),false, product);
+                                        false, material.get(),false,LocalDateTime.now(), product);
+                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(),false, product,LocalDateTime.now());
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
                         materialProductList.add(materialProduct);

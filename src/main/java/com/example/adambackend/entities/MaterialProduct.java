@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,6 +23,8 @@ public class MaterialProduct {
     private Material material = new Material();
     @Column(name="is_active")
     private Boolean isActive;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 
     @ManyToOne
     @MapsId("productId")

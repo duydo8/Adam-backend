@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 @RestController
 @CrossOrigin("*")
@@ -27,6 +28,8 @@ public class MaterialControler {
     public ResponseEntity<?> createWard(@RequestBody MaterialDTO materialDTO) {
         Material material= new Material();
         material.setMaterialName(materialDTO.getMaterialName());
+        material.setIsActive(true);
+        material.setCreateDate(LocalDateTime.now());
         material.setIsDeleted(false);
         return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
     }

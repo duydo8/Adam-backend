@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,5 +28,7 @@ public class Promotion {
     @JsonIgnore
     @OneToMany(mappedBy = "promotion")
     private List<SaleEventCode> saleEventCodeList= new ArrayList<>();
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 
 }

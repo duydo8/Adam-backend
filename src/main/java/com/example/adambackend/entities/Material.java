@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class Material {
     private Boolean isDeleted;
     @Column(name="is_active")
     private Boolean isActive;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
     @JsonIgnore
     @OneToMany(mappedBy = "material")
     private List<MaterialProduct> materialProducts= new ArrayList<>();

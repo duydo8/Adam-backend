@@ -2,12 +2,14 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.SizeDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +20,12 @@ public class SizeController {
     @Autowired
     SizeService sizeService;
     @PostMapping("create")
-    public ResponseEntity<?> createSize(@RequestBody Size size){
-
+    public ResponseEntity<?> createSize(@RequestBody SizeDTO sizeDTO){
+        Size size= new Size();
+        size.setSizeName(sizeDTO.getSizeName());
+        size.setCreateDate(LocalDateTime.now());
+       size.setIsActive(true);
+       size.setIsDeleted(false);
         return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size),200,"success"));
     }
     @PutMapping("update")

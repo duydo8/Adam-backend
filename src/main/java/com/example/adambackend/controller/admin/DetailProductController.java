@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,8 @@ public class DetailProductController {
             detailProduct.setIsDelete(false);
             detailProduct.setColor(color.get());
             detailProduct.setSize(size.get());
-
+            detailProduct.setIsActive(true);
+            detailProduct.setCreateDate(LocalDateTime.now());
             detailProductService.save(detailProduct);
             List<DetailProduct> detailProducts= product.get().getDetailProducts();
             detailProducts.add(detailProduct);

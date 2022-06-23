@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class Category {
     private String categoryName;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
     @Column(name = "category_parent_id")
     private Integer categoryParentId;
     @JsonIgnore

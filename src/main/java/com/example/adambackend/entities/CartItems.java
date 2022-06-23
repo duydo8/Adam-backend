@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -26,4 +27,6 @@ public class CartItems {
     private DetailProduct detailProduct;
     @Column(name="is_active")
     private Boolean isActive;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 }

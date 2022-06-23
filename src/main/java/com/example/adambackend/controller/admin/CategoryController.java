@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,8 @@ public class CategoryController {
         category.setCategoryName(categoryDTO.getCategoryName());
         category.setCategoryParentId(categoryDTO.getCategoryParentId());
         category.setIsDeleted(false);
+        category.setCreateDate(LocalDateTime.now());
+        category.setIsActive(true);
         return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
 
     }

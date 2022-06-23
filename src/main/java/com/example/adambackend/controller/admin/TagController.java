@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +31,8 @@ public class TagController {
         Tag tag= new Tag();
         tag.setTagName(tagDTO.getTagName());
         tag.setIsDelete(false);
+        tag.setCreateDate(LocalDateTime.now());
+        tag.setIsActive(true);
         tagService.save(tag);
         return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
     }

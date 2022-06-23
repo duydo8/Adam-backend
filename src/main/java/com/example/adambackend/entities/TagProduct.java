@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -26,5 +27,7 @@ public class TagProduct {
     @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product = new Product();
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 
 }

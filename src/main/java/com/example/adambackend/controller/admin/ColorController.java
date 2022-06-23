@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ public class ColorController {
     Color color = new Color();
     color.setColorName(colorDTO.getColorName());
     color.setIsDeleted(false);
+        color.setCreateDate(LocalDateTime.now());
+        color.setIsActive(true);
         return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color),200,"success"));
     }
     @PutMapping("update")

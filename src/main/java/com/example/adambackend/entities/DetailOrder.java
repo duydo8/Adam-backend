@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -28,5 +29,7 @@ public class DetailOrder {
     private Order order;
     @Column(name="is_active")
     private Boolean isActive;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
 
 }
