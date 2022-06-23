@@ -1,6 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.AccountResponse;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface AccountService {
 
-    List<Account> findAll();
+    List<AccountResponse> findAll();
 
     Account save(Account account);
 

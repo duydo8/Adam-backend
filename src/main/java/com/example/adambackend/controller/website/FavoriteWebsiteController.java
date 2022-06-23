@@ -54,7 +54,7 @@ public class FavoriteWebsiteController {
         if (favorite == null && productOptional.isPresent() && accountOptional.isPresent()) {
             FavoriteId favoriteId = new FavoriteId(accountId, productId);
             Favorite fa=favoriteService.save(new Favorite(favoriteId,
-                    LocalDateTime.now(),false,accountOptional.get(),productOptional.get()
+                    LocalDateTime.now(),false,accountOptional.get(),false,productOptional.get()
                     ));
             return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
         }

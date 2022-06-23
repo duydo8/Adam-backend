@@ -20,7 +20,8 @@ public class TagProduct {
     @MapsId("tagId")
     @JoinColumn(name = "tag_id")
     private Tag tag = new Tag();
-
+    @Column(name="is_active")
+    private Boolean isActive;
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "product_id")

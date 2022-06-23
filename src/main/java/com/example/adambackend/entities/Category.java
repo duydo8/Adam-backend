@@ -27,5 +27,7 @@ public class Category {
     @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
+    @Column(name="is_active")
+    private Boolean isActive;
 
 }

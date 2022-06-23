@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.AccountResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
     public Account findByVerificationCode(String code);
+    @Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
+            "role as role, is_active as isActive, is_deleted as isDeleted, priority as priority from accounts",nativeQuery = true)
+    public  List<AccountResponse> findAlls();
 
 }

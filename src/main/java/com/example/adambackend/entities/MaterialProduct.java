@@ -20,6 +20,8 @@ public class MaterialProduct {
     @MapsId("materialId")
     @JoinColumn(name = "material_id")
     private Material material = new Material();
+    @Column(name="is_active")
+    private Boolean isActive;
 
     @ManyToOne
     @MapsId("productId")

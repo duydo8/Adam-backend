@@ -33,6 +33,8 @@ public class DetailProduct {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @Column(name="is_active")
+    private Boolean isActive;
     @ManyToOne
     @JoinColumn(name = "color_id")
     private Color color;

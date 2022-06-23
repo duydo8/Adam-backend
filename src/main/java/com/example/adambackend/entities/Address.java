@@ -31,4 +31,6 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "ward_id")
     private Ward ward;
+    @Column(name="is_active")
+    private Boolean isActive;
 }

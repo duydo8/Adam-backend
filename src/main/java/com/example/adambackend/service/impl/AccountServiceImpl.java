@@ -1,6 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.AccountResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
 import net.bytebuddy.utility.RandomString;
@@ -27,8 +28,8 @@ public class AccountServiceImpl implements AccountService {
     private JavaMailSender mailSender;
 
     @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    public List<AccountResponse> findAll() {
+        return accountRepository.findAlls();
     }
 
     @Override

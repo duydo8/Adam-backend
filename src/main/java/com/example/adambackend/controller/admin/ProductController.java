@@ -2,7 +2,9 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.ProductDTO;
 import com.example.adambackend.payload.request.ProductRequest;
+import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.ProductDto;
 import com.example.adambackend.repository.MaterialProductRepository;
@@ -14,6 +16,7 @@ import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,14 +46,27 @@ public class ProductController {
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         Page<Product> page1 = productSevice.findPage(page, size);
-        Page<ProductDto> pageDtos = (Page<ProductDto>) page1.stream().map(e -> new ProductDto(e.getId(), e.getProductName(), e.getDescription(), e.isDelete(), e.getImage())).collect(Collectors.toList());
-        return ResponseEntity.ok().body(new IGenericResponse<Page<ProductDto>>(pageDtos, 200, "Page product"));
+        return ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1, 200, "Page product"));
     }
 
     @PostMapping("create")
-    public ResponseEntity<IGenericResponse<Product>> create(@RequestBody Product product) {
+    public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
+        if(categoryService.findById(productDTO.getCategoryId()).isPresent()){
+            Product product= new Product();
+            product.setVoteAverage(0);
+            product.setDelete(false);
+            product.setProductName(productDTO.getProductName());
+            product.setDescription(productDTO.getDescription());
+            product.setImage(productDTO.getImage());
+            product.setCreateDate(LocalDateTime.now());
+            product.setCategory(categoryService.findById(productDTO.getCategoryId()).get());
+            return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product), 200, "success"));
+        }else{
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        }
 
-        return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product), 200, "success"));
+
+
     }
 
     @PutMapping("update")
@@ -115,8 +131,8 @@ public class ProductController {
                     if (material.isPresent() && tagOptional.isPresent()) {
                         MaterialProduct materialProduct = new MaterialProduct
                                 (new MaterialProductPK(j, product.getId()),
-                                        false, material.get(), product);
-                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(), product);
+                                        false, material.get(),false, product);
+                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(),false, product);
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
                         materialProductList.add(materialProduct);

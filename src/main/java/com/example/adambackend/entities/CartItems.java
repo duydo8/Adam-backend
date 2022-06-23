@@ -24,4 +24,6 @@ public class CartItems {
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;
+    @Column(name="is_active")
+    private Boolean isActive;
 }

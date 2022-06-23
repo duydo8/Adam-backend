@@ -19,6 +19,8 @@ public class AccountEvent {
     private LocalDateTime timeUse;
     @Column(name="time_valid")
     private LocalDateTime timeValid;
+    @Column(name="is_active")
+    private Boolean isActive;
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id")

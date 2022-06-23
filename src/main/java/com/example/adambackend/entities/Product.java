@@ -49,7 +49,8 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<MaterialProduct> materialProducts= new ArrayList<>();
-
+    @Column(name="is_active")
+    private Boolean isActive;
 
 
 }

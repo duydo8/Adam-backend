@@ -25,6 +25,8 @@ public class Favorite {
     @JsonBackReference
     @JoinColumn(name = "account_id",insertable = false,updatable = false)
     private Account account = new Account();
+    @Column(name="is_active")
+    private Boolean isActive;
 
     @ManyToOne
     @MapsId("productId")

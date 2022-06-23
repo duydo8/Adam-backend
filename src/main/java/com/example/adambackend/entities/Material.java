@@ -22,6 +22,8 @@ public class Material {
     private String materialName;
     @Column(name="is_deleted")
     private Boolean isDeleted;
+    @Column(name="is_active")
+    private Boolean isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "material")
     private List<MaterialProduct> materialProducts= new ArrayList<>();

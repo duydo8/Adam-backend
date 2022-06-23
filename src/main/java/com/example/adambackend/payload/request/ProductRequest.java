@@ -17,18 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequest {
-
-
     private String productName;
     private String description;
-
     private String image;
-
-
     private Integer categoryId;
-
     private List<Integer> tagProductIdList;
-
     private List<Integer> materialProductIdList;
 
 

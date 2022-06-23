@@ -22,6 +22,8 @@ public class Tag {
     private String tagName;
     @Column(name="is_deleted")
     private Boolean isDelete;
+    @Column(name="is_active")
+    private Boolean isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<TagProduct> tagProducts= new ArrayList<>();

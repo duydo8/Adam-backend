@@ -26,5 +26,7 @@ public class DetailOrder {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
+    @Column(name="is_active")
+    private Boolean isActive;
 
 }

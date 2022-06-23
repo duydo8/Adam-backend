@@ -22,6 +22,8 @@ public class Size {
     private String sizeName;
     @Column(name="is_deleted")
     private Boolean isDeleted;
+    @Column(name="is_active")
+    private Boolean isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "size")
     private List<DetailProduct> detailProducts = new ArrayList<>();

@@ -25,4 +25,6 @@ public class Color {
     @JsonIgnore
     @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
     private List<DetailProduct> detailProducts = new ArrayList<>();
+    @Column(name="is_active")
+    private Boolean isActive;
 }

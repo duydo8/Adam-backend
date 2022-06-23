@@ -32,5 +32,7 @@ public class Event {
     private Promotion promotion;
     @OneToMany(mappedBy = "event")
     List<AccountEvent> accountEvents= new ArrayList<>();
+    @Column(name="is_active")
+    private Boolean isActive;
  
 }

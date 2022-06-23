@@ -25,6 +25,8 @@ public class SaleEventCode {
     private LocalDateTime createDate;
     @Column(name="start_time")
     private LocalDateTime startTime;
+    @Column(name="is_active")
+    private Boolean isActive;
     @Column(name="end_date")
     private LocalDateTime endDate;
     @JsonIgnore
