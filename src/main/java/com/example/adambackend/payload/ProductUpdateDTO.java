@@ -27,7 +27,7 @@ public class ProductUpdateDTO {
     private Double voteAverage;
     private LocalDateTime createDate;
     private Integer categoryId;
-    private List<Integer> tagProducts = new ArrayList<>();
-    private List<Integer> materialProducts = new ArrayList<>();
+    private List<Integer> tagProductIds = new ArrayList<>();
+    private List<Integer> materialProductIds = new ArrayList<>();
     private Boolean isActive;
 }

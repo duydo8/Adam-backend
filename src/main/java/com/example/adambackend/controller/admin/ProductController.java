@@ -95,7 +95,7 @@ public class ProductController {
             productSevice.save(product1.get());
             List<Material> materialList= new ArrayList<>();
             List<Tag> tagList= new ArrayList<>();
-            for (Integer materialId : productUpdateDTO.getMaterialProducts()
+            for (Integer materialId : productUpdateDTO.getMaterialProductIds()
             ) {
 
                 Optional<Material> materialOptional = materialService.findById(materialId);
@@ -112,7 +112,7 @@ public class ProductController {
                     materialList.add(materialOptional.get());
                 }
             }
-            for (Integer s : productUpdateDTO.getTagProducts()
+            for (Integer s : productUpdateDTO.getTagProductIds()
             ) {
                 Optional<Tag> tagOptional = tagService.findById(s);
                 if (tagOptional.isPresent()&& tagOptional.get().getIsActive()==true && tagOptional.get().getIsDelete()==false) {
