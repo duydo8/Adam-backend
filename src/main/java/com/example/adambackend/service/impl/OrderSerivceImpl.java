@@ -4,6 +4,8 @@ import com.example.adambackend.entities.Order;
 import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,10 @@ public class OrderSerivceImpl implements OrderService {
     @Override
     public Optional<Order> findById(Integer id) {
         return orderRepository.findById(id);
+    }
+    @Override
+    public Page<Order> findAll(Pageable pageable){
+        return  orderRepository.findAll(pageable);
     }
 
 //    @Override

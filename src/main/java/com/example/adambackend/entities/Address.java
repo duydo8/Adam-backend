@@ -1,11 +1,14 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -36,4 +39,7 @@ public class Address {
     private Ward ward;
     @Column(name = "is_active")
     private Boolean isActive;
+    @JsonIgnore
+    @OneToMany(mappedBy = "address")
+    private List<Order> orders = new ArrayList<>();
 }

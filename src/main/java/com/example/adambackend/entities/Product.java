@@ -16,15 +16,7 @@ import java.util.List;
 @Table(name = "products")
 @Entity
 public class Product {
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<Comment> comments = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<Favorite> favorites = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<DetailProduct> detailProducts = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,10 +24,10 @@ public class Product {
     private String productName;
     private String description;
     @Column(name = "is_deleted")
-    private boolean isDelete;
+    private Boolean isDelete;
     private String image;
     @Column(name = "vote_average")
-    private double voteAverage;
+    private Double voteAverage;
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne
@@ -49,6 +41,13 @@ public class Product {
     private List<MaterialProduct> materialProducts = new ArrayList<>();
     @Column(name = "is_active")
     private Boolean isActive;
-
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Comment> comments = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Favorite> favorites = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<DetailProduct> detailProducts = new ArrayList<>();
 }

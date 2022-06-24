@@ -30,6 +30,17 @@ public class Order {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name="amount_price")
+    private Double amountPrice;
+    @Column(name="sale_price")
+    private Double salePrice;
+    @Column(name="total_price")
+    private Double totalPrice;
+    @Column(name="address_detail")
+    private String addressDetail;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -39,6 +50,7 @@ public class Order {
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<AccountEvent> accountEventList = new ArrayList<>();
+
 
 
 }
