@@ -1,14 +1,12 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.DetailOrder;
-import com.example.adambackend.entities.DetailProduct;
-import com.example.adambackend.entities.Event;
-import com.example.adambackend.entities.Order;
+import com.example.adambackend.entities.*;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.OrderDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.OrderRepository;
+import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,8 @@ public class OrderController {
     OrderService orderService;
     @Autowired
     DetailProductService detailProductService;
+    @Autowired
+    AccountService accountService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -62,6 +62,13 @@ public class OrderController {
                 detailProductService.save(detailProductOptional.get());
 
             }
+            Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
+            if(account.getPriority()==10){
+
+            }else{
+                account.setPriority(account.getPriority());
+            }
+
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
 
         }

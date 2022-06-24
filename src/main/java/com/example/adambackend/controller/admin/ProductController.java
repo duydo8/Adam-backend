@@ -199,12 +199,13 @@ public class ProductController {
         if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
             for (int i = 0; i < tagList.size(); i++) {
                 for (int j = 0; j < materialList.size(); j++) {
-                    Optional<Material> material = materialService.findById(j);
+                    Optional<Material> materialOptional = materialService.findById(j);
                     Optional<Tag> tagOptional = tagService.findById(i);
-                    if (material.isPresent() && tagOptional.isPresent()) {
+                    if (materialOptional.isPresent() && tagOptional.isPresent()&& materialOptional.get().getIsActive()==true && materialOptional.get().getIsDeleted()==false
+                    &&  tagOptional.get().getIsActive()==true && tagOptional.get().getIsDelete()==false) {
                         MaterialProduct materialProduct = new MaterialProduct
                                 (new MaterialProductPK(j, product.getId()),
-                                        false, material.get(), false, LocalDateTime.now(), product);
+                                        false, materialOptional.get(), false, LocalDateTime.now(), product);
                         TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(), false, product, LocalDateTime.now());
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
