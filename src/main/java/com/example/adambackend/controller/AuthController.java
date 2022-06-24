@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("api/auth")
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -46,7 +47,7 @@ public class AuthController {
     @Autowired
     ModelMapper modelMapper;
 
-    @PostMapping("/authenticate")
+    @PostMapping("authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -67,7 +68,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/process_register")
+    @PostMapping("process_register")
     public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         System.out.println(account.toString());
@@ -78,7 +79,7 @@ public class AuthController {
         return ResponseEntity.ok(new IGenericResponse<AccountDto>(accountDto, 200, "register successfully please check email before loginning"));
     }
 
-    @RequestMapping("/verify")
+    @RequestMapping("verify")
     public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
         if (accountService.verify(code)) {
             return ResponseEntity.ok(new IGenericResponse<>(200, "verify_success"));
