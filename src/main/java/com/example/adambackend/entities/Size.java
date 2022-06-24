@@ -21,13 +21,13 @@ public class Size {
     private Integer id;
     @Column(name = "size_name")
     private String sizeName;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "size")
     private List<DetailProduct> detailProducts = new ArrayList<>();
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 }

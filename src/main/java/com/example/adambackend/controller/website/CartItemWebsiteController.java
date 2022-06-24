@@ -17,30 +17,34 @@ import java.util.Optional;
 public class CartItemWebsiteController {
     @Autowired
     CartItemService cartItemService;
-    @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody CartItems cartItems){
 
-        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems),200,"success"));
+    @PostMapping("create")
+    public ResponseEntity<?> create(@RequestBody CartItems cartItems) {
+
+        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody CartItems cartItems){
-        Optional<CartItems> cartItemsOptional= cartItemService.findById(cartItems.getId());
-        if(cartItemsOptional.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems),200,"success"));
+    public ResponseEntity<?> update(@RequestBody CartItems cartItems) {
+        Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItems.getId());
+        if (cartItemsOptional.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("detail_order_id")Integer id){
-        Optional<CartItems> cartItemsOptional= cartItemService.findById(id);
-        if(cartItemsOptional.isPresent()){
+    public ResponseEntity<?> delete(@RequestParam("detail_order_id") Integer id) {
+        Optional<CartItems> cartItemsOptional = cartItemService.findById(id);
+        if (cartItemsOptional.isPresent()) {
             cartItemService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
     }
 }

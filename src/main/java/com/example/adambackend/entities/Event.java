@@ -15,6 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 public class Event {
+    @OneToMany(mappedBy = "event")
+    List<AccountEvent> accountEvents = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,13 +30,11 @@ public class Event {
     @Column(name = "is_deleted")
     private Boolean isDelete;
     @ManyToOne
-    @JoinColumn(name="promotion_id")
+    @JoinColumn(name = "promotion_id")
     private Promotion promotion;
-    @OneToMany(mappedBy = "event")
-    List<AccountEvent> accountEvents= new ArrayList<>();
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
- 
+
 }

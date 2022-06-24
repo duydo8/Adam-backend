@@ -1,7 +1,6 @@
 package com.example.adambackend.entities;
 
 import com.example.adambackend.enums.ERoleName;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +18,21 @@ import java.util.List;
 @Table(name = "accounts")
 
 public class Account {
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Address> addressList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Comment> commentList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Favorite> favoriteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<CartItems> cartItemsList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Order> orderList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,8 +42,7 @@ public class Account {
     private String fullName;
     @Column(unique = true)
     private String email;
-
-    @Column(name = "phone_number",unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
     private String password;
     private ERoleName role;
@@ -37,33 +50,15 @@ public class Account {
     private boolean isActive;
     @Column(name = "is_deleted")
     private boolean isDelete;
-
     @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
-
     private double priority;
-
     public Account(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Address> addressList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Comment> commentList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Favorite> favoriteList ;
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<CartItems> cartItemsList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Order> orderList = new ArrayList<>();
 
 }

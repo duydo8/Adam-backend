@@ -21,50 +21,53 @@ public class AddressWebsiteController {
     AddressService addressService;
     @Autowired
     AccountService accountService;
+
     @PostMapping("create")
-    public ResponseEntity<?> createAddress(@RequestParam("account_id")Integer accountId, @RequestBody Address address){
+    public ResponseEntity<?> createAddress(@RequestParam("account_id") Integer accountId, @RequestBody Address address) {
         Optional<Account> account = accountService.findById(accountId);
         if (account.isPresent()) {
-            Address address1=addressService.save(address);
-            List<Address> addresses=account.get().getAddressList();
+            Address address1 = addressService.save(address);
+            List<Address> addresses = account.get().getAddressList();
             addresses.add(address);
             account.get().setAddressList(addresses);
             accountService.save(account.get());
-            return ResponseEntity.ok().body(new IGenericResponse<Address>(address1,200,"successfully"));
+            return ResponseEntity.ok().body(new IGenericResponse<Address>(address1, 200, "successfully"));
 
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found account"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found account"));
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestParam("account_id")Integer accountId, @RequestBody Address address){
+    public ResponseEntity<?> update(@RequestParam("account_id") Integer accountId, @RequestBody Address address) {
         Optional<Account> account = accountService.findById(accountId);
-        Optional<Address> address1= addressService.findById(address.getId());
-        if (account.isPresent()&& address1.isPresent()) {
-            Address address2=addressService.save(address);
-            List<Address> addresses=account.get().getAddressList();
+        Optional<Address> address1 = addressService.findById(address.getId());
+        if (account.isPresent() && address1.isPresent()) {
+            Address address2 = addressService.save(address);
+            List<Address> addresses = account.get().getAddressList();
             addresses.add(address);
             account.get().setAddressList(addresses);
             accountService.save(account.get());
-            return ResponseEntity.ok().body(new IGenericResponse<Address>(address2,200,"successfully"));
+            return ResponseEntity.ok().body(new IGenericResponse<Address>(address2, 200, "successfully"));
 
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("address_id") Integer addressId,@RequestParam("account_id") Integer accountId ){
+    public ResponseEntity<?> delete(@RequestParam("address_id") Integer addressId, @RequestParam("account_id") Integer accountId) {
         Optional<Account> account = accountService.findById(accountId);
-        Optional<Address> address1= addressService.findById(accountId);
-        if (account.isPresent()&& address1.isPresent()) {
-            List<Address> addresses= account.get().getAddressList();
+        Optional<Address> address1 = addressService.findById(accountId);
+        if (account.isPresent() && address1.isPresent()) {
+            List<Address> addresses = account.get().getAddressList();
             addresses.remove(address1.get());
             account.get().setAddressList(addresses);
             accountService.save(account.get());
             addressService.deleteById(addressId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,"successfully"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "successfully"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
 
 

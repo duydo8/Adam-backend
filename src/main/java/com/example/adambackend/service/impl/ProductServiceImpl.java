@@ -52,11 +52,12 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public List<Product> findByColorSizePriceBrandAndMaterial(String colorName,String sizeName,String material,double bottomPrice,double topPrice){
-        return productRepository.findByColorSizePriceBrandAndMaterial(colorName,sizeName,material,bottomPrice,topPrice);
+    public List<Product> findByColorSizePriceBrandAndMaterial(String colorName, String sizeName, String material, double bottomPrice, double topPrice) {
+        return productRepository.findByColorSizePriceBrandAndMaterial(colorName, sizeName, material, bottomPrice, topPrice);
     }
+
     @Override
-    public List<Product> findTop10ProductBestSale(){
+    public List<Product> findTop10ProductBestSale() {
         return productRepository.findTop10ProductBestSale();
     }
 }

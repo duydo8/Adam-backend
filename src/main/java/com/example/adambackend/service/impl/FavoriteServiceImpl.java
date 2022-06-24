@@ -41,7 +41,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public  List<Product> findProductFavoriteByAccountId(Integer id) {
+    public List<Product> findProductFavoriteByAccountId(Integer id) {
         return favoriteRepository.findProductFavoriteByAccountId(id);
     }
 

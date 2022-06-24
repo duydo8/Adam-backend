@@ -36,34 +36,35 @@ public class CommentWebsiteController {
     @Autowired
     DetailOrderService detailOrderService;
 
-//
+    //
     @PostMapping("create")
     public ResponseEntity<?> createComment(@RequestBody Comment comment, @RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
 //        if(productId)
-        List<Integer> listProductId= detailOrderService.findProductIdByOrder();
-        for (Integer id: listProductId
-             ) {
-            if(id==productId){
-                Optional<Product> productOptional= productSevice.findById(productId);
-                Optional<Account> accountOptional= accountService.findById(accountId);
-                if(comment.getVote()==0||productOptional.isPresent()||accountOptional.isPresent() ){
-                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"can't create comment"));
-                }else{
-                    int commentTotal= commentService.countCommentByProduct(productId);
+        List<Integer> listProductId = detailOrderService.findProductIdByOrder();
+        for (Integer id : listProductId
+        ) {
+            if (id == productId) {
+                Optional<Product> productOptional = productSevice.findById(productId);
+                Optional<Account> accountOptional = accountService.findById(accountId);
+                if (comment.getVote() == 0 || productOptional.isPresent() || accountOptional.isPresent()) {
+                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "can't create comment"));
+                } else {
+                    int commentTotal = commentService.countCommentByProduct(productId);
 
-                    double voteAverage= productOptional.get().getVoteAverage();
-                    voteAverage=(voteAverage*commentTotal+comment.getVote())/(commentTotal+1);
+                    double voteAverage = productOptional.get().getVoteAverage();
+                    voteAverage = (voteAverage * commentTotal + comment.getVote()) / (commentTotal + 1);
                     System.out.println(voteAverage);
                     productOptional.get().setVoteAverage(voteAverage);
                     productSevice.save(productOptional.get());
                     return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(comment.getContent(),
 
-                            LocalDateTime.now(), productId, accountId, CommentStatus.PENDING,comment.getVote()), 200, ""));
+                            LocalDateTime.now(), productId, accountId, CommentStatus.PENDING, comment.getVote()), 200, ""));
                 }
             }
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not contains in order"));
-}
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not contains in order"));
+    }
+
     @PutMapping("update")
     public ResponseEntity<?> updateComment(@RequestParam("comment_id") Integer id,
                                            @RequestParam("content") String content) {
@@ -76,16 +77,17 @@ public class CommentWebsiteController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found comment"));
     }
-//
+
+    //
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Integer id) {
         Optional<Comment> comment1 = commentService.findById(id);
         if (comment1.isPresent()) {
-            int vote= comment1.get().getVote();
-            int commentTotal= commentService.countCommentByProduct(comment1.get().getProduct().getId());
+            int vote = comment1.get().getVote();
+            int commentTotal = commentService.countCommentByProduct(comment1.get().getProduct().getId());
 
-            double voteAverage= comment1.get().getProduct().getVoteAverage();
-            voteAverage=(voteAverage*commentTotal-vote)/(voteAverage-1);
+            double voteAverage = comment1.get().getProduct().getVoteAverage();
+            voteAverage = (voteAverage * commentTotal - vote) / (voteAverage - 1);
             Product p = comment1.get().getProduct();
             p.setVoteAverage(voteAverage);
             productSevice.save(p);

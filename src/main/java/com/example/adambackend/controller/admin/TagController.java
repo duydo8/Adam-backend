@@ -1,6 +1,5 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.TagDTO;
@@ -22,30 +21,38 @@ public class TagController {
     TagService tagService;
     @Autowired
     ProductSevice productSevice;
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return  ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(), 200, ""));
     }
+
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody TagDTO tagDTO){
-        Tag tag= new Tag();
-        tag.setTagName(tagDTO.getTagName());
-        tag.setIsDelete(false);
-        tag.setCreateDate(LocalDateTime.now());
-        tag.setIsActive(true);
-        tagService.save(tag);
-        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
+    public ResponseEntity<?> create(@RequestBody TagDTO tagDTO) {
+        try {
+            Tag tag = new Tag();
+            tag.setTagName(tagDTO.getTagName());
+            tag.setIsDelete(false);
+            tag.setCreateDate(LocalDateTime.now());
+            tag.setIsActive(true);
+            tagService.save(tag);
+            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag), 200, ""));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
+        }
     }
+
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Tag tag
-                                    ){
+    ) {
 
-        Optional<Tag>tagOptional= tagService.findById(tag.getId());
-        if( tagOptional.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag),200,""));
+        Optional<Tag> tagOptional = tagService.findById(tag.getId());
+        if (tagOptional.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag), 200, ""));
         }
-        return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
+
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("tag_id") Integer id) {
         Optional<Tag> tagOptional = tagService.findById(id);

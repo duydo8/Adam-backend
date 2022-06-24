@@ -38,8 +38,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findAllCategoryParentId() {
         return categoryRepository.findAllCategoryParentId();
     }
+
     @Override
-    public List <Category> findByCategoryParentId(int id){
+    public List<Category> findByCategoryParentId(int id) {
         return categoryRepository.findByCategoryParentId(id);
     }
- }
+}

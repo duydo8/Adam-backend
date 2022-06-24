@@ -29,5 +29,6 @@ public interface AccountService {
     void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
 
     boolean verify(String verificationCode);
+
     Optional<Account> findByEmail(String email);
 }

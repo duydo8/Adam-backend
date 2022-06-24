@@ -31,7 +31,7 @@ public class CommentController {
 
     @PutMapping("changeStatusComment")
     public ResponseEntity<?> changeStatusComment(@RequestParam("comment_id") Integer commentId,
-                                                                @RequestParam("status") String status) {
+                                                 @RequestParam("status") String status) {
         //Comment comment= commentService.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
         Optional<Comment> comment = commentService.findById(commentId);
         if (comment.isPresent()) {

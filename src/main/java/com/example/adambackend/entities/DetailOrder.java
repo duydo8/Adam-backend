@@ -19,7 +19,7 @@ public class DetailOrder {
     private Integer id;
     private int quantity;
     private double price;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
@@ -27,9 +27,9 @@ public class DetailOrder {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
 }

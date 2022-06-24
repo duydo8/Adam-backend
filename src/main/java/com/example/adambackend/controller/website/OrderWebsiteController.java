@@ -23,7 +23,7 @@ public class OrderWebsiteController {
     @Autowired
     DetailOrderService detailOrderService;
 
-//    @GetMapping("findTop5OrderByCreateTime")
+    //    @GetMapping("findTop5OrderByCreateTime")
 //    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
 //        Optional<Account> account = accountService.findById(accountId);
 //        if (account.isPresent()) {
@@ -32,21 +32,21 @@ public class OrderWebsiteController {
 //        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 //    }
     @PostMapping("create")
-    public ResponseEntity<?> createOrder(@RequestBody Order order){
-        return  ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order),200,""));
+    public ResponseEntity<?> createOrder(@RequestBody Order order) {
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?>deleteOrder(@RequestParam("order_id")Integer orderId){
-        Optional<Order> optionalOrder= orderService.findById(orderId);
-        if(optionalOrder.isPresent()){
+    public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
+        Optional<Order> optionalOrder = orderService.findById(orderId);
+        if (optionalOrder.isPresent()) {
             detailOrderService.deleteAllByOrderId(orderId);
             orderService.deleteById(orderId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,""));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
     }
-    
 
 
 }

@@ -18,22 +18,21 @@ public class Favorite {
     private FavoriteId favoriteId;
     @Column(name = "time_create")
     private LocalDateTime time_create;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
     @ManyToOne
     @MapsId("accountId")
     @JsonBackReference
-    @JoinColumn(name = "account_id",insertable = false,updatable = false)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account = new Account();
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @ManyToOne
     @MapsId("productId")
     @JsonBackReference
-    @JoinColumn(name = "product_id",insertable = false,updatable = false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product = new Product();
-
 
 
 }

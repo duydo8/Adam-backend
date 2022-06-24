@@ -33,15 +33,16 @@ public class DetailProductController {
     ColorService colorService;
     @Autowired
     SizeService sizeService;
-    @PostMapping("create")
-    public ResponseEntity<?> createDetailProduct( @RequestBody DetailProductDTO detailProductDTO){
-        Optional<Product> product= productSevice.findById(detailProductDTO.getProductId());
-        Optional<Color> color=  colorService.findById(detailProductDTO.getColorId());
-        Optional<Size>size = sizeService.findById(detailProductDTO.getSizeId());
-        if(product.isPresent()&& colorService.findById(detailProductDTO.getColorId()).isPresent()
-                && sizeService.findById(detailProductDTO.getSizeId()).isPresent()){
 
-            DetailProduct detailProduct= new DetailProduct();
+    @PostMapping("create")
+    public ResponseEntity<?> createDetailProduct(@RequestBody DetailProductDTO detailProductDTO) {
+        Optional<Product> product = productSevice.findById(detailProductDTO.getProductId());
+        Optional<Color> color = colorService.findById(detailProductDTO.getColorId());
+        Optional<Size> size = sizeService.findById(detailProductDTO.getSizeId());
+        if (product.isPresent() && colorService.findById(detailProductDTO.getColorId()).isPresent()
+                && sizeService.findById(detailProductDTO.getSizeId()).isPresent()) {
+
+            DetailProduct detailProduct = new DetailProduct();
             detailProduct.setQuantity(detailProductDTO.getQuantity());
             detailProduct.setProduct(product.get());
             detailProduct.setProductImage(detailProductDTO.getProductImage());
@@ -53,40 +54,42 @@ public class DetailProductController {
             detailProduct.setIsActive(true);
             detailProduct.setCreateDate(LocalDateTime.now());
             detailProductService.save(detailProduct);
-            List<DetailProduct> detailProducts= product.get().getDetailProducts();
+            List<DetailProduct> detailProducts = product.get().getDetailProducts();
             detailProducts.add(detailProduct);
             product.get().setDetailProducts(detailProducts);
             productSevice.save(product.get());
             detailProduct.setProduct(product.get());
-            return  ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct),200,"success"));
+            return ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct), 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
 
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> updateDetailProduct(@RequestParam("product_id")Integer productId, @RequestBody DetailProduct detailProduct){
-        Optional<Product> product= productSevice.findById(productId);
-        if(product.isPresent()){
-        List<DetailProduct> detailProducts= product.get().getDetailProducts();
-        for (DetailProduct detailProduct1: detailProducts
-             ) {
-            if(detailProduct1.equals(detailProduct)){
-                detailProductService.save(detailProduct);
-                detailProducts.add(detailProduct);
-                product.get().setDetailProducts(detailProducts);
-                productSevice.save(product.get());
-                detailProduct.setProduct(product.get());
-                return  ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct),200,"success"));
+    public ResponseEntity<?> updateDetailProduct(@RequestParam("product_id") Integer productId, @RequestBody DetailProduct detailProduct) {
+        Optional<Product> product = productSevice.findById(productId);
+        if (product.isPresent()) {
+            List<DetailProduct> detailProducts = product.get().getDetailProducts();
+            for (DetailProduct detailProduct1 : detailProducts
+            ) {
+                if (detailProduct1.equals(detailProduct)) {
+                    detailProductService.save(detailProduct);
+                    detailProducts.add(detailProduct);
+                    product.get().setDetailProducts(detailProducts);
+                    productSevice.save(product.get());
+                    detailProduct.setProduct(product.get());
+                    return ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct), 200, "success"));
+                }
             }
-        }
 
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteDetailProduct(@RequestParam("product_id")Integer productId,@RequestParam("detail_product_id")Integer detailProductId) {
+    public ResponseEntity<?> deleteDetailProduct(@RequestParam("product_id") Integer productId, @RequestParam("detail_product_id") Integer detailProductId) {
         Optional<Product> product = productSevice.findById(productId);
         Optional<DetailProduct> detailProduct = detailProductService.findById(detailProductId);
         if (product.isPresent() && detailProduct.isPresent()) {
@@ -104,34 +107,35 @@ public class DetailProductController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
-    @PostMapping("createArrayOptionValueDetailProduct")
-    public ResponseEntity<?> createArrayOptionValueDetailProduct(@RequestBody DetailProductRequest detailProductRequest){
-        Optional<Product> productOptional= productSevice.findById(detailProductRequest.getProductId());
-        List<Color> colorList=new ArrayList<>();
-        List<Size> sizeList= new ArrayList<>();
-        for (Integer colorId: detailProductRequest.getColorIdList()
-             ) {
 
-            Optional<Color> color= colorService.findById(colorId);
-            if(color.isPresent()) {
+    @PostMapping("createArrayOptionValueDetailProduct")
+    public ResponseEntity<?> createArrayOptionValueDetailProduct(@RequestBody DetailProductRequest detailProductRequest) {
+        Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
+        List<Color> colorList = new ArrayList<>();
+        List<Size> sizeList = new ArrayList<>();
+        for (Integer colorId : detailProductRequest.getColorIdList()
+        ) {
+
+            Optional<Color> color = colorService.findById(colorId);
+            if (color.isPresent()) {
                 colorList.add(color.get());
             }
         }
-        for (Integer s: detailProductRequest.getSizeIdList()
+        for (Integer s : detailProductRequest.getSizeIdList()
         ) {
-            Optional<Size> size= sizeService.findById(s);
-            if(size.isPresent()) {
+            Optional<Size> size = sizeService.findById(s);
+            if (size.isPresent()) {
                 sizeList.add(size.get());
             }
 
         }
 
 
-        List<DetailProduct> detailProductList= new ArrayList<>();
-        if(productOptional.isPresent()){
-            for (int i=0;i<sizeList.size();i++) {
-                for (int j=0;j<colorList.size();j++) {
-                    DetailProduct detailProduct= new DetailProduct();
+        List<DetailProduct> detailProductList = new ArrayList<>();
+        if (productOptional.isPresent()) {
+            for (int i = 0; i < sizeList.size(); i++) {
+                for (int j = 0; j < colorList.size(); j++) {
+                    DetailProduct detailProduct = new DetailProduct();
                     detailProduct.setProduct(productSevice.findById(detailProductRequest.getProductId()).get());
                     detailProduct.setPriceImport(detailProductRequest.getPriceImport());
                     detailProduct.setPriceExport(detailProductRequest.getPriceExport());
@@ -139,16 +143,16 @@ public class DetailProductController {
                     detailProduct.setIsDelete(false);
                     detailProduct.setColor(colorList.get(j));
                     detailProduct.setSize(sizeList.get(i));
-                    detailProductList.add( detailProduct);
+                    detailProductList.add(detailProduct);
                     detailProductService.save(detailProduct);
 
                 }
 
             }
-            return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList,200,""));
+            return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
 
-        }else{
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not exists"));
+        } else {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
         }
 
     }

@@ -19,34 +19,42 @@ import java.util.Optional;
 public class SizeController {
     @Autowired
     SizeService sizeService;
+
     @PostMapping("create")
-    public ResponseEntity<?> createSize(@RequestBody SizeDTO sizeDTO){
-        Size size= new Size();
-        size.setSizeName(sizeDTO.getSizeName());
-        size.setCreateDate(LocalDateTime.now());
-       size.setIsActive(true);
-       size.setIsDeleted(false);
-        return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size),200,"success"));
+    public ResponseEntity<?> createSize(@RequestBody SizeDTO sizeDTO) {
+        try {
+            Size size = new Size();
+            size.setSizeName(sizeDTO.getSizeName());
+            size.setCreateDate(LocalDateTime.now());
+            size.setIsActive(true);
+            size.setIsDeleted(false);
+            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size), 200, "success"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
+        }
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Size size){
-        Optional<Size> size1= sizeService.findById(size.getId());
-        if(size1.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size),200,"success"));
+    public ResponseEntity<?> update(@RequestBody Size size) {
+        Optional<Size> size1 = sizeService.findById(size.getId());
+        if (size1.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("size_id")Integer sizeId){
-        Optional<Size> size1= sizeService.findById(sizeId);
-        if(size1.isPresent()){
+    public ResponseEntity<?> delete(@RequestParam("size_id") Integer sizeId) {
+        Optional<Size> size1 = sizeService.findById(sizeId);
+        if (size1.isPresent()) {
             sizeService.deleteById(sizeId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAll(), 200, ""));
     }
 }

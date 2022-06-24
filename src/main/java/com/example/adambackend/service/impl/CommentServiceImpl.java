@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus, int vote) {
 
-        return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus,vote);
+        return commentRepository.createAccountwithAccountIdAndProductId(content, localDateTime, productId, accountId, commentStatus, vote);
     }
 
     @Override

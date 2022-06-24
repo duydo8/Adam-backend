@@ -49,13 +49,13 @@ public class FavoriteWebsiteController {
     @PostMapping("create")
     public ResponseEntity<?> createFavorite(@RequestParam("product_id") Integer productId, @RequestParam("account_id") Integer accountId) {
         Favorite favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
-        Optional<Account>accountOptional= accountService.findById(accountId);
-        Optional<Product> productOptional= productSevice.findById(productId);
+        Optional<Account> accountOptional = accountService.findById(accountId);
+        Optional<Product> productOptional = productSevice.findById(productId);
         if (favorite == null && productOptional.isPresent() && accountOptional.isPresent()) {
             FavoriteId favoriteId = new FavoriteId(accountId, productId);
-            Favorite fa=favoriteService.save(new Favorite(favoriteId,
-                    LocalDateTime.now(),false,accountOptional.get(),false,productOptional.get()
-                    ));
+            Favorite fa = favoriteService.save(new Favorite(favoriteId,
+                    LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
+            ));
             return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Exist"));

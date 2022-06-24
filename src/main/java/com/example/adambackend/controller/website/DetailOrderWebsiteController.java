@@ -28,31 +28,35 @@ public class DetailOrderWebsiteController {
     public ResponseEntity<?> findTop10ProductByCountQuantityInOrderDetail() {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(detailOrderService.findTop10ProductByCountQuantityInOrderDetail(), 200, ""));
     }
-    @PostMapping("create")
-    public ResponseEntity<?> creatSize(@RequestBody DetailOrder detailOrder){
 
-        return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder),200,"success"));
+    @PostMapping("create")
+    public ResponseEntity<?> creatSize(@RequestBody DetailOrder detailOrder) {
+
+        return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody DetailOrder detailOrder){
-        Optional<DetailOrder> detailOrder1= detailOrderService.findById(detailOrder.getId());
-        if(detailOrder1.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder),200,"success"));
+    public ResponseEntity<?> update(@RequestBody DetailOrder detailOrder) {
+        Optional<DetailOrder> detailOrder1 = detailOrderService.findById(detailOrder.getId());
+        if (detailOrder1.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("detail_order_id")Integer id){
-        Optional<DetailOrder> detailOrder= detailOrderService.findById(id);
-        if(detailOrder.isPresent()){
+    public ResponseEntity<?> delete(@RequestParam("detail_order_id") Integer id) {
+        Optional<DetailOrder> detailOrder = detailOrderService.findById(id);
+        if (detailOrder.isPresent()) {
             detailOrderService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(), 200, ""));
     }
 
 }

@@ -2,7 +2,6 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Category;
 import com.example.adambackend.exception.HandleExceptionDemo;
-
 import com.example.adambackend.payload.CategoryDTO;
 import com.example.adambackend.payload.CategoryResponse;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -28,7 +27,7 @@ public class CategoryController {
 
     @PostMapping("create")
     public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
-        Category category= new Category();
+        Category category = new Category();
         category.setCategoryName(categoryDTO.getCategoryName());
         category.setCategoryParentId(categoryDTO.getCategoryParentId());
         category.setIsDeleted(false);
@@ -37,13 +36,14 @@ public class CategoryController {
         return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
 
     }
+
     @GetMapping("findAllCategoryParentId")
     public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
-        List<CategoryResponse> categoryResponseList= new ArrayList<>();
-        List<Category> categories= categoryService.findAllCategoryParentId();
-        for ( Category category: categories
-             ) {
-            CategoryResponse categoryResponse=new CategoryResponse();
+        List<CategoryResponse> categoryResponseList = new ArrayList<>();
+        List<Category> categories = categoryService.findAllCategoryParentId();
+        for (Category category : categories
+        ) {
+            CategoryResponse categoryResponse = new CategoryResponse();
             categoryResponse.setCategoryParentId(category.getCategoryParentId());
             categoryResponse.setId(category.getId());
             categoryResponse.setCategoryName(category.getCategoryName());
@@ -54,6 +54,7 @@ public class CategoryController {
         return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
 
     }
+
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody Category category) {
         Optional<Category> categoryOptional = categoryService.findById(category.getId());
@@ -75,15 +76,17 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
         }
     }
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
     }
+
     @GetMapping("findCategoryByParentId")
-    public  ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id")Integer id){
-        Optional<Category> categoryOptional= categoryService.findById(id);
-        if(categoryOptional.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id),200,""));
+    public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        if (categoryOptional.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));

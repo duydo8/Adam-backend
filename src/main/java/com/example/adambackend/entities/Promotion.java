@@ -20,15 +20,15 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String promotionType;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
     private String promotionName;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
     @JsonIgnore
     @OneToMany(mappedBy = "promotion")
-    private List<SaleEventCode> saleEventCodeList= new ArrayList<>();
-    @Column(name="create_date")
+    private List<SaleEventCode> saleEventCodeList = new ArrayList<>();
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
 }

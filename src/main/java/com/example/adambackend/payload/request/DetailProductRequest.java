@@ -1,7 +1,5 @@
 package com.example.adambackend.payload.request;
 
-import com.example.adambackend.entities.Color;
-import com.example.adambackend.entities.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

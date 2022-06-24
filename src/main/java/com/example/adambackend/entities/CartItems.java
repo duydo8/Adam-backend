@@ -17,7 +17,7 @@ public class CartItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int quantity;
-    @Column(name="total_price")
+    @Column(name = "total_price")
     private double totalPrice;
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -25,8 +25,8 @@ public class CartItems {
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 }

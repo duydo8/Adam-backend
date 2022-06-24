@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("admin/material")
@@ -20,18 +21,24 @@ public class MaterialControler {
     MaterialService materialService;
     @Autowired
     ProductSevice productSevice;
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return  ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
     }
+
     @PostMapping("create")
     public ResponseEntity<?> createWard(@RequestBody MaterialDTO materialDTO) {
-        Material material= new Material();
-        material.setMaterialName(materialDTO.getMaterialName());
-        material.setIsActive(true);
-        material.setCreateDate(LocalDateTime.now());
-        material.setIsDeleted(false);
-        return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
+        try {
+            Material material = new Material();
+            material.setMaterialName(materialDTO.getMaterialName());
+            material.setIsActive(true);
+            material.setCreateDate(LocalDateTime.now());
+            material.setIsDeleted(false);
+            return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
+        }
     }
 
     @PutMapping("update")

@@ -21,10 +21,11 @@ public interface CommentService {
 
     List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct);
 
-    Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus,int vote);
+    Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus, int vote);
 
     List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId);
 
     List<Comment> findTop10CommentByProductId(Integer productId);
+
     Integer countCommentByProduct(Integer productId);
 }

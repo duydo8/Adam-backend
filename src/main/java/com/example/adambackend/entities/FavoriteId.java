@@ -19,6 +19,4 @@ public class FavoriteId implements Serializable {
     private Integer productId;
 
 
-
-
 }

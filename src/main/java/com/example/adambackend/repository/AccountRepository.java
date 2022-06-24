@@ -13,7 +13,9 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findByUsername(String username);
+
     Optional<Account> findByEmail(String email);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
@@ -23,8 +25,9 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
     public Account findByVerificationCode(String code);
+
     @Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
-            "role as role, is_active as isActive, is_deleted as isDeleted, priority as priority from accounts",nativeQuery = true)
-    public  List<AccountResponse> findAlls();
+            "role as role, is_active as isActive, is_deleted as isDeleted, priority as priority from accounts", nativeQuery = true)
+    public List<AccountResponse> findAlls();
 
 }

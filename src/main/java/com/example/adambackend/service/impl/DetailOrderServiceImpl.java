@@ -47,11 +47,11 @@ public class DetailOrderServiceImpl implements DetailOrderService {
 
     @Override
     public void deleteAllByOrderId(Integer orderId) {
-         detailOrderRepository.deleteAllByOrderId(orderId);
+        detailOrderRepository.deleteAllByOrderId(orderId);
     }
 
     @Override
-    public List<Integer> findProductIdByOrder(){
-        return  detailOrderRepository.findProductIdByOrder();
+    public List<Integer> findProductIdByOrder() {
+        return detailOrderRepository.findProductIdByOrder();
     }
 }

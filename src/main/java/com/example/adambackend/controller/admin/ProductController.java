@@ -4,9 +4,7 @@ import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.ProductDTO;
 import com.example.adambackend.payload.request.ProductRequest;
-import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.payload.response.ProductDto;
 import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.CategoryService;
@@ -16,15 +14,12 @@ import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -51,8 +46,8 @@ public class ProductController {
 
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
-        if(categoryService.findById(productDTO.getCategoryId()).isPresent()){
-            Product product= new Product();
+        if (categoryService.findById(productDTO.getCategoryId()).isPresent()) {
+            Product product = new Product();
             product.setVoteAverage(0);
             product.setDelete(false);
             product.setProductName(productDTO.getProductName());
@@ -61,10 +56,9 @@ public class ProductController {
             product.setCreateDate(LocalDateTime.now());
             product.setCategory(categoryService.findById(productDTO.getCategoryId()).get());
             return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product), 200, "success"));
-        }else{
+        } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
         }
-
 
 
     }
@@ -131,8 +125,8 @@ public class ProductController {
                     if (material.isPresent() && tagOptional.isPresent()) {
                         MaterialProduct materialProduct = new MaterialProduct
                                 (new MaterialProductPK(j, product.getId()),
-                                        false, material.get(),false,LocalDateTime.now(), product);
-                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(),false, product,LocalDateTime.now());
+                                        false, material.get(), false, LocalDateTime.now(), product);
+                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(), false, product, LocalDateTime.now());
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
                         materialProductList.add(materialProduct);

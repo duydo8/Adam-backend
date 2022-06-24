@@ -18,9 +18,9 @@ public class Address {
     private Integer id;
     @Column(name = "address_detail")
     private String addressDetail;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private LocalDateTime createDate;
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -34,6 +34,6 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "ward_id")
     private Ward ward;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
 }

@@ -19,34 +19,42 @@ import java.util.Optional;
 public class ColorController {
     @Autowired
     ColorService colorService;
+
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAll(),200,""));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAll(), 200, ""));
     }
+
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody ColorDTO colorDTO){
-    Color color = new Color();
-    color.setColorName(colorDTO.getColorName());
-    color.setIsDeleted(false);
-        color.setCreateDate(LocalDateTime.now());
-        color.setIsActive(true);
-        return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color),200,"success"));
+    public ResponseEntity<?> create(@RequestBody ColorDTO colorDTO) {
+        try {
+            Color color = new Color();
+            color.setColorName(colorDTO.getColorName());
+            color.setIsDeleted(false);
+            color.setCreateDate(LocalDateTime.now());
+            color.setIsActive(true);
+            return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color), 200, "success"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
+        }
     }
+
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Color color){
-        Optional<Color> colorOptional= colorService.findById(color.getId());
-        if(colorOptional.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color),200,"success"));
+    public ResponseEntity<?> update(@RequestBody Color color) {
+        Optional<Color> colorOptional = colorService.findById(color.getId());
+        if (colorOptional.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("color_id")Integer colorId){
-        Optional<Color> colorOptional= colorService.findById(colorId);
-        if(colorOptional.isPresent()){
+    public ResponseEntity<?> delete(@RequestParam("color_id") Integer colorId) {
+        Optional<Color> colorOptional = colorService.findById(colorId);
+        if (colorOptional.isPresent()) {
             colorService.deleteById(colorId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
 }

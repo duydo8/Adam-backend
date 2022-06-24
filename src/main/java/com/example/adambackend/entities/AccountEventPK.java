@@ -14,11 +14,11 @@ import java.io.Serializable;
 @Embeddable
 public class AccountEventPK implements Serializable {
     private static final Long serialVersionUID = -7524270329897682645L;
-    @Column(name="account_id")
+    @Column(name = "account_id")
     private Integer accountId;
-    @Column(name="event_id")
+    @Column(name = "event_id")
     private Integer eventId;
-    @Column(name="code")
+    @Column(name = "code")
     private String code;
 
 }
