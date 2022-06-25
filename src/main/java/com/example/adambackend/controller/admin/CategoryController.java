@@ -29,7 +29,11 @@ public class CategoryController {
     public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setCategoryName(categoryDTO.getCategoryName());
-        category.setCategoryParentId(categoryDTO.getCategoryParentId());
+        if(categoryDTO.getCategoryParentId()==0) {
+            category.setCategoryParentId(null);
+        }else{
+            categoryDTO.getCategoryParentId();
+        }
         category.setIsDeleted(false);
         category.setCreateDate(LocalDateTime.now());
         category.setIsActive(true);
@@ -86,6 +90,7 @@ public class CategoryController {
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (categoryOptional.isPresent()) {
+
             return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
 
         }
