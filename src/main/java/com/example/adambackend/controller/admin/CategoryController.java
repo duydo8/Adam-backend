@@ -31,9 +31,9 @@ public class CategoryController {
         category.setCategoryName(categoryDTO.getCategoryName());
         if(categoryDTO.getCategoryParentId()==0) {
             category.setCategoryParentId(null);
-        }else{
-            categoryDTO.getCategoryParentId();
         }
+            category.setCategoryParentId(categoryDTO.getCategoryParentId());
+
         category.setIsDeleted(false);
         category.setCreateDate(LocalDateTime.now());
         category.setIsActive(true);
