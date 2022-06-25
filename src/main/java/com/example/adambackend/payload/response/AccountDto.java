@@ -16,10 +16,10 @@ public class AccountDto {
     private String fullName;
     private String email;
     private String password;
-    private ERoleName role;
-    private boolean isActive;
-    private boolean isDelete;
-    private float rate;
+    private String role;
+    private Boolean isActive;
+    private Boolean isDelete;
+    private Float priority;
     private String verificationCode;
     private LocalDateTime timeValid;
 }
