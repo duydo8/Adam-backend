@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.CustomProductFilterRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "select * from products p order by p.create_date limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
-    @Query(value = "select p.id from products p \n" +
+    //    Integer getId();
+//    Integer getQuantity();
+//    Double getPriceBottom();
+//    Double getPriceTop();
+//    String getProductName();
+//    String getProductImage();
+    @Query(value = "select p.id as id, p.product_name as productName,p.image as productImage " +
+            "from products p \n" +
             "join categories ca on p.category_id=ca.id \n" +
             "join detail_products dp on p.id=dp.product_id \n" +
             "join sizes s on dp.size_id=s.id \n" +
@@ -36,8 +44,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "and co.id=?3 or ?3 is null and m.id=?4 or ?4 is null  \n" +
             "and t.id=?5 or ?5 is null and dp.price_export BETWEEN ?6 or ?6 is null \n" +
             "and ?7 or ?7 is null ", nativeQuery = true)
-    List<Product> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
-                                       double bottomPrice, double topPrice, Pageable pageable);
+    List<CustomProductFilterRequest> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
+                                                          double bottomPrice, double topPrice, Pageable pageable);
 
     @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id join tags t on t.id=tp.tag_id where t.tag_name=?1 ", nativeQuery = true)
     List<Product> findAllByTagName(String tagName);

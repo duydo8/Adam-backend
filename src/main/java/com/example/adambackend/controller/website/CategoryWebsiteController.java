@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(value = "*",maxAge = 3600 )
+@CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("category")
 public class CategoryWebsiteController {
     @Autowired
@@ -41,6 +41,7 @@ public class CategoryWebsiteController {
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
     }
+
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);

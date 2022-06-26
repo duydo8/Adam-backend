@@ -1,10 +1,17 @@
 package com.example.adambackend.payload;
 
-import java.util.List;
+public interface CustomProductFilterRequest {
+    Integer getId();
 
-public class CustomProductFilterRequest {
-    private Integer id;
-    private Integer quantity;
-    private Double priceImport;
-//    private
+    Double getPriceBottom();
+
+    Double getPriceTop();
+
+    String getProductName();
+
+    String getProductImage();
+
+    String getCreateDate();
+
+
 }

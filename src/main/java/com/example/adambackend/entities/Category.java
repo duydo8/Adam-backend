@@ -17,6 +17,9 @@ import java.util.List;
 @Entity
 public class Category {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    List<Product> products = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,8 +32,6 @@ public class Category {
     @Column(name = "category_parent_id")
     private Integer categoryParentId;
     @Column(name = "is_active")
-    private Boolean isActive;@JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    List<Product> products = new ArrayList<>();
+    private Boolean isActive;
 
 }

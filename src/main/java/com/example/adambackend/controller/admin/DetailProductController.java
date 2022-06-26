@@ -164,33 +164,34 @@ public class DetailProductController {
         }
 
     }
+
     @PutMapping("updateListDetailProductAfterCreate")
-    public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse){
-        List<NewDetailProductDTO> newDetailProductDTOList= customDetailProductResponse.getNewDetailProductDTOList();
-        List<NewDetailProductDTO> newDetailProductDTOList1= new ArrayList<>();
-        if(newDetailProductDTOList.size()>0){
-            for (NewDetailProductDTO n: newDetailProductDTOList
-                 ) {
-                Optional<DetailProduct> detailProduct= detailProductService.findById(n.getId());
-                if(detailProduct.isPresent()){
+    public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse) {
+        List<NewDetailProductDTO> newDetailProductDTOList = customDetailProductResponse.getNewDetailProductDTOList();
+        List<NewDetailProductDTO> newDetailProductDTOList1 = new ArrayList<>();
+        if (newDetailProductDTOList.size() > 0) {
+            for (NewDetailProductDTO n : newDetailProductDTOList
+            ) {
+                Optional<DetailProduct> detailProduct = detailProductService.findById(n.getId());
+                if (detailProduct.isPresent()) {
                     detailProduct.get().setIsActive(n.getIsActive());
                     detailProduct.get().setPriceImport(n.getPriceImport());
                     detailProduct.get().setPriceExport(n.getPriceExport());
                     detailProduct.get().setQuantity(n.getQuantity());
                     detailProduct.get().setIsComplete(true);
                     detailProduct.get().setProductImage(n.getImage());
-                    DetailProduct detailProduct1=detailProductService.save(detailProduct.get());
-                    NewDetailProductDTO newDetailProductDTO= new NewDetailProductDTO();
-                    newDetailProductDTO=modelMapper.map(detailProduct1,NewDetailProductDTO.class);
+                    DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
+                    NewDetailProductDTO newDetailProductDTO = new NewDetailProductDTO();
+                    newDetailProductDTO = modelMapper.map(detailProduct1, NewDetailProductDTO.class);
                     newDetailProductDTOList1.add(newDetailProductDTO);
                 }
 
             }
-            return  ResponseEntity.ok().body(new IGenericResponse<>(newDetailProductDTOList1,200,""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(newDetailProductDTOList1, 200, ""));
 
 
         }
-        return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"nothing updated"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "nothing updated"));
     }
 
 }

@@ -19,6 +19,21 @@ import java.util.List;
 
 public class Account {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Address> addressList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Comment> commentList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Favorite> favoriteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<CartItems> cartItemsList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Order> orderList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -46,19 +61,4 @@ public class Account {
         this.email = email;
         this.password = password;
     }
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Address> addressList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Comment> commentList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Favorite> favoriteList;
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<CartItems> cartItemsList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Order> orderList = new ArrayList<>();
 }

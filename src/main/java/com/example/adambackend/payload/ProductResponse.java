@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +23,6 @@ public class ProductResponse {
     private LocalDateTime createDate;
     private Category category;
     private List<Tag> tagList;
-    private List<Material>materialList;
+    private List<Material> materialList;
     private Boolean isActive;
 }

@@ -35,9 +35,10 @@ public class OrderSerivceImpl implements OrderService {
     public Optional<Order> findById(Integer id) {
         return orderRepository.findById(id);
     }
+
     @Override
-    public Page<Order> findAll(Pageable pageable){
-        return  orderRepository.findAll(pageable);
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
 //    @Override

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(value = "*",maxAge = 3600 )
+@CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("admin/category")
 public class CategoryController {
     @Autowired
@@ -29,10 +29,10 @@ public class CategoryController {
     public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setCategoryName(categoryDTO.getCategoryName());
-        if(categoryDTO.getCategoryParentId()==0) {
+        if (categoryDTO.getCategoryParentId() == 0) {
             category.setCategoryParentId(null);
         }
-            category.setCategoryParentId(categoryDTO.getCategoryParentId());
+        category.setCategoryParentId(categoryDTO.getCategoryParentId());
 
         category.setIsDeleted(false);
         category.setCreateDate(LocalDateTime.now());

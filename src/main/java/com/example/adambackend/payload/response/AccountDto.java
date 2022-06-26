@@ -1,6 +1,5 @@
 package com.example.adambackend.payload.response;
 
-import com.example.adambackend.enums.ERoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

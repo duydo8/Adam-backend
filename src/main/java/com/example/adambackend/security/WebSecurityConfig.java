@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and().authorizeRequests().antMatchers("/api/user/**").hasAuthority("User").
 //                and().authorizeRequests().antMatchers( "/**","/*").permitAll()
 //                .anyRequest().authenticated();
-        .authorizeRequests().anyRequest().permitAll();
+                .authorizeRequests().anyRequest().permitAll();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -16,7 +16,6 @@ import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(value = "*",maxAge = 36000 )
+@CrossOrigin(value = "*", maxAge = 36000)
 @RequestMapping("admin/product")
 public class ProductController {
     @Autowired
@@ -71,8 +70,8 @@ public class ProductController {
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody ProductUpdateDTO productUpdateDTO) {
         Optional<Product> product1 = productSevice.findById(productUpdateDTO.getId());
-        Optional<Category>categoryOptional= categoryService.findById((productUpdateDTO.getCategoryId()));
-        if (product1.isPresent()&& categoryOptional.isPresent()) {
+        Optional<Category> categoryOptional = categoryService.findById((productUpdateDTO.getCategoryId()));
+        if (product1.isPresent() && categoryOptional.isPresent()) {
             product1.get().setProductName(productUpdateDTO.getProductName());
             product1.get().setVoteAverage(productUpdateDTO.getVoteAverage());
             product1.get().setIsDelete(false);
@@ -82,28 +81,28 @@ public class ProductController {
             product1.get().setIsDelete(productUpdateDTO.getIsDelete());
             product1.get().setIsActive(productUpdateDTO.getIsActive());
             product1.get().setCategory(categoryOptional.get());
-            List<TagProduct> tagProductList= product1.get().getTagProducts();
-            List<MaterialProduct> materialProductList= product1.get().getMaterialProducts();
-            for (TagProduct tagProduct:tagProductList
-                 ) {
+            List<TagProduct> tagProductList = product1.get().getTagProducts();
+            List<MaterialProduct> materialProductList = product1.get().getMaterialProducts();
+            for (TagProduct tagProduct : tagProductList
+            ) {
                 tagProductRepository.deleteById(tagProduct.getTagProductPK());
             }
-            for (MaterialProduct materialProduct:materialProductList
+            for (MaterialProduct materialProduct : materialProductList
             ) {
                 materialProductRepository.deleteById(materialProduct.getMaterialProductPK());
             }
             productSevice.save(product1.get());
-            List<Material> materialList= new ArrayList<>();
-            List<Tag> tagList= new ArrayList<>();
+            List<Material> materialList = new ArrayList<>();
+            List<Tag> tagList = new ArrayList<>();
             for (Integer materialId : productUpdateDTO.getMaterialProductIds()
             ) {
 
                 Optional<Material> materialOptional = materialService.findById(materialId);
-                if (materialOptional.isPresent()&& materialOptional.get().getIsActive()==true && materialOptional.get().getIsDeleted()==false) {
-                    MaterialProduct materialProduct= new MaterialProduct();
+                if (materialOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false) {
+                    MaterialProduct materialProduct = new MaterialProduct();
                     materialProduct.setProduct(product1.get());
                     materialProduct.setMaterial(materialOptional.get());
-                    materialProduct.setMaterialProductPK(new MaterialProductPK(materialId,product1.get().getId()));
+                    materialProduct.setMaterialProductPK(new MaterialProductPK(materialId, product1.get().getId()));
                     materialProduct.setCreateDate(LocalDateTime.now());
                     materialProduct.setIsDeleted(false);
                     materialProduct.setIsActive(true);
@@ -115,11 +114,11 @@ public class ProductController {
             for (Integer s : productUpdateDTO.getTagProductIds()
             ) {
                 Optional<Tag> tagOptional = tagService.findById(s);
-                if (tagOptional.isPresent()&& tagOptional.get().getIsActive()==true && tagOptional.get().getIsDelete()==false) {
-                    TagProduct tagProduct= new TagProduct();
+                if (tagOptional.isPresent() && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
+                    TagProduct tagProduct = new TagProduct();
                     tagProduct.setProduct(product1.get());
                     tagProduct.setTag(tagOptional.get());
-                    tagProduct.setTagProductPK(new TagProductPK(s,product1.get().getId()));
+                    tagProduct.setTagProductPK(new TagProductPK(s, product1.get().getId()));
                     tagProduct.setCreateDate(LocalDateTime.now());
                     tagProduct.setIsDeleted(false);
                     tagProduct.setIsActive(true);
@@ -131,8 +130,8 @@ public class ProductController {
             }
             product1.get().setTagProducts(tagProductList);
             product1.get().setMaterialProducts(materialProductList);
-            Product product= productSevice.save(product1.get());
-            ProductResponse productResponse= new ProductResponse();
+            Product product = productSevice.save(product1.get());
+            ProductResponse productResponse = new ProductResponse();
             productResponse.setId(product.getId());
             productResponse.setProductName(product.getProductName());
             productResponse.setVoteAverage(product.getVoteAverage());
@@ -168,20 +167,18 @@ public class ProductController {
         ) {
 
             Optional<Material> materialOptional = materialService.findById(materialId);
-            if (materialOptional.isPresent()&& materialOptional.get().getIsActive()==true && materialOptional.get().getIsDeleted()==false) {
+            if (materialOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false) {
                 materialList.add(materialOptional.get());
             }
         }
         for (Integer s : productRequest.getTagProductIdList()
         ) {
             Optional<Tag> tagOptional = tagService.findById(s);
-            if (tagOptional.isPresent()&& tagOptional.get().getIsActive()==true && tagOptional.get().getIsDelete()==false) {
+            if (tagOptional.isPresent() && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
                 tagList.add(tagOptional.get());
             }
 
         }
-
-
 
 
         Product product = new Product();
@@ -201,8 +198,8 @@ public class ProductController {
                 for (int j = 0; j < materialList.size(); j++) {
                     Optional<Material> materialOptional = materialService.findById(j);
                     Optional<Tag> tagOptional = tagService.findById(i);
-                    if (materialOptional.isPresent() && tagOptional.isPresent()&& materialOptional.get().getIsActive()==true && materialOptional.get().getIsDeleted()==false
-                    &&  tagOptional.get().getIsActive()==true && tagOptional.get().getIsDelete()==false) {
+                    if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
+                            && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
                         MaterialProduct materialProduct = new MaterialProduct
                                 (new MaterialProductPK(j, product.getId()),
                                         false, materialOptional.get(), false, LocalDateTime.now(), product);
@@ -218,8 +215,8 @@ public class ProductController {
             }
             product.setTagProducts(tagProductList);
             product.setMaterialProducts(materialProductList);
-            Product product1=productSevice.save(product);
-            ProductResponse productResponse= new ProductResponse();
+            Product product1 = productSevice.save(product);
+            ProductResponse productResponse = new ProductResponse();
             productResponse.setId(product.getId());
             productResponse.setProductName(product1.getProductName());
             productResponse.setVoteAverage(product1.getVoteAverage());

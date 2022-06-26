@@ -1,6 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.CustomProductFilterRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,8 +25,8 @@ public interface ProductSevice {
     List<Product> findAllByTagName(String tagName);
 
 
-    List<Product> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
-                                       double bottomPrice, double topPrice, Pageable pageable);
+    List<CustomProductFilterRequest> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
+                                                          double bottomPrice, double topPrice, Pageable pageable);
 
     List<Product> findTop10ProductBestSale();
 }

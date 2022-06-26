@@ -1,6 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.CustomProductFilterRequest;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,10 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public List<Product> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
-                                              double bottomPrice, double topPrice, Pageable pageable) {
+    public List<CustomProductFilterRequest> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
+                                                                 double bottomPrice, double topPrice, Pageable pageable) {
         return productRepository.findPageableByOption(categoryId, sizeId,
-                colorId,materialId,tagId, bottomPrice, topPrice,pageable);
+                colorId, materialId, tagId, bottomPrice, topPrice, pageable);
     }
 
     @Override

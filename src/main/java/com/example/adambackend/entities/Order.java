@@ -30,13 +30,13 @@ public class Order {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name="amount_price")
+    @Column(name = "amount_price")
     private Double amountPrice;
-    @Column(name="sale_price")
+    @Column(name = "sale_price")
     private Double salePrice;
-    @Column(name="total_price")
+    @Column(name = "total_price")
     private Double totalPrice;
-    @Column(name="address_detail")
+    @Column(name = "address_detail")
     private String addressDetail;
     @ManyToOne
     @JoinColumn(name = "address_id")
@@ -50,7 +50,6 @@ public class Order {
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<AccountEvent> accountEventList = new ArrayList<>();
-
 
 
 }
