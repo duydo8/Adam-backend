@@ -16,7 +16,7 @@ public class CategoryResponse {
     private String categoryName;
 
     private Boolean isDeleted;
-
+    private Boolean isActive;
     private Integer categoryParentId;
     private List<Category> categoryChildren;
 }

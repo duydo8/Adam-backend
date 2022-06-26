@@ -54,6 +54,7 @@ public class CategoryController {
             categoryResponse.setIsDeleted(category.getIsDeleted());
             categoryResponse.setCategoryChildren(categoryService.findByCategoryParentId(category.getId()));
             categoryResponseList.add(categoryResponse);
+            categoryResponse.setIsActive(category.getIsActive());
         }
         return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
 
