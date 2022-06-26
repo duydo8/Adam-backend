@@ -63,7 +63,8 @@ public class ProductWebsiteController {
 //                                    for(int k=0;k<listSizeId.size();k++){
 //                                        for(int l=0;l<listMaterialId.size();l++){
 //                                            for(int m=0;m<listTagId.size();m++){
-//
+////                                                List<Product> productSevice.findPageableByOption(cateId,sizeId,
+////                                                        colorId,materialId,tagId,bottomPrice,topPrice,pageable
 //                                            }
 //                                        }
 //                                    }
@@ -76,10 +77,10 @@ public class ProductWebsiteController {
 //        }else{
 //            int cateId;
 //        }
-////        Pageable pageable= PageRequest.of(page,size, Sort.by("create_date").descending());
-////        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findPageableByOption(cateId,sizeId,
-////                colorId,materialId,tagId,bottomPrice,topPrice,pageable
-////                ), 200, "success"));
+//        Pageable pageable= PageRequest.of(page,size, Sort.by("create_date").descending());
+//        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findPageableByOption(cateId,sizeId,
+//                colorId,materialId,tagId,bottomPrice,topPrice,pageable
+//                ), 200, "success"));
 //
 //    }
 
