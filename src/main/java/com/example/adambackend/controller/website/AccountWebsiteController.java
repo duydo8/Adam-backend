@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*",maxAge = 3600 )
 @RequestMapping("account")
 public class AccountWebsiteController {
     @Autowired

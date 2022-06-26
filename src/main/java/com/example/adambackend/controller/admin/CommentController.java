@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*",maxAge = 3600 )
 @RequestMapping("admin/comment")
 public class CommentController {
     @Autowired

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*",maxAge = 3600 )
 @RequestMapping("admin/category")
 public class CategoryController {
     @Autowired

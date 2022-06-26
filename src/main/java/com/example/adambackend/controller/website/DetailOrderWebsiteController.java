@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*",maxAge = 3600 )
 @RequestMapping("orderDetail")
 public class DetailOrderWebsiteController {
     @Autowired

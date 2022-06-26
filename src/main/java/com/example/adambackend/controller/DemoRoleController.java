@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*",maxAge = 3600 )
 @RequestMapping("")
 public class DemoRoleController {
     @GetMapping("/admin/demo")

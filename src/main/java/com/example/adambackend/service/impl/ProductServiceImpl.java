@@ -6,6 +6,8 @@ import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class ProductServiceImpl implements ProductSevice {
 
     @Override
     public Page<Product> findPage(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page, size));
+        return productRepository.findAll(PageRequest.of(page, size, Sort.by("createDate").descending()));
     }
 
     @Override
@@ -52,8 +54,10 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public List<Product> findByColorSizePriceBrandAndMaterial(String colorName, String sizeName, String material, double bottomPrice, double topPrice) {
-        return productRepository.findByColorSizePriceBrandAndMaterial(colorName, sizeName, material, bottomPrice, topPrice);
+    public List<Product> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
+                                              double bottomPrice, double topPrice, Pageable pageable) {
+        return productRepository.findPageableByOption(categoryId, sizeId,
+                colorId,materialId,tagId, bottomPrice, topPrice,pageable);
     }
 
     @Override

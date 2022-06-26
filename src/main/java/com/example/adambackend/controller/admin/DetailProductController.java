@@ -146,6 +146,8 @@ public class DetailProductController {
                     detailProduct.setPriceExport(detailProductRequest.getPriceExport());
                     detailProduct.setQuantity(detailProductRequest.getQuantity());
                     detailProduct.setIsDelete(false);
+                    detailProduct.setIsActive(true);
+                    detailProduct.setCreateDate(LocalDateTime.now());
                     detailProduct.setColor(colorList.get(j));
                     detailProduct.setSize(sizeList.get(i));
                     detailProductList.add(detailProduct);
