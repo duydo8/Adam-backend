@@ -5,13 +5,16 @@ import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.CustomDetailProductResponse;
 import com.example.adambackend.payload.DetailProductDTO;
+import com.example.adambackend.payload.NewDetailProductDTO;
 import com.example.adambackend.payload.request.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.ColorService;
 import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.SizeService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,8 @@ public class DetailProductController {
     ColorService colorService;
     @Autowired
     SizeService sizeService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @PostMapping("create")
     public ResponseEntity<?> createDetailProduct(@RequestBody DetailProductDTO detailProductDTO) {
@@ -155,6 +160,33 @@ public class DetailProductController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
         }
 
+    }
+    @PutMapping("updateListDetailProductAfterCreate")
+    public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse){
+        List<NewDetailProductDTO> newDetailProductDTOList= customDetailProductResponse.getNewDetailProductDTOList();
+        List<NewDetailProductDTO> newDetailProductDTOList1= new ArrayList<>();
+        if(newDetailProductDTOList.size()>0){
+            for (NewDetailProductDTO n: newDetailProductDTOList
+                 ) {
+                Optional<DetailProduct> detailProduct= detailProductService.findById(n.getId());
+                if(detailProduct.isPresent()){
+                    detailProduct.get().setIsActive(n.getIsActive());
+                    detailProduct.get().setPriceImport(n.getPriceImport());
+                    detailProduct.get().setPriceExport(n.getPriceExport());
+                    detailProduct.get().setQuantity(n.getQuantity());
+                    detailProduct.get().setProductImage(n.getImage());
+                    DetailProduct detailProduct1=detailProductService.save(detailProduct.get());
+                    NewDetailProductDTO newDetailProductDTO= new NewDetailProductDTO();
+                    newDetailProductDTO=modelMapper.map(detailProduct1,NewDetailProductDTO.class);
+                    newDetailProductDTOList1.add(newDetailProductDTO);
+                }
+
+            }
+            return  ResponseEntity.ok().body(new IGenericResponse<>(newDetailProductDTOList1,200,""));
+
+
+        }
+        return  ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"nothing updated"));
     }
 
 }
