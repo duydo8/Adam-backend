@@ -147,6 +147,7 @@ public class DetailProductController {
                     detailProduct.setQuantity(detailProductRequest.getQuantity());
                     detailProduct.setIsDelete(false);
                     detailProduct.setIsActive(true);
+                    detailProduct.setIsComplete(false);
                     detailProduct.setCreateDate(LocalDateTime.now());
                     detailProduct.setColor(colorList.get(j));
                     detailProduct.setSize(sizeList.get(i));
@@ -176,6 +177,7 @@ public class DetailProductController {
                     detailProduct.get().setPriceImport(n.getPriceImport());
                     detailProduct.get().setPriceExport(n.getPriceExport());
                     detailProduct.get().setQuantity(n.getQuantity());
+                    detailProduct.get().setIsComplete(true);
                     detailProduct.get().setProductImage(n.getImage());
                     DetailProduct detailProduct1=detailProductService.save(detailProduct.get());
                     NewDetailProductDTO newDetailProductDTO= new NewDetailProductDTO();
