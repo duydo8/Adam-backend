@@ -55,6 +55,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "group by p.id,dos.quantity,p.product_name,p.create_date,p.image,p.description,p.is_deleted,p.category_id,p.vote_average\n" +
             " ORDER BY count(dos.quantity) limit 10", nativeQuery = true)
     List<Product> findTop10ProductBestSale();
-    @Query(value = "select * from products p join detail_products dp on p.detail_product_id=dp.id where dp.id=?1",nativeQuery = true)
+    @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where dp.id=?1",nativeQuery = true)
     Product findByDetailProductId(Integer detalId);
 }
