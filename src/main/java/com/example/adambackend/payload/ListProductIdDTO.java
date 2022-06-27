@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListTagIdDTO {
-    List<Integer> tagIdList;
+public class ListProductIdDTO {
+    List<Integer> listProductId;
 }

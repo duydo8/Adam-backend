@@ -2,8 +2,10 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.ListTagIdDTO;
 import com.example.adambackend.payload.TagDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +24,8 @@ public class TagController {
     TagService tagService;
     @Autowired
     ProductSevice productSevice;
+    @Autowired
+    TagProductRepository tagProductRepository;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
@@ -63,7 +68,24 @@ public class TagController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
         }
     }
-//    @DeleteMapping("deleteByListId")
-//    @P
+
+    @DeleteMapping("deleteByListId")
+    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListTagIdDTO listTagIdDTO) {
+        List<Integer> listTagId = listTagIdDTO.getTagIdList();
+        System.out.println(listTagId.size());
+        if(listTagId.size()>0){
+        for (Integer x : listTagId
+        ) {
+            Optional<Tag> tagOptional = tagService.findById(x);
+            if (tagOptional.isPresent()) {
+
+                tagService.deleteById(x);
+
+            }
+        }
+        return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
+    }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+    }
 
 }
