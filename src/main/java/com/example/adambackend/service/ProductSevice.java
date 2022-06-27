@@ -29,4 +29,6 @@ public interface ProductSevice {
                                                           double bottomPrice, double topPrice, Pageable pageable);
 
     List<Product> findTop10ProductBestSale();
+
+    Product findByDetailProductId(Integer detalId);
 }

@@ -147,7 +147,7 @@ public class DetailProductController {
                     detailProduct.setQuantity(detailProductRequest.getQuantity());
                     detailProduct.setIsDelete(false);
                     detailProduct.setIsActive(true);
-                    detailProduct.setIsComplete(false);
+
                     detailProduct.setCreateDate(LocalDateTime.now());
                     detailProduct.setColor(colorList.get(j));
                     detailProduct.setSize(sizeList.get(i));
@@ -157,6 +157,7 @@ public class DetailProductController {
                 }
 
             }
+            productOptional.get().setIsComplete(false);
             return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
 
         } else {
@@ -178,9 +179,12 @@ public class DetailProductController {
                     detailProduct.get().setPriceImport(n.getPriceImport());
                     detailProduct.get().setPriceExport(n.getPriceExport());
                     detailProduct.get().setQuantity(n.getQuantity());
-                    detailProduct.get().setIsComplete(true);
+
                     detailProduct.get().setProductImage(n.getImage());
+
                     DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
+                    Product p = productSevice.findByDetailProductId(detailProduct.get().getId());
+                    p.setIsComplete(true);
                     NewDetailProductDTO newDetailProductDTO = new NewDetailProductDTO();
                     newDetailProductDTO = modelMapper.map(detailProduct1, NewDetailProductDTO.class);
                     newDetailProductDTOList1.add(newDetailProductDTO);

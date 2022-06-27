@@ -65,4 +65,9 @@ public class ProductServiceImpl implements ProductSevice {
     public List<Product> findTop10ProductBestSale() {
         return productRepository.findTop10ProductBestSale();
     }
+    @Override
+    public Product findByDetailProductId(Integer detalId){
+        return productRepository.findByDetailProductId(detalId);
+    }
+
 }

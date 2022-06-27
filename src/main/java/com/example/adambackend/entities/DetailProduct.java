@@ -29,8 +29,7 @@ public class DetailProduct {
     private Double priceExport;
     @Column(name = "is_deleted")
     private Boolean isDelete;
-    @Column(name = "is_completed")
-    private Boolean isComplete;
+
     @Column(name = "image_product")
     private String productImage;
     @ManyToOne

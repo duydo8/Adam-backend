@@ -25,4 +25,5 @@ public class ProductResponse {
     private List<Tag> tagList;
     private List<Material> materialList;
     private Boolean isActive;
+    private Boolean isComplete;
 }

@@ -39,6 +39,8 @@ public class Product {
     private Double voteAverage;
     @Column(name = "create_date")
     private LocalDateTime createDate;
+    @Column(name = "is_completed")
+    private Boolean isComplete;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

@@ -54,6 +54,7 @@ public class ProductController {
             product.setVoteAverage(0.0);
             product.setIsDelete(false);
             product.setIsActive(false);
+            product.setIsComplete(false);
             product.setProductName(productDTO.getProductName());
             product.setDescription(productDTO.getDescription());
             product.setImage(productDTO.getImage());
@@ -184,6 +185,7 @@ public class ProductController {
         Product product = new Product();
         product.setVoteAverage(0.0);
         product.setIsDelete(false);
+        product.setIsComplete(false);
         product.setProductName(productRequest.getProductName());
         product.setDescription(productRequest.getDescription());
         product.setImage(productRequest.getImage());
@@ -228,6 +230,7 @@ public class ProductController {
             productResponse.setCategory(product.getCategory());
             productResponse.setTagList(tagList);
             productResponse.setMaterialList(materialList);
+            productResponse.setIsComplete(false);
             return ResponseEntity.ok().body(new IGenericResponse<>(productResponse, 200, ""));
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
