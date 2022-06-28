@@ -1,13 +1,11 @@
 package com.example.adambackend.controller.website;
 
-import com.example.adambackend.entities.Product;
-import com.example.adambackend.entities.Tag;
+import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.CustomProductFilterRequest;
-import com.example.adambackend.payload.ProductWebstieFilterDTO;
+import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.ProductSevice;
-import com.example.adambackend.service.TagService;
+import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -29,7 +29,13 @@ public class ProductWebsiteController {
     @Autowired
     ModelMapper modelMapper;
     @Autowired
+    DetailProductService detailProductService;
+    @Autowired
     TagService tagService;
+    @Autowired
+    ColorService colorService;
+    @Autowired
+    SizeService sizeService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -247,6 +253,52 @@ public class ProductWebsiteController {
     @GetMapping("findTop10ProductBestSale")
     public ResponseEntity<?> findTop10ProductBestSale() {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10ProductBestSale(), 200, ""));
+
+    }
+    @GetMapping("findOptionProductById")
+    public ResponseEntity<?>findOptionProductById(@RequestParam("id")Integer id){
+        Optional<Product> productOptional= productSevice.findById(id);
+        if(productOptional.isPresent()){
+            ProductHandleValue productHandleValue= productSevice.findOptionByProductId(id);
+            ProductOptionalDTO productOptionalDTO=new ProductOptionalDTO(productHandleValue.getId(),
+                    productHandleValue.getDescription(),productHandleValue.getIsActive(),productHandleValue.getMaxPrice(),productHandleValue.getMinPrice()
+            ,productHandleValue.getProductName(),null);
+
+            List<DetailProduct> detailProducts= detailProductService.findAllByProductId(id);
+            Set<Integer> colorIdList= detailProducts.stream().map(e->e.getColor().getId()).collect(Collectors.toSet());
+            Set<Integer> sizeIdList= detailProducts.stream().map(e->e.getSize().getId()).collect(Collectors.toSet());
+            List<ValueOption> colorOptionList= new ArrayList<>();
+
+            for (Integer x: colorIdList
+                 ) {
+                Optional<Color> color=colorService.findById(x);
+                ValueOption colorOption= new ValueOption();
+                colorOption.setId(color.get().getId());
+                colorOption.setName(color.get().getColorName());
+                colorOptionList.add(colorOption);
+
+            }
+            List<ValueOption> sizeOptionList= new ArrayList<>();
+            OptionProduct optionColorProduct= new OptionProduct("Color",colorOptionList);
+
+            for (Integer x: sizeIdList
+            ) {
+                Optional<Size> sizeOptional=sizeService.findById(x);
+                ValueOption sizeOption= new ValueOption();
+                sizeOption.setId(sizeOptional.get().getId());
+                sizeOption.setName(sizeOptional.get().getSizeName());
+                sizeOptionList.add(sizeOption);
+
+            }
+            OptionProduct optionSizeProduct= new OptionProduct("Size",sizeOptionList);
+            List<OptionProduct> optionProducts= new ArrayList<>();
+            optionProducts.add(optionSizeProduct);
+            optionProducts.add(optionColorProduct);
+            productOptionalDTO.setOptions(optionProducts);
+
+            return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO,200, ""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
 

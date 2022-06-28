@@ -2,6 +2,8 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.CustomProductFilterRequest;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
+import com.example.adambackend.payload.productWebsiteDTO.ProductOptionalDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p")
     List<Product> findAll(Sort sort);
 
-    @Query(value = "select * from products p order by p.create_date limit 10", nativeQuery = true)
+    @Query(value = "select * from products p order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
     //    Integer getId();
@@ -57,4 +59,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findTop10ProductBestSale();
     @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where dp.id=?1",nativeQuery = true)
     Product findByDetailProductId(Integer detalId);
+    @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, max(price_export) as maxPrice from detail_products dp join products p \n" +
+            "ON p.id=dp.product_id where p.id=?1",nativeQuery = true)
+    ProductHandleValue findOptionByProductId(int productId);
+
 }

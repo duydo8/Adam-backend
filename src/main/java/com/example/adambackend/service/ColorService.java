@@ -14,4 +14,6 @@ public interface ColorService {
     Color save(Color color);
 
     List<Color> findAll();
+
+    List<Color> findByDetailProductId(Integer detailProductId);
 }
