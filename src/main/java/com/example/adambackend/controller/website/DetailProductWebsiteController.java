@@ -29,7 +29,7 @@ public class DetailProductWebsiteController {
         if (product.isPresent()) {
             List<DetailProduct> detailProducts = detailProductService.findAllByProductId(productId);
             List<DetailProductDto> detailProductDtos = detailProducts.stream().map(e -> new DetailProductDto(e.getId(), e.getQuantity(), e.getPriceImport(),
-                            e.getPriceExport(), e.getIsDelete(), e.getProductImage(), e.getProduct().getProductName(), e.getColor().getColorName(), e.getSize().getSizeName())).
+                            e.getPriceExport(), e.getIsDelete(), e.getProductImage(), e.getProduct().getProductName(), e.getColor(), e.getSize())).
                     collect(Collectors.toList());
             return ResponseEntity.
                     ok().

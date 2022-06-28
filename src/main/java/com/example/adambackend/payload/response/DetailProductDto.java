@@ -1,5 +1,7 @@
 package com.example.adambackend.payload.response;
 
+import com.example.adambackend.entities.Color;
+import com.example.adambackend.entities.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,6 @@ public class DetailProductDto {
     private Boolean isDelete;
     private String productImage;
     private String productName;
-    private String colorName;
-    private String sizeName;
+    private Color color;
+    private Size size;
 }
