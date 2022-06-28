@@ -28,4 +28,6 @@ public interface CommentService {
     List<Comment> findTop10CommentByProductId(Integer productId);
 
     Integer countCommentByProduct(Integer productId);
+
+    void deleteByProductId(Integer productId);
 }

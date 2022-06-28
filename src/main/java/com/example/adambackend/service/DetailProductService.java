@@ -17,4 +17,5 @@ public interface DetailProductService {
 
     List<DetailProduct> findAllByProductId(Integer idProduct);
 
+    void deleteByProductId(Integer productId);
 }

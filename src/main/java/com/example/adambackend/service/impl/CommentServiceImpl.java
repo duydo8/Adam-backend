@@ -67,4 +67,8 @@ public class CommentServiceImpl implements CommentService {
     public Integer countCommentByProduct(Integer productId) {
         return commentRepository.countCommentByProduct(productId);
     }
+    @Override
+    public void deleteByProductId(Integer productId){
+        commentRepository.deleteByProductId(productId);
+    }
 }

@@ -5,9 +5,7 @@ import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.CustomDetailProductResponse;
-import com.example.adambackend.payload.DetailProductDTO;
-import com.example.adambackend.payload.NewDetailProductDTO;
+import com.example.adambackend.payload.*;
 import com.example.adambackend.payload.request.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.ColorService;
@@ -196,6 +194,24 @@ public class DetailProductController {
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "nothing updated"));
+    }
+    @DeleteMapping("deleteByListId")
+    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListDetailProductIdDTO listDetailProductIdDTO) {
+        List<Integer> list= listDetailProductIdDTO.getListDetailProductId();
+
+
+        if(list.size()>0){
+            for (Integer x : list
+            ) {
+                Optional<DetailProduct> detailProductOptional = detailProductService.findById(x);
+
+                if (detailProductOptional.isPresent()) {
+                    detailProductService.deleteById(x);
+
+                }
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
+        }return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
 
 }

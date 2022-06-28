@@ -39,6 +39,10 @@ public class DetailProductServiceImpl implements DetailProductService {
     public List<DetailProduct> findAllByProductId(Integer idProduct) {
         return detailProductRepository.findAllByProductId(idProduct);
     }
+    @Override
+    public void deleteByProductId(Integer productId){
+        detailProductRepository.deleteByProductId(productId);
+    }
 
 
 }

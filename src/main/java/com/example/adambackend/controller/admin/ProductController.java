@@ -2,9 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.ProductDTO;
-import com.example.adambackend.payload.ProductResponse;
-import com.example.adambackend.payload.ProductUpdateDTO;
+import com.example.adambackend.payload.*;
 import com.example.adambackend.payload.productWebsiteDTO.OptionProduct;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductOptionalDTO;
@@ -48,6 +46,10 @@ public class ProductController {
     ColorService colorService;
     @Autowired
     DetailProductService detailProductService;
+    @Autowired
+    FavoriteService favoriteService;
+    @Autowired
+    CommentService commentService;
 
 
     @GetMapping("findAllByPageble")
@@ -293,5 +295,28 @@ public class ProductController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
+    }
+    @DeleteMapping("deleteByListId")
+    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListProductIdDTO listProductIdDTO) {
+        List<Integer> list= listProductIdDTO.getListProductId();
+
+
+        if(list.size()>0){
+            for (Integer x : list
+            ) {
+                Optional<Product> productOptional = productSevice.findById(x);
+
+                if (productOptional.isPresent()) {
+                    favoriteService.deleteByProductId(x);
+                    commentService.deleteByProductId(x);
+                    materialService.deleteByProductId(x);
+                    materialService.deleteByProductId(x);
+                    tagService.deleteByProductId(x);
+                    detailProductService.deleteByProductId(x);
+                    productSevice.deleteById(x);
+                }
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
+        }return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
 }

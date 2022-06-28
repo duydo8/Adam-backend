@@ -25,4 +25,6 @@ public interface FavoriteService {
     Favorite findByAccountIdAndProductId(Integer accountId, Integer productId);
 
     void deleteFavoriteByAccountIdAndProductId(Integer accountId, Integer productId);
+
+    void deleteByProductId(Integer productId);
 }

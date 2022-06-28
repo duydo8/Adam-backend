@@ -21,6 +21,10 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, In
     @Modifying
     @Query(value = "delete from detail_products where color_id=?1",nativeQuery = true)
     Integer deleteByColorId(Integer colorId);
+    @Transactional
+    @Modifying
+    @Query(value = "delete from detail_products where product_id=?1",nativeQuery = true)
+    void deleteByProductId(Integer productId);
 
 
 }

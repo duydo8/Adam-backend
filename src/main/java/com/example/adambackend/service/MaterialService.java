@@ -13,4 +13,6 @@ public interface MaterialService {
     void deleteById(Integer id);
 
     Optional<Material> findById(Integer id);
+
+    void deleteByProductId(Integer productId);
 }

@@ -16,4 +16,6 @@ public interface TagService {
     List<Tag> findAll();
 
     Optional<Tag> findByTagName(String tagName);
+
+    void deleteByProductId(Integer productId);
 }
