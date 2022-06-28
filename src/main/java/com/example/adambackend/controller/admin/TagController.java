@@ -73,18 +73,18 @@ public class TagController {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListTagIdDTO listTagIdDTO) {
         List<Integer> listTagId = listTagIdDTO.getTagIdList();
         System.out.println(listTagId.size());
-        if(listTagId.size()>0){
-        for (Integer x : listTagId
-        ) {
-            Optional<Tag> tagOptional = tagService.findById(x);
-            if (tagOptional.isPresent()) {
+        if (listTagId.size() > 0) {
+            for (Integer x : listTagId
+            ) {
+                Optional<Tag> tagOptional = tagService.findById(x);
+                if (tagOptional.isPresent()) {
 
-                tagService.deleteById(x);
+                    tagService.deleteById(x);
 
+                }
             }
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
-    }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
 

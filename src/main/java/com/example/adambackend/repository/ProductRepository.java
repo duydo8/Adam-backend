@@ -3,7 +3,6 @@ package com.example.adambackend.repository;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
-import com.example.adambackend.payload.productWebsiteDTO.ProductOptionalDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,10 +51,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "group by p.id,dos.quantity,p.product_name,p.create_date,p.image,p.description,p.is_deleted,p.category_id,p.vote_average\n" +
             " ORDER BY count(dos.quantity) limit 10", nativeQuery = true)
     List<Product> findTop10ProductBestSale();
-    @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and dp.id=?1",nativeQuery = true)
+
+    @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and dp.id=?1", nativeQuery = true)
     Product findByDetailProductId(Integer detalId);
+
     @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, max(price_export) as maxPrice from detail_products dp join products p \n" +
-            "ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1",nativeQuery = true)
+            "ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1", nativeQuery = true)
     ProductHandleValue findOptionByProductId(int productId);
 
 }

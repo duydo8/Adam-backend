@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SizeRepository extends JpaRepository<Size, Integer> {
-@Query(value = "select * from sizes s join detail_products dp on dp.size_id= s.id where dp.id=?1",nativeQuery = true)
-List<Size> findByDetailProductId(Integer detailProductId);
+    @Query(value = "select * from sizes s join detail_products dp on dp.size_id= s.id where dp.id=?1", nativeQuery = true)
+    List<Size> findByDetailProductId(Integer detailProductId);
 }

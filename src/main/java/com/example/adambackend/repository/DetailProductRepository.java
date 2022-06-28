@@ -13,17 +13,20 @@ import java.util.List;
 public interface DetailProductRepository extends JpaRepository<DetailProduct, Integer> {
     @Query("select dp from DetailProduct  dp join Product p on dp.product.id=p.id where p.id=?1")
     List<DetailProduct> findAllByProductId(Integer id);
+
     @Transactional
     @Modifying
-    @Query(value = "delete from detail_products where size_id=?1",nativeQuery = true)
+    @Query(value = "delete from detail_products where size_id=?1", nativeQuery = true)
     Integer deleteBySizeId(Integer sizeId);
+
     @Transactional
     @Modifying
-    @Query(value = "delete from detail_products where color_id=?1",nativeQuery = true)
+    @Query(value = "delete from detail_products where color_id=?1", nativeQuery = true)
     Integer deleteByColorId(Integer colorId);
+
     @Transactional
     @Modifying
-    @Query(value = "delete from detail_products where product_id=?1",nativeQuery = true)
+    @Query(value = "delete from detail_products where product_id=?1", nativeQuery = true)
     void deleteByProductId(Integer productId);
 
 

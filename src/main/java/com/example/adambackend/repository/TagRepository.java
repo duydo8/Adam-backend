@@ -13,8 +13,9 @@ import java.util.Optional;
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     Optional<Tag> findByTagName(String tagName);
+
     @Transactional
     @Modifying
-    @Query(value = "delete from tag_products where product_id=?1",nativeQuery = true)
+    @Query(value = "delete from tag_products where product_id=?1", nativeQuery = true)
     void deleteByProductId(Integer productId);
 }

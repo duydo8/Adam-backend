@@ -1,9 +1,7 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.Material;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.ListMaterialIdDTO;
 import com.example.adambackend.payload.ListSizeIdDTO;
 import com.example.adambackend.payload.SizeDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -63,22 +61,24 @@ public class SizeController {
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAll(), 200, ""));
     }
+
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListSizeIdDTO listSizeIdDTO) {
-        List<Integer> list= listSizeIdDTO.getListSizeId();
+        List<Integer> list = listSizeIdDTO.getListSizeId();
 
         System.out.println(list.size());
-        if(list.size()>0){
-        for (Integer x : list
-        ) {
-            Optional<Size> sizeOptional = sizeService.findById(x);
+        if (list.size() > 0) {
+            for (Integer x : list
+            ) {
+                Optional<Size> sizeOptional = sizeService.findById(x);
 
-            if (sizeOptional.isPresent()) {
-                detailProductRepository.deleteBySizeId(x);
-                sizeService.deleteById(x);
+                if (sizeOptional.isPresent()) {
+                    detailProductRepository.deleteBySizeId(x);
+                    sizeService.deleteById(x);
+                }
             }
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
-    }return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
 }

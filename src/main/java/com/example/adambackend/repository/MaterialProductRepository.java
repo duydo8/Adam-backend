@@ -13,6 +13,6 @@ import javax.transaction.Transactional;
 public interface MaterialProductRepository extends JpaRepository<MaterialProduct, MaterialProductPK> {
     @Transactional
     @Modifying
-    @Query(value = "delete from material_products where material_id=?1",nativeQuery = true)
+    @Query(value = "delete from material_products where material_id=?1", nativeQuery = true)
     Integer deleteByMateralId(Integer materialId);
 }

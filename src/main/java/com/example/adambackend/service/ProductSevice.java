@@ -3,10 +3,8 @@ package com.example.adambackend.service;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
-import com.example.adambackend.payload.productWebsiteDTO.ProductOptionalDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

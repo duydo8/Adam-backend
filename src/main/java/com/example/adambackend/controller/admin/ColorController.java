@@ -1,11 +1,9 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Color;
-import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.ColorDTO;
 import com.example.adambackend.payload.ListColorIdDTO;
-import com.example.adambackend.payload.ListSizeIdDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.ColorService;
@@ -63,23 +61,24 @@ public class ColorController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
+
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListColorIdDTO listColorIdDTO) {
-        List<Integer> list= listColorIdDTO.getListColorId();
+        List<Integer> list = listColorIdDTO.getListColorId();
         System.out.println(list.size());
-        if(list.size()>0){
-        for (Integer x : list
-        ) {
-            Optional<Color> colorOptional = colorService.findById(x);
+        if (list.size() > 0) {
+            for (Integer x : list
+            ) {
+                Optional<Color> colorOptional = colorService.findById(x);
 
-            if (colorOptional.isPresent()) {
+                if (colorOptional.isPresent()) {
 
-                colorService.deleteById(x);
+                    colorService.deleteById(x);
 
+                }
             }
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
-    }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " not found"));
     }
 }

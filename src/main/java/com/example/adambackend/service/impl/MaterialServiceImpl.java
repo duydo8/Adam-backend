@@ -33,8 +33,9 @@ public class MaterialServiceImpl implements MaterialService {
     public Optional<Material> findById(Integer id) {
         return materialRepository.findById(id);
     }
+
     @Override
-    public void deleteByProductId(Integer productId){
+    public void deleteByProductId(Integer productId) {
         materialRepository.deleteByProductId(productId);
     }
 }

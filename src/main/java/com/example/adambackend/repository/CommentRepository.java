@@ -33,8 +33,9 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query(value = "select count(*) from comments c join product p on c.product_id=p.id where p.id=?1", nativeQuery = true)
     Integer countCommentByProduct(Integer productId);
+
     @Transactional
     @Modifying
-    @Query(value = "delete from comments where product_id=?1",nativeQuery = true)
+    @Query(value = "delete from comments where product_id=?1", nativeQuery = true)
     void deleteByProductId(Integer productId);
 }

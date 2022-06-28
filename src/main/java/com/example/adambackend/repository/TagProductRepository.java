@@ -13,6 +13,6 @@ import javax.transaction.Transactional;
 public interface TagProductRepository extends JpaRepository<TagProduct, TagProductPK> {
     @Transactional
     @Modifying
-    @Query(value = "delete from tag_products where tag_id=?1",nativeQuery = true)
+    @Query(value = "delete from tag_products where tag_id=?1", nativeQuery = true)
     Integer deleteByTagId(Integer tagId);
 }

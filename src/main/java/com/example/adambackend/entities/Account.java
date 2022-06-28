@@ -56,6 +56,7 @@ public class Account {
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
     private double priority;
+
     public Account(String username, String email, String password) {
         this.username = username;
         this.email = email;

@@ -38,8 +38,9 @@ public class TagServiceImpl implements TagService {
     public Optional<Tag> findById(Integer id) {
         return tagRepository.findById(id);
     }
+
     @Override
-    public void deleteByProductId(Integer productId){
+    public void deleteByProductId(Integer productId) {
         tagRepository.deleteByProductId(productId);
     }
 

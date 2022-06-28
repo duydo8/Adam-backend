@@ -3,7 +3,6 @@ package com.example.adambackend.service.impl;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
-import com.example.adambackend.payload.productWebsiteDTO.ProductOptionalDTO;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +66,14 @@ public class ProductServiceImpl implements ProductSevice {
     public List<Product> findTop10ProductBestSale() {
         return productRepository.findTop10ProductBestSale();
     }
+
     @Override
-    public Product findByDetailProductId(Integer detalId){
+    public Product findByDetailProductId(Integer detalId) {
         return productRepository.findByDetailProductId(detalId);
     }
+
     @Override
-    public ProductHandleValue findOptionByProductId(int productId){
-        return  productRepository.findOptionByProductId(productId);
+    public ProductHandleValue findOptionByProductId(int productId) {
+        return productRepository.findOptionByProductId(productId);
     }
 }

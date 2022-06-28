@@ -1,10 +1,8 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.ListMaterialIdDTO;
-import com.example.adambackend.payload.ListTagIdDTO;
 import com.example.adambackend.payload.MaterialDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
@@ -69,25 +67,27 @@ public class MaterialControler {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
         }
     }
+
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListMaterialIdDTO listMaterialIdDTO) {
-        List<Integer> listMaterialIdDTOx= listMaterialIdDTO.getListMaterialId();
+        List<Integer> listMaterialIdDTOx = listMaterialIdDTO.getListMaterialId();
 
         System.out.println(listMaterialIdDTOx.size());
-        if(listMaterialIdDTOx.size()>0){
-        for (Integer x : listMaterialIdDTOx
-        ) {
-            Optional<Material> materialOptional = materialService.findById(x);
-            if (materialOptional.isPresent()) {
+        if (listMaterialIdDTOx.size() > 0) {
+            for (Integer x : listMaterialIdDTOx
+            ) {
+                Optional<Material> materialOptional = materialService.findById(x);
+                if (materialOptional.isPresent()) {
 
-                materialService.deleteById(x);
+                    materialService.deleteById(x);
 
+                }
             }
-        }
-        return ResponseEntity.ok().body(new IGenericResponse<>("",200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
 
-    }return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
-}
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+    }
 
 
 }
