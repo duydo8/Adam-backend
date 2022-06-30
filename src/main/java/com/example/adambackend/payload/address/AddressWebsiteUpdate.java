@@ -1,0 +1,17 @@
+package com.example.adambackend.payload.address;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddressWebsiteUpdate {
+    private Integer id;
+    private String addressDetail;
+    private Integer accountId;
+    private Integer provinceId;
+    private Integer districtId;
+    private Integer wardId;
+}
