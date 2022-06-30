@@ -35,7 +35,7 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public List<Size> findByDetailProductId(Integer detailProductId) {
+    public Size findByDetailProductId(Integer detailProductId) {
         return sizeRepository.findByDetailProductId(detailProductId);
     }
 }

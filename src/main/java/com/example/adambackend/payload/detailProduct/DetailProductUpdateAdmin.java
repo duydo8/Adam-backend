@@ -20,7 +20,7 @@ public class DetailProductUpdateAdmin {
     private Double priceExport;
     private Boolean isDelete;
     private String productImage;
-    private Integer productId;
+
     private Boolean isActive;
     private Integer colorId;
     private Integer sizeId;

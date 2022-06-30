@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ColorRepository extends JpaRepository<Color, Integer> {
-    @Query(value = "select * from Colors c join detail_products dp on dp.color_id= c.id where dp.id=?1", nativeQuery = true)
-    List<Color> findByDetailProductId(Integer detailProductId);
+    @Query(value = "select * from colors c join detail_products dp on dp.color_id= c.id where dp.id=?1", nativeQuery = true)
+    Color findByDetailProductId(Integer detailProductId);
 }

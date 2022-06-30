@@ -15,5 +15,5 @@ public interface ColorService {
 
     List<Color> findAll();
 
-    List<Color> findByDetailProductId(Integer detailProductId);
+    Color findByDetailProductId(Integer detailProductId);
 }

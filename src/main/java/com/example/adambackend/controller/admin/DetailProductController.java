@@ -9,6 +9,7 @@ import com.example.adambackend.payload.CustomDetailProductResponse;
 import com.example.adambackend.payload.DetailProductDTO;
 import com.example.adambackend.payload.ListDetailProductIdDTO;
 import com.example.adambackend.payload.NewDetailProductDTO;
+import com.example.adambackend.payload.detailProduct.DetailProductUpdateAdmin;
 import com.example.adambackend.payload.request.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.ColorService;
@@ -72,23 +73,24 @@ public class DetailProductController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateDetailProduct(@RequestParam("product_id") Integer productId, @RequestBody DetailProduct detailProduct) {
-        Optional<Product> product = productSevice.findById(productId);
-        if (product.isPresent()) {
-            List<DetailProduct> detailProducts = product.get().getDetailProducts();
-            for (DetailProduct detailProduct1 : detailProducts
-            ) {
-                if (detailProduct1.equals(detailProduct)) {
-                    detailProductService.save(detailProduct);
-                    detailProducts.add(detailProduct);
-                    product.get().setDetailProducts(detailProducts);
-                    productSevice.save(product.get());
-                    detailProduct.setProduct(product.get());
-                    return ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct), 200, "success"));
-                }
-            }
+    public ResponseEntity<?> updateDetailProduct( @RequestBody DetailProductUpdateAdmin detailProductUpdateAdmin) {
 
+        Optional<DetailProduct> detailProductOptional= detailProductService.findById(detailProductUpdateAdmin.getId());
+        Optional<Size> sizeOptional= sizeService.findById(detailProductUpdateAdmin.getSizeId());
+        Optional<Color>colorOptional= colorService.findById(detailProductUpdateAdmin.getColorId());
+        if(detailProductOptional.isPresent()&& colorOptional.isPresent()&&sizeOptional.isPresent())
+        {
 
+            DetailProduct detailProduct=detailProductOptional.get();
+            detailProduct.setQuantity(detailProductUpdateAdmin.getQuantity());
+            detailProduct.setPriceExport(detailProductUpdateAdmin.getPriceExport());
+            detailProduct.setPriceImport(detailProductUpdateAdmin.getPriceImport());
+            detailProduct.setIsDelete(detailProductUpdateAdmin.getIsDelete());
+            detailProduct.setProductImage(detailProductUpdateAdmin.getProductImage());
+            detailProduct.setIsActive(detailProductUpdateAdmin.getIsActive());
+            detailProduct.setColor(colorOptional.get());
+            detailProduct.setSize(sizeOptional.get());
+            return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin,200,""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
