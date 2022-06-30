@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
-@RequestMapping("cart")
+@RequestMapping("/user/cart")
 public class CartItemWebsiteController {
     @Autowired
     CartItemService cartItemService;

@@ -1,7 +1,8 @@
-package com.example.adambackend.payload.cart;
+package com.example.adambackend.payload.order;
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.entities.Address;
+import com.example.adambackend.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,16 +15,14 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+public class OrderWebsiteCreate {
 
-public class CartItemWebsiteCreate {
-
-    private Integer quantity;
-
+    private String fullName;
+    private String phoneNumber;
+    private Double amountPrice;
+    private Double salePrice;
     private Double totalPrice;
-
+    private String addressDetail;
+    private Integer addressId;
     private Integer accountId;
-
-    private Integer detailProductId;
-
-
 }

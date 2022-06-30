@@ -1,15 +1,21 @@
 package com.example.adambackend.controller.website;
 
+import com.example.adambackend.entities.Account;
+import com.example.adambackend.entities.Address;
 import com.example.adambackend.entities.Order;
+import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
+import com.example.adambackend.service.AddressService;
 import com.example.adambackend.service.DetailOrderService;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +28,8 @@ public class OrderWebsiteController {
     AccountService accountService;
     @Autowired
     DetailOrderService detailOrderService;
+    @Autowired
+    AddressService addressService;
 
     //    @GetMapping("findTop5OrderByCreateTime")
 //    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
@@ -32,9 +40,27 @@ public class OrderWebsiteController {
 //        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 //    }
     @PostMapping("create")
-    public ResponseEntity<?> createOrder(@RequestBody Order order) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
+        Optional<Account> account= accountService.findById(orderWebsiteCreate.getAccountId());
+        Optional<Address> address= addressService.findById(orderWebsiteCreate.getAddressId());
+        if(address.isPresent() && account.isPresent()){
+        Order order= new Order();
+        order.setAccount(account.get());
+        order.setCreateDate(LocalDateTime.now());
+        order.setStatus(OrderStatus.pending);
+        order.setAddress(address.get());
+        order.setFullName(orderWebsiteCreate.getFullName());
+        order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
+        order.setTotalPrice(orderWebsiteCreate.getTotalPrice());
+        order.setSalePrice(orderWebsiteCreate.getSalePrice());
+        order.setAmountPrice(orderWebsiteCreate.getAmountPrice());
+        order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
     }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+
+    }
+
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
