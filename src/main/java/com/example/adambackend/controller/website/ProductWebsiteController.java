@@ -50,7 +50,7 @@ public class ProductWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(), 200, ""));
     }
 
-    @PostMapping("findByOpionalArrayValue")
+    @GetMapping("findByOpionalArrayValue")
     public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestBody ProductWebstieFilterDTO productWebstieFilterDTO) {
         List<Integer> listCategoryId = productWebstieFilterDTO.getListCategoryId();
         List<Integer> listColorId = productWebstieFilterDTO.getListColorId();
