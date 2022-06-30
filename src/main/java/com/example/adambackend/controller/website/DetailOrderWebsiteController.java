@@ -24,10 +24,7 @@ public class DetailOrderWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAllByOrderId(orderId), 200, ""));
     }
 
-    @GetMapping("findTop10ProductByCountQuantityInOrderDetail")
-    public ResponseEntity<?> findTop10ProductByCountQuantityInOrderDetail() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(detailOrderService.findTop10ProductByCountQuantityInOrderDetail(), 200, ""));
-    }
+
 
     @PostMapping("create")
     public ResponseEntity<?> creatSize(@RequestBody DetailOrder detailOrder) {

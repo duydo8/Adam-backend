@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductWebsiteController {
     @Autowired
+    DetailOrderService detailOrderService;
+    @Autowired
     ProductSevice productSevice;
     @Autowired
     ModelMapper modelMapper;
@@ -48,7 +50,7 @@ public class ProductWebsiteController {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(), 200, ""));
     }
 
-    @GetMapping("findByColorSizePriceBrandAndMaterial")
+    @GetMapping("findByOpionalArrayValue")
     public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestBody ProductWebstieFilterDTO productWebstieFilterDTO) {
         List<Integer> listCategoryId = productWebstieFilterDTO.getListCategoryId();
         List<Integer> listColorId = productWebstieFilterDTO.getListColorId();
@@ -125,6 +127,7 @@ public class ProductWebsiteController {
                                 }
 
                             }
+
                         }
                     }
                 } else {
@@ -264,8 +267,9 @@ public class ProductWebsiteController {
 
                             }
                         } else {
+                            Integer tagId = null;
                             for (int i = 0; i < listCategoryId.size(); i++) {
-                                Integer tagId = null;
+
                                 customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), sizeId,
                                         colorId, materialId, tagId, bottomPrice, topPrice, pageable);
                             }
@@ -476,6 +480,11 @@ public class ProductWebsiteController {
     public ResponseEntity<?> findTop10ProductBestSale() {
         return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10ProductBestSale(), 200, ""));
 
+    }
+
+    @GetMapping("findTop10ProductByCountQuantityInOrderDetail")
+    public ResponseEntity<?> findTop10ProductByCountQuantityInOrderDetail() {
+        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(detailOrderService.findTop10ProductByCountQuantityInOrderDetail(), 200, ""));
     }
 
     @GetMapping("findOptionProductById")

@@ -17,8 +17,8 @@ public class DetailOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private int quantity;
-    private double price;
+    private Integer quantity;
+    private Double price;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
     @ManyToOne

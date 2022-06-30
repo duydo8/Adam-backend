@@ -20,7 +20,7 @@ public class DetailProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private int quantity;
+    private Integer quantity;
     @Column(name = "price_import")
     private Double priceImport;
     @Column(name = "price_export")
