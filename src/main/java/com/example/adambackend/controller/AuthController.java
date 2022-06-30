@@ -60,11 +60,11 @@ public class AuthController {
         ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
 
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
+        return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                String.valueOf(roles)));
+                String.valueOf(roles)),200,"successfully"));
     }
 
 

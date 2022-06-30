@@ -57,6 +57,12 @@ public class ProductWebsiteController {
         List<Integer> listTagId = productWebstieFilterDTO.getListTagId();
         Double bottomPrice = productWebstieFilterDTO.getBottomPrice();
         Double topPrice = productWebstieFilterDTO.getTopPrice();
+        if(bottomPrice==null){
+            bottomPrice=0.0;
+        }
+        if(topPrice==null){
+            topPrice=999999999.0;
+        }
         Integer page = productWebstieFilterDTO.getPage();
         Integer size = productWebstieFilterDTO.getSize();
         Pageable pageable = PageRequest.of(page, size);

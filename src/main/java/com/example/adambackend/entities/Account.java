@@ -19,21 +19,7 @@ import java.util.List;
 
 public class Account {
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Address> addressList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Comment> commentList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Favorite> favoriteList;
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<CartItems> cartItemsList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Order> orderList = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -56,6 +42,21 @@ public class Account {
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
     private double priority;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Address> addressList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Comment> commentList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Favorite> favoriteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<CartItems> cartItemsList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Order> orderList = new ArrayList<>();
 
     public Account(String username, String email, String password) {
         this.username = username;

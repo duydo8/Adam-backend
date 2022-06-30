@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface MaterialProductRepository extends JpaRepository<MaterialProduct, MaterialProductPK> {
@@ -15,4 +16,6 @@ public interface MaterialProductRepository extends JpaRepository<MaterialProduct
     @Modifying
     @Query(value = "delete from material_products where material_id=?1", nativeQuery = true)
     Integer deleteByMateralId(Integer materialId);
+    @Query(value = "select material_id from material_products where product_id=?1",nativeQuery = true)
+    List<Integer> findMaterialIdByProductId(Integer productId);
 }

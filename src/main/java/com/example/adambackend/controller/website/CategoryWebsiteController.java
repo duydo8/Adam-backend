@@ -33,8 +33,10 @@ public class CategoryWebsiteController {
             categoryResponse.setIsDeleted(category.getIsDeleted());
             categoryResponse.setCategoryChildren(categoryService.findByCategoryParentId(category.getId()));
             categoryResponseList.add(categoryResponse);
+            categoryResponse.setIsActive(category.getIsActive());
         }
         return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
+
     }
 
     @GetMapping("findAll")
@@ -46,8 +48,11 @@ public class CategoryWebsiteController {
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (categoryOptional.isPresent()) {
+
             return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
+
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+
     }
 }

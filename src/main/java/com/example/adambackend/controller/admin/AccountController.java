@@ -3,6 +3,7 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.account.AccountAdminDTO;
 import com.example.adambackend.payload.AccountResponse;
 import com.example.adambackend.payload.request.SignUpRequest;
 import com.example.adambackend.payload.response.AccountDto;
@@ -86,33 +87,7 @@ public class AccountController {
         return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
     }
 
-    @PostMapping("/createAccountWithRoleIsAdmin")
-    public ResponseEntity<?> registerAdmin(@RequestBody SignUpRequest signUpRequest) {
-        if (accountService.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new HandleExceptionDemo(400, "Username has been used"));
-        }
 
-        if (accountService.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new HandleExceptionDemo(400, "Email has been used"));
-        }
-
-
-        Account account = new Account(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword())
-        );
-        account.setRole(ERoleName.Admin);
-        account.setActive(true);
-
-        Account account1 = accountService.save(account);
-        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-
-        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
-    }
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
@@ -122,12 +97,25 @@ public class AccountController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Account account) {
-        Optional<Account> accountOptional = accountService.findById(account.getId());
+    public ResponseEntity<?> update(@RequestBody AccountAdminDTO accountAdminDTO) {
+        Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
         if (accountOptional.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<Account>(accountService.save(account), 200, "success"));
+            Account account= modelMapper.map(accountAdminDTO,Account.class);
+            accountService.save(account);
+
+            return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+    }
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deleteEvent(@RequestParam("id") Integer id) {
+        Optional<Account> accountOptional = accountService.findById(id);
+        if (accountOptional.isPresent()) {
+            accountService.deleteById(id);
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+        } else {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+        }
     }
 
 }

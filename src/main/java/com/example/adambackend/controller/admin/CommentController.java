@@ -1,16 +1,24 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Comment;
 import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.color.ColorAdminDTO;
+import com.example.adambackend.payload.ListColorIdDTO;
+import com.example.adambackend.payload.comment.CommentAdminDTO;
+import com.example.adambackend.payload.comment.CommentAdminUpdate;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.CommentService;
+import com.example.adambackend.service.ProductSevice;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,4 +75,72 @@ public class CommentController {
                     + " product id: " + productId));
         }
     }
+
+
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<>(commentService.findAll(), 200, ""));
+    }
+
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    ProductSevice productService;
+
+
+
+    @PutMapping("update")
+    public ResponseEntity<?> update(@RequestBody CommentAdminDTO commentAdminDTO) {
+        Optional<Comment> commentOptional = commentService.findById(commentAdminDTO.getId());
+        if (commentOptional.isPresent()) {
+            Comment comment=commentOptional.get();
+            comment.setVote(commentAdminDTO.getVote());
+            comment.setCommentStatus(commentAdminDTO.getCommentStatus());
+        //    comment.setAccount(accountService.findById(commentAdminDTO.getAccountId()).get());
+       //     comment.setProduct(productService.findById(commentAdminDTO.getProductId()).get());
+            comment.setIsActive(commentAdminDTO.getIsActive());
+            comment.setContent(commentAdminDTO.getContent());
+      //      comment.setTimeCreated(commentAdminDTO.getTimeCreated());
+
+
+            commentService.save(comment);
+            CommentAdminUpdate commentAdminUpdate= new CommentAdminUpdate(commentAdminDTO.getId(),
+                    commentAdminDTO.getContent(), commentAdminDTO.getVote(),
+                    comment.getTimeCreated(),commentAdminDTO.getCommentStatus(),comment.getAccount().getId(),
+                    comment.getProduct().getId(),commentAdminDTO.getIsActive());
+            return ResponseEntity.ok().body(new IGenericResponse<>(commentAdminUpdate, 200, "success"));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+    }
+
+    @DeleteMapping("delete")
+    public ResponseEntity<?> delete(@RequestParam("id") Integer Id) {
+        Optional<Comment> commentOptional = commentService.findById(Id);
+        if (commentOptional.isPresent()) {
+            commentService.deleteById(Id);
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+    }
+
+//    @DeleteMapping("deleteByListId")
+//    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListColorIdDTO listColorIdDTO) {
+//        List<Integer> list = listColorIdDTO.getListColorId();
+//        System.out.println(list.size());
+//        if (list.size() > 0) {
+//            for (Integer x : list
+//            ) {
+//                Optional<Color> colorOptional = colorService.findById(x);
+//
+//                if (colorOptional.isPresent()) {
+//
+//                    colorService.deleteById(x);
+//
+//                }
+//            }
+//            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
+//        }
+//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " not found"));
+//    }
+
 }
