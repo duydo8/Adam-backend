@@ -28,6 +28,15 @@ public class AddressWebsiteController {
     DistrictService districtService;
     @Autowired
     WardService wardService;
+    @GetMapping("findByAccountId")
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id")Integer accountId){
+        Optional<Account> account= accountService.findById(accountId);
+        if(account.isPresent()){
+            return ResponseEntity.ok().body(new IGenericResponse<>(addressService.findByAccountId(accountId),200,""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+
+         }
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<>(addressService.findAll(), 200, ""));

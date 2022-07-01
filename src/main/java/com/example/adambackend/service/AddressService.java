@@ -15,4 +15,5 @@ public interface AddressService {
 
     List<Address> findAll();
 
+    List<Address> findByAccountId(Integer accountId);
 }

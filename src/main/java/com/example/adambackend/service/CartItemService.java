@@ -14,4 +14,6 @@ public interface CartItemService {
     CartItems save(CartItems cartItems);
 
     List<CartItems> findAll();
+
+    List<CartItems> findByAccountId(Integer accountId);
 }

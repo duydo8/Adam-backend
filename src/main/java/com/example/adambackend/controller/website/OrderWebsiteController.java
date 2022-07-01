@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -84,6 +85,16 @@ public class OrderWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+    @GetMapping("findByAccountId")
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId){
+        Optional<Account> account= accountService.findById(accountId);
+        if(account.isPresent()){
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId),200,""));
 
+
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+
+    }
 
 }

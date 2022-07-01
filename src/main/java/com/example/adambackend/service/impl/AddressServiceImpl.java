@@ -33,4 +33,8 @@ public class AddressServiceImpl implements AddressService {
     public Optional<Address> findById(Integer id) {
         return addressRepository.findById(id);
     }
+    @Override
+    public List<Address> findByAccountId(Integer accountId){
+        return addressRepository.findByAccountId(accountId);
+    }
 }

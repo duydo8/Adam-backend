@@ -18,5 +18,11 @@ public interface OrderService {
 
     Page<Order> findAll(Pageable pageable);
 
+    //    @Override
+    //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
+    //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
+    //    }
+    List<Order> findByAccountId(Integer accountId);
+
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }
