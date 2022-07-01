@@ -68,7 +68,7 @@ CartItems cartItems= new CartItems(null, cartItemWebsiteCreate.getQuantity()
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("detail_order_id") Integer id) {
+    public ResponseEntity<?> delete(@RequestParam("id") Integer id) {
         Optional<CartItems> cartItemsOptional = cartItemService.findById(id);
         if (cartItemsOptional.isPresent()) {
             cartItemService.deleteById(id);
@@ -80,5 +80,15 @@ CartItems cartItems= new CartItems(null, cartItemWebsiteCreate.getQuantity()
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
+    }
+    @GetMapping("findById")
+    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
+        Optional<CartItems> cartItems= cartItemService.findById(id);
+        if(cartItems.isPresent()){
+            return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
+
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+
     }
 }

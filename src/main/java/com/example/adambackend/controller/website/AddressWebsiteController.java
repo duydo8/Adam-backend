@@ -28,7 +28,10 @@ public class AddressWebsiteController {
     DistrictService districtService;
     @Autowired
     WardService wardService;
-
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(new IGenericResponse<>(addressService.findAll(), 200, ""));
+    }
     @PostMapping("create")
     public ResponseEntity<?> createAddress( @RequestBody AddressWebsiteCreate addressWebsiteCreate) {
         Optional<Account> account = accountService.findById(addressWebsiteCreate.getAccountId());

@@ -2,6 +2,7 @@ package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Address;
+import com.example.adambackend.entities.CartItems;
 import com.example.adambackend.entities.Order;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
@@ -71,6 +72,16 @@ public class OrderWebsiteController {
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
+
+    }
+    @GetMapping("findById")
+    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
+        Optional<Order> order= orderService.findById(id);
+        if(order.isPresent()){
+            return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
+
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
 
