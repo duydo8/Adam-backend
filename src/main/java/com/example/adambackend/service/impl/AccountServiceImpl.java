@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
 
         String randomCode = RandomString.make(64);
         account.setVerificationCode(randomCode);
-        account.setActive(false);
+        account.setIsActive(false);
 
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
         accountRepository.save(account);
@@ -108,25 +108,15 @@ public class AccountServiceImpl implements AccountService {
         mailSender.send(message);
     }
 
-    @Override
-    public boolean verify(String verificationCode) {
-        Account account = accountRepository.findByVerificationCode(verificationCode);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        if (account == null || account.getTimeValid().isBefore(localDateTime)) {
-            return false;
-        } else {
-            account.setVerificationCode(null);
-            account.isActive();
-            accountRepository.save(account);
 
-            return true;
-        }
-
-    }
 
     @Override
     public Optional<Account> findByEmail(String email) {
         return accountRepository.findByEmail(email);
+    }
+    @Override
+    public Optional<Account> findByPhoneNumber(String phoneNumber){
+        return accountRepository.findByPhoneNumber(phoneNumber);
     }
 
 

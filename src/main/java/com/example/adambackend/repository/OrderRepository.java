@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
-@Query(value = "select * from orders where account_id=?1",nativeQuery = true)
-List<Order> findOrderByAccountId(Integer accountId);
+@Query(value = "select * from orders where account_id=?1 and status=?2",nativeQuery = true)
+List<Order> findOrderByAccountId(Integer accountId , Integer status);
 
 }

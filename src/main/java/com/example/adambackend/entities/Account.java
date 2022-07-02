@@ -34,9 +34,9 @@ public class Account {
     private String password;
     private ERoleName role;
     @Column(name = "is_active")
-    private boolean isActive;
+    private Boolean isActive;
     @Column(name = "is_deleted")
-    private boolean isDelete;
+    private Boolean isDelete;
     @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "time_valid")
@@ -58,9 +58,11 @@ public class Account {
     @OneToMany(mappedBy = "account")
     List<Order> orderList = new ArrayList<>();
 
-    public Account(String username, String email, String password) {
+    public Account(String username, String email, String password,String phoneNumber,String fullName) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phoneNumber=phoneNumber;
+        this.fullName=fullName;
     }
 }

@@ -22,7 +22,7 @@ public interface OrderService {
     //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
     //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
     //    }
-    List<Order> findByAccountId(Integer accountId);
+    List<Order> findByAccountId(Integer accountId, Integer status);
 
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }

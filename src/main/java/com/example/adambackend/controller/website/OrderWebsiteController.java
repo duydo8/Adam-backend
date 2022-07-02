@@ -86,10 +86,10 @@ public class OrderWebsiteController {
 
     }
     @GetMapping("findByAccountId")
-    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId){
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId,@RequestParam("status")Integer status){
         Optional<Account> account= accountService.findById(accountId);
         if(account.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId),200,""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId,status),200,""));
 
 
         }

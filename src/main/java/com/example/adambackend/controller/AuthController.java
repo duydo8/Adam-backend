@@ -68,28 +68,9 @@ public class AuthController {
     }
 
 
-    @PostMapping("process_register")
-    public ResponseEntity<?> processRegister(@RequestBody Account account, HttpServletRequest request)
-            throws UnsupportedEncodingException, MessagingException {
-        System.out.println(account.toString());
-        account.setRole(ERoleName.User);
-        accountService.register(account, getSiteURL(request));
-        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
 
-        return ResponseEntity.ok(new IGenericResponse<AccountDto>(accountDto, 200, "register successfully please check email before loginning"));
-    }
 
-    @RequestMapping("verify")
-    public ResponseEntity<?> verifyUser(@RequestParam("code") String code) {
-        if (accountService.verify(code)) {
-            return ResponseEntity.ok(new IGenericResponse<>(200, "verify_success"));
-        } else {
-            return ResponseEntity.ok(new IGenericResponse<>(400, "verify_fail"));
-        }
-    }
 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }
+
+
 }

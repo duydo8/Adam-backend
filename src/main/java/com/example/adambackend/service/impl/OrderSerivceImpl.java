@@ -46,7 +46,7 @@ public class OrderSerivceImpl implements OrderService {
 //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
 //    }
 @Override
-public List<Order> findByAccountId(Integer accountId){
-    return orderRepository.findOrderByAccountId(accountId);
+public List<Order> findByAccountId(Integer accountId,Integer status){
+    return orderRepository.findOrderByAccountId(accountId, status);
 }
 }
