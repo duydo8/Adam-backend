@@ -44,6 +44,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @OneToMany(mappedBy = "order")
+    private List<CartItems> cartItems= new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();

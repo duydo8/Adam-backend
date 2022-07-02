@@ -8,15 +8,13 @@ import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.AccountService;
-import com.example.adambackend.service.AddressService;
-import com.example.adambackend.service.DetailOrderService;
-import com.example.adambackend.service.OrderService;
+import com.example.adambackend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +30,8 @@ public class OrderWebsiteController {
     DetailOrderService detailOrderService;
     @Autowired
     AddressService addressService;
+    @Autowired
+    CartItemService cartItemService;
 
     //    @GetMapping("findTop5OrderByCreateTime")
 //    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
@@ -57,6 +57,17 @@ public class OrderWebsiteController {
         order.setSalePrice(orderWebsiteCreate.getSalePrice());
         order.setAmountPrice(orderWebsiteCreate.getAmountPrice());
         order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
+
+
+        List<CartItems> cartItemsList= new ArrayList<>();
+            for (Integer x: orderWebsiteCreate.getCartItemIdList()
+                 ) {
+                Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
+                if(cartItemsOptional.isPresent()){
+                    cartItemsList.add(cartItemsOptional.get());
+                }
+            }
+            order.setCartItems(cartItemsList);
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
     }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
@@ -90,8 +101,6 @@ public class OrderWebsiteController {
         Optional<Account> account= accountService.findById(accountId);
         if(account.isPresent()){
             return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId,status),200,""));
-
-
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 

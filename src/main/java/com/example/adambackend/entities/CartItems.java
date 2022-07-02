@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,18 @@ public class CartItems {
     private Boolean isActive;
     @Column(name = "create_date")
     private LocalDateTime createDate;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private Order order;
+
+    public CartItems(Integer id, int quantity, double totalPrice, Account account, DetailProduct detailProduct, Boolean isActive, LocalDateTime createDate) {
+        this.id = id;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.account = account;
+        this.detailProduct = detailProduct;
+        this.isActive = isActive;
+        this.createDate = createDate;
+    }
 }

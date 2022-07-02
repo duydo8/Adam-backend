@@ -48,11 +48,25 @@ public class CartItemWebsiteController {
 //    private LocalDateTime createDate;
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {
-CartItems cartItems= new CartItems(null, cartItemWebsiteCreate.getQuantity()
-,cartItemWebsiteCreate.getTotalPrice(),accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-        detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
-        true, LocalDateTime.now());
-        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+        Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
+        Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
+        if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
+            List<CartItems> cartItemsList= cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
+            for (CartItems c: cartItemsList
+             ){
+                if(detailProductOptional.get().getId()== c.getDetailProduct().getId()){
+                    c.setQuantity(c.getQuantity()+1);
+                    return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
+                }
+            }
+
+            CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
+                    , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                    detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
+                    true, LocalDateTime.now());
+            return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
 
     @PutMapping("update")

@@ -27,5 +27,5 @@ public class OrderWebsiteCreate {
     private String addressDetail;
     private Integer addressId;
     private Integer accountId;
-    private List<CartItems> cartItemsList;
+    private List<Integer> cartItemIdList;
 }
