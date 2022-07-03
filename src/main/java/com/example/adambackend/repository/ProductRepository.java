@@ -20,16 +20,18 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findTop10productByCreateDate();
 
 
-    @Query(value = "select distinct(p.id) as id, p.product_name as productName,p.image as productImage " +
-            "from products p \n" +
-            "join categories ca on p.category_id=ca.id \n" +
-            "join detail_products dp on p.id=dp.product_id \n" +
-            "join sizes s on dp.size_id=s.id \n" +
-            "join tag_products tp on tp.product_id=p.id \n" +
-            "join tags t on t.id=tp.tag_id \n" +
-            "join material_products mp on mp.product_id=p.id \n" +
-            "join materials m on m.id=mp.material_id  \n" +
-            "join colors co on co.id=dp.color_id \n" +
+    @Query(value = "select p.id as id, p.product_name as productName,p.image as productImage, p.create_date as createDate,Min(price_export) as " +
+            "minPrice, Max(price_export)as maxPrice " +
+            "            from products p " +
+            "            join categories ca on p.category_id=ca.id " +
+            "            join detail_products dp on p.id=dp.product_id " +
+            "            join sizes s on dp.size_id=s.id " +
+            "            join tag_products tp on tp.product_id=p.id " +
+            "            join tags t on t.id=tp.tag_id " +
+            "            join material_products mp on mp.product_id=p.id " +
+            "            join materials m on m.id=mp.material_id  " +
+            "            join colors co on co.id=dp.color_id " +
+            "" +
             "where" +
 //            " ca.is_active=1 and dp.is_active=1 and p.is_active=1 and p.is_completed=1 " +
 //            "and s.is_active=1 and tp.is_active=1 and t.is_active=1 " +
@@ -39,7 +41,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 //            "and mp.is_deleted=0 and m.is_deleted=0 and co.is_deleted=0 and " +
             " ca.id=?1  or s.id=?2  \n" +
             "or co.id=?3 or  m.id=?4   \n" +
-            "or t.id=?5  or dp.price_export BETWEEN ?6  and ?7  ", nativeQuery = true)
+            "or t.id=?5  or dp.price_export BETWEEN ?6  and ?7  " +
+            "GROUP BY product_name,product_name,image,p.create_date,p.id order by p.id ", nativeQuery = true)
     List<CustomProductFilterRequest> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
                                                           double bottomPrice, double topPrice, Pageable pageable);
 
