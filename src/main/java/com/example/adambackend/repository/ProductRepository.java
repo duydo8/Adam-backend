@@ -33,10 +33,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "where" +
 //            " ca.is_active=1 and dp.is_active=1 and p.is_active=1 and p.is_completed=1 " +
 //            "and s.is_active=1 and tp.is_active=1 and t.is_active=1 " +
-//            "and mp.is_active=1 and m.is_active=1 and co.is_active=1 \n" +
-//            "and ca.is_deleted=0 and dp.is_deleted=0 and p.is_deleted=0 \n" +
-//            "and s.is_deleted=0 and tp.is_deleted=0 and t.is_deleted=0 \n" +
-//            "and mp.is_deleted=0 and m.is_deleted=0 and co.is_deleted=0 and \n" +
+//            "and mp.is_active=1 and m.is_active=1 and co.is_active=1 " +
+//            "and ca.is_deleted=0 and dp.is_deleted=0 and p.is_deleted=0 " +
+//            "and s.is_deleted=0 and tp.is_deleted=0 and t.is_deleted=0 " +
+//            "and mp.is_deleted=0 and m.is_deleted=0 and co.is_deleted=0 and " +
             " ca.id=?1  or s.id=?2  \n" +
             "or co.id=?3 or  m.id=?4   \n" +
             "or t.id=?5  or dp.price_export BETWEEN ?6  and ?7  ", nativeQuery = true)

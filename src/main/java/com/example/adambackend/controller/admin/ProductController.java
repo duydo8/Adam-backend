@@ -53,20 +53,7 @@ public class ProductController {
     CommentService commentService;
     @Autowired
     ModelMapper modelMapper;
-    private Integer id;
-    private String productName;
-    private String description;
-    private Boolean isDelete;
-    private String image;
-    private Double voteAverage;
-    private LocalDateTime createDate;
-    private Boolean isComplete;
-    private Category category;
-    private List<Tag> tagList = new ArrayList<>();
-    private List<Material> materialList = new ArrayList<>();
-    private List<Color> colorList= new ArrayList<>();
-    private List<Size> sizeList= new ArrayList<>();
-    private Boolean isActive;
+
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {

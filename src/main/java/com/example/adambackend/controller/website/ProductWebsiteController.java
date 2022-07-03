@@ -3,6 +3,8 @@ package com.example.adambackend.controller.website;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.CustomProductFilterRequest;
+import com.example.adambackend.payload.ProductDTO;
+import com.example.adambackend.payload.product.ProductWebsiteDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.*;
@@ -14,10 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,10 +47,36 @@ public class ProductWebsiteController {
 
     @GetMapping("findTop10productByCreateDate")
     public ResponseEntity<?> findTop10productByCreateDate() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10productByCreateDate(), 200, ""));
+        List<Product>products=productSevice.findTop10productByCreateDate();
+        List<ProductWebsiteDTO> productDTOS= new ArrayList<>();
+        for (Product product:products){
+            ProductWebsiteDTO productWebsiteDTO= new ProductWebsiteDTO();
+            productWebsiteDTO.setId(product.getId());
+            productWebsiteDTO.setProductName(product.getProductName());
+            productWebsiteDTO.setCreateDate(product.getCreateDate());
+            productWebsiteDTO.setDescription(product.getDescription());
+            productWebsiteDTO.setImage(product.getImage());
+            productWebsiteDTO.setIsComplete(product.getIsComplete());
+            productWebsiteDTO.setIsActive(product.getIsActive());
+            productWebsiteDTO.setIsDelete(product.getIsDelete());
+            productWebsiteDTO.setVoteAverage(product.getVoteAverage());
+            List<DetailProduct> detailProducts= product.getDetailProducts();
+
+            List<Double> price=detailProducts.stream().
+                    map(e->e.getPriceExport()).collect(Collectors.toList());
+            Collections.sort(price);
+
+            Double minPrice= price.get(0);
+            Double maxPrice= price.get(price.size()-1);
+            productWebsiteDTO.setMaxPrice(maxPrice);
+            productWebsiteDTO.setMinPrice(minPrice);
+
+        }
+
+        return ResponseEntity.ok().body(new IGenericResponse<>(productDTOS, 200, ""));
     }
 
-    @GetMapping("findByOpionalArrayValue")
+    @PostMapping("findByOpionalArrayValue")
     public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestBody ProductWebstieFilterDTO productWebstieFilterDTO) {
         List<Integer> listCategoryId = productWebstieFilterDTO.getListCategoryId();
         List<Integer> listColorId = productWebstieFilterDTO.getListColorId();
@@ -478,7 +504,34 @@ public class ProductWebsiteController {
 
     @GetMapping("findTop10ProductBestSale")
     public ResponseEntity<?> findTop10ProductBestSale() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findTop10ProductBestSale(), 200, ""));
+        List<Product> products= productSevice.findTop10ProductBestSale();
+        List<ProductWebsiteDTO> productDTOS= new ArrayList<>();
+        for (Product product:products){
+            ProductWebsiteDTO productWebsiteDTO= new ProductWebsiteDTO();
+            productWebsiteDTO.setId(product.getId());
+            productWebsiteDTO.setProductName(product.getProductName());
+            productWebsiteDTO.setCreateDate(product.getCreateDate());
+            productWebsiteDTO.setDescription(product.getDescription());
+            productWebsiteDTO.setImage(product.getImage());
+            productWebsiteDTO.setIsComplete(product.getIsComplete());
+            productWebsiteDTO.setIsActive(product.getIsActive());
+            productWebsiteDTO.setIsDelete(product.getIsDelete());
+            productWebsiteDTO.setVoteAverage(product.getVoteAverage());
+            List<DetailProduct> detailProducts= product.getDetailProducts();
+
+            List<Double> price=detailProducts.stream().
+                    map(e->e.getPriceExport()).collect(Collectors.toList());
+            Collections.sort(price);
+
+            Double minPrice= price.get(0);
+            Double maxPrice= price.get(price.size()-1);
+            productWebsiteDTO.setMaxPrice(maxPrice);
+            productWebsiteDTO.setMinPrice(minPrice);
+
+        }
+
+        return ResponseEntity.ok().body(new IGenericResponse<>(productDTOS, 200, ""));
+
 
     }
 
