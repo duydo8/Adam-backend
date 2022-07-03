@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
     @Query(value = "select p.id as id, p.product_name as productName,p.image as productImage, p.create_date as createDate,Min(price_export) as " +
-            "minPrice, Max(price_export)as maxPrice " +
+            " priceBottom, Max(price_export)as priceTop " +
             "            from products p " +
             "            join categories ca on p.category_id=ca.id " +
             "            join detail_products dp on p.id=dp.product_id " +
