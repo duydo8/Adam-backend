@@ -70,7 +70,7 @@ public class ProductWebsiteController {
             Double maxPrice= price.get(price.size()-1);
             productWebsiteDTO.setMaxPrice(maxPrice);
             productWebsiteDTO.setMinPrice(minPrice);
-
+            productDTOS.add(productWebsiteDTO);
         }
 
         return ResponseEntity.ok().body(new IGenericResponse<>(productDTOS, 200, ""));
@@ -527,6 +527,7 @@ public class ProductWebsiteController {
             Double maxPrice= price.get(price.size()-1);
             productWebsiteDTO.setMaxPrice(maxPrice);
             productWebsiteDTO.setMinPrice(minPrice);
+            productDTOS.add(productWebsiteDTO);
 
         }
 
