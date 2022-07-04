@@ -9,6 +9,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.*;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +59,9 @@ public class OrderWebsiteController {
         order.setAmountPrice(orderWebsiteCreate.getAmountPrice());
         order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
 
+            List<CartItems> cartItemsList= new ArrayList<>();
 
-        List<CartItems> cartItemsList= new ArrayList<>();
+
             for (Integer x: orderWebsiteCreate.getCartItemIdList()
                  ) {
                 Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
@@ -68,6 +70,17 @@ public class OrderWebsiteController {
                 }
             }
             order.setCartItems(cartItemsList);
+            List<Order> orders= orderService.findAll();
+                String code=RandomString.make(64);
+                for (int i=0;i<orders.size();i++){
+                    if(code.equals(orders.get(i).getOrder_code())){
+                        code=RandomString.make((64));
+                        break;
+                    }
+                }
+                order.setOrder_code(code);
+
+
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
     }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
@@ -105,5 +118,7 @@ public class OrderWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
+
 
 }

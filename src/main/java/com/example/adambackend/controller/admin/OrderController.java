@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,32 @@ public class OrderController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
-
+    @GetMapping("countAllOrder")
+    public ResponseEntity<?> countAllOrder(@RequestParam("start_date") String startDate,
+                                           @RequestParam("end_date")String endDate){
+        startDate=startDate.replace(" ","T");
+        endDate=endDate.replace(" ","T");
+        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countAllOrderByTime(dateStart,dateEnd),200,""));
+    }
+    @GetMapping("countCancelOrder")
+    public ResponseEntity<?> countCancelOrder(@RequestParam("start_date") String startDate,
+                                           @RequestParam("end_date")String endDate){
+        startDate=startDate.replace(" ","T");
+        endDate=endDate.replace(" ","T");
+        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countCancelOrderByTime(dateStart,dateEnd),200,""));
+    }
+    @GetMapping("countSuccessOrder")
+    public ResponseEntity<?> countSuccessOrder(@RequestParam("start_date") String startDate,
+                                           @RequestParam("end_date")String endDate){
+        startDate=startDate.replace(" ","T");
+        endDate=endDate.replace(" ","T");
+        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countsuccessOrderByTime(dateStart,dateEnd),200,""));
+    }
 
 }

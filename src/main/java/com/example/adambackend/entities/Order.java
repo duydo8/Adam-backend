@@ -38,6 +38,7 @@ public class Order {
     private Double totalPrice;
     @Column(name = "address_detail")
     private String addressDetail;
+    private String order_code;
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;

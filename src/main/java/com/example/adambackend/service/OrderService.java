@@ -4,6 +4,7 @@ import com.example.adambackend.entities.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,12 @@ public interface OrderService {
     //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
     //    }
     List<Order> findByAccountId(Integer accountId, Integer status);
+
+    Integer countAllOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
+
+    Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
+
+    Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
 
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }

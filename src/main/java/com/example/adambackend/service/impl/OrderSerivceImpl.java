@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,4 +50,17 @@ public class OrderSerivceImpl implements OrderService {
 public List<Order> findByAccountId(Integer accountId,Integer status){
     return orderRepository.findOrderByAccountId(accountId, status);
 }
+@Override
+    public Integer countAllOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
+        return  orderRepository.countAllOrderByTime(startDate,endDate);
+
+}
+@Override
+public Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
+        return orderRepository.countCancelOrderByTime(startDate,endDate);
+}
+    @Override
+    public Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
+        return orderRepository.countSuccessOrderByTime(startDate,endDate);
+    }
 }

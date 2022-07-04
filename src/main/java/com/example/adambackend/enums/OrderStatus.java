@@ -8,7 +8,8 @@ public enum OrderStatus {
     payback(-1),// doi tra
     delay(4),// hoan don hang
     checking(5),//kiem tra lai don hang hoan tra hoac cancel
-    success(6); // thành công
+    success(6), // thành công
+    delivery(7);
     private int value;
 
     private OrderStatus(int value) {
