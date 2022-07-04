@@ -1,13 +1,12 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.Account;
-import com.example.adambackend.entities.DetailOrder;
-import com.example.adambackend.entities.DetailProduct;
-import com.example.adambackend.entities.Order;
+import com.example.adambackend.entities.*;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.AccountService;
+import com.example.adambackend.service.DetailOrderService;
 import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +32,10 @@ public class OrderController {
     DetailProductService detailProductService;
     @Autowired
     AccountService accountService;
-
+    @Autowired
+    DetailOrderService detailOrderService;
+    @Autowired
+    HistoryOrderRepository historyOrderRepository;
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -42,8 +45,22 @@ public class OrderController {
 
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody Order order) {
-        Optional<Order> materialOptional = orderService.findById(order.getId());
-        if (materialOptional.isPresent()) {
+        Optional<Order> orderOptional = orderService.findById(order.getId());
+        if (orderOptional.isPresent()) {
+
+            HistoryOrder historyOrder= new HistoryOrder();
+            order=orderService.save(order);
+
+            historyOrder.setOrder(orderService.findById(order.getId()).get());
+            historyOrder.setDescription("create time");
+            historyOrder.setUpdateTime(LocalDateTime.now());
+            historyOrder.setIsActive(true);
+            historyOrder.setTotalPrice(order.getTotalPrice());
+            historyOrder.setStatus(OrderStatus.success);
+            historyOrder=historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders= new ArrayList<>();
+            historyOrders.add(historyOrder);
+            order.setHistoryOrders(historyOrders);
 
             return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(order), 200, ""));
         } else {
@@ -72,7 +89,21 @@ public class OrderController {
             } else {
                 account.setPriority(account.getPriority());
             }
+            Order order= orderOptional.get();
+            HistoryOrder historyOrder= new HistoryOrder();
+            order=orderService.save(order);
 
+            historyOrder.setOrder(orderService.findById(order.getId()).get());
+            historyOrder.setDescription("create time");
+            historyOrder.setUpdateTime(LocalDateTime.now());
+            historyOrder.setIsActive(true);
+            historyOrder.setTotalPrice(order.getTotalPrice());
+            historyOrder.setStatus(OrderStatus.success);
+            historyOrder=historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders= new ArrayList<>();
+            historyOrders.add(historyOrder);
+            order.setHistoryOrders(historyOrders);
+            orderService.save(order);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
 
         }
@@ -96,6 +127,7 @@ public class OrderController {
         LocalDateTime dateEnd=LocalDateTime.parse(endDate);
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countCancelOrderByTime(dateStart,dateEnd),200,""));
     }
+
     @GetMapping("countSuccessOrder")
     public ResponseEntity<?> countSuccessOrder(@RequestParam("start_date") String startDate,
                                            @RequestParam("end_date")String endDate){
@@ -104,6 +136,17 @@ public class OrderController {
         LocalDateTime dateStart= LocalDateTime.parse(startDate);
         LocalDateTime dateEnd=LocalDateTime.parse(endDate);
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countsuccessOrderByTime(dateStart,dateEnd),200,""));
+    }
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
+        Optional<Order> optionalOrder = orderService.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            detailOrderService.deleteAllByOrderId(orderId);
+            orderService.deleteById(orderId);
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
+
     }
 
 }

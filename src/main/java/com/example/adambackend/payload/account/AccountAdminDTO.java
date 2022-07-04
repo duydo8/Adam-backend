@@ -17,9 +17,9 @@ public class AccountAdminDTO {
     private String email;
     private String phoneNumber;
     private String password;
-    private ERoleName role;
-    private boolean isActive;
-    private boolean isDelete;
+    private String role;
+    private Boolean isActive;
+    private Boolean isDelete;
     private String verificationCode;
     private LocalDateTime timeValid;
     private double priority;

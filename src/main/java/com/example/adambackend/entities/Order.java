@@ -45,6 +45,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<HistoryOrder> historyOrders;
 
     @OneToMany(mappedBy = "order")
     private List<CartItems> cartItems= new ArrayList<>();

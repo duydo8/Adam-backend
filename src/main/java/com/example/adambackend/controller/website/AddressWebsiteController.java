@@ -58,6 +58,9 @@ public class AddressWebsiteController {
             address.setProvince(province.get());
             address.setDistrict(district.get());
             address.setWard(ward.get());
+            address.setPhoneNumber(addressWebsiteCreate.getPhoneNumber());
+            address.setFullName(addressWebsiteCreate.getFullName());
+            address.setIsDeleted(addressWebsiteCreate.getIsDefault());
             Address address1=addressService.save(address);
             return ResponseEntity.ok().body(new IGenericResponse<>(address1,200,""));
         }
@@ -80,6 +83,9 @@ public class AddressWebsiteController {
             address1.setProvince(province.get());
             address1.setDistrict(district.get());
             address1.setWard(ward.get());
+            address1.setPhoneNumber(addressWebsiteUpdate.getPhoneNumber());
+            address1.setFullName(addressWebsiteUpdate.getFullName());
+            address1.setIsDeleted(addressWebsiteUpdate.getIsDefault());
             Address address2=addressService.save(address1);
 
             return ResponseEntity.ok().body(new IGenericResponse<Address>(address2, 200, "successfully"));

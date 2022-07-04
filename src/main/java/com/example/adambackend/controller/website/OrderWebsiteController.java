@@ -1,13 +1,11 @@
 package com.example.adambackend.controller.website;
 
-import com.example.adambackend.entities.Account;
-import com.example.adambackend.entities.Address;
-import com.example.adambackend.entities.CartItems;
-import com.example.adambackend.entities.Order;
+import com.example.adambackend.entities.*;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +32,8 @@ public class OrderWebsiteController {
     AddressService addressService;
     @Autowired
     CartItemService cartItemService;
+    @Autowired
+    HistoryOrderRepository historyOrderRepository;
 
     //    @GetMapping("findTop5OrderByCreateTime")
 //    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
@@ -72,13 +73,26 @@ public class OrderWebsiteController {
             order.setCartItems(cartItemsList);
             List<Order> orders= orderService.findAll();
                 String code=RandomString.make(64);
-                for (int i=0;i<orders.size();i++){
-                    if(code.equals(orders.get(i).getOrder_code())){
-                        code=RandomString.make((64));
+                for (int i=0;i<orders.size();i++) {
+                    if (code.equals(orders.get(i).getOrder_code())) {
+                        code = RandomString.make((64));
                         break;
                     }
                 }
                 order.setOrder_code(code);
+            HistoryOrder historyOrder= new HistoryOrder();
+             order=orderService.save(order);
+
+            historyOrder.setOrder(orderService.findById(order.getId()).get());
+            historyOrder.setDescription("create time");
+            historyOrder.setUpdateTime(LocalDateTime.now());
+            historyOrder.setIsActive(true);
+            historyOrder.setTotalPrice(orderWebsiteCreate.getTotalPrice());
+            historyOrder.setStatus(OrderStatus.pending);
+            historyOrder=historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders= new ArrayList<>();
+            historyOrders.add(historyOrder);
+            order.setHistoryOrders(historyOrders);
 
 
         return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));

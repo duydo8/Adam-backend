@@ -99,7 +99,50 @@ public class AccountController {
     }
 
 
+    @PostMapping("/createAdminAccount")
+    public ResponseEntity<IGenericResponse> registerAccount(@RequestBody SignUpRequest signUpRequest) {
+        if (accountService.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new IGenericResponse(400, "Username has been used"));
+        }
 
+        if (accountService.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new IGenericResponse(400, "Email has been used"));
+        }
+        if(accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()){
+            return ResponseEntity
+                    .badRequest()
+                    .body(new IGenericResponse(400, "PhoneNumber has been used"));
+        }
+
+
+        Account account = new Account(signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
+                passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
+                signUpRequest.getFullName()
+        );
+        account.setIsActive(true);
+        account.setIsDelete(false);
+        if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
+            account.setRole(ERoleName.Admin);
+        } else {
+            account.setRole(ERoleName.User);
+        }
+        String code= RandomString.make(64);
+        account.setVerificationCode(code);
+        account.setTimeValid(LocalDateTime.now().plusMinutes(30));
+//        TwilioSendSms twilioSendSms= new TwilioSendSms();
+//        twilioSendSms.sendCode(account.getPhoneNumber(),code);
+
+        Account account1 = accountService.save(account);
+
+        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+
+        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
+    }
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         List<AccountResponse> accountList = accountService.findAll();
@@ -112,6 +155,10 @@ public class AccountController {
         Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
         if (accountOptional.isPresent()) {
             Account account= modelMapper.map(accountAdminDTO,Account.class);
+            if(accountAdminDTO.getRole().equalsIgnoreCase("admin")){
+                account.setRole(ERoleName.Admin);
+            }else account.setRole(ERoleName.User);
+
             accountService.save(account);
 
             return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
@@ -125,8 +172,10 @@ public class AccountController {
             accountService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
         }
     }
+//    @DeleteMapping("deleteListId")
+
 
 }

@@ -21,4 +21,7 @@ public class AddressWebsiteCreate {
     private Integer provinceId;
     private Integer districtId;
     private Integer wardId;
+    private String phoneNumber;
+    private  String fullName;
+    private Boolean isDefault;
 }
