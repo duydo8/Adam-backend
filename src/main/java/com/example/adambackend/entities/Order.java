@@ -23,7 +23,7 @@ public class Order {
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    private OrderStatus status;
+    private Integer status;
 
     @Column(name = "full_name")
     private String fullName;

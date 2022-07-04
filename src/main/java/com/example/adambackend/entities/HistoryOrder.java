@@ -18,7 +18,7 @@ public class HistoryOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private OrderStatus status;
+    private Integer status;
     @Column(name="update_time")
     private LocalDateTime updateTime;
     private String description;

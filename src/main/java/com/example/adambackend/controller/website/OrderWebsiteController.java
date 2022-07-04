@@ -51,7 +51,7 @@ public class OrderWebsiteController {
         Order order= new Order();
         order.setAccount(account.get());
         order.setCreateDate(LocalDateTime.now());
-        order.setStatus(OrderStatus.pending);
+        order.setStatus(1);
         order.setAddress(address.get());
         order.setFullName(orderWebsiteCreate.getFullName());
         order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
@@ -88,7 +88,7 @@ public class OrderWebsiteController {
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(orderWebsiteCreate.getTotalPrice());
-            historyOrder.setStatus(OrderStatus.pending);
+            historyOrder.setStatus(1);
             historyOrder=historyOrderRepository.save(historyOrder);
             List<HistoryOrder> historyOrders= new ArrayList<>();
             historyOrders.add(historyOrder);

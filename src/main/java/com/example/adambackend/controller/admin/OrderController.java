@@ -56,9 +56,9 @@ public class OrderController {
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(order.getTotalPrice());
-            historyOrder.setStatus(OrderStatus.success);
+            historyOrder.setStatus(6);
             historyOrder=historyOrderRepository.save(historyOrder);
-            List<HistoryOrder> historyOrders= new ArrayList<>();
+            List<HistoryOrder> historyOrders= order.getHistoryOrders();
             historyOrders.add(historyOrder);
             order.setHistoryOrders(historyOrders);
 
@@ -73,7 +73,7 @@ public class OrderController {
         Optional<Order> orderOptional = orderService.findById(orderId);
         if (orderOptional.isPresent()) {
             List<DetailOrder> detailOrderList = orderOptional.get().getDetailOrders();
-            orderOptional.get().setStatus(OrderStatus.success);
+            orderOptional.get().setStatus(6);
             for (DetailOrder detailOrder : detailOrderList
             ) {
                 Integer detailProductId = detailOrder.getDetailProduct().getId();
@@ -98,7 +98,7 @@ public class OrderController {
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(order.getTotalPrice());
-            historyOrder.setStatus(OrderStatus.success);
+            historyOrder.setStatus(6);
             historyOrder=historyOrderRepository.save(historyOrder);
             List<HistoryOrder> historyOrders= new ArrayList<>();
             historyOrders.add(historyOrder);

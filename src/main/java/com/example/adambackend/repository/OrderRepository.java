@@ -20,5 +20,6 @@ List<Order> findOrderByAccountId(Integer accountId , Integer status);
     Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
     @Query(value = "select count(*) from orders where status=6 and create_date between ?1 and ?2",nativeQuery = true)
     Integer countSuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
+//    @Query("select ")
 }
 
