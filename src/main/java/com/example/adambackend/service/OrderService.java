@@ -19,6 +19,8 @@ public interface OrderService {
 
     Page<Order> findAll(Pageable pageable);
 
+    Double sumTotalPriceByTime(Integer month);
+
     //    @Override
     //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
     //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
@@ -30,6 +32,12 @@ public interface OrderService {
     Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
 
     Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
+
+    Double sumSuccessOrderByTime(Integer month);
+
+    Double sumCancelOrderByTime(Integer month);
+
+    Double sumPaybackOrderByTime(Integer month);
 
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }

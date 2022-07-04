@@ -41,6 +41,10 @@ public class OrderSerivceImpl implements OrderService {
     public Page<Order> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
     }
+    @Override
+    public Double sumTotalPriceByTime(Integer month){
+        return  orderRepository.sumTotalPriceByTime(month);
+    }
 
 //    @Override
 //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
@@ -62,5 +66,17 @@ public Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime end
     @Override
     public Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
         return orderRepository.countSuccessOrderByTime(startDate,endDate);
+    }
+    @Override
+    public Double sumSuccessOrderByTime(Integer month){
+        return orderRepository.sumSuccessOrderByTime(month);
+    }
+    @Override
+    public Double sumCancelOrderByTime(Integer month){
+        return orderRepository.sumCancelOrderByTime(month);
+    }
+    @Override
+    public Double sumPaybackOrderByTime(Integer month){
+        return orderRepository.sumPaybackOrderByTime(month);
     }
 }

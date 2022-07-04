@@ -3,6 +3,7 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.order.OrderDashboard;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.AccountService;
@@ -147,6 +148,126 @@ public class OrderController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
+    }
+    @GetMapping("sumTotalPriceByTime")
+    public ResponseEntity<?> sumTotalPriceByTime(){
+        OrderDashboard orderDashboard= new OrderDashboard();
+        orderDashboard.setName("Tổng đơn hàng");
+         Double thang1=orderService.sumTotalPriceByTime(1);
+        Double thang2=orderService.sumTotalPriceByTime(2);
+        Double thang3=orderService.sumTotalPriceByTime(3);
+        Double thang4=orderService.sumTotalPriceByTime(4);
+        Double thang5=orderService.sumTotalPriceByTime(5);
+        Double thang6=orderService.sumTotalPriceByTime(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        orderDashboard.setData(doubleList);
+        List<String> thang= new ArrayList<>();
+
+        thang.add("January");
+        thang.add("February");
+        thang.add("March");
+        thang.add("April");
+        thang.add("May");
+        thang.add("June");
+        thang.add("July");
+        orderDashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+    }
+    @GetMapping("sumSuccessOrderByTime")
+    public ResponseEntity<?> sumSuccessOrderByTime(){
+        OrderDashboard orderDashboard= new OrderDashboard();
+        orderDashboard.setName("Đơn thành công");
+        Double thang1=orderService.sumSuccessOrderByTime(1);
+        Double thang2=orderService.sumSuccessOrderByTime(2);
+        Double thang3=orderService.sumSuccessOrderByTime(3);
+        Double thang4=orderService.sumSuccessOrderByTime(4);
+        Double thang5=orderService.sumSuccessOrderByTime(5);
+        Double thang6=orderService.sumSuccessOrderByTime(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        orderDashboard.setData(doubleList);
+        List<String> thang= new ArrayList<>();
+
+        thang.add("January");
+        thang.add("February");
+        thang.add("March");
+        thang.add("April");
+        thang.add("May");
+        thang.add("June");
+        thang.add("July");
+        orderDashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+    }
+    @GetMapping("sumCancelOrderByTime")
+    public ResponseEntity<?> sumCancelOrderByTime(){
+        OrderDashboard orderDashboard= new OrderDashboard();
+        orderDashboard.setName("Đơn hủy");
+        Double thang1=orderService.sumCancelOrderByTime(1);
+        Double thang2=orderService.sumCancelOrderByTime(2);
+        Double thang3=orderService.sumCancelOrderByTime(3);
+        Double thang4=orderService.sumCancelOrderByTime(4);
+        Double thang5=orderService.sumCancelOrderByTime(5);
+        Double thang6=orderService.sumCancelOrderByTime(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        orderDashboard.setData(doubleList);
+        List<String> thang= new ArrayList<>();
+
+        thang.add("January");
+        thang.add("February");
+        thang.add("March");
+        thang.add("April");
+        thang.add("May");
+        thang.add("June");
+        thang.add("July");
+        orderDashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+    }
+    @GetMapping("sumPaybackOrderByTime")
+    public ResponseEntity<?> sumPaybackOrderByTime(){
+        OrderDashboard orderDashboard= new OrderDashboard();
+        orderDashboard.setName("Đơn hủy");
+        Double thang1=orderService.sumPaybackOrderByTime(1);
+        Double thang2=orderService.sumPaybackOrderByTime(2);
+        Double thang3=orderService.sumPaybackOrderByTime(3);
+        Double thang4=orderService.sumPaybackOrderByTime(4);
+        Double thang5=orderService.sumPaybackOrderByTime(5);
+        Double thang6=orderService.sumPaybackOrderByTime(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        orderDashboard.setData(doubleList);
+        List<String> thang= new ArrayList<>();
+
+        thang.add("January");
+        thang.add("February");
+        thang.add("March");
+        thang.add("April");
+        thang.add("May");
+        thang.add("June");
+        thang.add("July");
+        orderDashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
     }
 
 }
