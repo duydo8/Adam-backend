@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.product;
 
 import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Material;

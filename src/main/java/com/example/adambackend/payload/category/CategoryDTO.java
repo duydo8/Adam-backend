@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

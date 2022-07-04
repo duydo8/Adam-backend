@@ -1,14 +1,12 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListColorIdDTO {
-    List<Integer> listColorId;
+public class SizeDTO {
+    private String sizeName;
 }

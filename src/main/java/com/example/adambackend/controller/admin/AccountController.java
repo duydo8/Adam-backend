@@ -5,7 +5,8 @@ import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.account.AccountAdminDTO;
-import com.example.adambackend.payload.AccountResponse;
+import com.example.adambackend.payload.account.AccountResponse;
+import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.request.SignUpRequest;
 import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -17,10 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +35,8 @@ public class AccountController {
     @Autowired
     ModelMapper modelMapper;
 
-
+    private final List<String> thang= Arrays.asList("January", "February", "March", "April", "May",
+            "June", "July");
 
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
@@ -81,6 +82,7 @@ public class AccountController {
 
         return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
     }
+
     @GetMapping("verify")
     public ResponseEntity<?> verify(@RequestParam("code")String code,@RequestParam("id")Integer id){
         Optional<Account> accountOptional= accountService.findById(id);
@@ -187,6 +189,69 @@ public class AccountController {
 
     }
 //    @DeleteMapping("deleteListId")
+@GetMapping("countTotalAccountInOrder")
+    public ResponseEntity<?> countTotalAccountInOrder(){
+    Dashboard dashboard= new Dashboard();
+    dashboard.setName("Tổng số người dùng mua hàng");
+    Double thang1=accountService.countTotalAccountInOrder(1);
+    Double thang2=accountService.countTotalAccountInOrder(2);
+    Double thang3=accountService.countTotalAccountInOrder(3);
+    Double thang4=accountService.countTotalAccountInOrder(4);
+    Double thang5=accountService.countTotalAccountInOrder(5);
+    Double thang6=accountService.countTotalAccountInOrder(6);
+    List<Double> doubleList= new ArrayList<>();
+    doubleList.add(thang1);
+    doubleList.add(thang2);
+    doubleList.add(thang3);
+    doubleList.add(thang4);
+    doubleList.add(thang5);
+    doubleList.add(thang6);
+    dashboard.setData(doubleList);
+    dashboard.setLabels(thang);
+    return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
+}
+    @GetMapping("countTotalAccount")
+    public ResponseEntity<?> countTotalAccount(){
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Tổng người dùng");
+        Double thang1=accountService.countTotalAccount(1);
+        Double thang2=accountService.countTotalAccount(2);
+        Double thang3=accountService.countTotalAccount(3);
+        Double thang4=accountService.countTotalAccount(4);
+        Double thang5=accountService.countTotalAccount(5);
+        Double thang6=accountService.countTotalAccount(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        dashboard.setData(doubleList);
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
+    }
+    @GetMapping("countTotalSignUpAccount")
+    public ResponseEntity<?> countTotalSignUpAccount(){
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Tổng số người đăng ký mỡi");
+        Double thang1=accountService.countTotalSignUpAccount(1);
+        Double thang2=accountService.countTotalSignUpAccount(2);
+        Double thang3=accountService.countTotalSignUpAccount(3);
+        Double thang4=accountService.countTotalSignUpAccount(4);
+        Double thang5=accountService.countTotalSignUpAccount(5);
+        Double thang6=accountService.countTotalSignUpAccount(6);
+        List<Double> doubleList= new ArrayList<>();
+        doubleList.add(thang1);
+        doubleList.add(thang2);
+        doubleList.add(thang3);
+        doubleList.add(thang4);
+        doubleList.add(thang5);
+        doubleList.add(thang6);
+        dashboard.setData(doubleList);
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
+    }
 
 
 }

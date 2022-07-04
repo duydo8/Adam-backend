@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDashboard {
+public class Dashboard {
     private String name;
     private List<String> labels;
     private List<Double> data;

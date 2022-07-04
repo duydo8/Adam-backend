@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.payload.AccountResponse;
+import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
 import net.bytebuddy.utility.RandomString;
@@ -117,6 +117,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> findByPhoneNumber(String phoneNumber){
         return accountRepository.findByPhoneNumber(phoneNumber);
+    }
+    @Override
+    public Double countTotalAccount(Integer month){
+        return accountRepository.countTotalAccount(month);
+    }
+    @Override
+    public Double countTotalSignUpAccount(Integer month){
+        return accountRepository.countTotalSignUpAccount(month);
+
+    }
+    @Override
+    public Double countTotalAccountInOrder(Integer month){
+        return accountRepository.countTotalAccountInOrder(month);
     }
 
 

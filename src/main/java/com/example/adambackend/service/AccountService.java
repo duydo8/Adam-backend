@@ -1,7 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.payload.AccountResponse;
+import com.example.adambackend.payload.account.AccountResponse;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -33,4 +33,10 @@ public interface AccountService {
     Optional<Account> findByEmail(String email);
 
     Optional<Account> findByPhoneNumber(String phoneNumber);
+
+    Double countTotalAccount(Integer month);
+
+    Double countTotalSignUpAccount(Integer month);
+
+    Double countTotalAccountInOrder(Integer month);
 }

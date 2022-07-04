@@ -2,8 +2,8 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Material;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.ListMaterialIdDTO;
-import com.example.adambackend.payload.MaterialDTO;
+import com.example.adambackend.payload.material.ListMaterialIdDTO;
+import com.example.adambackend.payload.material.MaterialDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.service.MaterialService;

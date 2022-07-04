@@ -22,11 +22,13 @@ List<Order> findOrderByAccountId(Integer accountId , Integer status);
     Integer countSuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
     @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
     Double sumTotalPriceByTime(Integer month);
-    @Query(value = "select sum(total_price) from orders where month(create_date)=?1 and year(create_date)=2022 and status=6",nativeQuery = true)
+    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=6",nativeQuery = true)
     Double sumSuccessOrderByTime(Integer month);
-    @Query(value = "select sum(total_price) from orders where month(create_date)=?1 and year(create_date)=2022 and status=-1",nativeQuery = true)
+    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=-1",nativeQuery = true)
     Double sumPaybackOrderByTime(Integer month);
-    @Query(value = "select sum(total_price) from orders where month(create_date)=?1 and year(create_date)=2022 and status=0",nativeQuery = true)
+    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=0",nativeQuery = true)
     Double sumCancelOrderByTime(Integer month);
+
+
 }
 

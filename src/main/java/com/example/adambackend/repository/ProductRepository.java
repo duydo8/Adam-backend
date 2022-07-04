@@ -1,7 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Product;
-import com.example.adambackend.payload.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

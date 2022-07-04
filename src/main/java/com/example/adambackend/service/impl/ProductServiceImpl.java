@@ -1,7 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
-import com.example.adambackend.payload.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;

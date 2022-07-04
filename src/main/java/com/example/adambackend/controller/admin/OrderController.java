@@ -3,7 +3,7 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.order.OrderDashboard;
+import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.AccountService;
@@ -151,8 +151,8 @@ public class OrderController {
     }
     @GetMapping("sumTotalPriceByTime")
     public ResponseEntity<?> sumTotalPriceByTime(){
-        OrderDashboard orderDashboard= new OrderDashboard();
-        orderDashboard.setName("Tổng đơn hàng");
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Tổng đơn hàng");
          Double thang1=orderService.sumTotalPriceByTime(1);
         Double thang2=orderService.sumTotalPriceByTime(2);
         Double thang3=orderService.sumTotalPriceByTime(3);
@@ -166,7 +166,7 @@ public class OrderController {
         doubleList.add(thang4);
         doubleList.add(thang5);
         doubleList.add(thang6);
-        orderDashboard.setData(doubleList);
+        dashboard.setData(doubleList);
         List<String> thang= new ArrayList<>();
 
         thang.add("January");
@@ -176,13 +176,13 @@ public class OrderController {
         thang.add("May");
         thang.add("June");
         thang.add("July");
-        orderDashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
     }
     @GetMapping("sumSuccessOrderByTime")
     public ResponseEntity<?> sumSuccessOrderByTime(){
-        OrderDashboard orderDashboard= new OrderDashboard();
-        orderDashboard.setName("Đơn thành công");
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Đơn thành công");
         Double thang1=orderService.sumSuccessOrderByTime(1);
         Double thang2=orderService.sumSuccessOrderByTime(2);
         Double thang3=orderService.sumSuccessOrderByTime(3);
@@ -196,7 +196,7 @@ public class OrderController {
         doubleList.add(thang4);
         doubleList.add(thang5);
         doubleList.add(thang6);
-        orderDashboard.setData(doubleList);
+        dashboard.setData(doubleList);
         List<String> thang= new ArrayList<>();
 
         thang.add("January");
@@ -206,13 +206,13 @@ public class OrderController {
         thang.add("May");
         thang.add("June");
         thang.add("July");
-        orderDashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
     }
     @GetMapping("sumCancelOrderByTime")
     public ResponseEntity<?> sumCancelOrderByTime(){
-        OrderDashboard orderDashboard= new OrderDashboard();
-        orderDashboard.setName("Đơn hủy");
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Đơn hủy");
         Double thang1=orderService.sumCancelOrderByTime(1);
         Double thang2=orderService.sumCancelOrderByTime(2);
         Double thang3=orderService.sumCancelOrderByTime(3);
@@ -226,7 +226,7 @@ public class OrderController {
         doubleList.add(thang4);
         doubleList.add(thang5);
         doubleList.add(thang6);
-        orderDashboard.setData(doubleList);
+        dashboard.setData(doubleList);
         List<String> thang= new ArrayList<>();
 
         thang.add("January");
@@ -236,13 +236,13 @@ public class OrderController {
         thang.add("May");
         thang.add("June");
         thang.add("July");
-        orderDashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
     }
     @GetMapping("sumPaybackOrderByTime")
     public ResponseEntity<?> sumPaybackOrderByTime(){
-        OrderDashboard orderDashboard= new OrderDashboard();
-        orderDashboard.setName("Đơn hủy");
+        Dashboard dashboard= new Dashboard();
+        dashboard.setName("Đơn hủy");
         Double thang1=orderService.sumPaybackOrderByTime(1);
         Double thang2=orderService.sumPaybackOrderByTime(2);
         Double thang3=orderService.sumPaybackOrderByTime(3);
@@ -256,7 +256,7 @@ public class OrderController {
         doubleList.add(thang4);
         doubleList.add(thang5);
         doubleList.add(thang6);
-        orderDashboard.setData(doubleList);
+        dashboard.setData(doubleList);
         List<String> thang= new ArrayList<>();
 
         thang.add("January");
@@ -266,8 +266,8 @@ public class OrderController {
         thang.add("May");
         thang.add("June");
         thang.add("July");
-        orderDashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderDashboard,200,""));
+        dashboard.setLabels(thang);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
     }
 
 }

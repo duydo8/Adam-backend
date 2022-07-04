@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.account;
 
 public interface AccountResponse {
     Integer getId();

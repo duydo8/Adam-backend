@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.material;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListDetailProductIdDTO {
-    List<Integer> listDetailProductId;
+public class ListMaterialIdDTO {
+    List<Integer> listMaterialId;
 }

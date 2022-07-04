@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.product;
 
 public interface CustomProductFilterRequest {
     Integer getId();

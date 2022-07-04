@@ -2,10 +2,10 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.ListProductIdDTO;
-import com.example.adambackend.payload.ProductDTO;
-import com.example.adambackend.payload.ProductResponse;
-import com.example.adambackend.payload.ProductUpdateDTO;
+import com.example.adambackend.payload.product.ListProductIdDTO;
+import com.example.adambackend.payload.product.ProductDTO;
+import com.example.adambackend.payload.product.ProductResponse;
+import com.example.adambackend.payload.product.ProductUpdateDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -22,8 +22,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000)

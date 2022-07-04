@@ -1,4 +1,4 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,12 +1,14 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.tag;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SizeDTO {
-    private String sizeName;
+public class ListTagIdDTO {
+    List<Integer> tagIdList;
 }

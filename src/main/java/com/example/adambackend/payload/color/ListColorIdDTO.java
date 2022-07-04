@@ -1,12 +1,14 @@
-package com.example.adambackend.payload;
+package com.example.adambackend.payload.color;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagDTO {
-    private String tagName;
+public class ListColorIdDTO {
+    List<Integer> listColorId;
 }

@@ -2,8 +2,8 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.ListTagIdDTO;
-import com.example.adambackend.payload.TagDTO;
+import com.example.adambackend.payload.tag.ListTagIdDTO;
+import com.example.adambackend.payload.tag.TagDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.ProductSevice;
