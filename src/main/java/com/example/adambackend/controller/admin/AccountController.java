@@ -175,6 +175,17 @@ public class AccountController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
         }
     }
+    @GetMapping("findById")
+    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
+        Optional<Account> accountOptional = accountService.findById(id);
+        if (accountOptional.isPresent()) {
+
+            return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(),200, ""));
+        } else {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        }
+
+    }
 //    @DeleteMapping("deleteListId")
 
 
