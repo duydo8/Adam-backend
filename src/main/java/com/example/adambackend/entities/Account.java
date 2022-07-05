@@ -41,7 +41,10 @@ public class Account {
     private String verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
-    private double priority;
+    private Double priority;
+    @Column(name="create_date")
+    private LocalDateTime createDate;
+
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Address> addressList = new ArrayList<>();

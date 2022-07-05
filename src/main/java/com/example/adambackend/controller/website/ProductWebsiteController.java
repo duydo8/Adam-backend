@@ -83,6 +83,22 @@ public class ProductWebsiteController {
         List<Integer> listTagId = productWebstieFilterDTO.getListTagId();
         Double bottomPrice = productWebstieFilterDTO.getBottomPrice();
         Double topPrice = productWebstieFilterDTO.getTopPrice();
+        if(listCategoryId==null||listCategoryId.isEmpty() ||  listCategoryId.size()==0){
+            listCategoryId=Arrays.asList(0);
+        }
+        if(listColorId==null||listColorId.isEmpty() ||  listColorId.size()==0){
+            listCategoryId=Arrays.asList(0);
+        }
+        if(listSizeId==null||listSizeId.isEmpty() ||  listSizeId.size()==0){
+            listCategoryId=Arrays.asList(0);
+        }
+
+        if(listMaterialId==null||listMaterialId.isEmpty() ||  listMaterialId.size()==0){
+            listCategoryId=Arrays.asList(0);
+        }
+        if(listTagId==null||listTagId.isEmpty() ||  listTagId.size()==0){
+            listCategoryId=Arrays.asList(0);
+        }
         if(bottomPrice==null){
             bottomPrice=0.0;
         }

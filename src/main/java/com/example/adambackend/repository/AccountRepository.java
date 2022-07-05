@@ -31,11 +31,11 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
             "role as role, is_active as isActive, is_deleted as isDeleted, priority as priority from accounts", nativeQuery = true)
     public List<AccountResponse> findAlls();
-    @Query(value = "select count(*) from accounts where is_active=1 and is_delete=0 and month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
+    @Query(value = "select count(*) from accounts where is_active=1 and is_deleted=0 and month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
     Double countTotalAccount(Integer month);
     @Query(value = "select count(*) from accounts where month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
     Double countTotalSignUpAccount(Integer month);
-    @Query(value = "select count(a.id) from accounts a where a.id in (select account_id from orders)",nativeQuery = true)
+    @Query(value = "select count(a.id) from accounts a where a.id in (select account_id from orders) and month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
     Double countTotalAccountInOrder(Integer month);
 
 }

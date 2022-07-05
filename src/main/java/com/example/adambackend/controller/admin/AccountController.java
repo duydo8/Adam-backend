@@ -63,7 +63,9 @@ public class AccountController {
                 passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
                 signUpRequest.getFullName()
         );
+        account.setCreateDate(LocalDateTime.now());
         account.setIsActive(false);
+
         account.setIsDelete(false);
         if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
             account.setRole(ERoleName.Admin);
@@ -75,7 +77,7 @@ public class AccountController {
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
         TwilioSendSms twilioSendSms= new TwilioSendSms();
         twilioSendSms.sendCode(account.getPhoneNumber(),code);
-
+        account.setPriority(5.0);
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
@@ -128,6 +130,7 @@ public class AccountController {
         );
         account.setIsActive(true);
         account.setIsDelete(false);
+        account.setCreateDate(LocalDateTime.now());
         if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
             account.setRole(ERoleName.Admin);
         } else {
@@ -138,7 +141,7 @@ public class AccountController {
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
 //        TwilioSendSms twilioSendSms= new TwilioSendSms();
 //        twilioSendSms.sendCode(account.getPhoneNumber(),code);
-
+        account.setPriority(5.0);
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);

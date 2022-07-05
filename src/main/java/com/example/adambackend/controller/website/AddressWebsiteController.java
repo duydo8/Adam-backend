@@ -61,6 +61,7 @@ public class AddressWebsiteController {
             address.setPhoneNumber(addressWebsiteCreate.getPhoneNumber());
             address.setFullName(addressWebsiteCreate.getFullName());
             address.setIsDeleted(addressWebsiteCreate.getIsDefault());
+            address.setIsDefault(false);
             Address address1=addressService.save(address);
             return ResponseEntity.ok().body(new IGenericResponse<>(address1,200,""));
         }
@@ -68,9 +69,7 @@ public class AddressWebsiteController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(
-
-            @RequestBody AddressWebsiteUpdate addressWebsiteUpdate) {
+    public ResponseEntity<?> update(@RequestBody AddressWebsiteUpdate addressWebsiteUpdate) {
         Optional<Account> account = accountService.findById(addressWebsiteUpdate.getAccountId());
         Optional<Address> address = addressService.findById(addressWebsiteUpdate.getId());
         Optional<Province> province= provinceService.findById(addressWebsiteUpdate.getProvinceId());
@@ -86,6 +85,7 @@ public class AddressWebsiteController {
             address1.setPhoneNumber(addressWebsiteUpdate.getPhoneNumber());
             address1.setFullName(addressWebsiteUpdate.getFullName());
             address1.setIsDeleted(addressWebsiteUpdate.getIsDefault());
+            address1.setIsDefault(addressWebsiteUpdate.getIsDefault());
             Address address2=addressService.save(address1);
 
             return ResponseEntity.ok().body(new IGenericResponse<Address>(address2, 200, "successfully"));
