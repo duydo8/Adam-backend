@@ -34,6 +34,8 @@ public class OrderWebsiteController {
     CartItemService cartItemService;
     @Autowired
     HistoryOrderRepository historyOrderRepository;
+    @Autowired
+    DetailProductService detailProductService;
 
     //    @GetMapping("findTop5OrderByCreateTime")
 //    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
@@ -68,6 +70,14 @@ public class OrderWebsiteController {
                 Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
                 if(cartItemsOptional.isPresent()){
                     cartItemsList.add(cartItemsOptional.get());
+                    DetailProduct detailProduct= cartItemsOptional.get().getDetailProduct();
+
+                    if(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity()<0){
+                        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not enough quantity "));
+                    }
+                    detailProduct.setQuantity(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity());
+                    detailProductService.save(detailProduct);
+                    cartItemService.deleteById(x);
                 }
             }
             order.setCartItems(cartItemsList);

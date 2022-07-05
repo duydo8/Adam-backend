@@ -44,8 +44,34 @@ public class OrderController {
         return ResponseEntity.ok().body(new IGenericResponse<Page<Order>>(page1, 200, "Page product"));
     }
 
+    @PutMapping("updateByIdAndStatus")
+    public ResponseEntity<?> update(@RequestParam("order_id") Integer orderId,
+                                    @RequestParam("status")Integer status) {
+        Optional<Order> orderOptional = orderService.findById(orderId);
+        if (orderOptional.isPresent()) {
+            orderOptional.get().setStatus(status);
+
+            HistoryOrder historyOrder= new HistoryOrder();
+
+
+            historyOrder.setOrder(orderOptional.get());
+            historyOrder.setDescription("update time");
+            historyOrder.setUpdateTime(LocalDateTime.now());
+            historyOrder.setIsActive(true);
+            historyOrder.setTotalPrice(orderOptional.get().getTotalPrice());
+            historyOrder.setStatus(6);
+            historyOrder=historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders= orderOptional.get().getHistoryOrders();
+            historyOrders.add(historyOrder);
+            orderOptional.get().setHistoryOrders(historyOrders);
+
+            return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(orderOptional.get()), 200, ""));
+        } else {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found event"));
+        }
+    }
     @PutMapping("update")
-    public ResponseEntity<?> updateEvent(@RequestBody Order order) {
+    public ResponseEntity<?> update(@RequestBody Order order) {
         Optional<Order> orderOptional = orderService.findById(order.getId());
         if (orderOptional.isPresent()) {
 

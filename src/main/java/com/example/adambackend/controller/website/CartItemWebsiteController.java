@@ -50,6 +50,14 @@ public class CartItemWebsiteController {
     public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {
         Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
         Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
+        if(cartItemWebsiteCreate.getQuantity()>=10){
+            return ResponseEntity.badRequest().body(
+                    new HandleExceptionDemo(400, "can't buy too much (<10)"));
+        }
+        if(detailProductOptional.get().getQuantity()<cartItemWebsiteCreate.getQuantity()){
+            return ResponseEntity.badRequest().body(
+                    new HandleExceptionDemo(400, "not enough quantity"));
+        }
         if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
             List<CartItems> cartItemsList= cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
             for (CartItems c: cartItemsList
