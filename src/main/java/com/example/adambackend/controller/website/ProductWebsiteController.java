@@ -75,7 +75,7 @@ public class ProductWebsiteController {
     }
 
     @PostMapping("findByOpionalArrayValue")
-    public ResponseEntity<?> findByColorSizePriceBrandAndMaterial(@RequestBody ProductWebstieFilterDTO productWebstieFilterDTO) {
+    public ResponseEntity<?> findByOpionalArrayValue(@RequestBody ProductWebstieFilterDTO productWebstieFilterDTO) {
         List<Integer> listCategoryId = productWebstieFilterDTO.getListCategoryId();
         List<Integer> listColorId = productWebstieFilterDTO.getListColorId();
         List<Integer> listSizeId = productWebstieFilterDTO.getListSizeId();
@@ -89,11 +89,10 @@ public class ProductWebsiteController {
         if(listColorId==null||listColorId.isEmpty() ||  listColorId.size()==0){
             listColorId=new ArrayList<>();
         }
-        if(listSizeId==null||listSizeId.isEmpty() ||  listSizeId.size()==0){
+        if(listSizeId==null){
             listSizeId=new ArrayList<>();
         }
-
-        if(listMaterialId==null||listMaterialId.isEmpty() ||  listMaterialId.size()==0){
+        if(listMaterialId==null||  listMaterialId.size()==0){
             listMaterialId=new ArrayList<>();
         }
         if(listTagId==null||listTagId.isEmpty() ||  listTagId.size()==0){

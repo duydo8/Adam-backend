@@ -56,8 +56,8 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public List<CustomProductFilterRequest> findPageableByOption(int categoryId, int sizeId, int colorId, int materialId, int tagId,
-                                                                 double bottomPrice, double topPrice, Pageable pageable) {
+    public List<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
+                                                                 Double bottomPrice, Double topPrice, Pageable pageable) {
         return productRepository.findPageableByOption(categoryId, sizeId,
                 colorId, materialId, tagId, bottomPrice, topPrice, pageable);
     }
