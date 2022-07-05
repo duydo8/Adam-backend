@@ -3,6 +3,7 @@ package com.example.adambackend.repository;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,7 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "or dp.color_id=?3 or ?3 is null or  m.id=?4  or ?4 is null \n" +
             "or t.id=?5  or ?5 is null or dp.price_export BETWEEN ?6  and ?7  " +
             "GROUP BY product_name,product_name,image,p.create_date,p.id order by p.id ", nativeQuery = true)
-    List<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
+    Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 
     @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id join tags t on t.id=tp.tag_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and  t.tag_name=?1 ", nativeQuery = true)

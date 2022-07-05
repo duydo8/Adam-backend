@@ -26,7 +26,7 @@ public interface ProductSevice {
     List<Product> findAllByTagName(String tagName);
 
 
-    List<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
+    Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 
     List<Product> findTop10ProductBestSale();

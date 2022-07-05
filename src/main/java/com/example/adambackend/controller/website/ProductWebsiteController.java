@@ -10,6 +10,7 @@ import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -107,7 +108,7 @@ public class ProductWebsiteController {
         Integer page = productWebstieFilterDTO.getPage();
         Integer size = productWebstieFilterDTO.getSize();
         Pageable pageable = PageRequest.of(page, size);
-        List<CustomProductFilterRequest> customProductFilterRequests = new ArrayList<>();
+        Page<CustomProductFilterRequest> customProductFilterRequests = null;
         //,Sort.by("createDate").descending()
         if (listCategoryId.size() > 0) {
             if (listColorId.size() > 0) {
