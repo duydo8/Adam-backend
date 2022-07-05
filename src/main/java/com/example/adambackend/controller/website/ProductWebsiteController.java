@@ -84,20 +84,20 @@ public class ProductWebsiteController {
         Double bottomPrice = productWebstieFilterDTO.getBottomPrice();
         Double topPrice = productWebstieFilterDTO.getTopPrice();
         if(listCategoryId==null||listCategoryId.isEmpty() ||  listCategoryId.size()==0){
-            listCategoryId=Arrays.asList(0);
+            listCategoryId=new ArrayList<>();
         }
         if(listColorId==null||listColorId.isEmpty() ||  listColorId.size()==0){
-            listCategoryId=Arrays.asList(0);
+            listColorId=new ArrayList<>();
         }
         if(listSizeId==null||listSizeId.isEmpty() ||  listSizeId.size()==0){
-            listCategoryId=Arrays.asList(0);
+            listSizeId=new ArrayList<>();
         }
 
         if(listMaterialId==null||listMaterialId.isEmpty() ||  listMaterialId.size()==0){
-            listCategoryId=Arrays.asList(0);
+            listMaterialId=new ArrayList<>();
         }
         if(listTagId==null||listTagId.isEmpty() ||  listTagId.size()==0){
-            listCategoryId=Arrays.asList(0);
+            listTagId=new ArrayList<>();
         }
         if(bottomPrice==null){
             bottomPrice=0.0;
