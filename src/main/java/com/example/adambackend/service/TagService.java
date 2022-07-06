@@ -17,5 +17,5 @@ public interface TagService {
 
     Optional<Tag> findByTagName(String tagName);
 
-    void deleteByProductId(Integer productId);
+
 }
