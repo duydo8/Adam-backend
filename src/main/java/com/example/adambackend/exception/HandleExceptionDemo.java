@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HandleExceptionDemo {
-    private int code;
+    private int status;
     private String message;
 }
