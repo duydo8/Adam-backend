@@ -230,7 +230,7 @@ public class OrderController {
 
         dashboard2.setLabels(thang);
         Dashboard dashboard3= new Dashboard();
-        dashboard2.setName("Đơn Đổi Trả");
+        dashboard3.setName("Đơn Đổi Trả");
 
         List<Double> doubleList3=Arrays.asList(orderService.sumPaybackOrderByTime(1),
         orderService.sumPaybackOrderByTime(2),
@@ -238,9 +238,9 @@ public class OrderController {
         orderService.sumPaybackOrderByTime(4),
         orderService.sumPaybackOrderByTime(5),
         orderService.sumPaybackOrderByTime(6));
-        dashboard2.setData(doubleList3);
+        dashboard3.setData(doubleList3);
 
-        dashboard2.setLabels(thang);
+        dashboard3.setLabels(thang);
         dashboardList.add(dashboard);
         dashboardList.add(dashboard1);
         dashboardList.add(dashboard2);
