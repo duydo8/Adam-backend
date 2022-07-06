@@ -1,5 +1,7 @@
 package com.example.adambackend.payload.product;
 
+import java.time.LocalDateTime;
+
 public interface CustomProductFilterRequest {
     Integer getId();
 
@@ -11,7 +13,7 @@ public interface CustomProductFilterRequest {
 
     String getProductImage();
 
-    String getCreateDate();
+    LocalDateTime getCreateDate();
 
 
 }

@@ -21,29 +21,25 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findTop10productByCreateDate();
 
 
-    @Query(value = "select p.id as id, p.product_name as productName,p.image as productImage, p.create_date as createDate,Min(price_export) as " +
-            " priceBottom, Max(price_export)as priceTop " +
-            "            from products p " +
-            "            join categories ca on p.category_id=ca.id " +
-            "            join detail_products dp on p.id=dp.product_id " +
-            "            join sizes s on dp.size_id=s.id " +
-            "            join tag_products tp on tp.product_id=p.id " +
-            "            join tags t on t.id=tp.tag_id " +
-            "            join material_products mp on mp.product_id=p.id " +
-            "            join materials m on m.id=mp.material_id  " +
-            "            join colors co on co.id=dp.color_id " +
+    @Query(value = "select pro.id as id, pro.productName as productName,pro.image as productImage, " +
+            " pro.createDate as createDate,min(dp.priceExport) as " +
+            " priceBottom, max (dp.priceExport)as priceTop " +
+            "            from Product pro " +
+            "            join Category ca on pro.category.id=ca.id " +
+            "            join DetailProduct dp on pro.id=dp.product.id " +
+            "            join Size s on dp.size.id=s.id " +
+            "            join TagProduct tp on tp.product.id=pro.id " +
+            "            join Tag t on t.id=tp.tag.id " +
+            "            join MaterialProduct mp on mp.product.id=pro.id " +
+            "            join Material m on m.id=mp.material.id  " +
+            "            join Color co on co.id=dp.color.id " +
             "" +
             "where" +
-//            " ca.is_active=1 and dp.is_active=1 and p.is_active=1 and p.is_completed=1 " +
-//            "and s.is_active=1 and tp.is_active=1 and t.is_active=1 " +
-//            "and mp.is_active=1 and m.is_active=1 and co.is_active=1 " +
-//            "and ca.is_deleted=0 and dp.is_deleted=0 and p.is_deleted=0 " +
-//            "and s.is_deleted=0 and tp.is_deleted=0 and t.is_deleted=0 " +
-//            "and mp.is_deleted=0 and m.is_deleted=0 and co.is_deleted=0 and " +
-            " ca.id=?1  or ?1 is null or dp.size_id=?2  or ?2 is null \n" +
-            "or dp.color_id=?3 or ?3 is null or  m.id=?4  or ?4 is null \n" +
-            "or t.id=?5  or ?5 is null or dp.price_export BETWEEN ?6  and ?7  " +
-            "GROUP BY product_name,product_name,image,p.create_date,p.id order by p.id ", nativeQuery = true)
+
+            " ca.id=?1  or ?1 is null or dp.size.id=?2  or ?2 is null \n" +
+            "or dp.color.id=?3 or ?3 is null or  m.id=?4  or ?4 is null \n" +
+            "or t.id=?5  or ?5 is null or dp.priceExport BETWEEN ?6  and ?7  " +
+            "GROUP BY pro.productName,pro.image,pro.createDate,pro.id order by pro.id ")
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 
