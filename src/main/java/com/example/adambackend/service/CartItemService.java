@@ -16,4 +16,6 @@ public interface CartItemService {
     List<CartItems> findAll();
 
     List<CartItems> findByAccountId(Integer accountId);
+
+    void updateIsActive(Integer id);
 }

@@ -59,7 +59,8 @@ public class OrderWebsiteController {
         order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
         order.setTotalPrice(orderWebsiteCreate.getTotalPrice());
         order.setSalePrice(orderWebsiteCreate.getSalePrice());
-        order.setAmountPrice(orderWebsiteCreate.getAmountPrice());
+        Double ammountPrice=0.0;
+
         order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
 
             List<CartItems> cartItemsList= new ArrayList<>();
@@ -75,11 +76,14 @@ public class OrderWebsiteController {
                     if(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity()<0){
                         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not enough quantity "));
                     }
+
+                    ammountPrice+=cartItemsOptional.get().getTotalPrice();
                     detailProduct.setQuantity(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity());
                     detailProductService.save(detailProduct);
-                    cartItemService.deleteById(x);
+                    cartItemService.updateIsActive(x);
                 }
             }
+            order.setAmountPrice(ammountPrice);
             order.setCartItems(cartItemsList);
             List<Order> orders= orderService.findAll();
                 String code=RandomString.make(64);

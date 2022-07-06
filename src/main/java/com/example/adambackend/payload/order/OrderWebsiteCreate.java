@@ -21,7 +21,7 @@ public class OrderWebsiteCreate {
 
     private String fullName;
     private String phoneNumber;
-    private Double amountPrice;
+
     private Double salePrice;
     private Double totalPrice;
     private String addressDetail;

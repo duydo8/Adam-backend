@@ -38,4 +38,8 @@ public class CartItemServiceImpl implements CartItemService {
     public List<CartItems> findByAccountId(Integer accountId){
         return cartItemRepository.findCartItemsByAccountId(accountId);
     }
+    @Override
+    public void updateIsActive(Integer id){
+          cartItemRepository.updateIsActive(id);
+    }
 }
