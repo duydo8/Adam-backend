@@ -14,5 +14,5 @@ public interface MaterialService {
 
     Optional<Material> findById(Integer id);
 
-    void deleteByProductId(Integer productId);
+
 }
