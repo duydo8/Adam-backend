@@ -5,6 +5,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryDTO;
 import com.example.adambackend.payload.category.CategoryResponse;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.CategoryRepository;
 import com.example.adambackend.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @RequestMapping("admin/category")
 public class CategoryController {
     @Autowired
-    CategoryService categoryService;
+    CategoryRepository categoryService;
     @Autowired
     ModelMapper modelMapper;
 

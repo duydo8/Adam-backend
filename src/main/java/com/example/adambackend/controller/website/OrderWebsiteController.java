@@ -55,7 +55,8 @@ public class OrderWebsiteController {
         order.setAddress(address.get());
         order.setFullName(orderWebsiteCreate.getFullName());
         order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-        order.setTotalPrice(orderWebsiteCreate.getTotalPrice());
+
+
         order.setSalePrice(orderWebsiteCreate.getSalePrice());
         Double ammountPrice=0.0;
 
@@ -89,7 +90,7 @@ public class OrderWebsiteController {
             }
             order.setAmountPrice(ammountPrice);
             order.setCartItems(cartItemsList);
-
+            Double totalPrice=ammountPrice- orderWebsiteCreate.getSalePrice();
             List<Order> orders= orderService.findAll();
                 String code=RandomString.make(64);
                 for (int i=0;i<orders.size();i++) {
@@ -106,7 +107,7 @@ public class OrderWebsiteController {
             historyOrder.setDescription("create time");
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
-            historyOrder.setTotalPrice(orderWebsiteCreate.getTotalPrice());
+            historyOrder.setTotalPrice(ammountPrice- orderWebsiteCreate.getSalePrice());
             historyOrder.setStatus(1);
             historyOrder=historyOrderRepository.save(historyOrder);
             List<HistoryOrder> historyOrders= new ArrayList<>();
@@ -159,6 +160,7 @@ public class OrderWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
 
 
 

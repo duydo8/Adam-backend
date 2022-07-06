@@ -23,7 +23,7 @@ public class OrderWebsiteCreate {
     private String phoneNumber;
 
     private Double salePrice;
-    private Double totalPrice;
+
     private String addressDetail;
     private Integer addressId;
     private Integer accountId;

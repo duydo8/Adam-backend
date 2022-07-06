@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Order;
+import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,16 @@ List<Order> findOrderByAccountId(Integer accountId , Integer status);
     Double sumPaybackOrderByTime(Integer month);
     @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=0",nativeQuery = true)
     Double sumCancelOrderByTime(Integer month);
-
-
+    @Query(value = "select o.id from orders o join detail_orders dos on o.id=dos.order_id \n" +
+            "join detail_products dp on dp.id=dos.detail_product_id \n" +
+            "join products p on dp.product_id=p.id where o.account_id=?1 order by o.create_date desc limit 1",nativeQuery = true)
+    Integer findCurrentOrderId(Integer accountId);
+    @Query(value = "select p.id as id,p.product_name as productName,p.image as productImage,p.create_date  " +
+            "as createDate, MAX(dp.price_export) as maxPrice, MIN(dp.price_export) as minPrice from orders o \n" +
+            "join detail_orders dos on o.id=dos.order_id \n" +
+            "join detail_products dp on dp.id=dos.detail_product_id \n" +
+            "join products p on dp.product_id=p.id\n" +
+            "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date",nativeQuery = true)
+    List<CustomProductFilterRequest> findByOrderId(Integer orderId);
 }
 

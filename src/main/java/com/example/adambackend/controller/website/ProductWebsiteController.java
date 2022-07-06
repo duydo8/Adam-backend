@@ -6,6 +6,7 @@ import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.product.ProductWebsiteDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class ProductWebsiteController {
     ColorService colorService;
     @Autowired
     SizeService sizeService;
+    @Autowired
+    OrderRepository orderRepository;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -602,4 +605,14 @@ public class ProductWebsiteController {
 
     }
 
+    @GetMapping("findProductsByCurrentOrderOfAccountId")
+    public ResponseEntity<?> findProductsByCurrentOrder(@RequestParam("account_id")Integer accountId){
+        Integer orderId= orderRepository.findCurrentOrderId(accountId);
+        if(orderId!=null){
+            List<CustomProductFilterRequest> productWebstieFilterDTOS=
+                    orderRepository.findByOrderId(orderId);
+            return ResponseEntity.ok().body(new IGenericResponse<>(productWebstieFilterDTOS,200,""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"no order found"));
+    }
 }

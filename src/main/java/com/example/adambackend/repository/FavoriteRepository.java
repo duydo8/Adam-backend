@@ -15,7 +15,10 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
     @Query("select count(fa) from Favorite fa join Account a on fa.account.id= a.id join Product  p on fa.product.id= p.id where a.id=?1 and p.id=?2")
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
-    @Query("select p from Favorite  fa join Product p on fa.product.id=p.id join Account a on a.id=fa.account.id where a.id=?1")
+    @Query(value = "select p.id,p.product_name,p.image,MAX(dp.price_export) as maxPrice,MIN(dp.price_import) as minPrice from favorites  fa join products p on fa.product_id=p.id \n" +
+            "join detail_products dp on dp.product_id=p.id\n" +
+            "join accounts a on a.id=fa.account_id where p.is_active=1 and p.is_deleted=0  and a.id=?1" +
+            "GROUP BY p.id,p.product_name,p.image ",nativeQuery = true)
     List<Product> findProductFavoriteByAccountId(Integer accountId);
 
     @Query(value = "select top(10) p from products p join favorites fa on p.id=fa.product_id group by p.id,fa.product_id orderby count(fa) desc ", nativeQuery = true)

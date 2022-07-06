@@ -31,7 +31,7 @@ public class ColorController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAll(), 200, ""));
+        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAlls(), 200, ""));
     }
 
 

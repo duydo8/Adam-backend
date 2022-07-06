@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -173,7 +174,8 @@ public class DetailProductController {
     @PutMapping("updateListDetailProductAfterCreate")
     public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse) {
         List<NewDetailProductDTO> newDetailProductDTOList = customDetailProductResponse.getNewDetailProductDTOList();
-        List<NewDetailProductDTO> newDetailProductDTOList1 = new ArrayList<>();
+
+        List<DetailProduct>detailProducts=new ArrayList<>();
         if (newDetailProductDTOList.size() > 0) {
             for (NewDetailProductDTO n : newDetailProductDTOList
             ) {
@@ -189,13 +191,15 @@ public class DetailProductController {
                     DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
                     Product p = productSevice.findByDetailProductId(detailProduct.get().getId());
                     p.setIsComplete(true);
-                    NewDetailProductDTO newDetailProductDTO = new NewDetailProductDTO();
-                    newDetailProductDTO = modelMapper.map(detailProduct1, NewDetailProductDTO.class);
-                    newDetailProductDTOList1.add(newDetailProductDTO);
+                    productSevice.save(p);
+                    detailProducts.add(detailProduct1);
+
                 }
 
             }
-            return ResponseEntity.ok().body(new IGenericResponse<>(newDetailProductDTOList1, 200, ""));
+            List<NewDetailProductDTO>  newDetailProductDTOList1=detailProducts.stream().map(e->new NewDetailProductDTO(e.getId(),e.getPriceImport(),
+                    e.getPriceExport(),e.getProductImage(),e.getQuantity(),e.getIsActive())).collect(Collectors.toList());
+            return ResponseEntity.ok().body(new IGenericResponse<>(detailProducts, 200, ""));
 
 
         }
