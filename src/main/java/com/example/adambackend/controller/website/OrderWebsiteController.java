@@ -1,7 +1,6 @@
 package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.*;
-import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,10 +64,15 @@ public class OrderWebsiteController {
             List<CartItems> cartItemsList= new ArrayList<>();
 
 
+
+
+
+//
             for (Integer x: orderWebsiteCreate.getCartItemIdList()
                  ) {
                 Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
                 if(cartItemsOptional.isPresent()){
+
                     cartItemsList.add(cartItemsOptional.get());
                     DetailProduct detailProduct= cartItemsOptional.get().getDetailProduct();
 
@@ -81,10 +84,12 @@ public class OrderWebsiteController {
                     detailProduct.setQuantity(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity());
                     detailProductService.save(detailProduct);
                     cartItemService.updateIsActive(x);
+
                 }
             }
             order.setAmountPrice(ammountPrice);
             order.setCartItems(cartItemsList);
+
             List<Order> orders= orderService.findAll();
                 String code=RandomString.make(64);
                 for (int i=0;i<orders.size();i++) {
@@ -107,9 +112,17 @@ public class OrderWebsiteController {
             List<HistoryOrder> historyOrders= new ArrayList<>();
             historyOrders.add(historyOrder);
             order.setHistoryOrders(historyOrders);
+            order= orderService.save(order);
+            for (Integer x: orderWebsiteCreate.getCartItemIdList()
+            ) {
+                Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
+                if(cartItemsOptional.isPresent()){
+                    cartItemsOptional.get().setOrder(order);
+                    cartItemService.save(cartItemsOptional.get());
+                }
+            }
 
-
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
     }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
 
