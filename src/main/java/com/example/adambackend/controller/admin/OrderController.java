@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,34 +137,34 @@ public class OrderController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
-    @GetMapping("countAllOrder")
-    public ResponseEntity<?> countAllOrder(@RequestParam("start_date") String startDate,
-                                           @RequestParam("end_date")String endDate){
-        startDate=startDate.replace(" ","T");
-        endDate=endDate.replace(" ","T");
-        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countAllOrderByTime(dateStart,dateEnd),200,""));
-    }
-    @GetMapping("countCancelOrder")
-    public ResponseEntity<?> countCancelOrder(@RequestParam("start_date") String startDate,
-                                           @RequestParam("end_date")String endDate){
-        startDate=startDate.replace(" ","T");
-        endDate=endDate.replace(" ","T");
-        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countCancelOrderByTime(dateStart,dateEnd),200,""));
-    }
-
-    @GetMapping("countSuccessOrder")
-    public ResponseEntity<?> countSuccessOrder(@RequestParam("start_date") String startDate,
-                                           @RequestParam("end_date")String endDate){
-        startDate=startDate.replace(" ","T");
-        endDate=endDate.replace(" ","T");
-        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countsuccessOrderByTime(dateStart,dateEnd),200,""));
-    }
+//    @GetMapping("countAllOrder")
+//    public ResponseEntity<?> countAllOrder(@RequestParam("start_date") String startDate,
+//                                           @RequestParam("end_date")String endDate){
+//        startDate=startDate.replace(" ","T");
+//        endDate=endDate.replace(" ","T");
+//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countAllOrderByTime(dateStart,dateEnd),200,""));
+//    }
+//    @GetMapping("countCancelOrder")
+//    public ResponseEntity<?> countCancelOrder(@RequestParam("start_date") String startDate,
+//                                           @RequestParam("end_date")String endDate){
+//        startDate=startDate.replace(" ","T");
+//        endDate=endDate.replace(" ","T");
+//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countCancelOrderByTime(dateStart,dateEnd),200,""));
+//    }
+//
+//    @GetMapping("countSuccessOrder")
+//    public ResponseEntity<?> countSuccessOrder(@RequestParam("start_date") String startDate,
+//                                           @RequestParam("end_date")String endDate){
+//        startDate=startDate.replace(" ","T");
+//        endDate=endDate.replace(" ","T");
+//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
+//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
+//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countsuccessOrderByTime(dateStart,dateEnd),200,""));
+//    }
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
         Optional<Order> optionalOrder = orderService.findById(orderId);
@@ -175,8 +176,9 @@ public class OrderController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
     }
-    @GetMapping("sumTotalPriceByTime")
+    @GetMapping("orderSatistic")
     public ResponseEntity<?> sumTotalPriceByTime(){
+        List<Dashboard> dashboardList= new ArrayList<>();
         Dashboard dashboard= new Dashboard();
         dashboard.setName("Tổng đơn hàng");
          Double thang1=orderService.sumTotalPriceByTime(1);
@@ -203,97 +205,48 @@ public class OrderController {
         thang.add("June");
         thang.add("July");
         dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-    }
-    @GetMapping("sumSuccessOrderByTime")
-    public ResponseEntity<?> sumSuccessOrderByTime(){
-        Dashboard dashboard= new Dashboard();
-        dashboard.setName("Đơn thành công");
-        Double thang1=orderService.sumSuccessOrderByTime(1);
-        Double thang2=orderService.sumSuccessOrderByTime(2);
-        Double thang3=orderService.sumSuccessOrderByTime(3);
-        Double thang4=orderService.sumSuccessOrderByTime(4);
-        Double thang5=orderService.sumSuccessOrderByTime(5);
-        Double thang6=orderService.sumSuccessOrderByTime(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
-        dashboard.setData(doubleList);
-        List<String> thang= new ArrayList<>();
+        Dashboard dashboard1= new Dashboard();
+        dashboard1.setName("Đơn thành công");
 
-        thang.add("January");
-        thang.add("February");
-        thang.add("March");
-        thang.add("April");
-        thang.add("May");
-        thang.add("June");
-        thang.add("July");
-        dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-    }
-    @GetMapping("sumCancelOrderByTime")
-    public ResponseEntity<?> sumCancelOrderByTime(){
-        Dashboard dashboard= new Dashboard();
-        dashboard.setName("Đơn hủy");
-        Double thang1=orderService.sumCancelOrderByTime(1);
-        Double thang2=orderService.sumCancelOrderByTime(2);
-        Double thang3=orderService.sumCancelOrderByTime(3);
-        Double thang4=orderService.sumCancelOrderByTime(4);
-        Double thang5=orderService.sumCancelOrderByTime(5);
-        Double thang6=orderService.sumCancelOrderByTime(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
-        dashboard.setData(doubleList);
-        List<String> thang= new ArrayList<>();
 
-        thang.add("January");
-        thang.add("February");
-        thang.add("March");
-        thang.add("April");
-        thang.add("May");
-        thang.add("June");
-        thang.add("July");
-        dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-    }
-    @GetMapping("sumPaybackOrderByTime")
-    public ResponseEntity<?> sumPaybackOrderByTime(){
-        Dashboard dashboard= new Dashboard();
-        dashboard.setName("Đơn hủy");
-        Double thang1=orderService.sumPaybackOrderByTime(1);
-        Double thang2=orderService.sumPaybackOrderByTime(2);
-        Double thang3=orderService.sumPaybackOrderByTime(3);
-        Double thang4=orderService.sumPaybackOrderByTime(4);
-        Double thang5=orderService.sumPaybackOrderByTime(5);
-        Double thang6=orderService.sumPaybackOrderByTime(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
-        dashboard.setData(doubleList);
-        List<String> thang= new ArrayList<>();
+        List<Double> doubleList1= Arrays.asList(orderService.sumSuccessOrderByTime(1),
+                orderService.sumSuccessOrderByTime(2),
+                orderService.sumSuccessOrderByTime(3),
+                orderService.sumSuccessOrderByTime(4),
+                orderService.sumSuccessOrderByTime(5),
+                orderService.sumSuccessOrderByTime(6));
+        dashboard1.setData(doubleList1);
+        dashboard1.setLabels(thang);
+        Dashboard dashboard2= new Dashboard();
+        dashboard2.setName("Đơn Hủy");
 
-        thang.add("January");
-        thang.add("February");
-        thang.add("March");
-        thang.add("April");
-        thang.add("May");
-        thang.add("June");
-        thang.add("July");
-        dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
+        List<Double> doubleList2=Arrays.asList(orderService.sumCancelOrderByTime(1),
+        orderService.sumCancelOrderByTime(2),
+        orderService.sumCancelOrderByTime(3),
+        orderService.sumCancelOrderByTime(4),
+        orderService.sumCancelOrderByTime(5),
+        orderService.sumCancelOrderByTime(6));
+        dashboard2.setData(doubleList2);
+
+        dashboard2.setLabels(thang);
+        Dashboard dashboard3= new Dashboard();
+        dashboard2.setName("Đơn Đổi Trả");
+
+        List<Double> doubleList3=Arrays.asList(orderService.sumPaybackOrderByTime(1),
+        orderService.sumPaybackOrderByTime(2),
+        orderService.sumPaybackOrderByTime(3),
+        orderService.sumPaybackOrderByTime(4),
+        orderService.sumPaybackOrderByTime(5),
+        orderService.sumPaybackOrderByTime(6));
+        dashboard2.setData(doubleList3);
+
+        dashboard2.setLabels(thang);
+        dashboardList.add(dashboard);
+        dashboardList.add(dashboard1);
+        dashboardList.add(dashboard2);
+        dashboardList.add(dashboard3);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList,200,""));
     }
+
 
 }
