@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -23,7 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(value = "select pro.id as id, pro.productName as productName,pro.image as productImage, " +
             " pro.createDate as createDate,min(dp.priceExport) as " +
-            " priceBottom, max (dp.priceExport)as priceTop " +
+            " minPrice, max (dp.priceExport)as maxPrice " +
             "            from Product pro " +
             "            join Category ca on pro.category.id=ca.id " +
             "            join DetailProduct dp on pro.id=dp.product.id " +
@@ -59,4 +61,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1", nativeQuery = true)
     ProductHandleValue findOptionByProductId(int productId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update products set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    void updateProductsDeleted(Integer id);
 }

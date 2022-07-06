@@ -2,9 +2,11 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -14,4 +16,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     List<Category> findAllCategoryParentId();
 
     List<Category> findByCategoryParentId(int parentId);
+    @Modifying
+    @Transactional
+    @Query(value = "update categories set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    void updateCategoriesDeleted(Integer id);
 }

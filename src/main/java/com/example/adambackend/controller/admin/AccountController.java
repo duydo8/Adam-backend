@@ -5,6 +5,7 @@ import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.account.AccountAdminDTO;
+import com.example.adambackend.payload.account.AccountArrayId;
 import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.request.SignUpRequest;
@@ -192,69 +193,57 @@ public class AccountController {
 
     }
 //    @DeleteMapping("deleteListId")
-@GetMapping("countTotalAccountInOrder")
+@GetMapping("accountSatistic")
     public ResponseEntity<?> countTotalAccountInOrder(){
     Dashboard dashboard= new Dashboard();
     dashboard.setName("Tổng số người dùng mua hàng");
-    Double thang1=accountService.countTotalAccountInOrder(1);
-    Double thang2=accountService.countTotalAccountInOrder(2);
-    Double thang3=accountService.countTotalAccountInOrder(3);
-    Double thang4=accountService.countTotalAccountInOrder(4);
-    Double thang5=accountService.countTotalAccountInOrder(5);
-    Double thang6=accountService.countTotalAccountInOrder(6);
-    List<Double> doubleList= new ArrayList<>();
-    doubleList.add(thang1);
-    doubleList.add(thang2);
-    doubleList.add(thang3);
-    doubleList.add(thang4);
-    doubleList.add(thang5);
-    doubleList.add(thang6);
+
+    List<Double> doubleList= Arrays.asList(accountService.countTotalAccountInOrder(1),
+   accountService.countTotalAccountInOrder(2),
+    accountService.countTotalAccountInOrder(3),
+   accountService.countTotalAccountInOrder(4),
+   accountService.countTotalAccountInOrder(5),
+    accountService.countTotalAccountInOrder(6));
+
     dashboard.setData(doubleList);
     dashboard.setLabels(thang);
-    return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-}
-    @GetMapping("countTotalAccount")
-    public ResponseEntity<?> countTotalAccount(){
-        Dashboard dashboard= new Dashboard();
-        dashboard.setName("Tổng người dùng");
-        Double thang1=accountService.countTotalAccount(1);
-        Double thang2=accountService.countTotalAccount(2);
-        Double thang3=accountService.countTotalAccount(3);
-        Double thang4=accountService.countTotalAccount(4);
-        Double thang5=accountService.countTotalAccount(5);
-        Double thang6=accountService.countTotalAccount(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
-        dashboard.setData(doubleList);
-        dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-    }
-    @GetMapping("countTotalSignUpAccount")
-    public ResponseEntity<?> countTotalSignUpAccount(){
-        Dashboard dashboard= new Dashboard();
-        dashboard.setName("Tổng số người đăng ký mỡi");
-        Double thang1=accountService.countTotalSignUpAccount(1);
-        Double thang2=accountService.countTotalSignUpAccount(2);
-        Double thang3=accountService.countTotalSignUpAccount(3);
-        Double thang4=accountService.countTotalSignUpAccount(4);
-        Double thang5=accountService.countTotalSignUpAccount(5);
-        Double thang6=accountService.countTotalSignUpAccount(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
-        dashboard.setData(doubleList);
-        dashboard.setLabels(thang);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboard,200,""));
-    }
+    Dashboard dashboard1= new Dashboard();
+    dashboard1.setName("Tổng số người dùng ");
 
+    List<Double> doubleList1= Arrays.asList(accountService.countTotalAccount(1),
+            accountService.countTotalAccount(2),
+            accountService.countTotalAccount(3),
+            accountService.countTotalAccount(4),
+            accountService.countTotalAccount(5),
+            accountService.countTotalAccount(6));
+
+    dashboard1.setData(doubleList1);
+    dashboard1.setLabels(thang);
+    Dashboard dashboard2= new Dashboard();
+    dashboard2.setName("Tổng số người đăng ký mới");
+
+    List<Double> doubleList2= Arrays.asList(accountService.countTotalSignUpAccount(1),
+            accountService.countTotalSignUpAccount(2),
+            accountService.countTotalSignUpAccount(3),
+            accountService.countTotalSignUpAccount(4),
+            accountService.countTotalSignUpAccount(5),
+            accountService.countTotalSignUpAccount(6));
+
+    dashboard2.setData(doubleList2);
+    dashboard2.setLabels(thang);
+List<Dashboard> dashboardList= Arrays.asList(dashboard,dashboard1,dashboard2);
+    return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList,200,""));
+}
+@PutMapping("deleteByArrayId")
+    public ResponseEntity<?> deleteByArrayId(@RequestBody AccountArrayId accountArrayId){
+        List<Integer> accountIdList=accountArrayId.getAccountIdList();
+    for (Integer x: accountIdList
+         ) {
+        if(accountService.findById(x).isPresent()) {
+            accountService.updateAccountDeleted(x);
+        }
+    }
+    return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
+}
 
 }

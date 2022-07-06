@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 public interface CustomProductFilterRequest {
     Integer getId();
 
-    Double getPriceBottom();
+    Double getMinPrice();
 
-    Double getPriceTop();
+    Double getMaxPrice();
 
     String getProductName();
 

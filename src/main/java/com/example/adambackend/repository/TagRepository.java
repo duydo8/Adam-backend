@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,8 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "delete from tag_products where product_id=?1", nativeQuery = true)
-    void deleteByProductId(Integer productId);
+    @Query(value = "update tags set is_active=0 and is_deleted=1 where id=?1", nativeQuery = true)
+    void updateDeletedTagId(Integer productId);
+    @Query(value = "select * from tags where is_active=1 and is_delete=0",nativeQuery = true)
+    List<Tag> findAlls();
 }

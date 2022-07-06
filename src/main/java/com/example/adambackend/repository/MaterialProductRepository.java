@@ -18,4 +18,8 @@ public interface MaterialProductRepository extends JpaRepository<MaterialProduct
     Integer deleteByMateralId(Integer materialId);
     @Query(value = "select material_id from material_products where product_id=?1",nativeQuery = true)
     List<Integer> findMaterialIdByProductId(Integer productId);
+    @Modifying
+    @Transactional
+    @Query(value = "update material_products set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    void updateMaterialProductsDeleted(Integer id);
 }

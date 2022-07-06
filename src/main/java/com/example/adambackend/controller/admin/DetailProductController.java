@@ -12,6 +12,7 @@ import com.example.adambackend.payload.detailProduct.NewDetailProductDTO;
 import com.example.adambackend.payload.detailProduct.DetailProductUpdateAdmin;
 import com.example.adambackend.payload.request.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.ColorService;
 import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.ProductSevice;
@@ -31,7 +32,7 @@ import java.util.Optional;
 @RequestMapping("admin/detailProduct")
 public class DetailProductController {
     @Autowired
-    DetailProductService detailProductService;
+    DetailProductRepository detailProductService;
     @Autowired
     ProductSevice productSevice;
     @Autowired
@@ -212,7 +213,7 @@ public class DetailProductController {
                 Optional<DetailProduct> detailProductOptional = detailProductService.findById(x);
 
                 if (detailProductOptional.isPresent()) {
-                    detailProductService.deleteById(x);
+                    detailProductService.updateDetailProductsDeleted(x);
 
                 }
             }

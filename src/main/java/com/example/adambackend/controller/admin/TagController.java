@@ -6,6 +6,7 @@ import com.example.adambackend.payload.tag.ListTagIdDTO;
 import com.example.adambackend.payload.tag.TagDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.TagProductRepository;
+import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @RequestMapping("admin/tag")
 public class TagController {
     @Autowired
-    TagService tagService;
+    TagRepository tagService;
     @Autowired
     ProductSevice productSevice;
     @Autowired
@@ -29,7 +30,7 @@ public class TagController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAlls(), 200, ""));
     }
 
     @PostMapping("create")
@@ -78,8 +79,8 @@ public class TagController {
             ) {
                 Optional<Tag> tagOptional = tagService.findById(x);
                 if (tagOptional.isPresent()) {
-
-                    tagService.deleteById(x);
+        tagProductRepository.updateDeletedTagId(x);
+                    tagService.updateDeletedTagId(x);
 
                 }
             }

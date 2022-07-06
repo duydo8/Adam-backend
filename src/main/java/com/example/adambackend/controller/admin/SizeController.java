@@ -6,6 +6,7 @@ import com.example.adambackend.payload.size.ListSizeIdDTO;
 import com.example.adambackend.payload.size.SizeDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DetailProductRepository;
+import com.example.adambackend.repository.SizeRepository;
 import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("admin/size")
 public class SizeController {
     @Autowired
-    SizeService sizeService;
+    SizeRepository sizeService;
     @Autowired
     DetailProductRepository detailProductRepository;
 
@@ -73,8 +74,8 @@ public class SizeController {
                 Optional<Size> sizeOptional = sizeService.findById(x);
 
                 if (sizeOptional.isPresent()) {
-                    detailProductRepository.deleteBySizeId(x);
-                    sizeService.deleteById(x);
+
+                    sizeService.updateProductsDeleted(x);
                 }
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));

@@ -39,4 +39,6 @@ public interface AccountService {
     Double countTotalSignUpAccount(Integer month);
 
     Double countTotalAccountInOrder(Integer month);
+
+    void updateAccountDeleted(Integer id);
 }

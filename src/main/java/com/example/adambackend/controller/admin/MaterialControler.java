@@ -6,6 +6,7 @@ import com.example.adambackend.payload.material.ListMaterialIdDTO;
 import com.example.adambackend.payload.material.MaterialDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
+import com.example.adambackend.repository.MaterialRepository;
 import com.example.adambackend.service.MaterialService;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @RequestMapping("admin/material")
 public class MaterialControler {
     @Autowired
-    MaterialService materialService;
+    MaterialRepository materialService;
     @Autowired
     ProductSevice productSevice;
     @Autowired
@@ -78,8 +79,8 @@ public class MaterialControler {
             ) {
                 Optional<Material> materialOptional = materialService.findById(x);
                 if (materialOptional.isPresent()) {
-
-                    materialService.deleteById(x);
+materialProductRepository.updateMaterialProductsDeleted(x);
+                    materialService.updateDeleteByArrayId(x);
 
                 }
             }

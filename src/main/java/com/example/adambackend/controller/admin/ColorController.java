@@ -6,6 +6,7 @@ import com.example.adambackend.payload.color.ColorAdminDTO;
 import com.example.adambackend.payload.color.ColorDTO;
 import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.ColorRepository;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.ColorService;
 import org.modelmapper.ModelMapper;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @RequestMapping("admin/color")
 public class ColorController {
     @Autowired
-    ColorService colorService;
+    ColorRepository colorService;
     @Autowired
     DetailProductRepository detailProductRepository;
     @Autowired
@@ -80,7 +81,7 @@ public class ColorController {
 
                 if (colorOptional.isPresent()) {
 
-                    colorService.deleteById(x);
+                    colorService.updateColorsDeleted(x);
 
                 }
             }

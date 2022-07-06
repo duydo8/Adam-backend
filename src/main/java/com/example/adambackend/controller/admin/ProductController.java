@@ -10,11 +10,13 @@ import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
+import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ import java.util.Optional;
 @RequestMapping("admin/product")
 public class ProductController {
     @Autowired
-    ProductSevice productSevice;
+    ProductRepository productSevice;
     @Autowired
     MaterialService materialService;
     @Autowired
@@ -55,7 +57,7 @@ public class ProductController {
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Page<Product> page1 = productSevice.findPage(page, size);
+        Page<Product> page1 = productSevice.findAll(PageRequest.of(page,size));
 
 
         return ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1, 200, "Page product"));
@@ -373,13 +375,7 @@ return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
                 Optional<Product> productOptional = productSevice.findById(x);
 
                 if (productOptional.isPresent()) {
-                    favoriteService.deleteByProductId(x);
-                    commentService.deleteByProductId(x);
-                    materialService.deleteByProductId(x);
-                    materialService.deleteByProductId(x);
-                    tagService.deleteByProductId(x);
-                    detailProductService.deleteByProductId(x);
-                    productSevice.deleteById(x);
+                    productSevice.updateProductsDeleted(x);
                 }
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));

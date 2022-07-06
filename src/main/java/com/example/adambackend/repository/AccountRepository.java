@@ -3,9 +3,11 @@ package com.example.adambackend.repository;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.payload.account.AccountResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +39,9 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Double countTotalSignUpAccount(Integer month);
     @Query(value = "select count(a.id) from accounts a where a.id in (select account_id from orders) and month(create_date)=?1 and year(create_date)=2022 ",nativeQuery = true)
     Double countTotalAccountInOrder(Integer month);
+    @Modifying
+    @Transactional
+    @Query(value = "update accounts set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    void updateAccountDeleted(Integer id);
 
 }

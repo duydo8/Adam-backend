@@ -132,5 +132,8 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.countTotalAccountInOrder(month);
     }
 
-
+    @Override
+    public void updateAccountDeleted(Integer id){
+        accountRepository.updateAccountDeleted(id);
+    }
 }
