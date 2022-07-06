@@ -35,7 +35,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "            join MaterialProduct mp on mp.product.id=pro.id " +
             "            join Material m on m.id=mp.material.id  " +
             "            join Color co on co.id=dp.color.id " +
-            "" +
             "where" +
 
             " ca.id=?1  or ?1 is null or dp.size.id=?2  or ?2 is null \n" +
@@ -45,7 +44,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 
-    @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id join tags t on t.id=tp.tag_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and  t.tag_name=?1 ", nativeQuery = true)
+    @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id " +
+            "join tags t on t.id=tp.tag_id where p.is_completed=1 " +
+            "and p.is_active=1 and p.is_deleted=0 and  t.tag_name=?1 ", nativeQuery = true)
     List<Product> findAllByTagName(String tagName);
 
     @Query(value = "select p.id,p.product_name,p.create_date,p.image,p.description,p.is_active,p.is_completed,p.is_deleted,p.category_id,p.vote_average from products p \n" +

@@ -16,7 +16,7 @@ public interface TagProductRepository extends JpaRepository<TagProduct, TagProdu
     @Modifying
     @Query(value = "delete from tag_products where tag_id=?1", nativeQuery = true)
     Integer deleteByTagId(Integer tagId);
-    @Query(value = "select tag_id from tag_products where product_id=?1",nativeQuery = true)
+    @Query(value = "select tag_id from tag_products where product_id=?1 and  is_active=1 and is_deleted=0 ",nativeQuery = true)
     List<Integer> findTagIdByProductId(Integer productId);
     @Transactional
     @Modifying

@@ -11,7 +11,8 @@ import java.util.List;
 
 @Repository
 public interface DetailProductRepository extends JpaRepository<DetailProduct, Integer> {
-    @Query("select dp from DetailProduct  dp join Product p on dp.product.id=p.id where p.id=?1")
+    @Query("select dp from DetailProduct  dp join Product p on dp.product.id=p.id " +
+            "where p.id=?1 and dp.isActive=true and dp.isDelete=false and p.isActive=true and p.isDelete=false")
     List<DetailProduct> findAllByProductId(Integer id);
 
     @Transactional
