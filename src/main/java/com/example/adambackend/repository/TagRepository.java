@@ -17,7 +17,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "update tags set is_active=0 and is_deleted=1 where id=?1", nativeQuery = true)
+    @Query(value = "update tags set is_active=0 , is_deleted=1 where id=?1", nativeQuery = true)
     void updateDeletedTagId(Integer productId);
     @Query(value = "select * from tags where is_active=1 and is_deleted=0",nativeQuery = true)
     List<Tag> findAlls();

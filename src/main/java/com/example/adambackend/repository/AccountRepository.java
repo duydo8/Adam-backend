@@ -41,7 +41,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Double countTotalAccountInOrder(Integer month);
     @Modifying
     @Transactional
-    @Query(value = "update accounts set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    @Query(value = "update accounts set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)
     void updateAccountDeleted(Integer id);
 
 }

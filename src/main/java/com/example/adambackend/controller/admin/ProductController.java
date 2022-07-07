@@ -375,6 +375,7 @@ return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
                 Optional<Product> productOptional = productSevice.findById(x);
 
                 if (productOptional.isPresent()) {
+                    System.out.println(x);
                     productSevice.updateProductsDeleted(x);
                 }
             }

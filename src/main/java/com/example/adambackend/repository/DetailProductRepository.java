@@ -32,7 +32,7 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, In
 
     @Modifying
     @Transactional
-    @Query(value = "update detail_products set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    @Query(value = "update detail_products set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)
     void updateDetailProductsDeleted(Integer id);
 
 }

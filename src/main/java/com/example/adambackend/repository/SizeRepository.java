@@ -17,7 +17,7 @@ public interface SizeRepository extends JpaRepository<Size, Integer> {
    Size findByDetailProductId(Integer detailProductId);
     @Modifying
     @Transactional
-    @Query(value = "update sizes set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
+    @Query(value = "update sizes set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)
     void updateProductsDeleted(Integer id);
     @Query(value = "select * from sizes where is_active=1 and is_deleted=0",nativeQuery = true)
     List<Size> findAlls();
