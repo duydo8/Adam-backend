@@ -16,8 +16,8 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query("SELECT p FROM Product p")
-    List<Product> findAll(Sort sort);
+    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true ")
+    Page<Product> findAll(Pageable pageable);
 
     @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
