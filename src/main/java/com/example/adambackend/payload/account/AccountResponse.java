@@ -17,7 +17,7 @@ public interface AccountResponse {
 
     Boolean getIsActive();
 
-    Boolean getIsDelete();
+    Boolean getIsDeleted();
 
     Double getPriority();
 
