@@ -25,7 +25,7 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Intege
     void deleteAllByOrderId(Integer orderId);
 
     @Query(value = "select p.id from detail_orders do join orders o on do.order_id=o.id join detail_products dp on dp.id= do.detail_product_id " +
-            "join products p on p.id=dp.product_id", nativeQuery = true)
+            "join products p on p.id=dp.product_id where p.is_active=1 and p.is_deleted=0", nativeQuery = true)
     List<Integer> findProductIdByOrder();
 
 }

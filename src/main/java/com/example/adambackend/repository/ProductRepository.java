@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "            join MaterialProduct mp on mp.product.id=pro.id " +
             "            join Material m on m.id=mp.material.id  " +
             "            join Color co on co.id=dp.color.id " +
-            "where" +
+            "where pro.isActive=true and pro.isDelete=false and " +
 
             " ca.id=?1  or ?1 is null or dp.size.id=?2  or ?2 is null \n" +
             "or dp.color.id=?3 or ?3 is null or  m.id=?4  or ?4 is null \n" +
