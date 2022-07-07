@@ -6,7 +6,9 @@ import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.product.ProductWebsiteDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.repository.OrderRepository;
+import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,12 @@ public class ProductWebsiteController {
     SizeService sizeService;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    MaterialService materialService;
+    @Autowired
+    TagProductRepository tagProductRepository;
+    @Autowired
+    MaterialProductRepository materialProductRepository;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -562,48 +570,41 @@ public class ProductWebsiteController {
     public ResponseEntity<?> findOptionProductById(@RequestParam("id") Integer id) {
         Optional<Product> productOptional = productSevice.findById(id);
         if (productOptional.isPresent()) {
-            ProductHandleValue productHandleValue = productSevice.findOptionByProductId(id);
-            ProductOptionalDTO productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
-                    productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                    , productHandleValue.getProductName(), null);
-
-            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(id);
-            Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-            Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-            List<ValueOption> colorOptionList = new ArrayList<>();
-
-            for (Integer x : colorIdList
+            List<Integer> listTagId= tagProductRepository.findTagIdByProductId(id);
+            List<Integer> listMaterialId=materialProductRepository.findMaterialIdByProductId(id);
+            List<DetailProduct> detailProductList= detailProductService.findAllByProductId(id);
+            Set<Tag> tagList= new HashSet<>();
+            Set<Material> materialList= new HashSet<>();
+            Set<Color>colorList= new HashSet<>();
+            Set<Size> sizeList= new HashSet<>();
+            for (DetailProduct dp: detailProductList
             ) {
-                Optional<Color> color = colorService.findById(x);
-                ValueOption colorOption = new ValueOption();
-                colorOption.setId(color.get().getId());
-                colorOption.setName(color.get().getColorName());
-                colorOptionList.add(colorOption);
+                Color c= colorService.findByDetailProductId(dp.getId());
+                Size s = sizeService.findByDetailProductId(dp.getId());
+                colorList.add(c);
+                sizeList.add(s);
+            }
+            for (Integer x :listTagId
+            ) {
+                Optional<Tag> tagOptional=tagService.findById(x);
+                tagList.add(tagOptional.get());
 
             }
-            List<ValueOption> sizeOptionList = new ArrayList<>();
-            OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-
-            for (Integer x : sizeIdList
+            for (Integer x :listMaterialId
             ) {
-                Optional<Size> sizeOptional = sizeService.findById(x);
-                ValueOption sizeOption = new ValueOption();
-                sizeOption.setId(sizeOptional.get().getId());
-                sizeOption.setName(sizeOptional.get().getSizeName());
-                sizeOptionList.add(sizeOption);
+                Optional<Material> materialOptional=materialService.findById(x);
+                materialList.add(materialOptional.get());
 
             }
-            OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-            List<OptionProduct> optionProducts = new ArrayList<>();
-            optionProducts.add(optionSizeProduct);
-            optionProducts.add(optionColorProduct);
-            productOptionalDTO.setOptions(optionProducts);
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+            OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
+            return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
+
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
 
     @GetMapping("findProductsByCurrentOrderOfAccountId")
     public ResponseEntity<?> findProductsByCurrentOrder(@RequestParam("account_id")Integer accountId){
