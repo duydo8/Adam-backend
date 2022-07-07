@@ -4,6 +4,7 @@ import com.example.adambackend.entities.Category;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryResponse;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.CategoryRepository;
 import com.example.adambackend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("category")
 public class CategoryWebsiteController {
     @Autowired
-    CategoryService categoryService;
+    CategoryRepository categoryService;
 
     @GetMapping("findAllCategoryParentId")
     public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
@@ -39,10 +40,10 @@ public class CategoryWebsiteController {
 
     }
 
-//    @GetMapping("findAll")
-//    public ResponseEntity<?> findAll() {
-//        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
-//    }
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
+    }
 
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {

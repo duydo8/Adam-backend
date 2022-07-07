@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Category;
+import com.example.adambackend.entities.Color;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Transactional
     @Query(value = "update categories set is_deleted=1 and is_active=0 where id=?1",nativeQuery = true)
     void updateCategoriesDeleted(Integer id);
+    @Query(value = "select * from categories where is_active=1 and is_deleted=0",nativeQuery = true)
+    List<Category> findAlls();
 }
