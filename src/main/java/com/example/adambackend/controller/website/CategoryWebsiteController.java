@@ -39,10 +39,10 @@ public class CategoryWebsiteController {
 
     }
 
-    @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
-    }
+//    @GetMapping("findAll")
+//    public ResponseEntity<?> findAll() {
+//        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
+//    }
 
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {

@@ -60,7 +60,7 @@ public class SizeController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAll(), 200, ""));
+        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAlls(), 200, ""));
     }
 
     @DeleteMapping("deleteByListId")

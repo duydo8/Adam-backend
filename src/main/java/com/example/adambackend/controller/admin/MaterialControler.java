@@ -30,7 +30,7 @@ public class MaterialControler {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAlls(), 200, ""));
     }
 
     @PostMapping("create")
