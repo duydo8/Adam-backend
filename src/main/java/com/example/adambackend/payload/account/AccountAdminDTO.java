@@ -22,7 +22,7 @@ public class AccountAdminDTO {
     private Boolean isDelete;
     private String verificationCode;
     private LocalDateTime timeValid;
-    private double priority;
+    private Double priority;
 
 
 }

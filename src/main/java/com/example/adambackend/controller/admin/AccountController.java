@@ -158,18 +158,22 @@ public class AccountController {
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody AccountAdminDTO accountAdminDTO) {
-        Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
-        if (accountOptional.isPresent()) {
-            Account account= modelMapper.map(accountAdminDTO,Account.class);
-            if(accountAdminDTO.getRole().equalsIgnoreCase("admin")){
-                account.setRole(ERoleName.Admin);
-            }else account.setRole(ERoleName.User);
+        try {
+            Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
+            if (accountOptional.isPresent()) {
+                Account account = modelMapper.map(accountAdminDTO, Account.class);
+                if (accountAdminDTO.getRole().equalsIgnoreCase("admin")) {
+                    account.setRole(ERoleName.Admin);
+                } else account.setRole(ERoleName.User);
 
-            accountService.save(account);
+                accountService.save(account);
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        }catch (Exception e){
+          return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not valid data"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteEvent(@RequestParam("id") Integer id) {
