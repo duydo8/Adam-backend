@@ -67,4 +67,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Transactional
     @Query(value = "update products set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)
     void updateProductsDeleted(Integer id);
+    @Modifying
+    @Transactional
+    @Query(value = "update products set is_active=?1 where id=?2",nativeQuery = true)
+    void updateProductsIsActive(Integer isActive,Integer id);
 }

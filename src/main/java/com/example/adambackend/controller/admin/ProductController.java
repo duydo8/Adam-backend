@@ -175,6 +175,18 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }
 
+    @PutMapping("updateIsActive")
+    public ResponseEntity updateIsActive(@RequestParam("is_active")
+                                          Integer isActive,@RequestParam("id")Integer id){
+        Optional<Product> product1 = productSevice.findById(id);
+        if (product1.isPresent()) {
+
+         productSevice.updateProductsIsActive(isActive,id);
+        return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+
+    }
     @PostMapping("createArrayOptionValueProduct")
     public ResponseEntity<?> createArrayOptionValueProduct(@RequestBody ProductRequest productRequest) {
 
@@ -196,6 +208,7 @@ public class ProductController {
             }
 
         }
+
 
 
         Product product = new Product();
