@@ -101,6 +101,7 @@ public class OrderWebsiteController {
                 }
                 order.setOrder_code(code);
             HistoryOrder historyOrder= new HistoryOrder();
+            order.setTotalPrice(totalPrice);
              order=orderService.save(order);
 
             historyOrder.setOrder(orderService.findById(order.getId()).get());
