@@ -9,13 +9,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionalProduct {
-    private List<Tag> tagList;
-    private List<Material> materialList;
-    private List<Color> colorList;
-    private List<Size> sizeList;
+    private Set<Tag> tagList;
+    private Set<Material> materialList;
+    private Set<Color> colorList;
+    private Set<Size> sizeList;
 }

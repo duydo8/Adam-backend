@@ -21,9 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000)
@@ -345,10 +343,10 @@ public class ProductController {
             List<Integer> listTagId= tagProductRepository.findTagIdByProductId(id);
             List<Integer> listMaterialId=materialProductRepository.findMaterialIdByProductId(id);
             List<DetailProduct> detailProductList= detailProductService.findAllByProductId(id);
-            List<Tag> tagList= new ArrayList<>();
-            List<Material> materialList= new ArrayList<>();
-            List<Color>colorList= new ArrayList<>();
-            List<Size> sizeList= new ArrayList<>();
+            Set<Tag> tagList= new HashSet<>();
+            Set<Material> materialList= new HashSet<>();
+            Set<Color>colorList= new HashSet<>();
+            Set<Size> sizeList= new HashSet<>();
             for (DetailProduct dp: detailProductList
                  ) {
                 Color c= colorService.findByDetailProductId(dp.getId());

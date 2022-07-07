@@ -140,8 +140,8 @@ public class AccountController {
         String code= RandomString.make(64);
         account.setVerificationCode(code);
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-//        TwilioSendSms twilioSendSms= new TwilioSendSms();
-//        twilioSendSms.sendCode(account.getPhoneNumber(),code);
+        TwilioSendSms twilioSendSms= new TwilioSendSms();
+        twilioSendSms.sendCode(account.getPhoneNumber(),code);
         account.setPriority(5.0);
         Account account1 = accountService.save(account);
 
