@@ -1,10 +1,13 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Category;
+import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryDTO;
 import com.example.adambackend.payload.category.CategoryResponse;
+import com.example.adambackend.payload.category.ListCategoryId;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.payload.tag.ListTagIdDTO;
 import com.example.adambackend.repository.CategoryRepository;
 import com.example.adambackend.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -85,9 +88,26 @@ public class CategoryController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAll(), 200, ""));
+        return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
     }
+    @DeleteMapping("deleteByListId")
+    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListCategoryId listCategoryId) {
+        List<Integer> list = listCategoryId.getListCategoryId();
+        System.out.println(list.size());
+        if (list.size() > 0) {
+            for (Integer x : list
+            ) {
+                Optional<Category> categoryOptional = categoryService.findById(x);
+                if (categoryOptional.isPresent()) {
 
+                    categoryService.updateCategoriesDeleted(x);
+
+                }
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
+        }
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+    }
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
