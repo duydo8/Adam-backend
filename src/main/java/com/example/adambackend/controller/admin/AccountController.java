@@ -20,10 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -137,12 +134,13 @@ public class AccountController {
         } else {
             account.setRole(ERoleName.User);
         }
-        String code= RandomString.make(64);
-        account.setVerificationCode(code);
+        Random ran=new Random();
+        int x=ran.nextInt(6)+5;
+
+        account.setVerificationCode(String.valueOf(x));
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-//        TwilioSendSms twilioSendSms= new TwilioSendSms();
-//        twilioSendSms.sendCode(account.getPhoneNumber(),code);
-        account.setPriority(5.0);
+        TwilioSendSms twilioSendSms= new TwilioSendSms();
+        twilioSendSms.sendCode(account.getPhoneNumber(),String.valueOf(x));
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);

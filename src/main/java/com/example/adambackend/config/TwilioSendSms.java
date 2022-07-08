@@ -14,6 +14,6 @@ public class TwilioSendSms {
                 "e3c30102ce6da495e7916d846ab94f57");
 
         Message.creator(new PhoneNumber("+84966501755"),new PhoneNumber(phoneNumber),
-                "Mã xác nhận của bạn là " + code +" sẽ hết hạn sau 30p").create();
+                "Mã xác nhận của bạn là " + code ).create();
     }
 }

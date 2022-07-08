@@ -153,7 +153,7 @@ public class ProductController {
             productResponse.setIsDelete(product.getIsDelete());
             productResponse.setDescription(product.getDescription());
             productResponse.setImage(product.getImage());
-
+            productResponse.setCreateDate(product.getCreateDate());
             productResponse.setIsActive(product.getIsActive());
             productResponse.setCategory(categoryOptional.get());
             productResponse.setTagList(tagList);
