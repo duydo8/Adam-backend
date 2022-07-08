@@ -10,10 +10,10 @@ public class TwilioSendSms {
     public void sendCode(String phoneNumber,String code) {
 
         Twilio.init(
-                "ACCOUNT_SID",
-                "AUTH_TOKEN");
+                "AC3ac486fb125060125c0433ca45a05009",
+                "e3c30102ce6da495e7916d846ab94f57");
 
-        Message.creator(new PhoneNumber("+19036229068"),new PhoneNumber(phoneNumber),
+        Message.creator(new PhoneNumber("+84966501755"),new PhoneNumber(phoneNumber),
                 "Mã xác nhận của bạn là " + code +" sẽ hết hạn sau 30p").create();
     }
 }
