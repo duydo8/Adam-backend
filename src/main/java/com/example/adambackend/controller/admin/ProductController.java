@@ -158,6 +158,7 @@ public class ProductController {
             productResponse.setCategory(categoryOptional.get());
             productResponse.setTagList(tagList);
             productResponse.setMaterialList(materialList);
+            productResponse.setIsComplete(product.getIsComplete());
             return ResponseEntity.ok().body(new IGenericResponse<ProductResponse>(productResponse, 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
