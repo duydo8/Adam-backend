@@ -14,5 +14,5 @@ public class ColorAdminDTO {
     private String colorName;
     private Boolean isDeleted;
     private Boolean isActive;
-    private LocalDateTime createDate;
+
 }

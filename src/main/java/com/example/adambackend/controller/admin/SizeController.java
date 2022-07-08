@@ -5,6 +5,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.size.ListSizeIdDTO;
 import com.example.adambackend.payload.size.SizeDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.payload.size.SizeUpdate;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.repository.SizeRepository;
 import com.example.adambackend.service.SizeService;
@@ -40,10 +41,13 @@ public class SizeController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Size size) {
-        Optional<Size> size1 = sizeService.findById(size.getId());
+    public ResponseEntity<?> update(@RequestBody SizeUpdate sizeUpdate) {
+        Optional<Size> size1 = sizeService.findById(sizeUpdate.getId());
         if (size1.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size), 200, "success"));
+            size1.get().setSizeName(sizeUpdate.getSizeName());
+            size1.get().setIsActive(sizeUpdate.getIsActive());
+            size1.get().setIsDeleted(sizeUpdate.getIsDeleted());
+            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size1.get()), 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }

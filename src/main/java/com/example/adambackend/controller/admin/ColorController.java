@@ -4,6 +4,7 @@ import com.example.adambackend.entities.Color;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.color.ColorAdminDTO;
 import com.example.adambackend.payload.color.ColorDTO;
+import com.example.adambackend.payload.color.ColorUpdate;
 import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.ColorRepository;
@@ -50,12 +51,14 @@ public class ColorController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody ColorAdminDTO colorAdminDTO) {
-        Optional<Color> colorOptional = colorService.findById(colorAdminDTO.getId());
+    public ResponseEntity<?> update(@RequestBody ColorUpdate colorUpdate) {
+        Optional<Color> colorOptional = colorService.findById(colorUpdate.getId());
         if (colorOptional.isPresent()) {
-            Color color=modelMapper.map(colorAdminDTO,Color.class);
-            colorService.save(color);
-            return ResponseEntity.ok().body(new IGenericResponse<>(colorAdminDTO, 200, "success"));
+            colorOptional.get().setColorName(colorUpdate.getColorName());
+            colorOptional.get().setIsActive(colorUpdate.getIsActive());
+            colorOptional.get().setIsDeleted(colorUpdate.getIsDeleted());
+
+            return ResponseEntity.ok().body(new IGenericResponse<>(colorService.save(colorOptional.get()), 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
     }

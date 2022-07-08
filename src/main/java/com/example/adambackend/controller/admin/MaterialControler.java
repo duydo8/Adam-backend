@@ -4,6 +4,7 @@ import com.example.adambackend.entities.Material;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.material.ListMaterialIdDTO;
 import com.example.adambackend.payload.material.MaterialDTO;
+import com.example.adambackend.payload.material.MaterialUpdate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.repository.MaterialRepository;
@@ -48,11 +49,13 @@ public class MaterialControler {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateEvent(@RequestBody Material  material) {
-        Optional<Material> materialOptional = materialService.findById(material.getId());
+    public ResponseEntity<?> updateEvent(@RequestBody MaterialUpdate materialUpdate) {
+        Optional<Material> materialOptional = materialService.findById(materialUpdate.getId());
         if (materialOptional.isPresent()) {
-
-            return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
+            materialOptional.get().setMaterialName(materialUpdate.getMaterialName());
+            materialOptional.get().setIsActive(materialUpdate.getIsActive());
+            materialOptional.get().setIsDeleted(materialUpdate.getIsDeleted());
+            return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(materialOptional.get()), 200, ""));
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
         }
