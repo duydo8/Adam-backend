@@ -569,48 +569,75 @@ public class ProductWebsiteController {
     @GetMapping("findOptionProductById")
     public ResponseEntity<?> findOptionProductById(@RequestParam("id") Integer id) {
         Optional<Product> productOptional = productSevice.findById(id);
-        if (productOptional.isPresent()) {
+        if(productOptional.isPresent()){
+                    ProductHandleValue productHandleValue = productSevice.findOptionByProductId(id);
+            ProductOptionalDTO productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
+                    productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
+                    , productHandleValue.getProductName(), null);
+
+            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(id);
+            Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
+            Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
+            List<ValueOption> colorOptionList = new ArrayList<>();
+
+            for (Integer x : colorIdList
+            ) {
+                Optional<Color> color = colorService.findById(x);
+                ValueOption colorOption = new ValueOption();
+                colorOption.setId(color.get().getId());
+                colorOption.setName(color.get().getColorName());
+                colorOptionList.add(colorOption);
+
+            }
+            OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
+            List<ValueOption> sizeOptionList = new ArrayList<>();
+
+
+            for (Integer x : sizeIdList
+            ) {
+                Optional<Size> sizeOptional = sizeService.findById(x);
+                ValueOption sizeOption = new ValueOption();
+                sizeOption.setId(sizeOptional.get().getId());
+                sizeOption.setName(sizeOptional.get().getSizeName());
+                sizeOptionList.add(sizeOption);
+
+            }
+
+            OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
+            //
             List<Integer> listTagId= tagProductRepository.findTagIdByProductId(id);
             List<Integer> listMaterialId=materialProductRepository.findMaterialIdByProductId(id);
-            List<DetailProduct> detailProductList= detailProductService.findAllByProductId(id);
-            Set<Tag> tagList= new HashSet<>();
-            Set<Material> materialList= new HashSet<>();
-            Set<Color>colorList= new HashSet<>();
-            Set<Size> sizeList= new HashSet<>();
-            for (DetailProduct dp: detailProductList
+            List<ValueOption> materialOptionList = new ArrayList<>();
+
+
+            for (Integer x: listMaterialId
             ) {
-                Optional<Color>  c= colorService.findByDetailProductId(dp.getId());
-                Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
-                if(c.isPresent()){
-                    colorList.add(c.get());
-                }
-                if(s.isPresent()){
-                    sizeList.add(s.get());
-                }
-
+                Optional<Material> materialOptional = materialService.findById(x);
+                ValueOption materialOption = new ValueOption();
+                materialOption.setId(materialOptional.get().getId());
+                materialOption.setName(materialOptional.get().getMaterialName());
+                materialOptionList.add(materialOption);
             }
-            for (Integer x :listTagId
+            OptionProduct optionMaterialProduct = new OptionProduct("Material", materialOptionList);
+            List<ValueOption> tagOptionList = new ArrayList<>();
+            for (Integer x: listTagId
             ) {
-                Optional<Tag> tagOptional=tagService.findById(x);
-                tagList.add(tagOptional.get());
-
+                Optional<Tag> tagOptional = tagService.findById(x);
+                ValueOption tagOption = new ValueOption();
+                tagOption.setId(tagOptional.get().getId());
+                tagOption.setName(tagOptional.get().getTagName());
+                tagOptionList.add(tagOption);
             }
-            for (Integer x :listMaterialId
-            ) {
-                Optional<Material> materialOptional=materialService.findById(x);
-                materialList.add(materialOptional.get());
+            OptionProduct optionTagProduct = new OptionProduct("Tag", tagOptionList);
 
-            }
-            if(colorList.size()==0){
-                colorList= Collections.<Color>emptySet();
-            }
-            if(sizeList.size()==0){
-                sizeList= Collections.<Size>emptySet();
-            }
 
-            OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
-            return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
-
+            List<OptionProduct> optionProducts = new ArrayList<>();
+            optionProducts.add(optionSizeProduct);
+            optionProducts.add(optionColorProduct);
+            optionProducts.add(optionMaterialProduct);
+            optionProducts.add(optionTagProduct);
+            productOptionalDTO.setOptions(optionProducts);
+            return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 

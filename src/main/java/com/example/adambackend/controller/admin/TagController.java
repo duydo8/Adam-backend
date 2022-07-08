@@ -5,6 +5,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.tag.ListTagIdDTO;
 import com.example.adambackend.payload.tag.TagDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.payload.tag.TagUpdate;
 import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.ProductSevice;
@@ -49,12 +50,15 @@ public class TagController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Tag tag
+    public ResponseEntity<?> update(@RequestBody TagUpdate tagUpdate
     ) {
 
-        Optional<Tag> tagOptional = tagService.findById(tag.getId());
+        Optional<Tag> tagOptional = tagService.findById(tagUpdate.getId());
         if (tagOptional.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tag), 200, ""));
+            tagOptional.get().setTagName(tagUpdate.getTagName());
+            tagOptional.get().setIsActive(tagUpdate.getIsActive());
+            tagOptional.get().setIsDelete(tagUpdate.getIsDeleted());
+            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tagOptional.get()), 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
