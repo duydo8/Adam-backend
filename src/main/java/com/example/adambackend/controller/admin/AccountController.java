@@ -126,7 +126,7 @@ public class AccountController {
                 passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
                 signUpRequest.getFullName()
         );
-        account.setIsActive(true);
+        account.setIsActive(false);
         account.setIsDelete(false);
         account.setCreateDate(LocalDateTime.now());
         if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
@@ -135,13 +135,13 @@ public class AccountController {
             account.setRole(ERoleName.User);
         }
 
-        int x=new Random().nextInt(999999);
+        int x=new Random().nextInt(899999)+100000;
 
         account.setVerificationCode(String.format("%06d",x));
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
         System.out.println("------------"+x);
-//        TwilioSendSms twilioSendSms= new TwilioSendSms();
-//        twilioSendSms.sendCode(account.getPhoneNumber(),String.format("%06d",x));
+        TwilioSendSms twilioSendSms= new TwilioSendSms();
+        twilioSendSms.sendCode(account.getPhoneNumber(),x+"");
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
