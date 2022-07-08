@@ -222,6 +222,8 @@ public class ProductController {
         productSevice.save(product);
         List<TagProduct> tagProductList = new ArrayList<>();
         List<MaterialProduct> materialProductList = new ArrayList<>();
+        MaterialProduct materialProduct=null;
+        TagProduct tagProduct =null;
         if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
             for (int i = 0; i < tagList.size(); i++) {
                 for (int j = 0; j < materialList.size(); j++) {
@@ -229,10 +231,10 @@ public class ProductController {
                     Optional<Tag> tagOptional = tagService.findById(i);
                     if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
                             && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
-                        MaterialProduct materialProduct = new MaterialProduct
+                        materialProduct = new MaterialProduct
                                 (new MaterialProductPK(materialOptional.get().getId(), product.getId()),
                                         false, materialOptional.get(), true, LocalDateTime.now(), product);
-                        TagProduct tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
+                        tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
                         materialProductList.add(materialProduct);

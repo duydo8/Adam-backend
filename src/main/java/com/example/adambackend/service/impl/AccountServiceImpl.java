@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<Account> findById(Integer id) {
-        return accountRepository.findById(id);
+        return accountRepository.findByIds(id);
     }
 
     @Override
