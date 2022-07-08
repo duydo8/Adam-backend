@@ -48,7 +48,7 @@ public class MaterialControler {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateEvent(@RequestBody Material material) {
+    public ResponseEntity<?> updateEvent(@RequestBody Material  material) {
         Optional<Material> materialOptional = materialService.findById(material.getId());
         if (materialOptional.isPresent()) {
 

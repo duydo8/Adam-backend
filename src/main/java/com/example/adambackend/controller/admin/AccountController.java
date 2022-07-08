@@ -101,53 +101,7 @@ public class AccountController {
     }
 
 
-    @PostMapping("/createAdminAccount")
-    public ResponseEntity<IGenericResponse> registerAccount(@RequestBody SignUpRequest signUpRequest) {
-        if (accountService.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new IGenericResponse(400, "Username has been used"));
-        }
 
-        if (accountService.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new IGenericResponse(400, "Email has been used"));
-        }
-        if(accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new IGenericResponse(400, "PhoneNumber has been used"));
-        }
-
-
-        Account account = new Account(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
-                signUpRequest.getFullName()
-        );
-        account.setIsActive(false);
-        account.setIsDelete(false);
-        account.setCreateDate(LocalDateTime.now());
-        if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
-            account.setRole(ERoleName.Admin);
-        } else {
-            account.setRole(ERoleName.User);
-        }
-
-        int x=new Random().nextInt(899999)+100000;
-
-        account.setVerificationCode(String.format("%06d",x));
-        account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-        System.out.println("------------"+x);
-        TwilioSendSms twilioSendSms= new TwilioSendSms();
-        twilioSendSms.sendCode(account.getPhoneNumber(),x+"");
-        Account account1 = accountService.save(account);
-
-        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-
-        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
-    }
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         List<AccountResponse> accountList = accountService.findAll();
