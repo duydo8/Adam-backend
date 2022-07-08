@@ -5,6 +5,7 @@ import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryDTO;
 import com.example.adambackend.payload.category.CategoryResponse;
+import com.example.adambackend.payload.category.CategoryUpdate;
 import com.example.adambackend.payload.category.ListCategoryId;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.tag.ListTagIdDTO;
@@ -65,11 +66,14 @@ public class CategoryController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateEvent(@RequestBody Category category) {
-        Optional<Category> categoryOptional = categoryService.findById(category.getId());
+    public ResponseEntity<?> updateEvent(@RequestBody CategoryUpdate categoryUpdate) {
+        Optional<Category> categoryOptional = categoryService.findById(categoryUpdate.getId());
         if (categoryOptional.isPresent()) {
-
-            return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
+            categoryOptional.get().setCategoryName(categoryUpdate.getCategoryName());
+            categoryOptional.get().setIsActive(categoryUpdate.getIsActive());
+            categoryOptional.get().setIsDeleted(categoryUpdate.getIsDeleted());
+            categoryOptional.get().setCategoryParentId(categoryUpdate.getCategoryParentId());
+            return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(categoryOptional.get()), 200, ""));
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
         }
