@@ -10,11 +10,10 @@ import com.example.adambackend.payload.detailProduct.DetailProductDTO;
 import com.example.adambackend.payload.detailProduct.ListDetailProductIdDTO;
 import com.example.adambackend.payload.detailProduct.NewDetailProductDTO;
 import com.example.adambackend.payload.detailProduct.DetailProductUpdateAdmin;
-import com.example.adambackend.payload.request.DetailProductRequest;
+import com.example.adambackend.payload.detailProduct.DetailProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.ColorService;
-import com.example.adambackend.service.DetailProductService;
 import com.example.adambackend.service.ProductSevice;
 import com.example.adambackend.service.SizeService;
 import org.modelmapper.ModelMapper;
@@ -205,7 +204,59 @@ public class DetailProductController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "nothing updated"));
     }
+    @PutMapping("updateArrayOptionValueDetailProduct")
+    public ResponseEntity<?> UpdateArrayOptionValueDetailProduct(@RequestBody DetailProductRequest detailProductRequest) {
+        Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
+        detailProductService.deleteByProductId(detailProductRequest.getProductId());
+        List<Color> colorList = new ArrayList<>();
+        List<Size> sizeList = new ArrayList<>();
+        for (Integer colorId : detailProductRequest.getColorIdList()
+        ) {
 
+            Optional<Color> color = colorService.findById(colorId);
+            if (color.isPresent()) {
+                colorList.add(color.get());
+            }
+        }
+        for (Integer s : detailProductRequest.getSizeIdList()
+        ) {
+            Optional<Size> size = sizeService.findById(s);
+            if (size.isPresent()) {
+                sizeList.add(size.get());
+            }
+
+        }
+
+
+        List<DetailProduct> detailProductList = new ArrayList<>();
+        if (productOptional.isPresent()) {
+            for (int i = 0; i < sizeList.size(); i++) {
+                for (int j = 0; j < colorList.size(); j++) {
+                    DetailProduct detailProduct = new DetailProduct();
+                    detailProduct.setProduct(productSevice.findById(detailProductRequest.getProductId()).get());
+                    detailProduct.setPriceImport(detailProductRequest.getPriceImport());
+                    detailProduct.setPriceExport(detailProductRequest.getPriceExport());
+                    detailProduct.setQuantity(detailProductRequest.getQuantity());
+                    detailProduct.setIsDelete(false);
+                    detailProduct.setIsActive(true);
+
+                    detailProduct.setCreateDate(LocalDateTime.now());
+                    detailProduct.setColor(colorList.get(j));
+                    detailProduct.setSize(sizeList.get(i));
+                    detailProductList.add(detailProduct);
+                    detailProductService.save(detailProduct);
+
+                }
+
+            }
+            productOptional.get().setIsComplete(false);
+            return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
+
+        } else {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
+        }
+
+    }
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListDetailProductIdDTO listDetailProductIdDTO) {
         List<Integer> list = listDetailProductIdDTO.getListDetailProductId();
