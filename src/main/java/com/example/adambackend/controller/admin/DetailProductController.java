@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(value = "*", maxAge = 36000000)
 @RequestMapping("admin/detailProduct")
 public class DetailProductController {
     @Autowired
