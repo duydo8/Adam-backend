@@ -230,9 +230,9 @@ public class ProductController {
                     if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
                             && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
                         MaterialProduct materialProduct = new MaterialProduct
-                                (new MaterialProductPK(j, product.getId()),
+                                (new MaterialProductPK(materialOptional.get().getId(), product.getId()),
                                         false, materialOptional.get(), true, LocalDateTime.now(), product);
-                        TagProduct tagProduct = new TagProduct(new TagProductPK(i, product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
+                        TagProduct tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
                         materialProductRepository.save(materialProduct);
                         tagProductRepository.save(tagProduct);
                         materialProductList.add(materialProduct);
