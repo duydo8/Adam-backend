@@ -300,7 +300,7 @@ public class ProductController {
 
             }
 
-            OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList,productOptional.get().getDescription());
+            OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
 return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
 
         }

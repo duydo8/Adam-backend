@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
     @Query(value = "select pro.id as id, pro.productName as productName,pro.image as productImage, " +
-            " pro.createDate as createDate,min(dp.priceExport) as " +
+            " pro.createDate as createDate,pro.description as Description ,min(dp.priceExport) as " +
             " minPrice, max (dp.priceExport)as maxPrice " +
             "            from Product pro " +
             "            join Category ca on pro.category.id=ca.id " +
