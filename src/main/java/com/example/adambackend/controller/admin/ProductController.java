@@ -227,8 +227,8 @@ public class ProductController {
         if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
             for (int i = 0; i < tagList.size(); i++) {
                 for (int j = 0; j < materialList.size(); j++) {
-                    Optional<Material> materialOptional = materialService.findById(j);
-                    Optional<Tag> tagOptional = tagService.findById(i);
+                    Optional<Material> materialOptional = materialService.findById(materialList.get(j).getId());
+                    Optional<Tag> tagOptional = tagService.findById(tagList.get(i).getId());
                     if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
                             && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
                         materialProduct = new MaterialProduct
