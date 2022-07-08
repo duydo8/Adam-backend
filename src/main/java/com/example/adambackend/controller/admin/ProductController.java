@@ -92,7 +92,7 @@ public class ProductController {
             product1.get().setIsDelete(false);
             product1.get().setDescription(productUpdateDTO.getDescription());
             product1.get().setImage(productUpdateDTO.getImage());
-            product1.get().setCreateDate(LocalDateTime.now());
+
             product1.get().setIsDelete(productUpdateDTO.getIsDelete());
             product1.get().setIsActive(productUpdateDTO.getIsActive());
             product1.get().setCategory(categoryOptional.get());
@@ -153,7 +153,7 @@ public class ProductController {
             productResponse.setIsDelete(product.getIsDelete());
             productResponse.setDescription(product.getDescription());
             productResponse.setImage(product.getImage());
-            productResponse.setCreateDate(product.getCreateDate());
+
             productResponse.setIsActive(product.getIsActive());
             productResponse.setCategory(categoryOptional.get());
             productResponse.setTagList(tagList);
