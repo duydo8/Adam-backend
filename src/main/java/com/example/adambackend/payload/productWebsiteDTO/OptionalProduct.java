@@ -19,4 +19,5 @@ public class OptionalProduct {
     private Set<Material> materialList;
     private Set<Color> colorList;
     private Set<Size> sizeList;
+    private String description;
 }
