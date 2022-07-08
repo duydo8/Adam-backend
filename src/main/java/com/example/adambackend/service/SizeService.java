@@ -15,5 +15,5 @@ public interface SizeService {
 
     List<Size> findAll();
 
-    Size findByDetailProductId(Integer detailProductId);
+    Optional<Size> findByDetailProductId(Integer detailProductId);
 }

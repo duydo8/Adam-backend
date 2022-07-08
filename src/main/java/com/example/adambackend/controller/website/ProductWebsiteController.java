@@ -579,10 +579,15 @@ public class ProductWebsiteController {
             Set<Size> sizeList= new HashSet<>();
             for (DetailProduct dp: detailProductList
             ) {
-                Color c= colorService.findByDetailProductId(dp.getId());
-                Size s = sizeService.findByDetailProductId(dp.getId());
-                colorList.add(c);
-                sizeList.add(s);
+                Optional<Color>  c= colorService.findByDetailProductId(dp.getId());
+                Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
+                if(c.isPresent()){
+                    colorList.add(c.get());
+                }
+                if(s.isPresent()){
+                    sizeList.add(s.get());
+                }
+
             }
             for (Integer x :listTagId
             ) {
@@ -595,6 +600,12 @@ public class ProductWebsiteController {
                 Optional<Material> materialOptional=materialService.findById(x);
                 materialList.add(materialOptional.get());
 
+            }
+            if(colorList.size()==0){
+                colorList= Collections.<Color>emptySet();
+            }
+            if(sizeList.size()==0){
+                sizeList= Collections.<Size>emptySet();
             }
 
             OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
