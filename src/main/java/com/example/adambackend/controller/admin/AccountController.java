@@ -134,13 +134,14 @@ public class AccountController {
         } else {
             account.setRole(ERoleName.User);
         }
-        Random ran=new Random();
-        int x=ran.nextInt(6)+5;
 
-        account.setVerificationCode(String.valueOf(x));
+        int x=new Random().nextInt(999999);
+
+        account.setVerificationCode(String.format("%06d",x));
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-        TwilioSendSms twilioSendSms= new TwilioSendSms();
-        twilioSendSms.sendCode(account.getPhoneNumber(),String.valueOf(x));
+        System.out.println("------------"+x);
+//        TwilioSendSms twilioSendSms= new TwilioSendSms();
+//        twilioSendSms.sendCode(account.getPhoneNumber(),String.format("%06d",x));
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);

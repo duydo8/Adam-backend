@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
-@CrossOrigin(value = "*", maxAge = 30000000)
+@CrossOrigin(value = "*", maxAge = 36000000)
 @RequestMapping("admin/product")
 public class ProductController {
     @Autowired
