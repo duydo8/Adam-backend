@@ -605,37 +605,14 @@ public class ProductWebsiteController {
 
             OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
             //
-            List<Integer> listTagId= tagProductRepository.findTagIdByProductId(id);
-            List<Integer> listMaterialId=materialProductRepository.findMaterialIdByProductId(id);
-            List<ValueOption> materialOptionList = new ArrayList<>();
 
 
-            for (Integer x: listMaterialId
-            ) {
-                Optional<Material> materialOptional = materialService.findById(x);
-                ValueOption materialOption = new ValueOption();
-                materialOption.setId(materialOptional.get().getId());
-                materialOption.setName(materialOptional.get().getMaterialName());
-                materialOptionList.add(materialOption);
-            }
-            OptionProduct optionMaterialProduct = new OptionProduct("Material", materialOptionList);
-            List<ValueOption> tagOptionList = new ArrayList<>();
-            for (Integer x: listTagId
-            ) {
-                Optional<Tag> tagOptional = tagService.findById(x);
-                ValueOption tagOption = new ValueOption();
-                tagOption.setId(tagOptional.get().getId());
-                tagOption.setName(tagOptional.get().getTagName());
-                tagOptionList.add(tagOption);
-            }
-            OptionProduct optionTagProduct = new OptionProduct("Tag", tagOptionList);
 
 
             List<OptionProduct> optionProducts = new ArrayList<>();
             optionProducts.add(optionSizeProduct);
             optionProducts.add(optionColorProduct);
-            optionProducts.add(optionMaterialProduct);
-            optionProducts.add(optionTagProduct);
+
             productOptionalDTO.setOptions(optionProducts);
             return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
         }
