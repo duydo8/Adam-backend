@@ -158,15 +158,28 @@ public class AccountController {
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody AccountAdminDTO accountAdminDTO) {
         try {
+//            private String fullName;
+//            private String email;
+//            private String phoneNumber;
+//            private String password;
+//            private String role;
+//            private Boolean isActive;
+//            private Boolean isDelete;
+//            private Double priority;
             Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
             if (accountOptional.isPresent()) {
-                Account account = modelMapper.map(accountAdminDTO, Account.class);
+                accountOptional.get().setFullName(accountAdminDTO.getFullName());
+                accountOptional.get().setEmail(accountAdminDTO.getEmail());
+                accountOptional.get().setPhoneNumber(accountAdminDTO.getPhoneNumber());
+                accountOptional.get().setIsDelete(accountAdminDTO.getIsDelete());
+                accountOptional.get().setIsActive(accountAdminDTO.getIsActive());
+                accountOptional.get().setPriority(accountAdminDTO.getPriority());
+                accountOptional.get().setPassword(passwordEncoder.encode(accountAdminDTO.getPassword()));
                 if (accountAdminDTO.getRole().equalsIgnoreCase("admin")) {
-                    account.setRole(ERoleName.Admin);
-                } else account.setRole(ERoleName.User);
-
-                accountService.save(account);
-
+                    accountOptional.get().setRole(ERoleName.Admin);
+                }
+                    accountOptional.get().setRole(ERoleName.User);
+                accountService.save(accountOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));

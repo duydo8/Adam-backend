@@ -300,7 +300,12 @@ public class ProductController {
                 materialList.add(materialOptional.get());
 
             }
-
+if(colorList.size()==0){
+    colorList=new HashSet<>();
+}
+            if(sizeList.size()==0){
+                sizeList=new HashSet<>();
+            }
             OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
 return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
 

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AccountAdminDTO {
     private Integer id;
-    private String username;
     private String fullName;
     private String email;
     private String phoneNumber;
@@ -20,8 +19,6 @@ public class AccountAdminDTO {
     private String role;
     private Boolean isActive;
     private Boolean isDelete;
-    private String verificationCode;
-    private LocalDateTime timeValid;
     private Double priority;
 
 
