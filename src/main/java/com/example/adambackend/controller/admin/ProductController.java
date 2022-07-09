@@ -2,10 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.product.ListProductIdDTO;
-import com.example.adambackend.payload.product.ProductDTO;
-import com.example.adambackend.payload.product.ProductResponse;
-import com.example.adambackend.payload.product.ProductUpdateDTO;
+import com.example.adambackend.payload.product.*;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -175,12 +172,11 @@ public class ProductController {
     }
 
     @PutMapping("updateIsActive")
-    public ResponseEntity updateIsActive(@RequestParam("is_active")
-                                          Integer isActive,@RequestParam("id")Integer id){
-        Optional<Product> product1 = productSevice.findById(id);
+    public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive){
+        Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
         if (product1.isPresent()) {
 
-         productSevice.updateProductsIsActive(isActive,id);
+         productSevice.updateProductsIsActive(productUpdateIsActive.getIsActive(),productUpdateIsActive.getId());
         return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
