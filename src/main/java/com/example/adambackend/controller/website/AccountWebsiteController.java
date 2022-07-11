@@ -99,7 +99,7 @@ public class AccountWebsiteController {
         if (accountOptional.isPresent()) {
             if (password.equals(confirm)) {
                 accountOptional.get().setPassword(passwordEncoder.encode(password));
-                ;
+
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "confirm is not equal password"));

@@ -38,6 +38,8 @@ public class OrderController {
     DetailOrderService detailOrderService;
     @Autowired
     HistoryOrderRepository historyOrderRepository;
+    private final List<String> thang= Arrays.asList("January", "February", "March", "April", "May",
+            "June", "July","August","September","October","November","December");
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -176,35 +178,32 @@ public class OrderController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
     }
+
     @GetMapping("orderSatistic")
     public ResponseEntity<?> sumTotalPriceByTime(){
         List<Dashboard> dashboardList= new ArrayList<>();
         Dashboard dashboard= new Dashboard();
         dashboard.setName("Tổng đơn hàng");
-         Double thang1=orderService.sumTotalPriceByTime(1);
-        Double thang2=orderService.sumTotalPriceByTime(2);
-        Double thang3=orderService.sumTotalPriceByTime(3);
-        Double thang4=orderService.sumTotalPriceByTime(4);
-        Double thang5=orderService.sumTotalPriceByTime(5);
-        Double thang6=orderService.sumTotalPriceByTime(6);
-        List<Double> doubleList= new ArrayList<>();
-        doubleList.add(thang1);
-        doubleList.add(thang2);
-        doubleList.add(thang3);
-        doubleList.add(thang4);
-        doubleList.add(thang5);
-        doubleList.add(thang6);
+
+        List<Double> doubleList= Arrays.asList(orderService.sumTotalPriceByTime(1),
+       orderService.sumTotalPriceByTime(2),
+        orderService.sumTotalPriceByTime(3),
+        orderService.sumTotalPriceByTime(4),
+        orderService.sumTotalPriceByTime(5),
+        orderService.sumTotalPriceByTime(6),
+                orderService.sumTotalPriceByTime(7),
+                orderService.sumTotalPriceByTime(8),
+                orderService.sumTotalPriceByTime(9),
+                orderService.sumTotalPriceByTime(10),
+                orderService.sumTotalPriceByTime(11),
+                orderService.sumTotalPriceByTime(12)
+
+                );
+
         dashboard.setData(doubleList);
         List<String> thang= new ArrayList<>();
 
-        thang.add("January");
-        thang.add("February");
-        thang.add("March");
-        thang.add("April");
-        thang.add("May");
-        thang.add("June");
-        thang.add("July");
-        dashboard.setLabels(thang);
+
         Dashboard dashboard1= new Dashboard();
         dashboard1.setName("Đơn thành công");
 
@@ -214,7 +213,14 @@ public class OrderController {
                 orderService.sumSuccessOrderByTime(3),
                 orderService.sumSuccessOrderByTime(4),
                 orderService.sumSuccessOrderByTime(5),
-                orderService.sumSuccessOrderByTime(6));
+                orderService.sumSuccessOrderByTime(6),
+        orderService.sumSuccessOrderByTime(7),
+                orderService.sumSuccessOrderByTime(8),
+                orderService.sumSuccessOrderByTime(9),
+                orderService.sumSuccessOrderByTime(10),
+                orderService.sumSuccessOrderByTime(11),
+                orderService.sumSuccessOrderByTime(12)
+        );
         dashboard1.setData(doubleList1);
         dashboard1.setLabels(thang);
         Dashboard dashboard2= new Dashboard();
@@ -225,7 +231,14 @@ public class OrderController {
         orderService.sumCancelOrderByTime(3),
         orderService.sumCancelOrderByTime(4),
         orderService.sumCancelOrderByTime(5),
-        orderService.sumCancelOrderByTime(6));
+        orderService.sumCancelOrderByTime(6),
+                orderService.sumCancelOrderByTime(7),
+                orderService.sumCancelOrderByTime(8),
+                orderService.sumCancelOrderByTime(9),
+                orderService.sumCancelOrderByTime(10),
+                orderService.sumCancelOrderByTime(11),
+                orderService.sumCancelOrderByTime(12)
+        );
         dashboard2.setData(doubleList2);
 
         dashboard2.setLabels(thang);
@@ -237,7 +250,15 @@ public class OrderController {
         orderService.sumPaybackOrderByTime(3),
         orderService.sumPaybackOrderByTime(4),
         orderService.sumPaybackOrderByTime(5),
-        orderService.sumPaybackOrderByTime(6));
+        orderService.sumPaybackOrderByTime(6),
+                orderService.sumPaybackOrderByTime(7),
+                orderService.sumPaybackOrderByTime(8),
+                orderService.sumPaybackOrderByTime(9),
+                orderService.sumPaybackOrderByTime(10),
+                orderService.sumPaybackOrderByTime(11),
+                orderService.sumPaybackOrderByTime(12)
+
+        );
         dashboard3.setData(doubleList3);
 
         dashboard3.setLabels(thang);

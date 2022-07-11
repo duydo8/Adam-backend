@@ -34,7 +34,7 @@ public class AccountController {
     ModelMapper modelMapper;
 
     private final List<String> thang= Arrays.asList("January", "February", "March", "April", "May",
-            "June", "July");
+            "June", "July","August","September","October","November","December");
 
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
@@ -112,14 +112,7 @@ public class AccountController {
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody AccountAdminDTO accountAdminDTO) {
         try {
-//            private String fullName;
-//            private String email;
-//            private String phoneNumber;
-//            private String password;
-//            private String role;
-//            private Boolean isActive;
-//            private Boolean isDelete;
-//            private Double priority;
+
             Optional<Account> accountOptional = accountService.findById(accountAdminDTO.getId());
             if (accountOptional.isPresent()) {
                 accountOptional.get().setFullName(accountAdminDTO.getFullName());
@@ -173,8 +166,14 @@ public class AccountController {
     accountService.countTotalAccountInOrder(3),
    accountService.countTotalAccountInOrder(4),
    accountService.countTotalAccountInOrder(5),
-    accountService.countTotalAccountInOrder(6));
-
+    accountService.countTotalAccountInOrder(6),
+    accountService.countTotalAccountInOrder(7),
+    accountService.countTotalAccountInOrder(8),
+    accountService.countTotalAccountInOrder(8),
+    accountService.countTotalAccountInOrder(9),
+    accountService.countTotalAccountInOrder(10),
+    accountService.countTotalAccountInOrder(11),
+    accountService.countTotalAccountInOrder(12));
     dashboard.setData(doubleList);
     dashboard.setLabels(thang);
     Dashboard dashboard1= new Dashboard();
@@ -185,7 +184,14 @@ public class AccountController {
             accountService.countTotalAccount(3),
             accountService.countTotalAccount(4),
             accountService.countTotalAccount(5),
-            accountService.countTotalAccount(6));
+            accountService.countTotalAccount(6),
+            accountService.countTotalAccount(7),
+            accountService.countTotalAccount(8),
+            accountService.countTotalAccount(9),
+            accountService.countTotalAccount(10),
+            accountService.countTotalAccount(11),
+            accountService.countTotalAccount(12)
+            );
 
     dashboard1.setData(doubleList1);
     dashboard1.setLabels(thang);
@@ -197,7 +203,14 @@ public class AccountController {
             accountService.countTotalSignUpAccount(3),
             accountService.countTotalSignUpAccount(4),
             accountService.countTotalSignUpAccount(5),
-            accountService.countTotalSignUpAccount(6));
+            accountService.countTotalSignUpAccount(6),
+            accountService.countTotalSignUpAccount(7),
+            accountService.countTotalSignUpAccount(8),
+            accountService.countTotalSignUpAccount(9),
+            accountService.countTotalSignUpAccount(10),
+            accountService.countTotalSignUpAccount(11),
+            accountService.countTotalSignUpAccount(12)
+    );
 
     dashboard2.setData(doubleList2);
     dashboard2.setLabels(thang);
