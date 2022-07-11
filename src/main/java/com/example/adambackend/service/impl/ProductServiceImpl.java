@@ -31,7 +31,11 @@ public class ProductServiceImpl implements ProductSevice {
     }
     @Override
     public Boolean checkFavorite(Integer productId, Integer accountId){
-        return productRepository.checkFavorite(productId,accountId);
+        Integer x= productRepository.checkFavorite(productId,accountId);
+        if(x==null){
+            return false;
+        }
+        return true;
     }
 
     @Override
