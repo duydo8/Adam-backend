@@ -2,6 +2,7 @@ package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Favorite;
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +19,9 @@ public interface FavoriteService {
 
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
-    List<Product> findProductFavoriteByAccountId(Integer id);
+    List<ProductHandleWebsite> findProductFavoriteByAccountId(Integer id);
 
-    List<Product> findTop10FavoriteProduct();
+    List<ProductHandleWebsite> findTop10FavoriteProduct();
 
     Favorite findByAccountIdAndProductId(Integer accountId, Integer productId);
 

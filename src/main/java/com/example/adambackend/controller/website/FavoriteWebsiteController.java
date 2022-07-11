@@ -5,6 +5,7 @@ import com.example.adambackend.entities.Favorite;
 import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.FavoriteService;
@@ -43,7 +44,7 @@ public class FavoriteWebsiteController {
 
     @GetMapping("findTop10FavoriteProduct")
     public ResponseEntity<?> findTop10FavoriteProduct() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(favoriteService.findTop10FavoriteProduct(), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<List<ProductHandleWebsite>>(favoriteService.findTop10FavoriteProduct(), 200, ""));
     }
 
     @PostMapping("create")

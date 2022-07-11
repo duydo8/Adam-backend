@@ -570,6 +570,7 @@ public class ProductWebsiteController {
     public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
                                                    @RequestParam("account_id")Integer account_id) {
         Optional<Product> productOptional = productSevice.findById(product_id);
+
         if(productOptional.isPresent()){
                     ProductHandleWebsite productHandleValue = productSevice.findOptionWebsiteByProductId(product_id,account_id);
            Boolean isFavorite= productSevice.checkFavorite(product_id,account_id);

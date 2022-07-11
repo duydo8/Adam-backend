@@ -2,6 +2,7 @@ package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Favorite;
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.FavoriteRepository;
 import com.example.adambackend.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +42,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public List<Product> findProductFavoriteByAccountId(Integer id) {
+    public List<ProductHandleWebsite> findProductFavoriteByAccountId(Integer id) {
         return favoriteRepository.findProductFavoriteByAccountId(id);
     }
 
     @Override
-    public List<Product> findTop10FavoriteProduct() {
+    public List<ProductHandleWebsite> findTop10FavoriteProduct() {
         return favoriteRepository.findTop10FavoriteProduct();
     }
 
