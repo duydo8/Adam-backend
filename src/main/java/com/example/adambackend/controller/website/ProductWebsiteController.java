@@ -568,18 +568,20 @@ public class ProductWebsiteController {
 
     @GetMapping("findOptionProductById")
     public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
-                                                   @RequestParam("account_id")Integer account_id) {
+                                                   @RequestParam(value = "account_id",required = false)Integer account_id) {
         Optional<Product> productOptional = productSevice.findById(product_id);
 
         if (productOptional.isPresent()) {
             ProductHandleWebsite productHandleValue = productSevice.findOptionWebsiteByProductId(product_id, account_id);
-            if (productHandleValue.getId() != null) {
+            if (productHandleValue != null) {
+                Boolean isFavorite = true;
+                ProductOptionalDTO productOptionalDTO=null;
+
+                     productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
+                            productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
+                            , productHandleValue.getProductName(), productHandleValue.getVoteAverage(), isFavorite, null);
 
 
-                Boolean isFavorite = productSevice.checkFavorite(product_id, account_id);
-                ProductOptionalDTO productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
-                        productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                        , productHandleValue.getProductName(), productHandleValue.getVoteAverage(), isFavorite, null);
 
                 List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
                 Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
@@ -621,7 +623,7 @@ public class ProductWebsiteController {
 
                     return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found favorite"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 

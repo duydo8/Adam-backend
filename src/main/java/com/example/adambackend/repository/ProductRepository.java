@@ -72,7 +72,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "group by p.product_name,p.is_active,p.is_completed,p.is_deleted,p.id,fa.is_active,p.vote_average ", nativeQuery = true)
     ProductHandleWebsite findOptionWebsiteByProductId(Integer productId, Integer accountId);
     @Query(value = "select fa.product_id from favorites fa join products p on p.id=fa.product_id join accounts a on a.id=fa.account_id where p.id=?1 and a.id=?2",nativeQuery = true)
-    Integer checkFavorite(Integer productId, Integer accountId);
+    List<Integer> checkFavorite(Integer productId, Integer accountId);
     @Modifying
     @Transactional
     @Query(value = "update products set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)

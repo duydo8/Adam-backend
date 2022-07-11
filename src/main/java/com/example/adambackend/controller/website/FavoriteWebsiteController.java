@@ -44,7 +44,7 @@ public class FavoriteWebsiteController {
 
     @GetMapping("findTop10FavoriteProduct")
     public ResponseEntity<?> findTop10FavoriteProduct() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<ProductHandleWebsite>>(favoriteService.findTop10FavoriteProduct(), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(favoriteService.findTop10FavoriteProduct(), 200, ""));
     }
 
     @PostMapping("create")
