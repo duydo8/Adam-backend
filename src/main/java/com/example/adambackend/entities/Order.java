@@ -53,9 +53,9 @@ public class Order {
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "order")
-    private List<AccountEvent> accountEventList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "discount_order_id")
+    private DiscountOrder discountOrder;
 
 
 }

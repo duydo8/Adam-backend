@@ -2,6 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Event;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.event.EventDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,17 @@ public class EventController {
     EventService eventService;
 
     @PostMapping("create")
-    public ResponseEntity<?> createEvent(@RequestBody Event event) {
+    public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
+        Event event= new Event();
+        event.setCreateDate(eventDTO.getCreateDate());
+        event.setEvent_name(eventDTO.getEventName());
+        event.setEndTime(eventDTO.getEndTime());
+        event.setStartTime(eventDTO.getStartTime());
+       event.setIsActive(true);
+       event.setIsDelete(false);
+
+       event.setType(eventDTO.getType());
+       event.setDescription(eventDTO.getDescription());
         return ResponseEntity.ok().body(new IGenericResponse<Event>(eventService.save(event), 200, ""));
 
     }

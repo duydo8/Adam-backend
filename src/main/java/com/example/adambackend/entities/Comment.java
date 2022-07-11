@@ -23,6 +23,8 @@ public class Comment {
     private LocalDateTime timeCreated;
     @Column(name = "status")
     private CommentStatus commentStatus;
+    @Column(name="comment_parent_id")
+    private Integer commentParentId;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

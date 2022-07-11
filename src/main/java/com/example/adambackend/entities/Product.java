@@ -53,4 +53,7 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     List<DetailProduct> detailProducts = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<DiscountProduct> discountProducts = new ArrayList<>();
 }

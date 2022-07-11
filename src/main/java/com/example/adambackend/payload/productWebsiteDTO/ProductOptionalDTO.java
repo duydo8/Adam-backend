@@ -16,5 +16,7 @@ public class ProductOptionalDTO {
     private Double maxPrice;
     private Double minPrice;
     private String productName;
+    private Double voteAverage;
+    private Boolean isFavorite;
     private List<OptionProduct> options;
 }

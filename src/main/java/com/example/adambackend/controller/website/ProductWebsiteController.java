@@ -567,15 +567,17 @@ public class ProductWebsiteController {
     }
 
     @GetMapping("findOptionProductById")
-    public ResponseEntity<?> findOptionProductById(@RequestParam("id") Integer id) {
-        Optional<Product> productOptional = productSevice.findById(id);
+    public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
+                                                   @RequestParam("account_id")Integer account_id) {
+        Optional<Product> productOptional = productSevice.findById(product_id);
         if(productOptional.isPresent()){
-                    ProductHandleValue productHandleValue = productSevice.findOptionByProductId(id);
+                    ProductHandleWebsite productHandleValue = productSevice.findOptionWebsiteByProductId(product_id,account_id);
+           Boolean isFavorite= productSevice.checkFavorite(product_id,account_id);
             ProductOptionalDTO productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
                     productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                    , productHandleValue.getProductName(), null);
+                    , productHandleValue.getProductName(), productHandleValue.getVoteAverage(),isFavorite, null);
 
-            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(id);
+            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
             Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
             Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
             List<ValueOption> colorOptionList = new ArrayList<>();

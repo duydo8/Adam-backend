@@ -3,6 +3,7 @@ package com.example.adambackend.repository;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,10 +60,19 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "where  p.isActive=true and p.isDelete=false and dp.id=?1")
     Product findByDetailProductId(Integer detalId);
 
-    @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, max(price_export) as maxPrice from detail_products dp join products p \n" +
-            "ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1", nativeQuery = true)
-    ProductHandleValue findOptionByProductId(int productId);
-
+    @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice,\n" +
+            "             max(price_export) as maxPrice from detail_products dp join products p \n" +
+            "            ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0\n" +
+            "group by p.product_name,p.is_active,p.is_completed,p.is_deleted,p.id and p.id=?1", nativeQuery = true)
+    ProductHandleValue findOptionByProductId(Integer productId);
+    @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, \n" +
+            "             max(price_export) as maxPrice,p.vote_average as voteAverage  from detail_products dp join products p \n" +
+            "            ON p.id=dp.product_id join favorites fa on fa.product_id=p.id join accounts a on a.id=fa.account_id \n" +
+            " where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1 and (a.id=?2 or ?2 is null) \n" +
+            "group by p.product_name,p.is_active,p.is_completed,p.is_deleted,p.id,fa.is_active,p.vote_average ", nativeQuery = true)
+    ProductHandleWebsite findOptionWebsiteByProductId(Integer productId, Integer accountId);
+    @Query(value = "select * from favorites fa join products p on p.id=fa.product_id join accounts a on a.id=fa.account_id where p.id=?1 and a.id=?2",nativeQuery = true)
+    Boolean checkFavorite(Integer productId, Integer accountId);
     @Modifying
     @Transactional
     @Query(value = "update products set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)

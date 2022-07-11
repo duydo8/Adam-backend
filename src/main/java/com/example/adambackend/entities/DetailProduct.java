@@ -46,5 +46,8 @@ public class DetailProduct {
     @JsonIgnore
     @OneToMany(mappedBy = "detailProduct")
     List<CartItems> cartItems = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="discount_product_id")
+    private DiscountProduct discountProduct;
 
 }

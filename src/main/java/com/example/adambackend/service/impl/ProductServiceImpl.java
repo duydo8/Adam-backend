@@ -2,7 +2,7 @@ package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
-import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,10 @@ public class ProductServiceImpl implements ProductSevice {
     @Override
     public Page<Product> findPage(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size, Sort.by("createDate").descending()));
+    }
+    @Override
+    public Boolean checkFavorite(Integer productId, Integer accountId){
+        return productRepository.checkFavorite(productId,accountId);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public ProductHandleValue findOptionByProductId(int productId) {
-        return productRepository.findOptionByProductId(productId);
+    public ProductHandleWebsite findOptionWebsiteByProductId(Integer productId,Integer accountId) {
+        return productRepository.findOptionWebsiteByProductId(productId,accountId);
     }
 }

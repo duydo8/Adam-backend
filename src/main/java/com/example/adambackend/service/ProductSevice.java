@@ -3,6 +3,7 @@ package com.example.adambackend.service;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +15,8 @@ public interface ProductSevice {
     Optional<Product> findById(Integer id);
 
     void deleteById(Integer id);
+
+    Boolean checkFavorite(Integer productId, Integer accountId);
 
     Product save(Product product);
 
@@ -33,5 +36,5 @@ public interface ProductSevice {
 
     Product findByDetailProductId(Integer detalId);
 
-    ProductHandleValue findOptionByProductId(int productId);
+    ProductHandleWebsite findOptionWebsiteByProductId(Integer productId,Integer accountId);
 }

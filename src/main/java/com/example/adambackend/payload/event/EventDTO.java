@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventDTO {
-    private String nameEvent;
+    private String eventName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Boolean status;
-    private Boolean isDelete;
-    private Integer promotionId;
+    private LocalDateTime createDate;
+    private String description;
+    private String type;
+
+
 }
