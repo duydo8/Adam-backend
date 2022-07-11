@@ -201,7 +201,7 @@ public class OrderController {
                 );
 
         dashboard.setData(doubleList);
-        List<String> thang= new ArrayList<>();
+       dashboard.setLabels(thang);
 
 
         Dashboard dashboard1= new Dashboard();
