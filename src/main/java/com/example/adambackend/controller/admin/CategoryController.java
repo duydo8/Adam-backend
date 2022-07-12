@@ -1,16 +1,13 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Category;
-import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryDTO;
 import com.example.adambackend.payload.category.CategoryResponse;
 import com.example.adambackend.payload.category.CategoryUpdate;
 import com.example.adambackend.payload.category.ListCategoryId;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.payload.tag.ListTagIdDTO;
 import com.example.adambackend.repository.CategoryRepository;
-import com.example.adambackend.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -94,6 +91,7 @@ public class CategoryController {
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
     }
+
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListCategoryId listCategoryId) {
         List<Integer> list = listCategoryId.getListCategoryId();
@@ -112,6 +110,7 @@ public class CategoryController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
+
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
         Optional<Category> categoryOptional = categoryService.findById(id);

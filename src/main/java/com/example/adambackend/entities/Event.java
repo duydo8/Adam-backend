@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,11 +16,17 @@ import java.util.List;
 @Table(name = "events")
 public class Event {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "event")
+    List<DiscountProduct> discountProducts;
+    @JsonIgnore
+    @OneToMany(mappedBy = "event")
+    List<DiscountOrder> discountOrders;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "event_name")
-    private String event_name;
+    private String eventName;
     @Column(name = "start_time")
     private LocalDateTime startTime;
     @Column(name = "end_time")
@@ -29,18 +34,11 @@ public class Event {
     private String description;
     @Column(name = "is_deleted")
     private Boolean isDelete;
-
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    private String type;
+    private Boolean type;
     private String image;
-    @JsonIgnore
-    @OneToMany(mappedBy = "event")
-    List<DiscountProduct> discountProducts;
-    @JsonIgnore
-    @OneToMany(mappedBy = "event")
-    List<DiscountOrder> discountOrders;
 
 }

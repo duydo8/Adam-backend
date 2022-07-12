@@ -1,4 +1,4 @@
-package com.example.adambackend.controller;
+package com.example.adambackend.controller.general;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

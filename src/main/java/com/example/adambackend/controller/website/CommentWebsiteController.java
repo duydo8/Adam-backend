@@ -1,9 +1,7 @@
 package com.example.adambackend.controller.website;
 
-import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Comment;
 import com.example.adambackend.entities.Product;
-import com.example.adambackend.enums.CommentStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,7 +61,6 @@ public class CommentWebsiteController {
 //        }
 //        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not contains in order"));
 //    }
-
 
 
     //

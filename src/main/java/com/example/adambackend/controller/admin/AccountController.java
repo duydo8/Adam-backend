@@ -20,21 +20,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("/admin/account")
 public class AccountController {
+    private final List<String> thang = Arrays.asList("January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December");
     @Autowired
     AccountService accountService;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     ModelMapper modelMapper;
-
-    private final List<String> thang= Arrays.asList("January", "February", "March", "April", "May",
-            "June", "July","August","September","October","November","December");
 
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
@@ -49,7 +50,7 @@ public class AccountController {
                     .badRequest()
                     .body(new IGenericResponse(400, "Email has been used"));
         }
-        if(accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()){
+        if (accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body(new IGenericResponse(400, "PhoneNumber has been used"));
@@ -58,7 +59,7 @@ public class AccountController {
 
         Account account = new Account(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
+                passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber(),
                 signUpRequest.getFullName()
         );
         account.setCreateDate(LocalDateTime.now());
@@ -70,11 +71,11 @@ public class AccountController {
         } else {
             account.setRole(ERoleName.User);
         }
-        String code= RandomString.make(64);
+        String code = RandomString.make(64);
         account.setVerificationCode(code);
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-        TwilioSendSms twilioSendSms= new TwilioSendSms();
-        twilioSendSms.sendCode(account.getPhoneNumber(),code);
+        TwilioSendSms twilioSendSms = new TwilioSendSms();
+        twilioSendSms.sendCode(account.getPhoneNumber(), code);
         account.setPriority(5.0);
         Account account1 = accountService.save(account);
 
@@ -84,22 +85,21 @@ public class AccountController {
     }
 
     @GetMapping("verify")
-    public ResponseEntity<?> verify(@RequestParam("code")String code,@RequestParam("id")Integer id){
-        Optional<Account> accountOptional= accountService.findById(id);
-        if(accountOptional.isPresent()){
-            if(accountOptional.get().getVerificationCode().equals(code)
-                    && accountOptional.get().getTimeValid()==LocalDateTime.now()){
+    public ResponseEntity<?> verify(@RequestParam("code") String code, @RequestParam("id") Integer id) {
+        Optional<Account> accountOptional = accountService.findById(id);
+        if (accountOptional.isPresent()) {
+            if (accountOptional.get().getVerificationCode().equals(code)
+                    && accountOptional.get().getTimeValid() == LocalDateTime.now()) {
                 accountOptional.get().setIsActive(true);
                 ;
-                return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()),200,""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"code is not correct or time is invalid"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code is not correct or time is invalid"));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
-
 
 
     @GetMapping("findAll")
@@ -125,15 +125,16 @@ public class AccountController {
                 if (accountAdminDTO.getRole().equalsIgnoreCase("admin")) {
                     accountOptional.get().setRole(ERoleName.Admin);
                 }
-                    accountOptional.get().setRole(ERoleName.User);
+                accountOptional.get().setRole(ERoleName.User);
                 accountService.save(accountOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
-        }catch (Exception e){
-          return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not valid data"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not valid data"));
         }
     }
+
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteEvent(@RequestParam("id") Integer id) {
         Optional<Account> accountOptional = accountService.findById(id);
@@ -144,89 +145,92 @@ public class AccountController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
         }
     }
+
     @GetMapping("findById")
-    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
+    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
         Optional<Account> accountOptional = accountService.findById(id);
         if (accountOptional.isPresent()) {
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(),200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
         }
 
     }
-//    @DeleteMapping("deleteListId")
-@GetMapping("accountSatistic")
-    public ResponseEntity<?> countTotalAccountInOrder(){
-    Dashboard dashboard= new Dashboard();
-    dashboard.setName("Tổng số người dùng mua hàng");
 
-    List<Double> doubleList= Arrays.asList(accountService.countTotalAccountInOrder(1),
-   accountService.countTotalAccountInOrder(2),
-    accountService.countTotalAccountInOrder(3),
-   accountService.countTotalAccountInOrder(4),
-   accountService.countTotalAccountInOrder(5),
-    accountService.countTotalAccountInOrder(6),
-    accountService.countTotalAccountInOrder(7),
-    accountService.countTotalAccountInOrder(8),
-    accountService.countTotalAccountInOrder(8),
-    accountService.countTotalAccountInOrder(9),
-    accountService.countTotalAccountInOrder(10),
-    accountService.countTotalAccountInOrder(11),
-    accountService.countTotalAccountInOrder(12));
-    dashboard.setData(doubleList);
-    dashboard.setLabels(thang);
-    Dashboard dashboard1= new Dashboard();
-    dashboard1.setName("Tổng số người dùng ");
+    //    @DeleteMapping("deleteListId")
+    @GetMapping("accountSatistic")
+    public ResponseEntity<?> countTotalAccountInOrder() {
+        Dashboard dashboard = new Dashboard();
+        dashboard.setName("Tổng số người dùng mua hàng");
 
-    List<Double> doubleList1= Arrays.asList(accountService.countTotalAccount(1),
-            accountService.countTotalAccount(2),
-            accountService.countTotalAccount(3),
-            accountService.countTotalAccount(4),
-            accountService.countTotalAccount(5),
-            accountService.countTotalAccount(6),
-            accountService.countTotalAccount(7),
-            accountService.countTotalAccount(8),
-            accountService.countTotalAccount(9),
-            accountService.countTotalAccount(10),
-            accountService.countTotalAccount(11),
-            accountService.countTotalAccount(12)
-            );
+        List<Double> doubleList = Arrays.asList(accountService.countTotalAccountInOrder(1),
+                accountService.countTotalAccountInOrder(2),
+                accountService.countTotalAccountInOrder(3),
+                accountService.countTotalAccountInOrder(4),
+                accountService.countTotalAccountInOrder(5),
+                accountService.countTotalAccountInOrder(6),
+                accountService.countTotalAccountInOrder(7),
+                accountService.countTotalAccountInOrder(8),
+                accountService.countTotalAccountInOrder(8),
+                accountService.countTotalAccountInOrder(9),
+                accountService.countTotalAccountInOrder(10),
+                accountService.countTotalAccountInOrder(11),
+                accountService.countTotalAccountInOrder(12));
+        dashboard.setData(doubleList);
+        dashboard.setLabels(thang);
+        Dashboard dashboard1 = new Dashboard();
+        dashboard1.setName("Tổng số người dùng ");
 
-    dashboard1.setData(doubleList1);
-    dashboard1.setLabels(thang);
-    Dashboard dashboard2= new Dashboard();
-    dashboard2.setName("Tổng số người đăng ký mới");
+        List<Double> doubleList1 = Arrays.asList(accountService.countTotalAccount(1),
+                accountService.countTotalAccount(2),
+                accountService.countTotalAccount(3),
+                accountService.countTotalAccount(4),
+                accountService.countTotalAccount(5),
+                accountService.countTotalAccount(6),
+                accountService.countTotalAccount(7),
+                accountService.countTotalAccount(8),
+                accountService.countTotalAccount(9),
+                accountService.countTotalAccount(10),
+                accountService.countTotalAccount(11),
+                accountService.countTotalAccount(12)
+        );
 
-    List<Double> doubleList2= Arrays.asList(accountService.countTotalSignUpAccount(1),
-            accountService.countTotalSignUpAccount(2),
-            accountService.countTotalSignUpAccount(3),
-            accountService.countTotalSignUpAccount(4),
-            accountService.countTotalSignUpAccount(5),
-            accountService.countTotalSignUpAccount(6),
-            accountService.countTotalSignUpAccount(7),
-            accountService.countTotalSignUpAccount(8),
-            accountService.countTotalSignUpAccount(9),
-            accountService.countTotalSignUpAccount(10),
-            accountService.countTotalSignUpAccount(11),
-            accountService.countTotalSignUpAccount(12)
-    );
+        dashboard1.setData(doubleList1);
+        dashboard1.setLabels(thang);
+        Dashboard dashboard2 = new Dashboard();
+        dashboard2.setName("Tổng số người đăng ký mới");
 
-    dashboard2.setData(doubleList2);
-    dashboard2.setLabels(thang);
-List<Dashboard> dashboardList= Arrays.asList(dashboard,dashboard1,dashboard2);
-    return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList,200,""));
-}
-@PutMapping("deleteByArrayId")
-    public ResponseEntity<?> deleteByArrayId(@RequestBody AccountArrayId accountArrayId){
-        List<Integer> accountIdList=accountArrayId.getAccountIdList();
-    for (Integer x: accountIdList
-         ) {
-        if(accountService.findById(x).isPresent()) {
-            accountService.updateAccountDeleted(x);
-        }
+        List<Double> doubleList2 = Arrays.asList(accountService.countTotalSignUpAccount(1),
+                accountService.countTotalSignUpAccount(2),
+                accountService.countTotalSignUpAccount(3),
+                accountService.countTotalSignUpAccount(4),
+                accountService.countTotalSignUpAccount(5),
+                accountService.countTotalSignUpAccount(6),
+                accountService.countTotalSignUpAccount(7),
+                accountService.countTotalSignUpAccount(8),
+                accountService.countTotalSignUpAccount(9),
+                accountService.countTotalSignUpAccount(10),
+                accountService.countTotalSignUpAccount(11),
+                accountService.countTotalSignUpAccount(12)
+        );
+
+        dashboard2.setData(doubleList2);
+        dashboard2.setLabels(thang);
+        List<Dashboard> dashboardList = Arrays.asList(dashboard, dashboard1, dashboard2);
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList, 200, ""));
     }
-    return ResponseEntity.ok().body(new HandleExceptionDemo(200,"success"));
-}
+
+    @PutMapping("deleteByArrayId")
+    public ResponseEntity<?> deleteByArrayId(@RequestBody AccountArrayId accountArrayId) {
+        List<Integer> accountIdList = accountArrayId.getAccountIdList();
+        for (Integer x : accountIdList
+        ) {
+            if (accountService.findById(x).isPresent()) {
+                accountService.updateAccountDeleted(x);
+            }
+        }
+        return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+    }
 
 }

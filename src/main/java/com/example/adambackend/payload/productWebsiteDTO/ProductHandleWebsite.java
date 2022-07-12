@@ -12,6 +12,7 @@ public interface ProductHandleWebsite {
     Double getMinPrice();
 
     String getProductName();
-     Double getVoteAverage();
+
+    Double getVoteAverage();
 
 }

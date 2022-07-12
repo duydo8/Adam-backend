@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="discount_products")
+@Table(name = "discount_products")
 public class DiscountProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="discount_name")
+    @Column(name = "discount_name")
     private String discountName;
     private String description;
     @Column(name = "create_date")
@@ -27,14 +27,14 @@ public class DiscountProduct {
     private LocalDateTime startTime;
     @Column(name = "end_time")
     private LocalDateTime endTime;
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name="is_deleted")
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @Column(name="sale_price")
+    @Column(name = "sale_price")
     private Double salePrice;
     @JsonIgnore
-    @OneToMany(mappedBy ="discountProduct" )
+    @OneToMany(mappedBy = "discountProduct")
     private List<DetailOrder> detailOrderList;
     @ManyToOne
     @JoinColumn(name = "event_id")

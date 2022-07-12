@@ -8,7 +8,6 @@ import com.example.adambackend.payload.material.MaterialUpdate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.repository.MaterialRepository;
-import com.example.adambackend.service.MaterialService;
 import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +81,7 @@ public class MaterialControler {
             ) {
                 Optional<Material> materialOptional = materialService.findById(x);
                 if (materialOptional.isPresent()) {
-materialProductRepository.updateMaterialProductsDeleted(x);
+                    materialProductRepository.updateMaterialProductsDeleted(x);
                     materialService.updateDeleteByArrayId(x);
 
                 }

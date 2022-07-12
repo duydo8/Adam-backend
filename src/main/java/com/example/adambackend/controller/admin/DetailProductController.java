@@ -5,12 +5,7 @@ import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Size;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.detailProduct.CustomDetailProductResponse;
-import com.example.adambackend.payload.detailProduct.DetailProductDTO;
-import com.example.adambackend.payload.detailProduct.ListDetailProductIdDTO;
-import com.example.adambackend.payload.detailProduct.NewDetailProductDTO;
-import com.example.adambackend.payload.detailProduct.DetailProductUpdateAdmin;
-import com.example.adambackend.payload.detailProduct.DetailProductRequest;
+import com.example.adambackend.payload.detailProduct.*;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DetailProductRepository;
 import com.example.adambackend.service.ColorService;
@@ -74,15 +69,14 @@ public class DetailProductController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateDetailProduct( @RequestBody DetailProductUpdateAdmin detailProductUpdateAdmin) {
+    public ResponseEntity<?> updateDetailProduct(@RequestBody DetailProductUpdateAdmin detailProductUpdateAdmin) {
 
-        Optional<DetailProduct> detailProductOptional= detailProductService.findById(detailProductUpdateAdmin.getId());
-        Optional<Size> sizeOptional= sizeService.findById(detailProductUpdateAdmin.getSizeId());
-        Optional<Color>colorOptional= colorService.findById(detailProductUpdateAdmin.getColorId());
-        if(detailProductOptional.isPresent()&& colorOptional.isPresent()&&sizeOptional.isPresent())
-        {
+        Optional<DetailProduct> detailProductOptional = detailProductService.findById(detailProductUpdateAdmin.getId());
+        Optional<Size> sizeOptional = sizeService.findById(detailProductUpdateAdmin.getSizeId());
+        Optional<Color> colorOptional = colorService.findById(detailProductUpdateAdmin.getColorId());
+        if (detailProductOptional.isPresent() && colorOptional.isPresent() && sizeOptional.isPresent()) {
 
-            DetailProduct detailProduct=detailProductOptional.get();
+            DetailProduct detailProduct = detailProductOptional.get();
             detailProduct.setQuantity(detailProductUpdateAdmin.getQuantity());
             detailProduct.setPriceExport(detailProductUpdateAdmin.getPriceExport());
             detailProduct.setPriceImport(detailProductUpdateAdmin.getPriceImport());
@@ -91,7 +85,7 @@ public class DetailProductController {
             detailProduct.setIsActive(detailProductUpdateAdmin.getIsActive());
             detailProduct.setColor(colorOptional.get());
             detailProduct.setSize(sizeOptional.get());
-            return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin,200,""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin, 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
@@ -174,7 +168,7 @@ public class DetailProductController {
     public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse) {
         List<NewDetailProductDTO> newDetailProductDTOList = customDetailProductResponse.getNewDetailProductDTOList();
 
-        List<DetailProduct>detailProducts=new ArrayList<>();
+        List<DetailProduct> detailProducts = new ArrayList<>();
         if (newDetailProductDTOList.size() > 0) {
             for (NewDetailProductDTO n : newDetailProductDTOList
             ) {
@@ -196,14 +190,15 @@ public class DetailProductController {
                 }
 
             }
-            List<NewDetailProductDTO>  newDetailProductDTOList1=detailProducts.stream().map(e->new NewDetailProductDTO(e.getId(),e.getPriceImport(),
-                    e.getPriceExport(),e.getProductImage(),e.getQuantity(),e.getIsActive())).collect(Collectors.toList());
+            List<NewDetailProductDTO> newDetailProductDTOList1 = detailProducts.stream().map(e -> new NewDetailProductDTO(e.getId(), e.getPriceImport(),
+                    e.getPriceExport(), e.getProductImage(), e.getQuantity(), e.getIsActive())).collect(Collectors.toList());
             return ResponseEntity.ok().body(new IGenericResponse<>(detailProducts, 200, ""));
 
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "nothing updated"));
     }
+
     @PutMapping("updateArrayOptionValueDetailProduct")
     public ResponseEntity<?> UpdateArrayOptionValueDetailProduct(@RequestBody DetailProductRequest detailProductRequest) {
         Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
@@ -257,6 +252,7 @@ public class DetailProductController {
         }
 
     }
+
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListDetailProductIdDTO listDetailProductIdDTO) {
         List<Integer> list = listDetailProductIdDTO.getListDetailProductId();

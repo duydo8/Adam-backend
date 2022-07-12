@@ -45,44 +45,41 @@ public class OrderWebsiteController {
 //    }
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
-        Optional<Account> account= accountService.findById(orderWebsiteCreate.getAccountId());
-        Optional<Address> address= addressService.findById(orderWebsiteCreate.getAddressId());
-        if(address.isPresent() && account.isPresent()){
-        Order order= new Order();
-        order.setAccount(account.get());
-        order.setCreateDate(LocalDateTime.now());
-        order.setStatus(1);
-        order.setAddress(address.get());
-        order.setFullName(orderWebsiteCreate.getFullName());
-        order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
+        Optional<Account> account = accountService.findById(orderWebsiteCreate.getAccountId());
+        Optional<Address> address = addressService.findById(orderWebsiteCreate.getAddressId());
+        if (address.isPresent() && account.isPresent()) {
+            Order order = new Order();
+            order.setAccount(account.get());
+            order.setCreateDate(LocalDateTime.now());
+            order.setStatus(1);
+            order.setAddress(address.get());
+            order.setFullName(orderWebsiteCreate.getFullName());
+            order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
 
 
-        order.setSalePrice(orderWebsiteCreate.getSalePrice());
-        Double ammountPrice=0.0;
+            order.setSalePrice(orderWebsiteCreate.getSalePrice());
+            Double ammountPrice = 0.0;
 
-        order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
+            order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
 
-            List<CartItems> cartItemsList= new ArrayList<>();
-
-
-
+            List<CartItems> cartItemsList = new ArrayList<>();
 
 
 //
-            for (Integer x: orderWebsiteCreate.getCartItemIdList()
-                 ) {
-                Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
-                if(cartItemsOptional.isPresent()){
+            for (Integer x : orderWebsiteCreate.getCartItemIdList()
+            ) {
+                Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+                if (cartItemsOptional.isPresent()) {
 
                     cartItemsList.add(cartItemsOptional.get());
-                    DetailProduct detailProduct= cartItemsOptional.get().getDetailProduct();
+                    DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
-                    if(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity()<0){
+                    if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
                         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not enough quantity "));
                     }
 
-                    ammountPrice+=cartItemsOptional.get().getTotalPrice();
-                    detailProduct.setQuantity(detailProduct.getQuantity()-cartItemsOptional.get().getQuantity());
+                    ammountPrice += cartItemsOptional.get().getTotalPrice();
+                    detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
                     detailProductService.save(detailProduct);
                     cartItemService.updateIsActive(x);
 
@@ -90,42 +87,42 @@ public class OrderWebsiteController {
             }
             order.setAmountPrice(ammountPrice);
             order.setCartItems(cartItemsList);
-            Double totalPrice=ammountPrice- orderWebsiteCreate.getSalePrice();
-            List<Order> orders= orderService.findAll();
-                String code=RandomString.make(64);
-                for (int i=0;i<orders.size();i++) {
-                    if (code.equals(orders.get(i).getOrder_code())) {
-                        code = RandomString.make((64));
-                        break;
-                    }
+            Double totalPrice = ammountPrice - orderWebsiteCreate.getSalePrice();
+            List<Order> orders = orderService.findAll();
+            String code = RandomString.make(64);
+            for (int i = 0; i < orders.size(); i++) {
+                if (code.equals(orders.get(i).getOrder_code())) {
+                    code = RandomString.make((64));
+                    break;
                 }
-                order.setOrder_code(code);
-            HistoryOrder historyOrder= new HistoryOrder();
+            }
+            order.setOrder_code(code);
+            HistoryOrder historyOrder = new HistoryOrder();
             order.setTotalPrice(totalPrice);
-             order=orderService.save(order);
+            order = orderService.save(order);
 
             historyOrder.setOrder(orderService.findById(order.getId()).get());
             historyOrder.setDescription("create time");
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
-            historyOrder.setTotalPrice(ammountPrice- orderWebsiteCreate.getSalePrice());
+            historyOrder.setTotalPrice(ammountPrice - orderWebsiteCreate.getSalePrice());
             historyOrder.setStatus(1);
-            historyOrder=historyOrderRepository.save(historyOrder);
-            List<HistoryOrder> historyOrders= new ArrayList<>();
+            historyOrder = historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders = new ArrayList<>();
             historyOrders.add(historyOrder);
             order.setHistoryOrders(historyOrders);
-            order= orderService.save(order);
-            for (Integer x: orderWebsiteCreate.getCartItemIdList()
+            order = orderService.save(order);
+            for (Integer x : orderWebsiteCreate.getCartItemIdList()
             ) {
-                Optional<CartItems> cartItemsOptional= cartItemService.findById(x);
-                if(cartItemsOptional.isPresent()){
+                Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+                if (cartItemsOptional.isPresent()) {
                     cartItemsOptional.get().setOrder(order);
                     cartItemService.save(cartItemsOptional.get());
                 }
             }
 
-        return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
-    }
+            return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
+        }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
 
     }
@@ -142,27 +139,27 @@ public class OrderWebsiteController {
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
 
     }
+
     @GetMapping("findById")
-    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
-        Optional<Order> order= orderService.findById(id);
-        if(order.isPresent()){
+    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
+        Optional<Order> order = orderService.findById(id);
+        if (order.isPresent()) {
             return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
     @GetMapping("findByAccountId")
-    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId,@RequestParam("status")Integer status){
-        Optional<Account> account= accountService.findById(accountId);
-        if(account.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId,status),200,""));
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId, @RequestParam("status") Integer status) {
+        Optional<Account> account = accountService.findById(accountId);
+        if (account.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId, status), 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
-
-
 
 
 }

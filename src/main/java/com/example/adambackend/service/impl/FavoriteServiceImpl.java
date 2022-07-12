@@ -1,7 +1,6 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Favorite;
-import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.FavoriteRepository;
 import com.example.adambackend.service.FavoriteService;

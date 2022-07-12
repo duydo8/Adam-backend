@@ -29,7 +29,6 @@ public interface AccountService {
     void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
 
 
-
     Optional<Account> findByEmail(String email);
 
     Optional<Account> findByPhoneNumber(String phoneNumber);

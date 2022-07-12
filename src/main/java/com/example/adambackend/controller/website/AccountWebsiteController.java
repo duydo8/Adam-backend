@@ -28,6 +28,7 @@ public class AccountWebsiteController {
     private AccountService accountService;
     @Autowired
     private ModelMapper modelMapper;
+
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerAccount(@RequestBody SignUpRequest signUpRequest) {
         if (accountService.existsByUsername(signUpRequest.getUsername())) {
@@ -41,7 +42,7 @@ public class AccountWebsiteController {
                     .badRequest()
                     .body(new IGenericResponse(400, "Email has been used"));
         }
-        if(accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()){
+        if (accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body(new IGenericResponse(400, "PhoneNumber has been used"));
@@ -50,7 +51,7 @@ public class AccountWebsiteController {
 
         Account account = new Account(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber(),
+                passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber(),
                 signUpRequest.getFullName()
         );
         account.setIsActive(false);
@@ -62,35 +63,37 @@ public class AccountWebsiteController {
             account.setRole(ERoleName.User);
         }
 
-        int x=new Random().nextInt(899999)+100000;
+        int x = new Random().nextInt(899999) + 100000;
 
-        account.setVerificationCode(String.format("%06d",x));
+        account.setVerificationCode(String.format("%06d", x));
         account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-        System.out.println("------------"+x);
-        TwilioSendSms twilioSendSms= new TwilioSendSms();
-        twilioSendSms.sendCode(account.getPhoneNumber(),x+"");
+        System.out.println("------------" + x);
+        TwilioSendSms twilioSendSms = new TwilioSendSms();
+        twilioSendSms.sendCode(account.getPhoneNumber(), x + "");
         Account account1 = accountService.save(account);
 
         AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
 
         return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
     }
+
     @GetMapping("verify")
-    public ResponseEntity<?> verify(@RequestParam("code")String code,@RequestParam("id")Integer id){
-        Optional<Account> accountOptional= accountService.findById(id);
-        if(accountOptional.isPresent()){
-            if(accountOptional.get().getVerificationCode().equals(code)
-                    && accountOptional.get().getTimeValid()==LocalDateTime.now()){
+    public ResponseEntity<?> verify(@RequestParam("code") String code, @RequestParam("id") Integer id) {
+        Optional<Account> accountOptional = accountService.findById(id);
+        if (accountOptional.isPresent()) {
+            if (accountOptional.get().getVerificationCode().equals(code)
+                    && accountOptional.get().getTimeValid() == LocalDateTime.now()) {
                 accountOptional.get().setIsActive(true);
                 ;
-                return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()),200,""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"code is not correct or time is invalid"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code is not correct or time is invalid"));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
     @PostMapping("forgotPassword")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
                                             @RequestParam("password") String password,
@@ -111,11 +114,12 @@ public class AccountWebsiteController {
         }
 
     }
+
     @GetMapping("findById")
-    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
+    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
         Optional<Account> accountOptional = accountService.findById(id);
         if (accountOptional.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(),200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
         } else {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
         }

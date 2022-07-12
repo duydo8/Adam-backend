@@ -5,7 +5,6 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.category.CategoryResponse;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.CategoryRepository;
-import com.example.adambackend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

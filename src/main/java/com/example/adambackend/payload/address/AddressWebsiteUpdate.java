@@ -15,6 +15,6 @@ public class AddressWebsiteUpdate {
     private Integer districtId;
     private Integer wardId;
     private String phoneNumber;
-    private  String fullName;
+    private String fullName;
     private Boolean isDefault;
 }

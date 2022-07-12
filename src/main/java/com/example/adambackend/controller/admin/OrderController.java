@@ -1,7 +1,6 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
-import com.example.adambackend.enums.OrderStatus;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -28,6 +27,8 @@ import java.util.Optional;
 @RequestMapping("admin/order")
 public class OrderController {
 
+    private final List<String> thang = Arrays.asList("January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December");
     @Autowired
     OrderService orderService;
     @Autowired
@@ -38,8 +39,7 @@ public class OrderController {
     DetailOrderService detailOrderService;
     @Autowired
     HistoryOrderRepository historyOrderRepository;
-    private final List<String> thang= Arrays.asList("January", "February", "March", "April", "May",
-            "June", "July","August","September","October","November","December");
+
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -49,12 +49,12 @@ public class OrderController {
 
     @PutMapping("updateByIdAndStatus")
     public ResponseEntity<?> update(@RequestParam("order_id") Integer orderId,
-                                    @RequestParam("status")Integer status) {
+                                    @RequestParam("status") Integer status) {
         Optional<Order> orderOptional = orderService.findById(orderId);
         if (orderOptional.isPresent()) {
             orderOptional.get().setStatus(status);
 
-            HistoryOrder historyOrder= new HistoryOrder();
+            HistoryOrder historyOrder = new HistoryOrder();
 
 
             historyOrder.setOrder(orderOptional.get());
@@ -63,8 +63,8 @@ public class OrderController {
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(orderOptional.get().getTotalPrice());
             historyOrder.setStatus(6);
-            historyOrder=historyOrderRepository.save(historyOrder);
-            List<HistoryOrder> historyOrders= orderOptional.get().getHistoryOrders();
+            historyOrder = historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders = orderOptional.get().getHistoryOrders();
             historyOrders.add(historyOrder);
             orderOptional.get().setHistoryOrders(historyOrders);
 
@@ -73,13 +73,14 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found event"));
         }
     }
+
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Order order) {
         Optional<Order> orderOptional = orderService.findById(order.getId());
         if (orderOptional.isPresent()) {
 
-            HistoryOrder historyOrder= new HistoryOrder();
-            order=orderService.save(order);
+            HistoryOrder historyOrder = new HistoryOrder();
+            order = orderService.save(order);
 
             historyOrder.setOrder(orderService.findById(order.getId()).get());
             historyOrder.setDescription("create time");
@@ -87,8 +88,8 @@ public class OrderController {
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(order.getTotalPrice());
             historyOrder.setStatus(6);
-            historyOrder=historyOrderRepository.save(historyOrder);
-            List<HistoryOrder> historyOrders= order.getHistoryOrders();
+            historyOrder = historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders = order.getHistoryOrders();
             historyOrders.add(historyOrder);
             order.setHistoryOrders(historyOrders);
 
@@ -119,9 +120,9 @@ public class OrderController {
             } else {
                 account.setPriority(account.getPriority());
             }
-            Order order= orderOptional.get();
-            HistoryOrder historyOrder= new HistoryOrder();
-            order=orderService.save(order);
+            Order order = orderOptional.get();
+            HistoryOrder historyOrder = new HistoryOrder();
+            order = orderService.save(order);
 
             historyOrder.setOrder(orderService.findById(order.getId()).get());
             historyOrder.setDescription("create time");
@@ -129,8 +130,8 @@ public class OrderController {
             historyOrder.setIsActive(true);
             historyOrder.setTotalPrice(order.getTotalPrice());
             historyOrder.setStatus(6);
-            historyOrder=historyOrderRepository.save(historyOrder);
-            List<HistoryOrder> historyOrders= new ArrayList<>();
+            historyOrder = historyOrderRepository.save(historyOrder);
+            List<HistoryOrder> historyOrders = new ArrayList<>();
             historyOrders.add(historyOrder);
             order.setHistoryOrders(historyOrders);
             orderService.save(order);
@@ -139,7 +140,8 @@ public class OrderController {
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
     }
-//    @GetMapping("countAllOrder")
+
+    //    @GetMapping("countAllOrder")
 //    public ResponseEntity<?> countAllOrder(@RequestParam("start_date") String startDate,
 //                                           @RequestParam("end_date")String endDate){
 //        startDate=startDate.replace(" ","T");
@@ -180,17 +182,17 @@ public class OrderController {
     }
 
     @GetMapping("orderSatistic")
-    public ResponseEntity<?> sumTotalPriceByTime(){
-        List<Dashboard> dashboardList= new ArrayList<>();
-        Dashboard dashboard= new Dashboard();
+    public ResponseEntity<?> sumTotalPriceByTime() {
+        List<Dashboard> dashboardList = new ArrayList<>();
+        Dashboard dashboard = new Dashboard();
         dashboard.setName("Tổng đơn hàng");
 
-        List<Double> doubleList= Arrays.asList(orderService.sumTotalPriceByTime(1),
-       orderService.sumTotalPriceByTime(2),
-        orderService.sumTotalPriceByTime(3),
-        orderService.sumTotalPriceByTime(4),
-        orderService.sumTotalPriceByTime(5),
-        orderService.sumTotalPriceByTime(6),
+        List<Double> doubleList = Arrays.asList(orderService.sumTotalPriceByTime(1),
+                orderService.sumTotalPriceByTime(2),
+                orderService.sumTotalPriceByTime(3),
+                orderService.sumTotalPriceByTime(4),
+                orderService.sumTotalPriceByTime(5),
+                orderService.sumTotalPriceByTime(6),
                 orderService.sumTotalPriceByTime(7),
                 orderService.sumTotalPriceByTime(8),
                 orderService.sumTotalPriceByTime(9),
@@ -198,23 +200,23 @@ public class OrderController {
                 orderService.sumTotalPriceByTime(11),
                 orderService.sumTotalPriceByTime(12)
 
-                );
+        );
 
         dashboard.setData(doubleList);
-       dashboard.setLabels(thang);
+        dashboard.setLabels(thang);
 
 
-        Dashboard dashboard1= new Dashboard();
+        Dashboard dashboard1 = new Dashboard();
         dashboard1.setName("Đơn thành công");
 
 
-        List<Double> doubleList1= Arrays.asList(orderService.sumSuccessOrderByTime(1),
+        List<Double> doubleList1 = Arrays.asList(orderService.sumSuccessOrderByTime(1),
                 orderService.sumSuccessOrderByTime(2),
                 orderService.sumSuccessOrderByTime(3),
                 orderService.sumSuccessOrderByTime(4),
                 orderService.sumSuccessOrderByTime(5),
                 orderService.sumSuccessOrderByTime(6),
-        orderService.sumSuccessOrderByTime(7),
+                orderService.sumSuccessOrderByTime(7),
                 orderService.sumSuccessOrderByTime(8),
                 orderService.sumSuccessOrderByTime(9),
                 orderService.sumSuccessOrderByTime(10),
@@ -223,15 +225,15 @@ public class OrderController {
         );
         dashboard1.setData(doubleList1);
         dashboard1.setLabels(thang);
-        Dashboard dashboard2= new Dashboard();
+        Dashboard dashboard2 = new Dashboard();
         dashboard2.setName("Đơn Hủy");
 
-        List<Double> doubleList2=Arrays.asList(orderService.sumCancelOrderByTime(1),
-        orderService.sumCancelOrderByTime(2),
-        orderService.sumCancelOrderByTime(3),
-        orderService.sumCancelOrderByTime(4),
-        orderService.sumCancelOrderByTime(5),
-        orderService.sumCancelOrderByTime(6),
+        List<Double> doubleList2 = Arrays.asList(orderService.sumCancelOrderByTime(1),
+                orderService.sumCancelOrderByTime(2),
+                orderService.sumCancelOrderByTime(3),
+                orderService.sumCancelOrderByTime(4),
+                orderService.sumCancelOrderByTime(5),
+                orderService.sumCancelOrderByTime(6),
                 orderService.sumCancelOrderByTime(7),
                 orderService.sumCancelOrderByTime(8),
                 orderService.sumCancelOrderByTime(9),
@@ -242,15 +244,15 @@ public class OrderController {
         dashboard2.setData(doubleList2);
 
         dashboard2.setLabels(thang);
-        Dashboard dashboard3= new Dashboard();
+        Dashboard dashboard3 = new Dashboard();
         dashboard3.setName("Đơn Đổi Trả");
 
-        List<Double> doubleList3=Arrays.asList(orderService.sumPaybackOrderByTime(1),
-        orderService.sumPaybackOrderByTime(2),
-        orderService.sumPaybackOrderByTime(3),
-        orderService.sumPaybackOrderByTime(4),
-        orderService.sumPaybackOrderByTime(5),
-        orderService.sumPaybackOrderByTime(6),
+        List<Double> doubleList3 = Arrays.asList(orderService.sumPaybackOrderByTime(1),
+                orderService.sumPaybackOrderByTime(2),
+                orderService.sumPaybackOrderByTime(3),
+                orderService.sumPaybackOrderByTime(4),
+                orderService.sumPaybackOrderByTime(5),
+                orderService.sumPaybackOrderByTime(6),
                 orderService.sumPaybackOrderByTime(7),
                 orderService.sumPaybackOrderByTime(8),
                 orderService.sumPaybackOrderByTime(9),
@@ -266,7 +268,7 @@ public class OrderController {
         dashboardList.add(dashboard1);
         dashboardList.add(dashboard2);
         dashboardList.add(dashboard3);
-        return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList,200,""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList, 200, ""));
     }
 
 

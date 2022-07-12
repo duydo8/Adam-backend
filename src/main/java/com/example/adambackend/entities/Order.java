@@ -1,6 +1,5 @@
 package com.example.adambackend.entities;
 
-import com.example.adambackend.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,11 +44,11 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HistoryOrder> historyOrders;
 
     @OneToMany(mappedBy = "order")
-    private List<CartItems> cartItems= new ArrayList<>();
+    private List<CartItems> cartItems = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();

@@ -39,11 +39,11 @@ public class Address {
     private Ward ward;
     @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name="full_name")
-    private  String fullName;
-    @Column(name="is_default")
+    @Column(name = "full_name")
+    private String fullName;
+    @Column(name = "is_default")
     private Boolean isDefault;
     @JsonIgnore
     @OneToMany(mappedBy = "address")

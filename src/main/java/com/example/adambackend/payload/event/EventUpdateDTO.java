@@ -9,14 +9,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDTO {
+public class EventUpdateDTO {
+    private Integer id;
     private String eventName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private LocalDateTime createDate;
     private String description;
     private Boolean type;
     private String image;
-
-
 }

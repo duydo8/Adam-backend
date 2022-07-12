@@ -28,28 +28,31 @@ public class AddressWebsiteController {
     DistrictService districtService;
     @Autowired
     WardService wardService;
+
     @GetMapping("findByAccountId")
-    public ResponseEntity<?> findByAccountId(@RequestParam("account_id")Integer accountId){
-        Optional<Account> account= accountService.findById(accountId);
-        if(account.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(addressService.findByAccountId(accountId),200,""));
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId) {
+        Optional<Account> account = accountService.findById(accountId);
+        if (account.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(addressService.findByAccountId(accountId), 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
-         }
+    }
+
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<>(addressService.findAll(), 200, ""));
     }
-    @PostMapping("create")
-    public ResponseEntity<?> createAddress( @RequestBody AddressWebsiteCreate addressWebsiteCreate) {
-        Optional<Account> account = accountService.findById(addressWebsiteCreate.getAccountId());
-        Optional<Province> province= provinceService.findById(addressWebsiteCreate.getProvinceId());
-        Optional<District> district= districtService.findById(addressWebsiteCreate.getDistrictId());
-        Optional<Ward> ward=wardService.findById(addressWebsiteCreate.getWardId());
-        if (account.isPresent()&&province.isPresent()&&district.isPresent()&&ward.isPresent()) {
 
-            Address address= new Address();
+    @PostMapping("create")
+    public ResponseEntity<?> createAddress(@RequestBody AddressWebsiteCreate addressWebsiteCreate) {
+        Optional<Account> account = accountService.findById(addressWebsiteCreate.getAccountId());
+        Optional<Province> province = provinceService.findById(addressWebsiteCreate.getProvinceId());
+        Optional<District> district = districtService.findById(addressWebsiteCreate.getDistrictId());
+        Optional<Ward> ward = wardService.findById(addressWebsiteCreate.getWardId());
+        if (account.isPresent() && province.isPresent() && district.isPresent() && ward.isPresent()) {
+
+            Address address = new Address();
             address.setAddressDetail(addressWebsiteCreate.getAddressDetail());
             address.setCreateDate(LocalDateTime.now());
             address.setIsActive(true);
@@ -62,8 +65,8 @@ public class AddressWebsiteController {
             address.setFullName(addressWebsiteCreate.getFullName());
             address.setIsDeleted(addressWebsiteCreate.getIsDefault());
             address.setIsDefault(false);
-            Address address1=addressService.save(address);
-            return ResponseEntity.ok().body(new IGenericResponse<>(address1,200,""));
+            Address address1 = addressService.save(address);
+            return ResponseEntity.ok().body(new IGenericResponse<>(address1, 200, ""));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found account"));
     }
@@ -72,11 +75,11 @@ public class AddressWebsiteController {
     public ResponseEntity<?> update(@RequestBody AddressWebsiteUpdate addressWebsiteUpdate) {
         Optional<Account> account = accountService.findById(addressWebsiteUpdate.getAccountId());
         Optional<Address> address = addressService.findById(addressWebsiteUpdate.getId());
-        Optional<Province> province= provinceService.findById(addressWebsiteUpdate.getProvinceId());
-        Optional<District> district= districtService.findById(addressWebsiteUpdate.getDistrictId());
-        Optional<Ward> ward=wardService.findById(addressWebsiteUpdate.getWardId());
-        if (account.isPresent()&&province.isPresent()&&district.isPresent()&&ward.isPresent()&& address.isPresent()) {
-           Address address1= address.get();
+        Optional<Province> province = provinceService.findById(addressWebsiteUpdate.getProvinceId());
+        Optional<District> district = districtService.findById(addressWebsiteUpdate.getDistrictId());
+        Optional<Ward> ward = wardService.findById(addressWebsiteUpdate.getWardId());
+        if (account.isPresent() && province.isPresent() && district.isPresent() && ward.isPresent() && address.isPresent()) {
+            Address address1 = address.get();
             address1.setAddressDetail(addressWebsiteUpdate.getAddressDetail());
             address1.setAccount(account.get());
             address1.setProvince(province.get());
@@ -86,7 +89,7 @@ public class AddressWebsiteController {
             address1.setFullName(addressWebsiteUpdate.getFullName());
             address1.setIsDeleted(addressWebsiteUpdate.getIsDefault());
             address1.setIsDefault(addressWebsiteUpdate.getIsDefault());
-            Address address2=addressService.save(address1);
+            Address address2 = addressService.save(address1);
 
             return ResponseEntity.ok().body(new IGenericResponse<Address>(address2, 200, "successfully"));
 

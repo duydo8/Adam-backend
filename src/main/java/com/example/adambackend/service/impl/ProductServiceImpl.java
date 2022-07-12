@@ -30,10 +30,11 @@ public class ProductServiceImpl implements ProductSevice {
     public Page<Product> findPage(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size, Sort.by("createDate").descending()));
     }
+
     @Override
-    public Boolean checkFavorite(Integer productId, Integer accountId){
-        List<Integer> x= productRepository.checkFavorite(productId,accountId);
-        if(x==null|| x.size()==0){
+    public Boolean checkFavorite(Integer productId, Integer accountId) {
+        List<Integer> x = productRepository.checkFavorite(productId, accountId);
+        if (x == null || x.size() == 0) {
             return false;
         }
         return true;
@@ -82,9 +83,10 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public ProductHandleWebsite findOptionWebsiteByAccountIdProductId(Integer productId,Integer accountId) {
-        return productRepository.findOptionWebsiteByProductId(productId,accountId);
+    public ProductHandleWebsite findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId) {
+        return productRepository.findOptionWebsiteByProductId(productId, accountId);
     }
+
     @Override
     public ProductHandleValue findOptionWebsiteByProductId(Integer productId) {
         return productRepository.findOptionByProductId(productId);

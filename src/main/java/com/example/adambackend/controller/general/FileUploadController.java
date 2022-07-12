@@ -1,8 +1,7 @@
-package com.example.adambackend.controller;
+package com.example.adambackend.controller.general;
 
 import com.example.adambackend.payload.response.Response;
 import com.example.adambackend.service.impl.FileStorageService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

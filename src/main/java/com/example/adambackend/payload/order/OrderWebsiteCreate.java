@@ -1,17 +1,9 @@
 package com.example.adambackend.payload.order;
 
-import com.example.adambackend.entities.Account;
-import com.example.adambackend.entities.Address;
-import com.example.adambackend.entities.CartItems;
-import com.example.adambackend.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

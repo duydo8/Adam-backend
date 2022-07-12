@@ -2,7 +2,6 @@ package com.example.adambackend.controller.website;
 
 import com.example.adambackend.entities.DetailOrder;
 import com.example.adambackend.entities.Order;
-import com.example.adambackend.entities.Product;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.detailOrder.DetailOrderWebsiteCreate;
 import com.example.adambackend.payload.detailOrder.DetailOrderWebsiteUpdate;
@@ -35,11 +34,10 @@ public class DetailOrderWebsiteController {
     }
 
 
-
     @PostMapping("create")
     public ResponseEntity<?> creatSize(@RequestBody DetailOrderWebsiteCreate detailOrderWebsiteCreate) {
-        Optional<Order> order= orderService.findById(detailOrderWebsiteCreate.getOrderId());
-        if(order.isPresent()) {
+        Optional<Order> order = orderService.findById(detailOrderWebsiteCreate.getOrderId());
+        if (order.isPresent()) {
             DetailOrder detailOrder = new DetailOrder();
             detailOrder.setIsActive(true);
             detailOrder.setIsDeleted(false);

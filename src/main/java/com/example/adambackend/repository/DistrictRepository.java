@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DistrictRepository extends JpaRepository<District, Integer> {
-    @Query(value = "select * from districts where province_id=?1",nativeQuery = true)
+    @Query(value = "select * from districts where province_id=?1", nativeQuery = true)
     List<District> findByProvineId(Integer provinceId);
 }

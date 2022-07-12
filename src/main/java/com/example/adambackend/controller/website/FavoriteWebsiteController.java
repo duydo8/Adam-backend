@@ -5,7 +5,6 @@ import com.example.adambackend.entities.Favorite;
 import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.FavoriteService;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController

@@ -41,42 +41,49 @@ public class OrderSerivceImpl implements OrderService {
     public Page<Order> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
     }
+
     @Override
-    public Double sumTotalPriceByTime(Integer month){
-        return  orderRepository.sumTotalPriceByTime(month);
+    public Double sumTotalPriceByTime(Integer month) {
+        return orderRepository.sumTotalPriceByTime(month);
     }
 
-//    @Override
+    //    @Override
 //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
 //        return orderRepository.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId);
 //    }
-@Override
-public List<Order> findByAccountId(Integer accountId,Integer status){
-    return orderRepository.findOrderByAccountId(accountId, status);
-}
-@Override
-    public Integer countAllOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
-        return  orderRepository.countAllOrderByTime(startDate,endDate);
-
-}
-@Override
-public Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
-        return orderRepository.countCancelOrderByTime(startDate,endDate);
-}
     @Override
-    public Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate){
-        return orderRepository.countSuccessOrderByTime(startDate,endDate);
+    public List<Order> findByAccountId(Integer accountId, Integer status) {
+        return orderRepository.findOrderByAccountId(accountId, status);
     }
+
     @Override
-    public Double sumSuccessOrderByTime(Integer month){
+    public Integer countAllOrderByTime(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.countAllOrderByTime(startDate, endDate);
+
+    }
+
+    @Override
+    public Integer countCancelOrderByTime(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.countCancelOrderByTime(startDate, endDate);
+    }
+
+    @Override
+    public Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.countSuccessOrderByTime(startDate, endDate);
+    }
+
+    @Override
+    public Double sumSuccessOrderByTime(Integer month) {
         return orderRepository.sumSuccessOrderByTime(month);
     }
+
     @Override
-    public Double sumCancelOrderByTime(Integer month){
+    public Double sumCancelOrderByTime(Integer month) {
         return orderRepository.sumCancelOrderByTime(month);
     }
+
     @Override
-    public Double sumPaybackOrderByTime(Integer month){
+    public Double sumPaybackOrderByTime(Integer month) {
         return orderRepository.sumPaybackOrderByTime(month);
     }
 }

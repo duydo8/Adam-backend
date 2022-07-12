@@ -32,7 +32,7 @@ public class CartItems {
     private LocalDateTime createDate;
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="order_id")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     public CartItems(Integer id, int quantity, double totalPrice, Account account, DetailProduct detailProduct, Boolean isActive, LocalDateTime createDate) {

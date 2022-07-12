@@ -17,6 +17,9 @@ import java.util.List;
 @Entity
 public class DetailProduct {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "detailProduct")
+    List<CartItems> cartItems = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,7 +30,6 @@ public class DetailProduct {
     private Double priceExport;
     @Column(name = "is_deleted")
     private Boolean isDelete;
-
     @Column(name = "image_product")
     private String productImage;
     @ManyToOne
@@ -43,9 +45,6 @@ public class DetailProduct {
     private Size size;
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    @JsonIgnore
-    @OneToMany(mappedBy = "detailProduct")
-    List<CartItems> cartItems = new ArrayList<>();
 
 
 }

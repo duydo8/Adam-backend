@@ -2,14 +2,13 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.tag.ListTagIdDTO;
 import com.example.adambackend.payload.tag.TagDTO;
-import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.tag.TagUpdate;
 import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.repository.TagRepository;
 import com.example.adambackend.service.ProductSevice;
-import com.example.adambackend.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,7 +82,7 @@ public class TagController {
             ) {
                 Optional<Tag> tagOptional = tagService.findById(x);
                 if (tagOptional.isPresent()) {
-        tagProductRepository.updateDeletedTagId(x);
+                    tagProductRepository.updateDeletedTagId(x);
                     tagService.updateDeletedTagId(x);
 
                 }

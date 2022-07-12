@@ -13,7 +13,6 @@ import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -57,10 +56,10 @@ public class ProductWebsiteController {
 
     @GetMapping("findTop10productByCreateDate")
     public ResponseEntity<?> findTop10productByCreateDate() {
-        List<Product>products=productSevice.findTop10productByCreateDate();
-        List<ProductWebsiteDTO> productDTOS= new ArrayList<>();
-        for (Product product:products){
-            ProductWebsiteDTO productWebsiteDTO= new ProductWebsiteDTO();
+        List<Product> products = productSevice.findTop10productByCreateDate();
+        List<ProductWebsiteDTO> productDTOS = new ArrayList<>();
+        for (Product product : products) {
+            ProductWebsiteDTO productWebsiteDTO = new ProductWebsiteDTO();
             productWebsiteDTO.setId(product.getId());
             productWebsiteDTO.setProductName(product.getProductName());
             productWebsiteDTO.setCreateDate(product.getCreateDate());
@@ -70,16 +69,18 @@ public class ProductWebsiteController {
             productWebsiteDTO.setIsActive(product.getIsActive());
             productWebsiteDTO.setIsDelete(product.getIsDelete());
             productWebsiteDTO.setVoteAverage(product.getVoteAverage());
-            List<DetailProduct> detailProducts= product.getDetailProducts();
+            List<DetailProduct> detailProducts = product.getDetailProducts();
 
-            List<Double> price=detailProducts.stream().
-                    map(e->e.getPriceExport()).collect(Collectors.toList());
+            List<Double> price = detailProducts.stream().
+                    map(e -> e.getPriceExport()).collect(Collectors.toList());
             Collections.sort(price);
+for(int i=0;i<price.size();i++){
+    Double minPrice = price.get(0);
+    Double maxPrice = price.get(price.size() - 1);
+    productWebsiteDTO.setMaxPrice(maxPrice);
+    productWebsiteDTO.setMinPrice(minPrice);
+}
 
-            Double minPrice= price.get(0);
-            Double maxPrice= price.get(price.size()-1);
-            productWebsiteDTO.setMaxPrice(maxPrice);
-            productWebsiteDTO.setMinPrice(minPrice);
             productDTOS.add(productWebsiteDTO);
         }
 
@@ -95,26 +96,26 @@ public class ProductWebsiteController {
         List<Integer> listTagId = productWebstieFilterDTO.getListTagId();
         Double bottomPrice = productWebstieFilterDTO.getBottomPrice();
         Double topPrice = productWebstieFilterDTO.getTopPrice();
-        if(listCategoryId==null||listCategoryId.isEmpty() ||  listCategoryId.size()==0){
-            listCategoryId=new ArrayList<>();
+        if (listCategoryId == null || listCategoryId.isEmpty() || listCategoryId.size() == 0) {
+            listCategoryId = new ArrayList<>();
         }
-        if(listColorId==null||listColorId.isEmpty() ||  listColorId.size()==0){
-            listColorId=new ArrayList<>();
+        if (listColorId == null || listColorId.isEmpty() || listColorId.size() == 0) {
+            listColorId = new ArrayList<>();
         }
-        if(listSizeId==null){
-            listSizeId=new ArrayList<>();
+        if (listSizeId == null) {
+            listSizeId = new ArrayList<>();
         }
-        if(listMaterialId==null||  listMaterialId.size()==0){
-            listMaterialId=new ArrayList<>();
+        if (listMaterialId == null || listMaterialId.size() == 0) {
+            listMaterialId = new ArrayList<>();
         }
-        if(listTagId==null||listTagId.isEmpty() ||  listTagId.size()==0){
-            listTagId=new ArrayList<>();
+        if (listTagId == null || listTagId.isEmpty() || listTagId.size() == 0) {
+            listTagId = new ArrayList<>();
         }
-        if(bottomPrice==null){
-            bottomPrice=0.0;
+        if (bottomPrice == null) {
+            bottomPrice = 0.0;
         }
-        if(topPrice==null){
-            topPrice=999999999.0;
+        if (topPrice == null) {
+            topPrice = 999999999.0;
         }
         Integer page = productWebstieFilterDTO.getPage();
         Integer size = productWebstieFilterDTO.getSize();
@@ -346,43 +347,42 @@ public class ProductWebsiteController {
 
                                 }
                             }
-                        }else{
-                            Integer tagId=null;
+                        } else {
+                            Integer tagId = null;
                             for (int j = 0; j < listColorId.size(); j++) {
                                 for (int k = 0; k < listSizeId.size(); k++) {
                                     for (int l = 0; l < listMaterialId.size(); l++) {
 
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                    listColorId.get(j), listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
+                                                listColorId.get(j), listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
 
                                     }
 
                                 }
                             }
                         }
-                    }else{
-                        Integer materialId=null;
+                    } else {
+                        Integer materialId = null;
                         if (listTagId.size() > 0) {
                             for (int j = 0; j < listColorId.size(); j++) {
                                 for (int k = 0; k < listSizeId.size(); k++) {
 
-                                        for (int m = 0; m < listTagId.size(); m++) {
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                    listColorId.get(j), materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
-                                        }
+                                    for (int m = 0; m < listTagId.size(); m++) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
+                                                listColorId.get(j), materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                                    }
 
 
                                 }
                             }
-                        }else{
-                            Integer tagId=null;
+                        } else {
+                            Integer tagId = null;
                             for (int j = 0; j < listColorId.size(); j++) {
                                 for (int k = 0; k < listSizeId.size(); k++) {
 
 
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                listColorId.get(j), materialId, tagId, bottomPrice, topPrice, pageable);
-
+                                    customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
+                                            listColorId.get(j), materialId, tagId, bottomPrice, topPrice, pageable);
 
 
                                 }
@@ -444,13 +444,13 @@ public class ProductWebsiteController {
                                     }
                                 }
                             }
-                        }else{
-                            Integer tagId=null;
+                        } else {
+                            Integer tagId = null;
                             for (int k = 0; k < listSizeId.size(); k++) {
                                 for (int l = 0; l < listMaterialId.size(); l++) {
 
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                colorId, listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                    customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
+                                            colorId, listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
 
                                 }
                             }
@@ -529,10 +529,10 @@ public class ProductWebsiteController {
 
     @GetMapping("findTop10ProductBestSale")
     public ResponseEntity<?> findTop10ProductBestSale() {
-        List<Product> products= productSevice.findTop10ProductBestSale();
-        List<ProductWebsiteDTO> productDTOS= new ArrayList<>();
-        for (Product product:products){
-            ProductWebsiteDTO productWebsiteDTO= new ProductWebsiteDTO();
+        List<Product> products = productSevice.findTop10ProductBestSale();
+        List<ProductWebsiteDTO> productDTOS = new ArrayList<>();
+        for (Product product : products) {
+            ProductWebsiteDTO productWebsiteDTO = new ProductWebsiteDTO();
             productWebsiteDTO.setId(product.getId());
             productWebsiteDTO.setProductName(product.getProductName());
             productWebsiteDTO.setCreateDate(product.getCreateDate());
@@ -542,14 +542,14 @@ public class ProductWebsiteController {
             productWebsiteDTO.setIsActive(product.getIsActive());
             productWebsiteDTO.setIsDelete(product.getIsDelete());
             productWebsiteDTO.setVoteAverage(product.getVoteAverage());
-            List<DetailProduct> detailProducts= product.getDetailProducts();
+            List<DetailProduct> detailProducts = product.getDetailProducts();
 
-            List<Double> price=detailProducts.stream().
-                    map(e->e.getPriceExport()).collect(Collectors.toList());
+            List<Double> price = detailProducts.stream().
+                    map(e -> e.getPriceExport()).collect(Collectors.toList());
             Collections.sort(price);
 
-            Double minPrice= price.get(0);
-            Double maxPrice= price.get(price.size()-1);
+            Double minPrice = price.get(0);
+            Double maxPrice = price.get(price.size() - 1);
             productWebsiteDTO.setMaxPrice(maxPrice);
             productWebsiteDTO.setMinPrice(minPrice);
             productDTOS.add(productWebsiteDTO);
@@ -568,12 +568,12 @@ public class ProductWebsiteController {
 
     @GetMapping("findOptionProductById")
     public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
-                                                   @RequestParam(value = "account_id",required = false)Integer account_id) {
+                                                   @RequestParam(value = "account_id", required = false) Integer account_id) {
         Optional<Product> productOptional = productSevice.findById(product_id);
-        Boolean isFavorite=false;
-        ProductOptionalDTO productOptionalDTO=null;
+        Boolean isFavorite = false;
+        ProductOptionalDTO productOptionalDTO = null;
         if (productOptional.isPresent()) {
-            if(account_id==null) {
+            if (account_id == null) {
                 isFavorite = false;
                 ProductHandleValue productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
                 productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
@@ -619,7 +619,7 @@ public class ProductWebsiteController {
 
                 return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
 
-            }else {
+            } else {
                 isFavorite = true;
                 ProductHandleWebsite productHandleValue = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
                 if (productHandleValue != null) {
@@ -667,7 +667,7 @@ public class ProductWebsiteController {
                     return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
 
                 }
-                     }
+            }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found favorite"));
         }
 
@@ -678,13 +678,13 @@ public class ProductWebsiteController {
 
 
     @GetMapping("findProductsByCurrentOrderOfAccountId")
-    public ResponseEntity<?> findProductsByCurrentOrder(@RequestParam("account_id")Integer accountId){
-        Integer orderId= orderRepository.findCurrentOrderId(accountId);
-        if(orderId!=null){
-            List<CustomProductFilterRequest> productWebstieFilterDTOS=
+    public ResponseEntity<?> findProductsByCurrentOrder(@RequestParam("account_id") Integer accountId) {
+        Integer orderId = orderRepository.findCurrentOrderId(accountId);
+        if (orderId != null) {
+            List<CustomProductFilterRequest> productWebstieFilterDTOS =
                     orderRepository.findByOrderId(orderId);
-            return ResponseEntity.ok().body(new IGenericResponse<>(productWebstieFilterDTOS,200,""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(productWebstieFilterDTOS, 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,"no order found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "no order found"));
     }
 }

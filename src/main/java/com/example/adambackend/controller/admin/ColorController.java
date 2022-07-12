@@ -2,14 +2,12 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Color;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.color.ColorAdminDTO;
 import com.example.adambackend.payload.color.ColorDTO;
 import com.example.adambackend.payload.color.ColorUpdate;
 import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.ColorRepository;
 import com.example.adambackend.repository.DetailProductRepository;
-import com.example.adambackend.service.ColorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

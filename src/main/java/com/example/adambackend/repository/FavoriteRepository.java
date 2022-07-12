@@ -1,7 +1,6 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Favorite;
-import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +21,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
             "            join detail_products dp on dp.product_id=p.id " +
             "            join accounts a on a.id=fa.account_id where p.is_active=1 " +
             "and p.is_deleted=0 and is_completed=1 and a.id=?1 " +
-            "            GROUP BY p.id,p.product_name,p.image ",nativeQuery = true)
+            "            GROUP BY p.id,p.product_name,p.image ", nativeQuery = true)
     List<ProductHandleWebsite> findProductFavoriteByAccountId(Integer accountId);
 
     @Query(value = "select top(10) p from products p join favorites fa on p.id=fa.product_id group by p.id,fa.product_id orderby count(fa) desc ", nativeQuery = true)

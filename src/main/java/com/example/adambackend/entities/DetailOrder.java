@@ -34,6 +34,6 @@ public class DetailOrder {
     @JoinColumn(name = "order_id")
     private Order order;
     @ManyToOne
-    @JoinColumn(name="discount_product_id")
-    private  DiscountProduct discountProduct;
+    @JoinColumn(name = "discount_product_id")
+    private DiscountProduct discountProduct;
 }

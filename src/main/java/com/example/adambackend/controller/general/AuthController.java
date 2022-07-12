@@ -1,10 +1,8 @@
-package com.example.adambackend.controller;
+package com.example.adambackend.controller.general;
 
 
-import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
-import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.repository.AccountRepository;
@@ -20,10 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 
 
 @RestController
@@ -64,13 +58,8 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                String.valueOf(roles)),200,"successfully"));
+                String.valueOf(roles)), 200, "successfully"));
     }
-
-
-
-
-
 
 
 }

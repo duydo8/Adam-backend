@@ -1,7 +1,6 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Favorite;
-import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 
 import java.util.List;

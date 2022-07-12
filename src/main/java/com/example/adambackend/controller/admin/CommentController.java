@@ -27,6 +27,10 @@ public class CommentController {
     CommentService commentService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    ProductSevice productService;
 
     @GetMapping("countCommentByAccountIdAndProductId")
     public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {
@@ -72,38 +76,30 @@ public class CommentController {
         }
     }
 
-
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<>(commentService.findAll(), 200, ""));
     }
 
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    ProductSevice productService;
-
-
-
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody CommentAdminDTO commentAdminDTO) {
         Optional<Comment> commentOptional = commentService.findById(commentAdminDTO.getId());
         if (commentOptional.isPresent()) {
-            Comment comment=commentOptional.get();
+            Comment comment = commentOptional.get();
             comment.setVote(commentAdminDTO.getVote());
             comment.setCommentStatus(commentAdminDTO.getCommentStatus());
-        //    comment.setAccount(accountService.findById(commentAdminDTO.getAccountId()).get());
-       //     comment.setProduct(productService.findById(commentAdminDTO.getProductId()).get());
+            //    comment.setAccount(accountService.findById(commentAdminDTO.getAccountId()).get());
+            //     comment.setProduct(productService.findById(commentAdminDTO.getProductId()).get());
             comment.setIsActive(commentAdminDTO.getIsActive());
             comment.setContent(commentAdminDTO.getContent());
-      //      comment.setTimeCreated(commentAdminDTO.getTimeCreated());
+            //      comment.setTimeCreated(commentAdminDTO.getTimeCreated());
 
 
             commentService.save(comment);
-            CommentAdminUpdate commentAdminUpdate= new CommentAdminUpdate(commentAdminDTO.getId(),
+            CommentAdminUpdate commentAdminUpdate = new CommentAdminUpdate(commentAdminDTO.getId(),
                     commentAdminDTO.getContent(), commentAdminDTO.getVote(),
-                    comment.getTimeCreated(),commentAdminDTO.getCommentStatus(),comment.getAccount().getId(),
-                    comment.getProduct().getId(),commentAdminDTO.getIsActive());
+                    comment.getTimeCreated(), commentAdminDTO.getCommentStatus(), comment.getAccount().getId(),
+                    comment.getProduct().getId(), commentAdminDTO.getIsActive());
             return ResponseEntity.ok().body(new IGenericResponse<>(commentAdminUpdate, 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));

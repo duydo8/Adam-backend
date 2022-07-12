@@ -1,7 +1,6 @@
-package com.example.adambackend.controller;
+package com.example.adambackend.controller.general;
 
 import com.example.adambackend.service.impl.FileStorageService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class FileDownloadController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 

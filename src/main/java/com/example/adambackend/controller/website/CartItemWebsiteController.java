@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +29,7 @@ public class CartItemWebsiteController {
     @Autowired
     DetailProductService detailProductService;
 
-//    private Integer id;
+    //    private Integer id;
 //    private int quantity;
 //    @Column(name = "total_price")
 //    private double totalPrice;
@@ -50,20 +47,20 @@ public class CartItemWebsiteController {
     public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {
         Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
         Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
-        if(cartItemWebsiteCreate.getQuantity()>=10){
+        if (cartItemWebsiteCreate.getQuantity() >= 10) {
             return ResponseEntity.badRequest().body(
                     new HandleExceptionDemo(400, "can't buy too much (<10)"));
         }
-        if(detailProductOptional.get().getQuantity()<cartItemWebsiteCreate.getQuantity()){
+        if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
             return ResponseEntity.badRequest().body(
                     new HandleExceptionDemo(400, "not enough quantity"));
         }
         if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
-            List<CartItems> cartItemsList= cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
-            for (CartItems c: cartItemsList
-             ){
-                if(detailProductOptional.get().getId()== c.getDetailProduct().getId()){
-                    c.setQuantity(c.getQuantity()+1);
+            List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
+            for (CartItems c : cartItemsList
+            ) {
+                if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
+                    c.setQuantity(c.getQuantity() + 1);
                     return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
                 }
             }
@@ -81,9 +78,9 @@ public class CartItemWebsiteController {
     public ResponseEntity<?> update(@RequestBody CartItemWebsiteUpdate cartItemWebsiteUpdate) {
         Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItemWebsiteUpdate.getId());
         if (cartItemsOptional.isPresent()) {
-         CartItems cartItems= cartItemsOptional.get();
-         cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
-         cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
+            CartItems cartItems = cartItemsOptional.get();
+            cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
+            cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
             return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
@@ -103,25 +100,27 @@ public class CartItemWebsiteController {
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
     }
+
     @GetMapping("findById")
-    public ResponseEntity<?> findById(@RequestParam("id")Integer id){
-        Optional<CartItems> cartItems= cartItemService.findById(id);
-        if(cartItems.isPresent()){
+    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
+        Optional<CartItems> cartItems = cartItemService.findById(id);
+        if (cartItems.isPresent()) {
             return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
     @GetMapping("findByAccountId")
-    public ResponseEntity<?> findByAccountId(@RequestParam("account_id")Integer accountId){
-        Optional<Account> account= accountService.findById(accountId);
-        if(account.isPresent()){
-            return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.findByAccountId(accountId),200,""));
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId) {
+        Optional<Account> account = accountService.findById(accountId);
+        if (account.isPresent()) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.findByAccountId(accountId), 200, ""));
 
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
-            }
+    }
 }

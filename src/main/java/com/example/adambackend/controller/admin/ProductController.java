@@ -3,7 +3,7 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.product.*;
-import com.example.adambackend.payload.productWebsiteDTO.*;
+import com.example.adambackend.payload.productWebsiteDTO.OptionalProduct;
 import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.MaterialProductRepository;
@@ -52,7 +52,7 @@ public class ProductController {
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Page<Product> page1 = productSevice.findAll(PageRequest.of(page,size));
+        Page<Product> page1 = productSevice.findAll(PageRequest.of(page, size));
 
 
         return ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1, 200, "Page product"));
@@ -172,16 +172,17 @@ public class ProductController {
     }
 
     @PutMapping("updateIsActive")
-    public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive){
+    public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive) {
         Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
         if (product1.isPresent()) {
 
-         productSevice.updateProductsIsActive(productUpdateIsActive.getIsActive(),productUpdateIsActive.getId());
-        return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+            productSevice.updateProductsIsActive(productUpdateIsActive.getIsActive(), productUpdateIsActive.getId());
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
 
     }
+
     @PostMapping("createArrayOptionValueProduct")
     public ResponseEntity<?> createArrayOptionValueProduct(@RequestBody ProductRequest productRequest) {
 
@@ -205,7 +206,6 @@ public class ProductController {
         }
 
 
-
         Product product = new Product();
         product.setVoteAverage(0.0);
         product.setIsDelete(false);
@@ -219,8 +219,8 @@ public class ProductController {
         productSevice.save(product);
         List<TagProduct> tagProductList = new ArrayList<>();
         List<MaterialProduct> materialProductList = new ArrayList<>();
-        MaterialProduct materialProduct=null;
-        TagProduct tagProduct =null;
+        MaterialProduct materialProduct = null;
+        TagProduct tagProduct = null;
         if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
             for (int i = 0; i < tagList.size(); i++) {
                 for (int j = 0; j < materialList.size(); j++) {
@@ -270,47 +270,47 @@ public class ProductController {
     public ResponseEntity<?> findOptionProductById(@RequestParam("id") Integer id) {
         Optional<Product> productOptional = productSevice.findById(id);
         if (productOptional.isPresent()) {
-            List<Integer> listTagId= tagProductRepository.findTagIdByProductId(id);
-            List<Integer> listMaterialId=materialProductRepository.findMaterialIdByProductId(id);
-            List<DetailProduct> detailProductList= detailProductService.findAllByProductId(id);
-            Set<Tag> tagList= new HashSet<>();
-            Set<Material> materialList= new HashSet<>();
-            Set<Color>colorList= new HashSet<>();
-            Set<Size> sizeList= new HashSet<>();
-            for (DetailProduct dp: detailProductList
-                 ) {
-                Optional<Color> c= colorService.findByDetailProductId(dp.getId());
+            List<Integer> listTagId = tagProductRepository.findTagIdByProductId(id);
+            List<Integer> listMaterialId = materialProductRepository.findMaterialIdByProductId(id);
+            List<DetailProduct> detailProductList = detailProductService.findAllByProductId(id);
+            Set<Tag> tagList = new HashSet<>();
+            Set<Material> materialList = new HashSet<>();
+            Set<Color> colorList = new HashSet<>();
+            Set<Size> sizeList = new HashSet<>();
+            for (DetailProduct dp : detailProductList
+            ) {
+                Optional<Color> c = colorService.findByDetailProductId(dp.getId());
                 Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
-                if(c.isPresent()){
+                if (c.isPresent()) {
                     colorList.add(c.get());
                 }
-                if(s.isPresent()){
+                if (s.isPresent()) {
                     sizeList.add(s.get());
                 }
             }
-            for (Integer x :listTagId
-                 ) {
-                Optional<Tag> tagOptional=tagService.findById(x);
+            for (Integer x : listTagId
+            ) {
+                Optional<Tag> tagOptional = tagService.findById(x);
                 tagList.add(tagOptional.get());
 
             }
-            for (Integer x :listMaterialId
+            for (Integer x : listMaterialId
             ) {
-                Optional<Material> materialOptional=materialService.findById(x);
+                Optional<Material> materialOptional = materialService.findById(x);
                 materialList.add(materialOptional.get());
 
             }
-            System.out.println( colorList.size());
-            if(colorList.size()==0){
-                colorList= Collections.<Color>emptySet();
+            System.out.println(colorList.size());
+            if (colorList.size() == 0) {
+                colorList = Collections.<Color>emptySet();
             }
-            if(sizeList.size()==0){
-                sizeList= Collections.<Size>emptySet();
+            if (sizeList.size() == 0) {
+                sizeList = Collections.<Size>emptySet();
             }
 
 
-            OptionalProduct optionalProduct= new OptionalProduct(tagList,materialList,colorList,sizeList);
-return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct,200,""));
+            OptionalProduct optionalProduct = new OptionalProduct(tagList, materialList, colorList, sizeList);
+            return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct, 200, ""));
 
         }
         return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));

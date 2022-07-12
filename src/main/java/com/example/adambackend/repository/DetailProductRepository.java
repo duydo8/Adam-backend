@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface DetailProductRepository extends JpaRepository<DetailProduct, Integer> {
     @Query(value = "select * from detail_products  dp join products p on dp.product_id=p.id " +
-            "where p.id=?1 and dp.is_active=true and dp.is_deleted=false and p.is_active=true and p.is_deleted=false",nativeQuery = true)
+            "where p.id=?1 and dp.is_active=true and dp.is_deleted=false and p.is_active=true and p.is_deleted=false", nativeQuery = true)
     List<DetailProduct> findAllByProductId(Integer id);
 
     @Transactional
@@ -32,7 +32,7 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, In
 
     @Modifying
     @Transactional
-    @Query(value = "update detail_products set is_deleted=1 , is_active=0 where id=?1",nativeQuery = true)
+    @Query(value = "update detail_products set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateDetailProductsDeleted(Integer id);
 
 }

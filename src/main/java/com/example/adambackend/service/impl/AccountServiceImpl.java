@@ -109,31 +109,34 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-
     @Override
     public Optional<Account> findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
+
     @Override
-    public Optional<Account> findByPhoneNumber(String phoneNumber){
+    public Optional<Account> findByPhoneNumber(String phoneNumber) {
         return accountRepository.findByPhoneNumber(phoneNumber);
     }
+
     @Override
-    public Double countTotalAccount(Integer month){
+    public Double countTotalAccount(Integer month) {
         return accountRepository.countTotalAccount(month);
     }
+
     @Override
-    public Double countTotalSignUpAccount(Integer month){
+    public Double countTotalSignUpAccount(Integer month) {
         return accountRepository.countTotalSignUpAccount(month);
 
     }
+
     @Override
-    public Double countTotalAccountInOrder(Integer month){
+    public Double countTotalAccountInOrder(Integer month) {
         return accountRepository.countTotalAccountInOrder(month);
     }
 
     @Override
-    public void updateAccountDeleted(Integer id){
+    public void updateAccountDeleted(Integer id) {
         accountRepository.updateAccountDeleted(id);
     }
 }

@@ -12,6 +12,7 @@ public interface CustomProductFilterRequest {
     String getProductName();
 
     String getProductImage();
+
     String getDescription();
 
     LocalDateTime getCreateDate();
