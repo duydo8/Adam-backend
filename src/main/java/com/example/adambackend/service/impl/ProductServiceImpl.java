@@ -2,6 +2,7 @@ package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.ProductSevice;
@@ -81,7 +82,11 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public ProductHandleWebsite findOptionWebsiteByProductId(Integer productId,Integer accountId) {
+    public ProductHandleWebsite findOptionWebsiteByAccountIdProductId(Integer productId,Integer accountId) {
         return productRepository.findOptionWebsiteByProductId(productId,accountId);
+    }
+    @Override
+    public ProductHandleValue findOptionWebsiteByProductId(Integer productId) {
+        return productRepository.findOptionByProductId(productId);
     }
 }

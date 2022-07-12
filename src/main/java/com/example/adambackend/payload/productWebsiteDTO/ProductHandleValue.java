@@ -12,4 +12,5 @@ public interface ProductHandleValue {
     Double getMinPrice();
 
     String getProductName();
+    Double getVoteAverage();
 }

@@ -36,5 +36,6 @@ public interface ProductSevice {
 
     Product findByDetailProductId(Integer detalId);
 
-    ProductHandleWebsite findOptionWebsiteByProductId(Integer productId,Integer accountId);
+    ProductHandleWebsite findOptionWebsiteByAccountIdProductId(Integer productId,Integer accountId);
+    ProductHandleValue findOptionWebsiteByProductId(Integer productId);
 }
