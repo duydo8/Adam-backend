@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Color;
+import com.example.adambackend.entities.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,6 @@ public interface ColorRepository extends JpaRepository<Color, Integer> {
 
     @Query(value = "select * from colors where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Color> findAlls();
+    @Query(value = "select * from colors where color_name like '%?1%'",nativeQuery = true)
+    List<Color> findByName(String name);
 }

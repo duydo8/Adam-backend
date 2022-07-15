@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.entities.Event;
 import com.example.adambackend.payload.account.AccountResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -51,5 +52,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Transactional
     @Query(value = "update accounts set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateAccountDeleted(Integer id);
+    @Query(value = "select * from accounts where username like '%?1%'",nativeQuery = true)
+    List<Account> findByName(String name);
 
 }

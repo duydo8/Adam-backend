@@ -1,6 +1,7 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Category;
+import com.example.adambackend.entities.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query(value = "select * from categories where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Category> findAlls();
+    @Query(value = "select * from categories where category_name like '%?1%'",nativeQuery = true)
+    List<Category> findByName(String name);
 }
