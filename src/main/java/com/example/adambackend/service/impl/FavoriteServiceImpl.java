@@ -15,7 +15,10 @@ import java.util.Optional;
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     FavoriteRepository favoriteRepository;
-
+@Override
+public void  deleteByIdAccountAndProduct(Integer accountId,Integer productId){
+    favoriteRepository.deleteByIdAccountAndProduct(accountId, productId);
+}
     @Override
     public List<Favorite> findAll() {
         return favoriteRepository.findAll();
@@ -26,15 +29,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         return favoriteRepository.save(Favorite);
     }
 
-    @Override
-    public void deleteById(FavoriteId id) {
-        favoriteRepository.deleteById(id);
-    }
 
-    @Override
-    public Optional<Favorite> findById(FavoriteId id) {
-        return favoriteRepository.findById(id);
-    }
 
     @Override
     public Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct) {

@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface FavoriteService {
 
-    Optional<Favorite> findById(FavoriteId id);
-
-    void deleteById(FavoriteId id);
+    void deleteByIdAccountAndProduct(Integer accountId,Integer productId);
 
     Favorite save(Favorite favorite);
 

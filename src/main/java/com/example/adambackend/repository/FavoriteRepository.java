@@ -51,4 +51,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteId> 
     @Modifying
     @Query(value = "delete from favorites where product_id=?1", nativeQuery = true)
     void deleteByProductId(Integer productId);
+    @Transactional
+    @Modifying
+    @Query(value = "delete from favorites where account_id=?1 and product_id=?2", nativeQuery = true)
+    void deleteByIdAccountAndProduct(Integer accountId,Integer productId);
 }

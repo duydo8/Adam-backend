@@ -67,19 +67,21 @@ public class FavoriteWebsiteController {
             Optional<Account> accountOptional = accountService.findById(accountId);
             Optional<Product> productOptional = productSevice.findById(productId);
             if (productOptional.isPresent() && accountOptional.isPresent()) {
+                if (favorite.isPresent()) {
+                    favoriteService.deleteByIdAccountAndProduct(accountId,productId);
+                    return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
 
+                } else {
+                    FavoriteId favoriteId = new FavoriteId(accountId, productId);
+                    Favorite fa = favoriteService.save(new Favorite(favoriteId,
+                            LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
+                    ));
+                    return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, "Thêm thành công"));
+
+                }
             }
-            if (favorite.isPresent()) {
-                FavoriteId favoriteId = new FavoriteId(accountId, productId);
-                Favorite fa = favoriteService.save(new Favorite(favoriteId,
-                        LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
-                ));
-                return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
-            } else {
-                FavoriteId favoriteId = new FavoriteId(accountId, productId);
-                favoriteService.deleteById(favoriteId);
-                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
-            }
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+
 
         } catch (Exception e) {
             e.printStackTrace();
