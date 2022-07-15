@@ -41,48 +41,68 @@ public class SizeController {
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody SizeUpdate sizeUpdate) {
-        Optional<Size> size1 = sizeService.findById(sizeUpdate.getId());
-        if (size1.isPresent()) {
-            size1.get().setSizeName(sizeUpdate.getSizeName());
-            size1.get().setIsActive(sizeUpdate.getIsActive());
-            size1.get().setIsDeleted(sizeUpdate.getIsDeleted());
-            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size1.get()), 200, "success"));
+        try {
+            Optional<Size> size1 = sizeService.findById(sizeUpdate.getId());
+            if (size1.isPresent()) {
+                size1.get().setSizeName(sizeUpdate.getSizeName());
+                size1.get().setIsActive(sizeUpdate.getIsActive());
+                size1.get().setIsDeleted(sizeUpdate.getIsDeleted());
+                return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size1.get()), 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("size_id") Integer sizeId) {
-        Optional<Size> size1 = sizeService.findById(sizeId);
-        if (size1.isPresent()) {
-            sizeService.deleteById(sizeId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        try {
+            Optional<Size> size1 = sizeService.findById(sizeId);
+            if (size1.isPresent()) {
+                sizeService.deleteById(sizeId);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAlls(), 200, ""));
+        try {
+            return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAlls(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListSizeIdDTO listSizeIdDTO) {
-        List<Integer> list = listSizeIdDTO.getListSizeId();
+        try {
+            List<Integer> list = listSizeIdDTO.getListSizeId();
 
-        System.out.println(list.size());
-        if (list.size() > 0) {
-            for (Integer x : list
-            ) {
-                Optional<Size> sizeOptional = sizeService.findById(x);
+            System.out.println(list.size());
+            if (list.size() > 0) {
+                for (Integer x : list
+                ) {
+                    Optional<Size> sizeOptional = sizeService.findById(x);
 
-                if (sizeOptional.isPresent()) {
+                    if (sizeOptional.isPresent()) {
 
-                    sizeService.updateProductsDeleted(x);
+                        sizeService.updateProductsDeleted(x);
+                    }
                 }
+                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
             }
-            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 }

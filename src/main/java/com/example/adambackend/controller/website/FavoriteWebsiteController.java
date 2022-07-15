@@ -35,45 +35,57 @@ public class FavoriteWebsiteController {
 
     @GetMapping("findProductFavoriteByAccountId")
     public ResponseEntity<?> findProductFavoriteByAccountId(@RequestParam("account_id") Integer accountId) {
-        Optional<Account> account = accountService.findById(accountId);
-        if (account.isPresent()) {
+        try {
+            Optional<Account> account = accountService.findById(accountId);
+            if (account.isPresent()) {
 //            ProductDto productDto = modelMapper.map(, ProductDto.class);
-            return ResponseEntity.ok().body(new IGenericResponse(favoriteService.findProductFavoriteByAccountId(accountId), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse(favoriteService.findProductFavoriteByAccountId(accountId), 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Account"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Account"));
     }
 
     @GetMapping("findTop10FavoriteProduct")
     public ResponseEntity<?> findTop10FavoriteProduct() {
-        List<Integer> list= favoriteService.findTop10FavoriteProduct();
-        List<ProductHandleWebsite> productHandleWebsites=list.stream().map(e->favoriteService.findProductById(e)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(new IGenericResponse<>(productHandleWebsites, 200, ""));
+        try {
+            List<Integer> list = favoriteService.findTop10FavoriteProduct();
+            List<ProductHandleWebsite> productHandleWebsites = list.stream().map(e -> favoriteService.findProductById(e)).collect(Collectors.toList());
+            return ResponseEntity.ok().body(new IGenericResponse<>(productHandleWebsites, 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @PostMapping("create")
     public ResponseEntity<?> createFavorite(@RequestParam("product_id") Integer productId, @RequestParam("account_id") Integer accountId) {
-        Optional<Favorite> favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
-        Optional<Account> accountOptional = accountService.findById(accountId);
-        Optional<Product> productOptional = productSevice.findById(productId);
-        if(productOptional.isPresent() && accountOptional.isPresent()){
+        try {
+            Optional<Favorite> favorite = favoriteService.findByAccountIdAndProductId(accountId, productId);
+            Optional<Account> accountOptional = accountService.findById(accountId);
+            Optional<Product> productOptional = productSevice.findById(productId);
+            if (productOptional.isPresent() && accountOptional.isPresent()) {
 
+            }
+            if (favorite.isPresent()) {
+                FavoriteId favoriteId = new FavoriteId(accountId, productId);
+                Favorite fa = favoriteService.save(new Favorite(favoriteId,
+                        LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
+                ));
+                return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
+            } else {
+                FavoriteId favoriteId = new FavoriteId(accountId, productId);
+                favoriteService.deleteById(favoriteId);
+                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        if (favorite.isPresent()  ) {
-            FavoriteId favoriteId = new FavoriteId(accountId, productId);
-            Favorite fa = favoriteService.save(new Favorite(favoriteId,
-                    LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
-            ));
-            return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, ""));
-        } else  {
-            FavoriteId favoriteId = new FavoriteId(accountId, productId);
-            favoriteService.deleteById(favoriteId);
-            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
-        }
-
-
     }
-
-
 
 
 }

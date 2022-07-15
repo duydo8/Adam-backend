@@ -22,37 +22,50 @@ public class CategoryWebsiteController {
 
     @GetMapping("findAllCategoryParentId")
     public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
-        List<CategoryResponse> categoryResponseList = new ArrayList<>();
-        List<Category> categories = categoryService.findAllCategoryParentId();
-        for (Category category : categories
-        ) {
-            CategoryResponse categoryResponse = new CategoryResponse();
-            categoryResponse.setCategoryParentId(category.getCategoryParentId());
-            categoryResponse.setId(category.getId());
-            categoryResponse.setCategoryName(category.getCategoryName());
-            categoryResponse.setIsDeleted(category.getIsDeleted());
-            categoryResponse.setCategoryChildren(categoryService.findByCategoryParentId(category.getId()));
-            categoryResponseList.add(categoryResponse);
-            categoryResponse.setIsActive(category.getIsActive());
+        try {
+            List<CategoryResponse> categoryResponseList = new ArrayList<>();
+            List<Category> categories = categoryService.findAllCategoryParentId();
+            for (Category category : categories
+            ) {
+                CategoryResponse categoryResponse = new CategoryResponse();
+                categoryResponse.setCategoryParentId(category.getCategoryParentId());
+                categoryResponse.setId(category.getId());
+                categoryResponse.setCategoryName(category.getCategoryName());
+                categoryResponse.setIsDeleted(category.getIsDeleted());
+                categoryResponse.setCategoryChildren(categoryService.findByCategoryParentId(category.getId()));
+                categoryResponseList.add(categoryResponse);
+                categoryResponse.setIsActive(category.getIsActive());
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
-
     }
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @GetMapping("findCategoryByParentId")
     public ResponseEntity<?> findCategoryByParentId(@RequestParam("category_parent_id") Integer id) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
-        if (categoryOptional.isPresent()) {
+        try {
+            Optional<Category> categoryOptional = categoryService.findById(id);
+            if (categoryOptional.isPresent()) {
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
 
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
-
     }
 }

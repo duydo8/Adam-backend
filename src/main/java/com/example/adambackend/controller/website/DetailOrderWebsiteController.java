@@ -36,48 +36,68 @@ public class DetailOrderWebsiteController {
 
     @PostMapping("create")
     public ResponseEntity<?> creatSize(@RequestBody DetailOrderWebsiteCreate detailOrderWebsiteCreate) {
-        Optional<Order> order = orderService.findById(detailOrderWebsiteCreate.getOrderId());
-        if (order.isPresent()) {
-            DetailOrder detailOrder = new DetailOrder();
-            detailOrder.setIsActive(true);
-            detailOrder.setIsDeleted(false);
-            detailOrder.setQuantity(detailOrderWebsiteCreate.getQuantity());
-            detailOrder.setCreateDate(LocalDateTime.now());
-            detailOrder.setDetailProduct(detailProductService.findById(detailOrderWebsiteCreate.getDetailProductId()).get());
-            detailOrder.setOrder(order.get());
-            detailOrder.setPrice(detailOrderWebsiteCreate.getPrice());
-            return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
+        try {
+            Optional<Order> order = orderService.findById(detailOrderWebsiteCreate.getOrderId());
 
+            if (order.isPresent()) {
+                DetailOrder detailOrder = new DetailOrder();
+                detailOrder.setIsActive(true);
+                detailOrder.setIsDeleted(false);
+                detailOrder.setQuantity(detailOrderWebsiteCreate.getQuantity());
+                detailOrder.setCreateDate(LocalDateTime.now());
+                detailOrder.setDetailProduct(detailProductService.findById(detailOrderWebsiteCreate.getDetailProductId()).get());
+                detailOrder.setOrder(order.get());
+                detailOrder.setPrice(detailOrderWebsiteCreate.getPrice());
+                return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
+
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-
     }
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody DetailOrderWebsiteUpdate detailOrderWebsiteUpdate) {
-        Optional<DetailOrder> detailOrder1 = detailOrderService.findById(detailOrderWebsiteUpdate.getId());
-        if (detailOrder1.isPresent()) {
-            DetailOrder detailOrder = detailOrder1.get();
-            detailOrder.setPrice(detailOrderWebsiteUpdate.getPrice());
-            detailOrder.setQuantity(detailOrderWebsiteUpdate.getQuantity());
-            return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
+        try {
+            Optional<DetailOrder> detailOrder1 = detailOrderService.findById(detailOrderWebsiteUpdate.getId());
+            if (detailOrder1.isPresent()) {
+                DetailOrder detailOrder = detailOrder1.get();
+                detailOrder.setPrice(detailOrderWebsiteUpdate.getPrice());
+                detailOrder.setQuantity(detailOrderWebsiteUpdate.getQuantity());
+                return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("detail_order_id") Integer id) {
-        Optional<DetailOrder> detailOrder = detailOrderService.findById(id);
-        if (detailOrder.isPresent()) {
-            detailOrderService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        try {
+            Optional<DetailOrder> detailOrder = detailOrderService.findById(id);
+            if (detailOrder.isPresent()) {
+                detailOrderService.deleteById(id);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(), 200, ""));
+        try {
+            return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
 }

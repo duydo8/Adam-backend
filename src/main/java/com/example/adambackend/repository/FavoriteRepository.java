@@ -17,23 +17,25 @@ public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteId> 
     @Query("select count(fa) from Favorite fa join Account a on fa.account.id= a.id join Product  p on fa.product.id= p.id where a.id=?1 and p.id=?2")
     Integer countFavoriteByAccountIdAndProductId(int idAccount, int idProduct);
 
-        @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.image as image," +
-                " MAX(dp.price_export) as maxPrice,MIN(dp.price_import) " +
-                "as minPrice, p.vote_average as voteAverage from favorites  fa join products p on fa.product_id=p.id " +
-                "            join detail_products dp on dp.product_id=p.id " +
-                "            join accounts a on a.id=fa.account_id where p.is_active=1 " +
-                "and p.is_deleted=0 and is_completed=1 and a.id=?1 " +
-                "            GROUP BY p.id,p.product_name,p.image ", nativeQuery = true)
+    @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.image as image," +
+            " MAX(dp.price_export) as maxPrice,MIN(dp.price_import) " +
+            "as minPrice, p.vote_average as voteAverage from favorites  fa join products p on fa.product_id=p.id " +
+            "            join detail_products dp on dp.product_id=p.id " +
+            "            join accounts a on a.id=fa.account_id where p.is_active=1 " +
+            "and p.is_deleted=0 and is_completed=1 and a.id=?1 " +
+            "            GROUP BY p.id,p.product_name,p.image ", nativeQuery = true)
     List<ProductHandleWebsite> findProductFavoriteByAccountId(Integer accountId);
+
     @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.image as image,\n" +
             "    MAX(dp.price_export) as maxPrice,MIN(dp.price_import)\n" +
             "    as minPrice, p.vote_average as voteAverage from products p\n" +
             "    join detail_products dp on dp.product_id=p.id\n" +
             "    where  p.is_deleted=0 and is_completed=1 and p.id=?1\n" +
-            "    GROUP BY p.id,p.product_name,p.image  ",nativeQuery = true)
-ProductHandleWebsite findProductById(Integer id);
+            "    GROUP BY p.id,p.product_name,p.image  ", nativeQuery = true)
+    ProductHandleWebsite findProductById(Integer id);
+
     @Query(value = "select product_id from favorites fa join products p on p.id=fa.product_id  where  p.is_deleted=0 and is_completed=1 \n" +
-            "group by product_id ORDER BY count(product_id) desc limit 10 ",nativeQuery = true)
+            "group by product_id ORDER BY count(product_id) desc limit 10 ", nativeQuery = true)
     List<Integer> findTop10FavoriteProductId();
 
 

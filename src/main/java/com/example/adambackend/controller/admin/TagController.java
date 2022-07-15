@@ -30,7 +30,12 @@ public class TagController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAlls(), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAlls(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @PostMapping("create")
@@ -51,45 +56,59 @@ public class TagController {
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody TagUpdate tagUpdate
     ) {
-
-        Optional<Tag> tagOptional = tagService.findById(tagUpdate.getId());
-        if (tagOptional.isPresent()) {
-            tagOptional.get().setTagName(tagUpdate.getTagName());
-            tagOptional.get().setIsActive(tagUpdate.getIsActive());
-            tagOptional.get().setIsDelete(tagUpdate.getIsDeleted());
-            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tagOptional.get()), 200, ""));
+        try {
+            Optional<Tag> tagOptional = tagService.findById(tagUpdate.getId());
+            if (tagOptional.isPresent()) {
+                tagOptional.get().setTagName(tagUpdate.getTagName());
+                tagOptional.get().setIsActive(tagUpdate.getIsActive());
+                tagOptional.get().setIsDelete(tagUpdate.getIsDeleted());
+                return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tagOptional.get()), 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("tag_id") Integer id) {
-        Optional<Tag> tagOptional = tagService.findById(id);
-        if (tagOptional.isPresent()) {
-            tagService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
+        try {
+            Optional<Tag> tagOptional = tagService.findById(id);
+            if (tagOptional.isPresent()) {
+                tagService.deleteById(id);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListTagIdDTO listTagIdDTO) {
-        List<Integer> listTagId = listTagIdDTO.getTagIdList();
-        System.out.println(listTagId.size());
-        if (listTagId.size() > 0) {
-            for (Integer x : listTagId
-            ) {
-                Optional<Tag> tagOptional = tagService.findById(x);
-                if (tagOptional.isPresent()) {
-                    tagProductRepository.updateDeletedTagId(x);
-                    tagService.updateDeletedTagId(x);
+        try {
+            List<Integer> listTagId = listTagIdDTO.getTagIdList();
+            System.out.println(listTagId.size());
+            if (listTagId.size() > 0) {
+                for (Integer x : listTagId
+                ) {
+                    Optional<Tag> tagOptional = tagService.findById(x);
+                    if (tagOptional.isPresent()) {
+                        tagProductRepository.updateDeletedTagId(x);
+                        tagService.updateDeletedTagId(x);
 
+                    }
                 }
+                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
             }
-            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
 }

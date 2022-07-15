@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface HistoryOrderRepository extends JpaRepository<HistoryOrder, Integer> {
     @Query(value = "select ho from HistoryOrder  ho where ho.order.id=?1")
-    List<HistoryOrder>  findByOrderId(Integer orderId);
+    List<HistoryOrder> findByOrderId(Integer orderId);
 }

@@ -25,16 +25,21 @@ public class DetailProductWebsiteController {
 
     @GetMapping("findByProductId")
     public ResponseEntity<?> findByProductId(@RequestParam("product_id") Integer productId) {
-        Optional<Product> product = productSevice.findById(productId);
-        if (product.isPresent()) {
-            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(productId);
-            List<DetailProductDto> detailProductDtos = detailProducts.stream().map(e -> new DetailProductDto(e.getId(), e.getQuantity(), e.getPriceImport(),
-                            e.getPriceExport(), e.getIsDelete(), e.getProductImage(), e.getProduct().getProductName(), e.getColor(), e.getSize())).
-                    collect(Collectors.toList());
-            return ResponseEntity.
-                    ok().
-                    body(new IGenericResponse<List<DetailProductDto>>(detailProductDtos, 200, "lấy mọi detail product của sản phẩm có id laf id_product"));
+        try {
+            Optional<Product> product = productSevice.findById(productId);
+            if (product.isPresent()) {
+                List<DetailProduct> detailProducts = detailProductService.findAllByProductId(productId);
+                List<DetailProductDto> detailProductDtos = detailProducts.stream().map(e -> new DetailProductDto(e.getId(), e.getQuantity(), e.getPriceImport(),
+                                e.getPriceExport(), e.getIsDelete(), e.getProductImage(), e.getProduct().getProductName(), e.getColor(), e.getSize())).
+                        collect(Collectors.toList());
+                return ResponseEntity.
+                        ok().
+                        body(new IGenericResponse<List<DetailProductDto>>(detailProductDtos, 200, "lấy mọi detail product của sản phẩm có id laf id_product"));
+            }
+            return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy product"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy product"));
     }
 }

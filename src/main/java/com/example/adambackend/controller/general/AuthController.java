@@ -43,22 +43,26 @@ public class AuthController {
 
     @PostMapping("authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
-        ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
+            AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
+            ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
 
 
-        return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                String.valueOf(roles)), 200, "successfully"));
+            return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    String.valueOf(roles)), 200, "successfully"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
 

@@ -19,28 +19,43 @@ public class WardController {
 
     @GetMapping("create")
     public ResponseEntity<?> createWard(@RequestBody Ward ward) {
-        return ResponseEntity.ok().body(new IGenericResponse<Ward>(wardService.save(ward), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<Ward>(wardService.save(ward), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody Ward ward) {
-        Optional<Ward> wardOptional = wardService.findById(ward.getId());
-        if (wardOptional.isPresent()) {
+        try {
+            Optional<Ward> wardOptional = wardService.findById(ward.getId());
+            if (wardOptional.isPresent()) {
 
-            return ResponseEntity.ok().body(new IGenericResponse<Ward>(wardService.save(ward), 200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+                return ResponseEntity.ok().body(new IGenericResponse<Ward>(wardService.save(ward), 200, ""));
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteEvent(@RequestParam("ward_id") Integer id) {
-        Optional<Ward> wardOptional = wardService.findById(id);
-        if (wardOptional.isPresent()) {
-            wardService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+        try {
+            Optional<Ward> wardOptional = wardService.findById(id);
+            if (wardOptional.isPresent()) {
+                wardService.deleteById(id);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 }

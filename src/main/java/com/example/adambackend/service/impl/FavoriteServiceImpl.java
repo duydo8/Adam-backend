@@ -50,8 +50,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     public List<Integer> findTop10FavoriteProduct() {
         return favoriteRepository.findTop10FavoriteProductId();
     }
+
     @Override
-    public ProductHandleWebsite findProductById(Integer id){
+    public ProductHandleWebsite findProductById(Integer id) {
         return favoriteRepository.findProductById(id);
     }
 

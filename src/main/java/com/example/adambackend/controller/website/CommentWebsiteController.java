@@ -66,50 +66,70 @@ public class CommentWebsiteController {
     //
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Integer id) {
-        Optional<Comment> comment1 = commentService.findById(id);
-        if (comment1.isPresent()) {
-            Double vote = comment1.get().getVote();
-            int commentTotal = commentService.countCommentByProduct(comment1.get().getProduct().getId());
+        try {
+            Optional<Comment> comment1 = commentService.findById(id);
+            if (comment1.isPresent()) {
+                Double vote = comment1.get().getVote();
+                int commentTotal = commentService.countCommentByProduct(comment1.get().getProduct().getId());
 
-            double voteAverage = comment1.get().getProduct().getVoteAverage();
-            voteAverage = (voteAverage * commentTotal - vote) / (voteAverage - 1);
-            Product p = comment1.get().getProduct();
-            p.setVoteAverage(voteAverage);
-            productSevice.save(p);
-            commentService.deleteById(id);
-            return ResponseEntity.ok(new IGenericResponse(200, ""));
+                double voteAverage = comment1.get().getProduct().getVoteAverage();
+                voteAverage = (voteAverage * commentTotal - vote) / (voteAverage - 1);
+                Product p = comment1.get().getProduct();
+                p.setVoteAverage(voteAverage);
+                productSevice.save(p);
+                commentService.deleteById(id);
+                return ResponseEntity.ok(new IGenericResponse(200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
     }
 
     @GetMapping("findAllCommentByProductIdAndStatusIsActive")
     public ResponseEntity<?> findAllCommentByProductIdAndStatusIsActive(@RequestParam("product_id") Integer productId) {
-        Optional<Product> product = productSevice.findById(productId);
-        if (product.isPresent()) {
+        try {
+            Optional<Product> product = productSevice.findById(productId);
+            if (product.isPresent()) {
 
-            return ResponseEntity.ok(new IGenericResponse<List<Comment>>(commentService.findAllCommentByProductIdAndStatusIsActive(productId), 200, ""));
+                return ResponseEntity.ok(new IGenericResponse<List<Comment>>(commentService.findAllCommentByProductIdAndStatusIsActive(productId), 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
     }
 
     @GetMapping("findTop10CommentByProductId")
     public ResponseEntity<?> findTop10CommentByProductId(@RequestParam("productId") Integer productId) {
-        Optional<Product> product = productSevice.findById(productId);
-        if (product.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId), 200, ""));
+        try {
+            Optional<Product> product = productSevice.findById(productId);
+            if (product.isPresent()) {
+                return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId), 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
     }
 
     @GetMapping("findAllByAccountIdAndProductId")
     public ResponseEntity<IGenericResponse> changeStatusComment(@RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
-        List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
-        if (comments.size() > 0) {
-            List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
-            return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
-        } else {
-            return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy comment by account id: " + accountId
-                    + " product id: " + productId));
+        try {
+            List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
+            if (comments.size() > 0) {
+                List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
+                return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
+            } else {
+                return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy comment by account id: " + accountId
+                        + " product id: " + productId));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 

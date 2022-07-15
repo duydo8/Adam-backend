@@ -29,98 +29,113 @@ public class CartItemWebsiteController {
     @Autowired
     DetailProductService detailProductService;
 
-    //    private Integer id;
-//    private int quantity;
-//    @Column(name = "total_price")
-//    private double totalPrice;
-//    @ManyToOne
-//    @JoinColumn(name = "account_id")
-//    private Account account;
-//    @ManyToOne
-//    @JoinColumn(name = "detail_product_id")
-//    private DetailProduct detailProduct;
-//    @Column(name = "is_active")
-//    private Boolean isActive;
-//    @Column(name = "create_date")
-//    private LocalDateTime createDate;
+
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {
-        Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
-        Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
-        if (cartItemWebsiteCreate.getQuantity() >= 10) {
-            return ResponseEntity.badRequest().body(
-                    new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
-        }
-        if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
-            return ResponseEntity.badRequest().body(
-                    new HandleExceptionDemo(400, "Không đủ số lượng"));
-        }
-        if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
-            List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
-            for (CartItems c : cartItemsList
-            ) {
-                if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
-                    c.setQuantity(c.getQuantity() + 1);
-                    return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
-                }
+        try {
+            Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
+            Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
+            if (cartItemWebsiteCreate.getQuantity() >= 10) {
+                return ResponseEntity.badRequest().body(
+                        new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
             }
+            if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
+                return ResponseEntity.badRequest().body(
+                        new HandleExceptionDemo(400, "Không đủ số lượng"));
+            }
+            if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
+                List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
+                for (CartItems c : cartItemsList
+                ) {
+                    if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
+                        c.setQuantity(c.getQuantity() + 1);
+                        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
+                    }
+                }
 
-            CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                    , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                    detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
-                    true, LocalDateTime.now());
-            return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+                CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
+                        , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
+                        true, LocalDateTime.now());
+                return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody CartItemWebsiteUpdate cartItemWebsiteUpdate) {
-        Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItemWebsiteUpdate.getId());
-        if (cartItemsOptional.isPresent()) {
-            CartItems cartItems = cartItemsOptional.get();
-            cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
-            cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
-            return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+        try {
+            Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItemWebsiteUpdate.getId());
+            if (cartItemsOptional.isPresent()) {
+                CartItems cartItems = cartItemsOptional.get();
+                cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
+                cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
+                return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("id") Integer id) {
-        Optional<CartItems> cartItemsOptional = cartItemService.findById(id);
-        if (cartItemsOptional.isPresent()) {
-            cartItemService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        try {
+            Optional<CartItems> cartItemsOptional = cartItemService.findById(id);
+            if (cartItemsOptional.isPresent()) {
+                cartItemService.deleteById(id);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
+        try {
+            return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @GetMapping("findById")
     public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
-        Optional<CartItems> cartItems = cartItemService.findById(id);
-        if (cartItems.isPresent()) {
-            return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
+        try {
+            Optional<CartItems> cartItems = cartItemService.findById(id);
+            if (cartItems.isPresent()) {
+                return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
 
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-
     }
 
     @GetMapping("findByAccountId")
     public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId) {
-        Optional<Account> account = accountService.findById(accountId);
-        if (account.isPresent()) {
-            return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.findByAccountId(accountId), 200, ""));
+        try {
+            Optional<Account> account = accountService.findById(accountId);
+            if (account.isPresent()) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.findByAccountId(accountId), 200, ""));
 
 
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-
     }
 }

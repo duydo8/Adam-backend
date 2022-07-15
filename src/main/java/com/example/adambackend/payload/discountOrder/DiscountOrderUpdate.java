@@ -1,6 +1,5 @@
 package com.example.adambackend.payload.discountOrder;
 
-import com.example.adambackend.entities.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

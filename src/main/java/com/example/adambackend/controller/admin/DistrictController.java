@@ -19,28 +19,43 @@ public class DistrictController {
 
     @GetMapping("create")
     public ResponseEntity<?> createWard(@RequestBody District district) {
-        return ResponseEntity.ok().body(new IGenericResponse<District>(districtService.save(district), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<District>(districtService.save(district), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody District district) {
-        Optional<District> districtOptional = districtService.findById(district.getId());
-        if (districtOptional.isPresent()) {
+        try {
+            Optional<District> districtOptional = districtService.findById(district.getId());
+            if (districtOptional.isPresent()) {
 
-            return ResponseEntity.ok().body(new IGenericResponse<District>(districtService.save(district), 200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+                return ResponseEntity.ok().body(new IGenericResponse<District>(districtService.save(district), 200, ""));
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Integer id) {
-        Optional<District> districtOptional = districtService.findById(id);
-        if (districtOptional.isPresent()) {
-            districtService.deleteById(id);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+        try {
+            Optional<District> districtOptional = districtService.findById(id);
+            if (districtOptional.isPresent()) {
+                districtService.deleteById(id);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 }

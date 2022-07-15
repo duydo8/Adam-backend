@@ -15,12 +15,21 @@ public class WardWebsiteController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(wardRepository.findAll(), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<>(wardRepository.findAll(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @GetMapping("findByDistrictId")
     public ResponseEntity<?> findByProviceId(@RequestParam("district_id") Integer districtId) {
-        return ResponseEntity.ok().body(new IGenericResponse<>(wardRepository.findByDistrictId(districtId), 200, ""));
-
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<>(wardRepository.findByDistrictId(districtId), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 }

@@ -18,7 +18,12 @@ public class ProvinceWebsiteController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(provinceRepository.findAll(), 200, ""));
+        try {
+            return ResponseEntity.ok().body(new IGenericResponse<>(provinceRepository.findAll(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
 }

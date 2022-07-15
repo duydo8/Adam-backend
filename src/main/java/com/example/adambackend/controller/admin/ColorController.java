@@ -30,7 +30,12 @@ public class ColorController {
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAlls(), 200, ""));
+        try {
+            return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAlls(), 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
 
@@ -50,44 +55,59 @@ public class ColorController {
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody ColorUpdate colorUpdate) {
-        Optional<Color> colorOptional = colorService.findById(colorUpdate.getId());
-        if (colorOptional.isPresent()) {
-            colorOptional.get().setColorName(colorUpdate.getColorName());
-            colorOptional.get().setIsActive(colorUpdate.getIsActive());
-            colorOptional.get().setIsDeleted(colorUpdate.getIsDeleted());
+        try {
+            Optional<Color> colorOptional = colorService.findById(colorUpdate.getId());
+            if (colorOptional.isPresent()) {
+                colorOptional.get().setColorName(colorUpdate.getColorName());
+                colorOptional.get().setIsActive(colorUpdate.getIsActive());
+                colorOptional.get().setIsDeleted(colorUpdate.getIsDeleted());
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(colorService.save(colorOptional.get()), 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(colorService.save(colorOptional.get()), 200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("color_id") Integer colorId) {
-        Optional<Color> colorOptional = colorService.findById(colorId);
-        if (colorOptional.isPresent()) {
-            colorService.deleteById(colorId);
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+        try {
+            Optional<Color> colorOptional = colorService.findById(colorId);
+            if (colorOptional.isPresent()) {
+                colorService.deleteById(colorId);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListColorIdDTO listColorIdDTO) {
-        List<Integer> list = listColorIdDTO.getListColorId();
-        System.out.println(list.size());
-        if (list.size() > 0) {
-            for (Integer x : list
-            ) {
-                Optional<Color> colorOptional = colorService.findById(x);
+        try {
+            List<Integer> list = listColorIdDTO.getListColorId();
+            System.out.println(list.size());
+            if (list.size() > 0) {
+                for (Integer x : list
+                ) {
+                    Optional<Color> colorOptional = colorService.findById(x);
 
-                if (colorOptional.isPresent()) {
+                    if (colorOptional.isPresent()) {
 
-                    colorService.updateColorsDeleted(x);
+                        colorService.updateColorsDeleted(x);
 
+                    }
                 }
+                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
             }
-            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
     }
 }
