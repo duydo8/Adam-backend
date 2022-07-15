@@ -35,7 +35,7 @@ public class AddressWebsiteController {
         if (account.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<>(addressService.findByAccountId(accountId), 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -68,7 +68,7 @@ public class AddressWebsiteController {
             Address address1 = addressService.save(address);
             return ResponseEntity.ok().body(new IGenericResponse<>(address1, 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found account"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
     }
 
     @PutMapping("update")
@@ -95,7 +95,7 @@ public class AddressWebsiteController {
 
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
     @DeleteMapping("delete")
@@ -110,7 +110,7 @@ public class AddressWebsiteController {
             addressService.deleteById(addressId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "successfully"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
 

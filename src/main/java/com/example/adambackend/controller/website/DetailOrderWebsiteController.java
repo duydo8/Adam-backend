@@ -49,7 +49,7 @@ public class DetailOrderWebsiteController {
             return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -62,7 +62,7 @@ public class DetailOrderWebsiteController {
             detailOrder.setQuantity(detailOrderWebsiteUpdate.getQuantity());
             return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -72,7 +72,7 @@ public class DetailOrderWebsiteController {
             detailOrderService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")

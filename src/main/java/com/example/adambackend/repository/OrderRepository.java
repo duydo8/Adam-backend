@@ -2,6 +2,8 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Order;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -49,5 +51,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "join products p on dp.product_id=p.id\n" +
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
+    @Query(value = "select * from orders o where o.status=?1 or ?1 is null ",nativeQuery = true)
+    Page<Order> findByStatus(Integer status,Pageable pageable);
 }
 

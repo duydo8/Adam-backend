@@ -1,6 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Favorite;
+import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.FavoriteRepository;
 import com.example.adambackend.service.FavoriteService;
@@ -26,12 +27,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(FavoriteId id) {
         favoriteRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Favorite> findById(Integer id) {
+    public Optional<Favorite> findById(FavoriteId id) {
         return favoriteRepository.findById(id);
     }
 
@@ -46,12 +47,16 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public List<ProductHandleWebsite> findTop10FavoriteProduct() {
-        return favoriteRepository.findTop10FavoriteProduct();
+    public List<Integer> findTop10FavoriteProduct() {
+        return favoriteRepository.findTop10FavoriteProductId();
+    }
+    @Override
+    public ProductHandleWebsite findProductById(Integer id){
+        return favoriteRepository.findProductById(id);
     }
 
     @Override
-    public Favorite findByAccountIdAndProductId(Integer accountId, Integer productId) {
+    public Optional<Favorite> findByAccountIdAndProductId(Integer accountId, Integer productId) {
         return favoriteRepository.findByAccountIdAndProductId(accountId, productId);
     }
 

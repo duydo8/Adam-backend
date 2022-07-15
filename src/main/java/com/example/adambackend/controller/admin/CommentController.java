@@ -54,13 +54,13 @@ public class CommentController {
             } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED_ACTIVE))) {
                 comment.get().setCommentStatus(CommentStatus.UPDATED_ACTIVE);
             } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found status"));
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy status"));
             }
             commentService.save(comment.get());
             CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
             return ResponseEntity.ok().body(new IGenericResponse<CommentDto>(commentDto, 200, "update successfully"));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found comment"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
         }
     }
 
@@ -71,7 +71,7 @@ public class CommentController {
             List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
             return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
         } else {
-            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found comment by account id: " + accountId
+            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Không tìm thấy comment by account id: " + accountId
                     + " product id: " + productId));
         }
     }
@@ -102,7 +102,7 @@ public class CommentController {
                     comment.getProduct().getId(), commentAdminDTO.getIsActive());
             return ResponseEntity.ok().body(new IGenericResponse<>(commentAdminUpdate, 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -112,7 +112,7 @@ public class CommentController {
             commentService.deleteById(Id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
 //    @DeleteMapping("deleteByListId")
@@ -132,7 +132,7 @@ public class CommentController {
 //            }
 //            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
 //        }
-//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " not found"));
+//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
 //    }
 
 }

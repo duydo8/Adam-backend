@@ -29,7 +29,7 @@ public class ProvinceController {
 
             return ResponseEntity.ok().body(new IGenericResponse<Province>(provinceService.save(province), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
         }
     }
 
@@ -40,7 +40,7 @@ public class ProvinceController {
             provinceService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
         }
     }
 }

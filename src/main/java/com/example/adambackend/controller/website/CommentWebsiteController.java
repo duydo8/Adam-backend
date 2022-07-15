@@ -79,7 +79,7 @@ public class CommentWebsiteController {
             commentService.deleteById(id);
             return ResponseEntity.ok(new IGenericResponse(200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found comment"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
     }
 
     @GetMapping("findAllCommentByProductIdAndStatusIsActive")
@@ -89,7 +89,7 @@ public class CommentWebsiteController {
 
             return ResponseEntity.ok(new IGenericResponse<List<Comment>>(commentService.findAllCommentByProductIdAndStatusIsActive(productId), 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Product"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
     }
 
     @GetMapping("findTop10CommentByProductId")
@@ -98,7 +98,7 @@ public class CommentWebsiteController {
         if (product.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId), 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Product"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
     }
 
     @GetMapping("findAllByAccountIdAndProductId")
@@ -108,7 +108,7 @@ public class CommentWebsiteController {
             List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
             return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
         } else {
-            return ResponseEntity.ok().body(new IGenericResponse(400, "not found comment by account id: " + accountId
+            return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy comment by account id: " + accountId
                     + " product id: " + productId));
         }
     }

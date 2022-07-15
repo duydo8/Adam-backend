@@ -58,7 +58,7 @@ public class ColorController {
 
             return ResponseEntity.ok().body(new IGenericResponse<>(colorService.save(colorOptional.get()), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -68,7 +68,7 @@ public class ColorController {
             colorService.deleteById(colorId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("deleteByListId")
@@ -88,6 +88,6 @@ public class ColorController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
     }
 }

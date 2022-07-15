@@ -35,6 +35,6 @@ public class DetailProductWebsiteController {
                     ok().
                     body(new IGenericResponse<List<DetailProductDto>>(detailProductDtos, 200, "lấy mọi detail product của sản phẩm có id laf id_product"));
         }
-        return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found product"));
+        return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy product"));
     }
 }

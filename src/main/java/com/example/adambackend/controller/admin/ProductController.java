@@ -73,7 +73,7 @@ public class ProductController {
             product.setCategory(categoryService.findById(productDTO.getCategoryId()).get());
             return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product), 200, "success"));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         }
 
 
@@ -158,7 +158,7 @@ public class ProductController {
             productResponse.setIsComplete(product.getIsComplete());
             return ResponseEntity.ok().body(new IGenericResponse<ProductResponse>(productResponse, 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -168,7 +168,7 @@ public class ProductController {
             productSevice.deleteById(sizeId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @PutMapping("updateIsActive")
@@ -179,7 +179,7 @@ public class ProductController {
             productSevice.updateProductsIsActive(productUpdateIsActive.getIsActive(), productUpdateIsActive.getId());
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -188,6 +188,7 @@ public class ProductController {
 
         List<Tag> tagList = new ArrayList<>();
         List<Material> materialList = new ArrayList<>();
+
         for (Integer materialId : productRequest.getMaterialProductIdList()
         ) {
 
@@ -313,7 +314,7 @@ public class ProductController {
             return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct, 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -334,6 +335,6 @@ public class ProductController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 }

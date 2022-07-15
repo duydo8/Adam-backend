@@ -56,7 +56,7 @@ public class MaterialControler {
             materialOptional.get().setIsDeleted(materialUpdate.getIsDeleted());
             return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(materialOptional.get()), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
         }
     }
 
@@ -67,7 +67,7 @@ public class MaterialControler {
             materialService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Ward"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
         }
     }
 
@@ -89,7 +89,7 @@ public class MaterialControler {
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
 

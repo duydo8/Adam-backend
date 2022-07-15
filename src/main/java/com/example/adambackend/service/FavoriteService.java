@@ -1,6 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Favorite;
+import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 
 import java.util.List;
@@ -8,9 +9,9 @@ import java.util.Optional;
 
 public interface FavoriteService {
 
-    Optional<Favorite> findById(Integer id);
+    Optional<Favorite> findById(FavoriteId id);
 
-    void deleteById(Integer id);
+    void deleteById(FavoriteId id);
 
     Favorite save(Favorite favorite);
 
@@ -20,9 +21,11 @@ public interface FavoriteService {
 
     List<ProductHandleWebsite> findProductFavoriteByAccountId(Integer id);
 
-    List<ProductHandleWebsite> findTop10FavoriteProduct();
+    List<Integer> findTop10FavoriteProduct();
 
-    Favorite findByAccountIdAndProductId(Integer accountId, Integer productId);
+    ProductHandleWebsite findProductById(Integer id);
+
+    Optional<Favorite> findByAccountIdAndProductId(Integer accountId, Integer productId);
 
     void deleteFavoriteByAccountIdAndProductId(Integer accountId, Integer productId);
 

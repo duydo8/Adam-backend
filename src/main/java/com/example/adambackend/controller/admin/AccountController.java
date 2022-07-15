@@ -97,7 +97,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code is not correct or time is invalid"));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -129,7 +129,7 @@ public class AccountController {
                 accountService.save(accountOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not valid data"));
         }
@@ -142,7 +142,7 @@ public class AccountController {
             accountService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
         }
     }
 
@@ -153,7 +153,7 @@ public class AccountController {
 
             return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
         }
 
     }

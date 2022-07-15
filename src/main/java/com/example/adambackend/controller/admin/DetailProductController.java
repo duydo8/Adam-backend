@@ -64,7 +64,7 @@ public class DetailProductController {
             detailProduct.setProduct(product.get());
             return ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
 
     }
 
@@ -87,7 +87,7 @@ public class DetailProductController {
             detailProduct.setSize(sizeOptional.get());
             return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin, 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -106,9 +106,9 @@ public class DetailProductController {
                     return ResponseEntity.badRequest().body(new IGenericResponse<>(productSevice.save(product.get()), 200, "success"));
                 }
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @PostMapping("createArrayOptionValueDetailProduct")
@@ -116,6 +116,9 @@ public class DetailProductController {
         Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
         List<Color> colorList = new ArrayList<>();
         List<Size> sizeList = new ArrayList<>();
+        if(sizeList.size()==0){
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Require size"));
+        }
         for (Integer colorId : detailProductRequest.getColorIdList()
         ) {
 
@@ -270,7 +273,7 @@ public class DetailProductController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
 }

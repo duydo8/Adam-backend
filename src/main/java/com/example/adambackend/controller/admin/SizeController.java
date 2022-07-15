@@ -48,7 +48,7 @@ public class SizeController {
             size1.get().setIsDeleted(sizeUpdate.getIsDeleted());
             return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size1.get()), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -58,7 +58,7 @@ public class SizeController {
             sizeService.deleteById(sizeId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")
@@ -83,6 +83,6 @@ public class SizeController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 }

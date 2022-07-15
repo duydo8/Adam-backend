@@ -54,7 +54,7 @@ public class EventController {
             eventOptional.get().setEndTime(eventUpdateDTO.getEndTime());
             return ResponseEntity.ok().body(new IGenericResponse<Event>(eventService.save(eventOptional.get()), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Event"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Event"));
         }
     }
 
@@ -65,7 +65,7 @@ public class EventController {
             eventService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Event"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Event"));
         }
     }
 }

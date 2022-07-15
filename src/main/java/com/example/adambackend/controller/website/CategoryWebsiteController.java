@@ -52,7 +52,7 @@ public class CategoryWebsiteController {
             return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
 
     }
 }

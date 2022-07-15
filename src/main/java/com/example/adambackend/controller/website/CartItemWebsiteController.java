@@ -49,11 +49,11 @@ public class CartItemWebsiteController {
         Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
         if (cartItemWebsiteCreate.getQuantity() >= 10) {
             return ResponseEntity.badRequest().body(
-                    new HandleExceptionDemo(400, "can't buy too much (<10)"));
+                    new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
         }
         if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
             return ResponseEntity.badRequest().body(
-                    new HandleExceptionDemo(400, "not enough quantity"));
+                    new HandleExceptionDemo(400, "Không đủ số lượng"));
         }
         if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
             List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
@@ -71,7 +71,7 @@ public class CartItemWebsiteController {
                     true, LocalDateTime.now());
             return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @PutMapping("update")
@@ -83,7 +83,7 @@ public class CartItemWebsiteController {
             cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
             return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @DeleteMapping("delete")
@@ -93,7 +93,7 @@ public class CartItemWebsiteController {
             cartItemService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
     @GetMapping("findAll")
@@ -108,7 +108,7 @@ public class CartItemWebsiteController {
             return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -120,7 +120,7 @@ public class CartItemWebsiteController {
 
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 }

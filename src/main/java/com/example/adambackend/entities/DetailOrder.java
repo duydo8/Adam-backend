@@ -19,6 +19,7 @@ public class DetailOrder {
     private Integer id;
     private Integer quantity;
     private Double price;
+    private Double totalPrice;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 

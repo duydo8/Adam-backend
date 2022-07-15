@@ -5,6 +5,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.HistoryOrderRepository;
+import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.DetailOrderService;
 import com.example.adambackend.service.DetailProductService;
@@ -13,14 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000000)
@@ -30,7 +30,7 @@ public class OrderController {
     private final List<String> thang = Arrays.asList("January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November", "December");
     @Autowired
-    OrderService orderService;
+    OrderRepository orderService;
     @Autowired
     DetailProductService detailProductService;
     @Autowired
@@ -41,9 +41,10 @@ public class OrderController {
     HistoryOrderRepository historyOrderRepository;
 
     @GetMapping("findAllByPageble")
-    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Order> page1 = orderService.findAll(pageable);
+    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size,
+                                              @RequestParam(value = "status",required = false)Integer status) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
+        Page<Order> page1 = orderService.findByStatus(status,pageable);
         return ResponseEntity.ok().body(new IGenericResponse<Page<Order>>(page1, 200, "Page product"));
     }
 
@@ -53,6 +54,52 @@ public class OrderController {
         Optional<Order> orderOptional = orderService.findById(orderId);
         if (orderOptional.isPresent()) {
             orderOptional.get().setStatus(status);
+            List<DetailOrder> detailOrderList= orderOptional.get().getDetailOrders();
+            if(status==2){
+                for (DetailOrder detailOrder : detailOrderList
+                     ) {
+                    DetailProduct detailProduct= detailOrder.getDetailProduct();
+                    detailProduct.setQuantity(detailProduct.getQuantity()-detailOrder.getQuantity());
+                    detailProductService.save(detailProduct);
+                }
+            }
+            if(status==0){
+                List<HistoryOrder> historyOrders= historyOrderRepository.findByOrderId(orderId);
+                for (HistoryOrder ho :historyOrders
+                     ) {
+                    if(ho.getStatus()==2){
+                        for (DetailOrder detailOrder : detailOrderList
+                        ) {
+                            DetailProduct detailProduct= detailOrder.getDetailProduct();
+                            detailProduct.setQuantity(detailProduct.getQuantity()-detailOrder.getQuantity());
+                            detailProductService.save(detailProduct);
+                        }
+                    }
+                }
+                Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
+                if (account.getPriority() == -5) {
+
+                } else {
+                    double priority= account.getPriority()-orderOptional.get().getTotalPrice()*0.0000001;
+                    if(priority<-5){
+                        account.setPriority(5.0);
+                    }
+                    account.setPriority(priority);
+                }
+            }
+            if(status==6){
+                Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
+                if (account.getPriority() == 5) {
+
+                } else {
+                    double priority= account.getPriority()+orderOptional.get().getTotalPrice()*0.0000001;
+                    if(priority>5){
+                        account.setPriority(5.0);
+                    }
+                    account.setPriority(priority);
+                }
+            }
+
 
             HistoryOrder historyOrder = new HistoryOrder();
 
@@ -70,7 +117,7 @@ public class OrderController {
 
             return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(orderOptional.get()), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found event"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy event"));
         }
     }
 
@@ -95,7 +142,7 @@ public class OrderController {
 
             return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(order), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found event"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy event"));
         }
     }
 
@@ -138,37 +185,10 @@ public class OrderController {
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
-    //    @GetMapping("countAllOrder")
-//    public ResponseEntity<?> countAllOrder(@RequestParam("start_date") String startDate,
-//                                           @RequestParam("end_date")String endDate){
-//        startDate=startDate.replace(" ","T");
-//        endDate=endDate.replace(" ","T");
-//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countAllOrderByTime(dateStart,dateEnd),200,""));
-//    }
-//    @GetMapping("countCancelOrder")
-//    public ResponseEntity<?> countCancelOrder(@RequestParam("start_date") String startDate,
-//                                           @RequestParam("end_date")String endDate){
-//        startDate=startDate.replace(" ","T");
-//        endDate=endDate.replace(" ","T");
-//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countCancelOrderByTime(dateStart,dateEnd),200,""));
-//    }
-//
-//    @GetMapping("countSuccessOrder")
-//    public ResponseEntity<?> countSuccessOrder(@RequestParam("start_date") String startDate,
-//                                           @RequestParam("end_date")String endDate){
-//        startDate=startDate.replace(" ","T");
-//        endDate=endDate.replace(" ","T");
-//        LocalDateTime dateStart= LocalDateTime.parse(startDate);
-//        LocalDateTime dateEnd=LocalDateTime.parse(endDate);
-//        return ResponseEntity.ok().body(new IGenericResponse<>(orderService.countsuccessOrderByTime(dateStart,dateEnd),200,""));
-//    }
+
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
         Optional<Order> optionalOrder = orderService.findById(orderId);
@@ -177,7 +197,7 @@ public class OrderController {
             orderService.deleteById(orderId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
 
     }
 

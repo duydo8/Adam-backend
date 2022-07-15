@@ -90,7 +90,7 @@ public class AccountWebsiteController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code is not correct or time is invalid"));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -110,7 +110,7 @@ public class AccountWebsiteController {
             }
 
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found account"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
         }
 
     }
@@ -121,7 +121,7 @@ public class AccountWebsiteController {
         if (accountOptional.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
         }
     }
 }

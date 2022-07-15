@@ -72,7 +72,7 @@ public class CategoryController {
             categoryOptional.get().setCategoryParentId(categoryUpdate.getCategoryParentId());
             return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(categoryOptional.get()), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
         }
     }
 
@@ -83,7 +83,7 @@ public class CategoryController {
             categoryService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
         }
     }
 
@@ -108,7 +108,7 @@ public class CategoryController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
     @GetMapping("findCategoryByParentId")
@@ -119,7 +119,7 @@ public class CategoryController {
             return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
 
     }
 

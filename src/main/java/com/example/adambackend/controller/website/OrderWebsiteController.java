@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,7 @@ public class OrderWebsiteController {
 //        if (account.isPresent()) {
 //            return ResponseEntity.ok().body(new IGenericResponse<List<Order>>(orderService.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId), 200, ""));
 //        }
-//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
+//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
 //    }
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
@@ -61,7 +64,7 @@ public class OrderWebsiteController {
             Double ammountPrice = 0.0;
 
             order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
-
+            order = orderService.save(order);
             List<CartItems> cartItemsList = new ArrayList<>();
 
 
@@ -75,19 +78,35 @@ public class OrderWebsiteController {
                     DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
                     if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
-                        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not enough quantity "));
+                        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không đủ số lượng "));
                     }
 
                     ammountPrice += cartItemsOptional.get().getTotalPrice();
                     detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
                     detailProductService.save(detailProduct);
                     cartItemService.updateIsActive(x);
+                    DetailOrder detailOrder = new DetailOrder();
+                    detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
+                    detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
+                    detailOrder.setCreateDate(LocalDateTime.now());
+                    detailOrder.setPrice(detailProduct.getPriceExport());
+                    detailOrder.setIsDeleted(false);
+                    detailOrder.setIsActive(true);
+                    detailOrder.setDetailProduct(detailProduct);
+                    detailOrder.setOrder(order);
+                    detailOrderService.save( detailOrder);
+
 
                 }
             }
+
             order.setAmountPrice(ammountPrice);
             order.setCartItems(cartItemsList);
             Double totalPrice = ammountPrice - orderWebsiteCreate.getSalePrice();
+            if(totalPrice>5000000){
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
+                        "đơn hàng không được quá 5m, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
+            }
             List<Order> orders = orderService.findAll();
             String code = RandomString.make(64);
             for (int i = 0; i < orders.size(); i++) {
@@ -105,7 +124,7 @@ public class OrderWebsiteController {
             historyOrder.setDescription("create time");
             historyOrder.setUpdateTime(LocalDateTime.now());
             historyOrder.setIsActive(true);
-            historyOrder.setTotalPrice(ammountPrice - orderWebsiteCreate.getSalePrice());
+            historyOrder.setTotalPrice(order.getTotalPrice());
             historyOrder.setStatus(1);
             historyOrder = historyOrderRepository.save(historyOrder);
             List<HistoryOrder> historyOrders = new ArrayList<>();
@@ -123,7 +142,7 @@ public class OrderWebsiteController {
 
             return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
 
     }
 
@@ -136,7 +155,7 @@ public class OrderWebsiteController {
             orderService.deleteById(orderId);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found Order"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
 
     }
 
@@ -147,7 +166,7 @@ public class OrderWebsiteController {
             return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
 
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
@@ -157,8 +176,7 @@ public class OrderWebsiteController {
         if (account.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByAccountId(accountId, status), 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
-
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
     }
 
 

@@ -59,7 +59,7 @@ public class TagController {
             tagOptional.get().setIsDelete(tagUpdate.getIsDeleted());
             return ResponseEntity.ok().body(new IGenericResponse<>(tagService.save(tagOptional.get()), 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
     @DeleteMapping("delete")
@@ -69,7 +69,7 @@ public class TagController {
             tagService.deleteById(id);
             return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found category"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
         }
     }
 
@@ -89,7 +89,7 @@ public class TagController {
             }
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
         }
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found "));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
     }
 
 }

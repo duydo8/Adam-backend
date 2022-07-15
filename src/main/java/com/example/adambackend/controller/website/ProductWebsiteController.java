@@ -523,7 +523,7 @@ for(int i=0;i<price.size();i++){
         if (tagOptional.isPresent()) {
             return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findAllByTagName(tagName), 200, ""));
         } else {
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         }
     }
 
@@ -668,11 +668,11 @@ for(int i=0;i<price.size();i++){
 
                 }
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found favorite"));
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy favorite"));
         }
 
 
-        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not found"));
+        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
 
     }
 
