@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface AccountService {
 
+    Optional<Account> findByUsername(String username);
+
     List<AccountResponse> findAll();
 
     Account save(Account account);
@@ -40,4 +42,5 @@ public interface AccountService {
     Double countTotalAccountInOrder(Integer month);
 
     void updateAccountDeleted(Integer id);
+
 }

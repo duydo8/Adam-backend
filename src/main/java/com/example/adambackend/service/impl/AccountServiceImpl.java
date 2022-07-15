@@ -26,6 +26,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Override
+    public Optional<Account> findByUsername(String username){
+        return accountRepository.findByUsername(username);
+    }
 
     @Override
     public List<AccountResponse> findAll() {

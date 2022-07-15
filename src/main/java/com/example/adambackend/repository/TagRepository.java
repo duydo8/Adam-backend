@@ -1,5 +1,6 @@
 package com.example.adambackend.repository;
 
+import com.example.adambackend.entities.Size;
 import com.example.adambackend.entities.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,4 +23,6 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     @Query(value = "select * from tags where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Tag> findAlls();
+    @Query(value = "select * from tags where tag_name like '%?1%'",nativeQuery = true)
+    List<Tag>  findByName(String name);
 }

@@ -13,12 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true ")
     Page<Product> findAll(Pageable pageable);
-
+@Query(value = "select * from products where product_name like '%?1%'",nativeQuery = true)
+List<Product>  findByName(String name);
     @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 

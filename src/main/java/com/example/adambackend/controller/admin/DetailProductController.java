@@ -130,7 +130,14 @@ public class DetailProductController {
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
             if (detailProductRequest.getSizeIdList().size() == 0) {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Require size"));
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Bắt buộc nhập size"));
+            }
+            if(detailProductRequest.getQuantity()<=0){
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Số lượng phải lớn hơn 0"));
+            }
+            if(detailProductRequest.getPriceExport()< detailProductRequest.getPriceImport()){
+                return ResponseEntity.badRequest().
+                        body(new HandleExceptionDemo(400, "Giá export phải lớn hơn import"));
             }
             for (Integer colorId : detailProductRequest.getColorIdList()
             ) {
@@ -175,7 +182,7 @@ public class DetailProductController {
                 return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
 
             } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Product không tổn tại"));
             }
         } catch (Exception e) {
             e.printStackTrace();

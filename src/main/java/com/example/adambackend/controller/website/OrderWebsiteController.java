@@ -60,8 +60,9 @@ public class OrderWebsiteController {
 
                 order.setSalePrice(orderWebsiteCreate.getSalePrice());
                 Double ammountPrice = 0.0;
-
+order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
+                order.setTotalPrice(0.0);
                 order = orderService.save(order);
                 List<CartItems> cartItemsList = new ArrayList<>();
 

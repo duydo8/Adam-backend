@@ -95,7 +95,7 @@ public class AccountController {
             Optional<Account> accountOptional = accountService.findById(id);
             if (accountOptional.isPresent()) {
                 if (accountOptional.get().getVerificationCode().equals(code)
-                        && accountOptional.get().getTimeValid() == LocalDateTime.now()) {
+                        && accountOptional.get().getTimeValid().isBefore(LocalDateTime.now())  ) {
                     accountOptional.get().setIsActive(true);
                     ;
                     return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));

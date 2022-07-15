@@ -1,5 +1,6 @@
 package com.example.adambackend.repository;
 
+import com.example.adambackend.entities.Product;
 import com.example.adambackend.entities.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +16,8 @@ public interface SizeRepository extends JpaRepository<Size, Integer> {
     @Query(value = "select * from sizes s join detail_products dp on dp.size_id= s.id where dp.id=?1 and" +
             " s.is_active=1 and s.is_deleted=0 ", nativeQuery = true)
     Optional<Size> findByDetailProductId(Integer detailProductId);
-
+    @Query(value = "select * from sizes where size_name like '%?1%'",nativeQuery = true)
+    List<Size>  findByName(String name);
     @Modifying
     @Transactional
     @Query(value = "update sizes set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
