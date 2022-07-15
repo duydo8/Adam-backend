@@ -129,7 +129,7 @@ public class DetailProductController {
             Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
-            if (sizeList.size() == 0) {
+            if (detailProductRequest.getSizeIdList().size() == 0) {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Require size"));
             }
             for (Integer colorId : detailProductRequest.getColorIdList()
