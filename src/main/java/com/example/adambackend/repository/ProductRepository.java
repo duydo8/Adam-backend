@@ -58,7 +58,7 @@ List<Product>  findByName(String name);
     List<Product> findTop10ProductBestSale();
 
     @Query(value = "select p from Product p join DetailProduct dp on p.id=dp.product.id " +
-            "where  p.isActive=true and p.isDelete=false and dp.id=?1")
+            "where dp.id=?1")
     Product findByDetailProductId(Integer detalId);
 
     @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, " +
