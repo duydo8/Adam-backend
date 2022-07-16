@@ -49,12 +49,12 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "as createDate, MAX(dp.price_export) as maxPrice, MIN(dp.price_export) as minPrice from orders o \n" +
             "join detail_orders dos on o.id=dos.order_id \n" +
             "join detail_products dp on dp.id=dos.detail_product_id \n" +
-            "join products p on dp.product_id=p.id\n" +
+            "join products p on dp.product_id=p.id \n" +
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
     @Query(value = "select * from tags where order_code like '%?1%'",nativeQuery = true)
     List<Order>  findByName(String name);
-    @Query(value = "select * from orders o where o.status=?1 or ?1 is null ", nativeQuery = true)
+    @Query(value = "select o from Order o where (o.status=?1 or ?1 is null) ")
     Page<Order> findByStatus(Integer status, Pageable pageable);
 }
 
