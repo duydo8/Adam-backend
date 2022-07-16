@@ -129,9 +129,7 @@ public class DetailProductController {
             Optional<Product> productOptional = productSevice.findById(detailProductRequest.getProductId());
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
-            if (detailProductRequest.getSizeIdList().size() == 0&&detailProductRequest.getColorIdList().size()==0) {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Bắt buộc nhập size hoặc color"));
-            }
+
 
             for (Integer colorId : detailProductRequest.getColorIdList()
             ) {
@@ -196,13 +194,7 @@ public class DetailProductController {
                 ) {
                     Optional<DetailProduct> detailProduct = detailProductService.findById(n.getId());
                     if (detailProduct.isPresent()) {
-                        if(n.getQuantity()<=0){
-                            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Số lượng phải lớn hơn 0"));
-                        }
-                        if(n.getPriceExport()< n.getPriceImport()){
-                            return ResponseEntity.badRequest().
-                                    body(new HandleExceptionDemo(400, "Giá export phải lớn hơn import"));
-                        }
+
                         detailProduct.get().setIsActive(n.getIsActive());
                         detailProduct.get().setPriceImport(n.getPriceImport());
                         detailProduct.get().setPriceExport(n.getPriceExport());
