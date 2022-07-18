@@ -61,7 +61,6 @@ public class DetailProductController {
                 List<DetailProduct> detailProducts = product.get().getDetailProducts();
                 detailProducts.add(detailProduct);
                 product.get().setDetailProducts(detailProducts);
-                productSevice.save(product.get());
                 detailProduct.setProduct(product.get());
                 return ResponseEntity.ok().body(new IGenericResponse<DetailProduct>(detailProductService.save(detailProduct), 200, "success"));
             }
@@ -78,7 +77,6 @@ public class DetailProductController {
             Optional<DetailProduct> detailProductOptional = detailProductService.findById(detailProductUpdateAdmin.getId());
             Optional<Size> sizeOptional = sizeService.findById(detailProductUpdateAdmin.getSizeId());
             Optional<Color> colorOptional = colorService.findById(detailProductUpdateAdmin.getColorId());
-            if (detailProductOptional.isPresent() && colorOptional.isPresent() && sizeOptional.isPresent()) {
 
                 DetailProduct detailProduct = detailProductOptional.get();
                 detailProduct.setQuantity(detailProductUpdateAdmin.getQuantity());
@@ -90,7 +88,7 @@ public class DetailProductController {
                 detailProduct.setColor(colorOptional.get());
                 detailProduct.setSize(sizeOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin, 200, ""));
-            }
+
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,26 +148,7 @@ public class DetailProductController {
 
 
             List<DetailProduct> detailProductList = new ArrayList<>();
-            if (productOptional.isPresent()) {
-                for (int i = 0; i < sizeList.size(); i++) {
-                    for (int j = 0; j < colorList.size(); j++) {
-                        DetailProduct detailProduct = new DetailProduct();
-                        detailProduct.setProduct(productSevice.findById(detailProductRequest.getProductId()).get());
-                        detailProduct.setPriceImport(detailProductRequest.getPriceImport());
-                        detailProduct.setPriceExport(detailProductRequest.getPriceExport());
-                        detailProduct.setQuantity(detailProductRequest.getQuantity());
-                        detailProduct.setIsDelete(false);
-                        detailProduct.setIsActive(true);
 
-                        detailProduct.setCreateDate(LocalDateTime.now());
-                        detailProduct.setColor(colorList.get(j));
-                        detailProduct.setSize(sizeList.get(i));
-                        detailProductList.add(detailProduct);
-                        detailProductService.save(detailProduct);
-
-                    }
-
-                }
                 productOptional.get().setIsComplete(false);
                 return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
 
@@ -231,22 +210,7 @@ public class DetailProductController {
             detailProductService.deleteByProductId(detailProductRequest.getProductId());
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
-            for (Integer colorId : detailProductRequest.getColorIdList()
-            ) {
 
-                Optional<Color> color = colorService.findById(colorId);
-                if (color.isPresent()) {
-                    colorList.add(color.get());
-                }
-            }
-            for (Integer s : detailProductRequest.getSizeIdList()
-            ) {
-                Optional<Size> size = sizeService.findById(s);
-                if (size.isPresent()) {
-                    sizeList.add(size.get());
-                }
-
-            }
 
 
             List<DetailProduct> detailProductList = new ArrayList<>();
