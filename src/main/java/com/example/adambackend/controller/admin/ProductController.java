@@ -103,7 +103,55 @@ public class ProductController {
                 product1.get().setIsDelete(productUpdateDTO.getIsDelete());
                 product1.get().setIsActive(productUpdateDTO.getIsActive());
                 product1.get().setCategory(categoryOptional.get());
+                List<TagProduct> tagProductList = product1.get().getTagProducts();
+                List<MaterialProduct> materialProductList = product1.get().getMaterialProducts();
+                for (TagProduct tagProduct : tagProductList
+                ) {
+                    tagProductRepository.deleteById(tagProduct.getTagProductPK());
+                }
+                for (MaterialProduct materialProduct : materialProductList
+                ) {
+                    materialProductRepository.deleteById(materialProduct.getMaterialProductPK());
+                }
+                productSevice.save(product1.get());
+                List<Material> materialList = new ArrayList<>();
+                List<Tag> tagList = new ArrayList<>();
+                for (Integer materialId : productUpdateDTO.getMaterialProductIds()
+                ) {
 
+                    Optional<Material> materialOptional = materialService.findById(materialId);
+                    if (materialOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false) {
+                        MaterialProduct materialProduct = new MaterialProduct();
+                        materialProduct.setProduct(product1.get());
+                        materialProduct.setMaterial(materialOptional.get());
+                        materialProduct.setMaterialProductPK(new MaterialProductPK(materialId, product1.get().getId()));
+                        materialProduct.setCreateDate(LocalDateTime.now());
+                        materialProduct.setIsDeleted(false);
+                        materialProduct.setIsActive(true);
+                        materialProductList.add(materialProduct);
+                        materialProductRepository.save(materialProduct);
+                        materialList.add(materialOptional.get());
+                    }
+                }
+                for (Integer s : productUpdateDTO.getTagProductIds()
+                ) {
+                    Optional<Tag> tagOptional = tagService.findById(s);
+                    if (tagOptional.isPresent() && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
+                        TagProduct tagProduct = new TagProduct();
+                        tagProduct.setProduct(product1.get());
+                        tagProduct.setTag(tagOptional.get());
+                        tagProduct.setTagProductPK(new TagProductPK(s, product1.get().getId()));
+                        tagProduct.setCreateDate(LocalDateTime.now());
+                        tagProduct.setIsDeleted(false);
+                        tagProduct.setIsActive(true);
+                        tagProductList.add(tagProduct);
+                        tagProductRepository.save(tagProduct);
+                        tagList.add(tagOptional.get());
+                    }
+
+                }
+                product1.get().setTagProducts(tagProductList);
+                product1.get().setMaterialProducts(materialProductList);
                 Product product = productSevice.save(product1.get());
                 ProductResponse productResponse = new ProductResponse();
                 productResponse.setId(product.getId());
@@ -192,7 +240,34 @@ public class ProductController {
             product.setCreateDate(LocalDateTime.now());
             product.setCategory(categoryService.findById(productRequest.getCategoryId()).get());
             product.setIsActive(true);
+            productSevice.save(product);
+            List<TagProduct> tagProductList = new ArrayList<>();
+            List<MaterialProduct> materialProductList = new ArrayList<>();
+            MaterialProduct materialProduct = null;
+            TagProduct tagProduct = null;
+            if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
+                for (int i = 0; i < tagList.size(); i++) {
+                    for (int j = 0; j < materialList.size(); j++) {
+                        Optional<Material> materialOptional = materialService.findById(materialList.get(j).getId());
+                        Optional<Tag> tagOptional = tagService.findById(tagList.get(i).getId());
+                        if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
+                                && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
+                            materialProduct = new MaterialProduct
+                                    (new MaterialProductPK(materialOptional.get().getId(), product.getId()),
+                                            false, materialOptional.get(), true, LocalDateTime.now(), product);
+                            tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
+                            materialProductRepository.save(materialProduct);
+                            tagProductRepository.save(tagProduct);
+                            materialProductList.add(materialProduct);
+                            tagProductList.add(tagProduct);
+                        }
+                    }
 
+
+                }
+                product.setTagProducts(tagProductList);
+                product.setMaterialProducts(materialProductList);
+                Product product1 = productSevice.save(product);
                 ProductResponse productResponse = new ProductResponse();
                 productResponse.setId(product.getId());
                 productResponse.setProductName(product1.getProductName());
@@ -230,7 +305,29 @@ public class ProductController {
                 Set<Material> materialList = new HashSet<>();
                 Set<Color> colorList = new HashSet<>();
                 Set<Size> sizeList = new HashSet<>();
+                for (DetailProduct dp : detailProductList
+                ) {
+                    Optional<Color> c = colorService.findByDetailProductId(dp.getId());
+                    Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
+                    if (c.isPresent()) {
+                        colorList.add(c.get());
+                    }
+                    if (s.isPresent()) {
+                        sizeList.add(s.get());
+                    }
+                }
+                for (Integer x : listTagId
+                ) {
+                    Optional<Tag> tagOptional = tagService.findById(x);
+                    tagList.add(tagOptional.get());
 
+                }
+                for (Integer x : listMaterialId
+                ) {
+                    Optional<Material> materialOptional = materialService.findById(x);
+                    materialList.add(materialOptional.get());
+
+                }
                 System.out.println(colorList.size());
                 if (colorList.size() == 0) {
                     colorList = Collections.<Color>emptySet();

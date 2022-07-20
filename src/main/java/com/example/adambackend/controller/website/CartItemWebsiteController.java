@@ -35,7 +35,14 @@ public class CartItemWebsiteController {
         try {
             Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
             Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
-
+            if (cartItemWebsiteCreate.getQuantity() >= 10) {
+                return ResponseEntity.badRequest().body(
+                        new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
+            }
+            if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
+                return ResponseEntity.badRequest().body(
+                        new HandleExceptionDemo(400, "Không đủ số lượng"));
+            }
             if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
                 List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
                 for (CartItems c : cartItemsList
@@ -46,7 +53,10 @@ public class CartItemWebsiteController {
                     }
                 }
 
-                CartItems cartItems = new CartItems();
+                CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
+                        , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
+                        true, LocalDateTime.now());
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));

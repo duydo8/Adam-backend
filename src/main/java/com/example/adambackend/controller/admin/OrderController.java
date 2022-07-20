@@ -62,6 +62,65 @@ public class OrderController {
             if (orderOptional.isPresent()) {
                 orderOptional.get().setStatus(status);
                 List<DetailOrder> detailOrderList = orderOptional.get().getDetailOrders();
+                if (status == 2) {
+                    for (DetailOrder detailOrder : detailOrderList
+                    ) {
+                        DetailProduct detailProduct = detailOrder.getDetailProduct();
+                        detailProduct.setQuantity(detailProduct.getQuantity() - detailOrder.getQuantity());
+                        detailProductService.save(detailProduct);
+                    }
+                }
+                if (status == 0) {
+                    List<HistoryOrder> historyOrders = historyOrderRepository.findByOrderId(orderId);
+                    for (HistoryOrder ho : historyOrders
+                    ) {
+                        if (ho.getStatus() == 2) {
+                            for (DetailOrder detailOrder : detailOrderList
+                            ) {
+                                DetailProduct detailProduct = detailOrder.getDetailProduct();
+                                detailProduct.setQuantity(detailProduct.getQuantity() - detailOrder.getQuantity());
+                                detailProductService.save(detailProduct);
+                            }
+                        }
+                    }
+                    Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
+                    if (account.getPriority() == -5) {
+
+                    } else {
+                        double priority = account.getPriority() - orderOptional.get().getTotalPrice() * 0.0000001;
+                        if (priority < -5) {
+                            account.setPriority(5.0);
+                        }
+                        account.setPriority(priority);
+                    }
+                }
+                if (status == 6) {
+                    Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
+                    if (account.getPriority() == 5) {
+
+                    } else {
+                        double priority = account.getPriority() + orderOptional.get().getTotalPrice() * 0.0000001;
+                        if (priority > 5) {
+                            account.setPriority(5.0);
+                        }
+                        account.setPriority(priority);
+                    }
+                }
+
+
+                HistoryOrder historyOrder = new HistoryOrder();
+
+
+                historyOrder.setOrder(orderOptional.get());
+                historyOrder.setDescription("update time");
+                historyOrder.setUpdateTime(LocalDateTime.now());
+                historyOrder.setIsActive(true);
+                historyOrder.setTotalPrice(orderOptional.get().getTotalPrice());
+                historyOrder.setStatus(6);
+                historyOrder = historyOrderRepository.save(historyOrder);
+                List<HistoryOrder> historyOrders = orderOptional.get().getHistoryOrders();
+                historyOrders.add(historyOrder);
+                orderOptional.get().setHistoryOrders(historyOrders);
 
                 return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(orderOptional.get()), 200, ""));
             } else {

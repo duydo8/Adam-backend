@@ -11,10 +11,10 @@ public class TwilioSendSms {
     public void sendCode(String phoneNumber, String code) {
 
         Twilio.init(
-                "TWILIO_ACCOUNT_SID",
-                "TWILIO_AUTH_TOKEN");
+                "AC3ac486fb125060125c0433ca45a05009",
+                "e3c30102ce6da495e7916d846ab94f57");
 
-        Message.creator(new PhoneNumber(phoneNumber), new PhoneNumber("+84966501755"),
+        Message.creator(new PhoneNumber(phoneNumber), new PhoneNumber("MG249f932ac8f2511f36124b3714ac6130"),
                 "Your verify is: " + code).create();
 
     }
