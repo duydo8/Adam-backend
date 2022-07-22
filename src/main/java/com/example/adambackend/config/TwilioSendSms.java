@@ -8,7 +8,7 @@ public class TwilioSendSms {
     public static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
     public static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
 
-    public void sendCode(String phoneNumber, String code) {
+    public void sendCode(String phoneNumber, Integer code) {
 
         Twilio.init(
                 "AC3ac486fb125060125c0433ca45a05009",

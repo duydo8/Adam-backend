@@ -66,22 +66,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.existsByEmail(email);
     }
 
-    @Override
-    public void register(Account account, String siteURL) throws UnsupportedEncodingException, MessagingException {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-
-        String randomCode = RandomString.make(64);
-        account.setVerificationCode(randomCode);
-        account.setIsActive(false);
-
-        account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-        accountRepository.save(account);
-
-        sendVerificationEmail(account, siteURL);
-    }
 
     @Override
     public void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException {

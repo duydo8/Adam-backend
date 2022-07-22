@@ -66,15 +66,13 @@ public class AccountWebsiteController {
 
             int x = new Random().nextInt(899999) + 100000;
 
-            account.setVerificationCode(String.format("%06d", x));
+            account.setVerificationCode( x);
             account.setTimeValid(LocalDateTime.now().plusMinutes(30));
             System.out.println("------------" + x);
             TwilioSendSms twilioSendSms = new TwilioSendSms();
-            twilioSendSms.sendCode(account.getPhoneNumber(), x + "");
             Account account1 = accountService.save(account);
-
             AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-
+            twilioSendSms.sendCode(account.getPhoneNumber(), x );
             return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
         } catch (Exception e) {
             e.printStackTrace();

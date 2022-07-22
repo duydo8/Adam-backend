@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 
 @RestController
@@ -110,7 +111,7 @@ public class AuthController {
             } else {
                 account.setRole(ERoleName.User);
             }
-            String code = RandomString.make(64);
+            int code = new Random().nextInt(999999);
             account.setVerificationCode(code);
             account.setTimeValid(LocalDateTime.now().plusMinutes(30));
             TwilioSendSms twilioSendSms = new TwilioSendSms();
@@ -132,7 +133,7 @@ public class AuthController {
                                   @RequestParam("code")String code){
         Optional<Account> accountOptional= accountService.findByUsername(username);
         if(accountOptional.isPresent()&& accountOptional.get().getPhoneNumber().equals(phoneNumber)){
-            String code1 = RandomString.make(64);
+            int code1 = new Random().nextInt(999999);
             accountOptional.get().setVerificationCode(code1);
             accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
             TwilioSendSms twilioSendSms = new TwilioSendSms();

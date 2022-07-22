@@ -53,7 +53,7 @@ public class Account {
     @Column(name = "is_deleted")
     private Boolean isDelete;
     @Column(name = "verification_code")
-    private String verificationCode;
+    private Integer verificationCode;
     @Column(name = "time_valid")
     private LocalDateTime timeValid;
     private Double priority;

@@ -10,12 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderWebsiteCreate {
-
     private String fullName;
     private String phoneNumber;
-
     private Double salePrice;
-
     private String addressDetail;
     private Integer addressId;
     private Integer accountId;

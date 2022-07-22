@@ -16,9 +16,5 @@ public class AccountDto {
     private String email;
     private String password;
     private String role;
-    private Boolean isActive;
-    private Boolean isDelete;
-    private Float priority;
-    private String verificationCode;
-    private LocalDateTime timeValid;
+
 }
