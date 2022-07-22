@@ -38,7 +38,10 @@ public class SizeController {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
     }
-
+    @GetMapping("findByName")
+    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
+        return ResponseEntity.ok(new IGenericResponse<>(sizeService.findByName(name),200,""));
+    }
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody SizeUpdate sizeUpdate) {
         try {

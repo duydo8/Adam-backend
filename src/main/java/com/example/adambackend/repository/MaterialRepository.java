@@ -1,10 +1,12 @@
 package com.example.adambackend.repository;
 
+import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Material;
 import com.example.adambackend.entities.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -19,6 +21,6 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
     @Query(value = "select * from materials where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Material> findAlls();
-    @Query(value = "select * from materials where material_name like '%?1%'",nativeQuery = true)
-    List<Material>  findByName(String name);
+    @Query(value = "select c from Material c where c.materialName like concat('%',:name,'%') ")
+    List<Material> findByName(@Param("name")  String name);
 }

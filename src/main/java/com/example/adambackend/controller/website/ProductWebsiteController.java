@@ -649,11 +649,13 @@ public class ProductWebsiteController {
                         productOptionalDTO.setOptions(optionProducts);
 
                         return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+                    }
+                    return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
 
-                    } else {
+                } else {
                         isFavorite = true;
                         Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
-                        if (productHandleValue != null) {
+                        if (productHandleValue1.isPresent()) {
                             productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),
                                     productHandleValue1.get().getDescription(), productHandleValue1.get().getIsActive(),
                                     productHandleValue1.get().getMaxPrice(), productHandleValue1.get().getMinPrice()
@@ -698,55 +700,12 @@ public class ProductWebsiteController {
 
                             return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
 
+                        }else {
+
+                            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
                         }
-                    }
-                    isFavorite = false;
-                    Optional<ProductHandleValue> productHandleValue2 = productSevice.findOptionWebsiteByProductId(product_id);
-                    productOptionalDTO = new ProductOptionalDTO(productHandleValue2.get().getId(),
-                            productHandleValue2.get().getDescription(), productHandleValue2.get().getIsActive(),
-                            productHandleValue2.get().getMaxPrice(), productHandleValue.get().getMinPrice()
-                            , productHandleValue2.get().getProductName(), productHandleValue2.get().getVoteAverage(), isFavorite, null);
-                    List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
-                    Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-                    Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-                    List<ValueOption> colorOptionList = new ArrayList<>();
-
-                    for (Integer x : colorIdList
-                    ) {
-                        Optional<Color> color = colorService.findById(x);
-                        ValueOption colorOption = new ValueOption();
-                        colorOption.setId(color.get().getId());
-                        colorOption.setName(color.get().getColorName());
-                        colorOptionList.add(colorOption);
-
-                    }
-                    OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-                    List<ValueOption> sizeOptionList = new ArrayList<>();
-
-
-                    for (Integer x : sizeIdList
-                    ) {
-                        Optional<Size> sizeOptional = sizeService.findById(x);
-                        ValueOption sizeOption = new ValueOption();
-                        sizeOption.setId(sizeOptional.get().getId());
-                        sizeOption.setName(sizeOptional.get().getSizeName());
-                        sizeOptionList.add(sizeOption);
-
-                    }
-
-                    OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-                    //
-
-
-                    List<OptionProduct> optionProducts = new ArrayList<>();
-                    optionProducts.add(optionSizeProduct);
-                    optionProducts.add(optionColorProduct);
-
-                    productOptionalDTO.setOptions(optionProducts);
-
-                    return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
-
                 }
+
             }
             return ResponseEntity.badRequest().body(new IGenericResponse(200, "Không tìm thấy"));
 

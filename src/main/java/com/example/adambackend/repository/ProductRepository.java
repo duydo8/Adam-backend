@@ -1,5 +1,6 @@
 package com.example.adambackend.repository;
 
+import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -19,8 +21,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true ")
     Page<Product> findAll(Pageable pageable);
-@Query(value = "select * from products where product_name like '%?1%'",nativeQuery = true)
-List<Product>  findByName(String name);
+    @Query(value = "select c from Product c where c.productName like concat('%',:name,'%') ")
+    List<Product> findByName(@Param("name")  String name);
     @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 

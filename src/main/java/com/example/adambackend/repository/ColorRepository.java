@@ -1,10 +1,12 @@
 package com.example.adambackend.repository;
 
+import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -24,6 +26,6 @@ public interface ColorRepository extends JpaRepository<Color, Integer> {
 
     @Query(value = "select * from colors where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Color> findAlls();
-    @Query(value = "select * from colors where color_name like '%?1%'",nativeQuery = true)
-    List<Color> findByName(String name);
+    @Query(value = "select c from Color c where c.colorName like concat('%',:name,'%') ")
+    List<Color> findByName(@Param("name")  String name);
 }

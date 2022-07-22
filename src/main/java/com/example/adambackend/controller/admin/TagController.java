@@ -37,7 +37,10 @@ public class TagController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
+    @GetMapping("findByName")
+    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
+        return ResponseEntity.ok(new IGenericResponse<>(tagService.findByName(name),200,""));
+    }
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody TagDTO tagDTO) {
         try {

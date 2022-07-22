@@ -70,7 +70,10 @@ public class ColorController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
+    @GetMapping("findByName")
+    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
+        return ResponseEntity.ok(new IGenericResponse<>(colorService.findByName(name),200,""));
+    }
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("color_id") Integer colorId) {
         try {

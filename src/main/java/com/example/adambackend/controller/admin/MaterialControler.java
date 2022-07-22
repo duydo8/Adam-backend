@@ -46,7 +46,10 @@ public class MaterialControler {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
     }
-
+    @GetMapping("findByName")
+    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
+        return ResponseEntity.ok(new IGenericResponse<>(materialService.findByName(name),200,""));
+    }
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody MaterialUpdate materialUpdate) {
         try {
