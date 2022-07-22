@@ -652,12 +652,12 @@ public class ProductWebsiteController {
 
                     } else {
                         isFavorite = true;
-                        ProductHandleWebsite productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
+                        Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
                         if (productHandleValue != null) {
-                            productOptionalDTO = new ProductOptionalDTO(productHandleValue1.getId(),
-                                    productHandleValue1.getDescription(), productHandleValue1.getIsActive(),
-                                    productHandleValue1.getMaxPrice(), productHandleValue1.getMinPrice()
-                                    , productHandleValue1.getProductName(), productHandleValue1.getVoteAverage(), isFavorite, null);
+                            productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),
+                                    productHandleValue1.get().getDescription(), productHandleValue1.get().getIsActive(),
+                                    productHandleValue1.get().getMaxPrice(), productHandleValue1.get().getMinPrice()
+                                    , productHandleValue1.get().getProductName(), productHandleValue1.get().getVoteAverage(), isFavorite, null);
                             List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
                             Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
                             Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());

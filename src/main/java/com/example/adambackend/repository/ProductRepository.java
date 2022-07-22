@@ -65,7 +65,7 @@ List<Product>  findByName(String name);
             "             max(price_export) as maxPrice from detail_products dp join products p " +
             "            ON p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1 " +
             "group by p.product_name,p.is_active,p.is_completed,p.is_deleted,p.id  ", nativeQuery = true)
-    ProductHandleValue findOptionByProductId(Integer productId);
+    Optional<ProductHandleValue> findOptionByProductId(Integer productId);
 
     @Query(value = "select p.id as id,p.product_name as productName,p.is_active as isActive,p.description as description,min(price_export) as minPrice, " +
             "             max(price_export) as maxPrice,p.vote_average as voteAverage  from detail_products dp join products p \n" +

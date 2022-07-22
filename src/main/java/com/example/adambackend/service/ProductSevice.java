@@ -36,7 +36,7 @@ public interface ProductSevice {
 
     Product findByDetailProductId(Integer detalId);
 
-    ProductHandleWebsite findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId);
+    Optional<ProductHandleWebsite> findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId);
 
     Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId);
 }

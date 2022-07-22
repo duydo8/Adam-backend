@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public ProductHandleValue findOptionWebsiteByProductId(Integer productId) {
+    public Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId) {
         return productRepository.findOptionByProductId(productId);
     }
 }
