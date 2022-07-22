@@ -51,12 +51,14 @@ public class ProductController {
 
 
     @GetMapping("findAllByPageble")
-    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
+                                              @RequestParam("size") int size
+            , @RequestParam("name") String name) {
         try {
-            Page<Product> page1 = productSevice.findAll(PageRequest.of(page, size));
+            if(name==null){
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(PageRequest.of(page, size)), 200, ""));
 
-
-            return ResponseEntity.ok().body(new IGenericResponse<Page<Product>>(page1, 200, "Page product"));
+            } return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name,PageRequest.of(page, size)), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -174,10 +176,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-    @GetMapping("findByName")
-    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
-        return ResponseEntity.ok(new IGenericResponse<>(productSevice.findByName(name),200,""));
-    }
+
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("product_id") Integer sizeId) {
         try {

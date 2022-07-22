@@ -29,8 +29,11 @@ public class MaterialControler {
     MaterialProductRepository materialProductRepository;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAlls(), 200, ""));
+    public ResponseEntity<?> findAll(@RequestParam("name")String name) {
+        if(name==null){
+            return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
+
+        } return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(name), 200, ""));
     }
 
     @PostMapping("create")
@@ -46,10 +49,7 @@ public class MaterialControler {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
     }
-    @GetMapping("findByName")
-    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
-        return ResponseEntity.ok(new IGenericResponse<>(materialService.findByName(name),200,""));
-    }
+
     @PutMapping("update")
     public ResponseEntity<?> updateEvent(@RequestBody MaterialUpdate materialUpdate) {
         try {

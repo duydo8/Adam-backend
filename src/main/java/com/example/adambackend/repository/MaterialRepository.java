@@ -20,7 +20,7 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
     void updateDeleteByArrayId(Integer id);
 
     @Query(value = "select * from materials where is_active=1 and is_deleted=0", nativeQuery = true)
-    List<Material> findAlls();
+    List<Material> findAll();
     @Query(value = "select c from Material c where c.isActive=true and c.isDeleted=false and  c.materialName like concat('%',:name,'%') ")
-    List<Material> findByName(@Param("name")  String name);
+    List<Material> findAll(@Param("name")  String name);
 }

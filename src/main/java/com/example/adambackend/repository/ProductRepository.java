@@ -19,10 +19,12 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true ")
+    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true")
     Page<Product> findAll(Pageable pageable);
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') ")
-    List<Product> findByName(@Param("name")  String name);
+    List<Product> findAll(@Param("name")  String name,Pageable pageable);
+    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true")
+    List<Product> findAll();
     @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 

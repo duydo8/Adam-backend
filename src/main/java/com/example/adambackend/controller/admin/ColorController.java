@@ -29,10 +29,14 @@ public class ColorController {
     ModelMapper modelMapper;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam("name")String name) {
         try {
-            return ResponseEntity.ok(new IGenericResponse<List<Color>>(colorService.findAlls(), 200, ""));
-        } catch (Exception e) {
+            if(name==null){
+                return ResponseEntity.ok().body(new IGenericResponse<>(colorService.findAll(), 200, ""));
+
+            } return ResponseEntity.ok().body(new IGenericResponse<>(colorService.findAll(name), 200, ""));
+
+           } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
@@ -70,10 +74,7 @@ public class ColorController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-    @GetMapping("findByName")
-    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
-        return ResponseEntity.ok(new IGenericResponse<>(colorService.findByName(name),200,""));
-    }
+
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("color_id") Integer colorId) {
         try {

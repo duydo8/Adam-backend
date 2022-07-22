@@ -38,10 +38,7 @@ public class SizeController {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
     }
-    @GetMapping("findByName")
-    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
-        return ResponseEntity.ok(new IGenericResponse<>(sizeService.findByName(name),200,""));
-    }
+
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody SizeUpdate sizeUpdate) {
         try {
@@ -75,9 +72,13 @@ public class SizeController {
     }
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
         try {
-            return ResponseEntity.ok(new IGenericResponse<List<Size>>(sizeService.findAlls(), 200, ""));
+            if(name==null){
+                return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.findAll(), 200, ""));
+
+            } return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.findAll(name), 200, ""));
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

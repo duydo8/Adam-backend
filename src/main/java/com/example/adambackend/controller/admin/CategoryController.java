@@ -106,9 +106,12 @@ public class CategoryController {
     }
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam("name")String name) {
         try {
-            return ResponseEntity.ok(new IGenericResponse<List<Category>>(categoryService.findAlls(), 200, ""));
+            if(name==null){
+                return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(), 200, ""));
+
+            } return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(name), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -154,9 +157,6 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-    @GetMapping("findByCateName")
-    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
-        return ResponseEntity.ok(new IGenericResponse<>(categoryService.findByName(name),200,""));
-    }
+
 
 }
