@@ -30,7 +30,7 @@ public class AccountWebsiteController {
     private ModelMapper modelMapper;
 
     @PostMapping("/createAccount")
-    public ResponseEntity<IGenericResponse> registerAccount(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
         try {
             if (accountService.existsByUsername(signUpRequest.getUsername())) {
                 return ResponseEntity
@@ -43,64 +43,75 @@ public class AccountWebsiteController {
                         .badRequest()
                         .body(new IGenericResponse(400, "Email has been used"));
             }
-            if (accountService.findByPhoneNumber(signUpRequest.getPhoneNumber()).isPresent()) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new IGenericResponse(400, "PhoneNumber has been used"));
-            }
+            System.out.println(signUpRequest.getPhoneNumber());
+            Optional<Account> account= accountService.findByUsername(signUpRequest.getPhoneNumber());
 
-
-            Account account = new Account(signUpRequest.getUsername(),
-                    signUpRequest.getEmail(),
-                    passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber(),
-                    signUpRequest.getFullName()
-            );
-            account.setIsActive(false);
-            account.setIsDelete(false);
-            account.setCreateDate(LocalDateTime.now());
-            if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
-                account.setRole(ERoleName.Admin);
-            } else {
-                account.setRole(ERoleName.User);
-            }
-
-            int x = new Random().nextInt(899999) + 100000;
-
-            account.setVerificationCode( x);
-            account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-            System.out.println("------------" + x);
-            TwilioSendSms twilioSendSms = new TwilioSendSms();
-            Account account1 = accountService.save(account);
-            AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-            twilioSendSms.sendCode(account.getPhoneNumber(), x );
-            return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
-
-    @GetMapping("verify")
-    public ResponseEntity<?> verify(@RequestParam("code") String code, @RequestParam("id") Integer id) {
-        try {
-            Optional<Account> accountOptional = accountService.findById(id);
-            if (accountOptional.isPresent()) {
-                if (accountOptional.get().getVerificationCode().equals(code)
-                        && accountOptional.get().getTimeValid() == LocalDateTime.now()) {
-                    accountOptional.get().setIsActive(true);
-                    ;
-                    return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
+            if(account.isPresent()){
+                account.get().setCreateDate(LocalDateTime.now());
+                account.get().setIsActive(true);
+                account.get().setIsDelete(false);
+                if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
+                    account.get().setRole(ERoleName.Admin);
+                } else {
+                    account.get().setRole(ERoleName.User);
                 }
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code is not correct or time is invalid"));
+
+                account.get().setPriority(0.0);
+                System.out.println(account.get().getTimeValid());
+                if(LocalDateTime.now().isBefore(account.get().getTimeValid())){
+                    System.out.println(account.get().getVerificationCode());
+                    System.out.println(signUpRequest.getCode());
+                    if(account.get().getVerificationCode()==(signUpRequest.getCode())){
+                        account.get().setTimeValid(null);
+                        account.get().setVerificationCode(null);
+                        Account account1 = accountService.save(account.get());
+
+                        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+                        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "thanh cong"));
+                    }
+                    return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng nhập lại"));
+
+                }
+                accountService.deleteById(account.get().getId());
+                return ResponseEntity.badRequest().body(new IGenericResponse(" ",400,"Đã quá thời gian chờ"));
 
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+            return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng xác nhận lại số điện thoại của bạn"));
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 
+    @PostMapping("verify")
+    public ResponseEntity<?> verify(@RequestParam("phone_number") String phoneNumber) {
+        try {
+            Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
+
+            if (accountOptional.isPresent()&& accountOptional.get().getTimeValid()==null) {
+
+                return ResponseEntity.badRequest().body(new IGenericResponse("",400, "số điện thoại này đã được đăng ký"));
+            }
+            TwilioSendSms twilioSendSms = new TwilioSendSms();
+            int code = new Random().nextInt(999999);
+            phoneNumber= phoneNumber.substring(1,phoneNumber.length());
+            twilioSendSms.sendCode(phoneNumber, code);
+            Account account= new Account();
+            account.setPhoneNumber(phoneNumber);
+            account.setUsername(phoneNumber);
+            account.setRole(ERoleName.User);
+            account.setPassword(passwordEncoder.encode("123456"));
+            account.setVerificationCode(code);
+            account.setTimeValid(LocalDateTime.now().plusMinutes(30));
+            accountService.save(account);
+            return ResponseEntity.ok().body(new IGenericResponse(code,200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
     @PostMapping("forgotPassword")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
                                             @RequestParam("password") String password,
