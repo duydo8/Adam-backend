@@ -21,6 +21,6 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
     @Query(value = "select * from materials where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Material> findAlls();
-    @Query(value = "select c from Material c where c.materialName like concat('%',:name,'%') ")
+    @Query(value = "select c from Material c where c.isActive=true and c.isDeleted=false and  c.materialName like concat('%',:name,'%') ")
     List<Material> findByName(@Param("name")  String name);
 }

@@ -18,7 +18,7 @@ public interface SizeRepository extends JpaRepository<Size, Integer> {
     @Query(value = "select * from sizes s join detail_products dp on dp.size_id= s.id where dp.id=?1 and" +
             " s.is_active=1 and s.is_deleted=0 ", nativeQuery = true)
     Optional<Size> findByDetailProductId(Integer detailProductId);
-    @Query(value = "select c from Size c where c.sizeName like concat('%',:name,'%') ")
+    @Query(value = "select c from Size c where c.isActive=true and c.isDeleted=false and  c.sizeName like concat('%',:name,'%') ")
     List<Size> findByName(@Param("name")  String name);
     @Modifying
     @Transactional

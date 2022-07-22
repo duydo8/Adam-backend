@@ -28,6 +28,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query(value = "select * from categories where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Category> findAlls();
-    @Query(value = "select c from Category c where c.categoryName like concat('%',:name,'%') ")
+    @Query(value = "select c from Category c where c.isActive=true and c.isDeleted=false and c.categoryName like concat('%',:name,'%') ")
     List<Category> findByName(@Param("name")  String name);
 }

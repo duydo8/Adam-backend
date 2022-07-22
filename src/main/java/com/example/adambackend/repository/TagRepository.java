@@ -25,6 +25,6 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     @Query(value = "select * from tags where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Tag> findAlls();
-    @Query(value = "select c from Tag c where c.tagName like concat('%',:name,'%') ")
+    @Query(value = "select c from Tag c where c.isActive=true and c.isDelete=false and  c.tagName like concat('%',:name,'%') ")
     List<Tag> findByName(@Param("name")  String name);
 }

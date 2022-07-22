@@ -26,6 +26,6 @@ public interface ColorRepository extends JpaRepository<Color, Integer> {
 
     @Query(value = "select * from colors where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Color> findAlls();
-    @Query(value = "select c from Color c where c.colorName like concat('%',:name,'%') ")
+    @Query(value = "select c from Color c where c.isActive=true and c.isDeleted=false and c.colorName like concat('%',:name,'%') ")
     List<Color> findByName(@Param("name")  String name);
 }
