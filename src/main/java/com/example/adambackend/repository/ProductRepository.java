@@ -72,7 +72,7 @@ List<Product>  findByName(String name);
             "            ON p.id=dp.product_id left join favorites fa on fa.product_id=p.id join accounts a on a.id=fa.account_id \n" +
             " where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 and p.id=?1 and (a.id=?2 or ?2 is null) \n" +
             "group by p.product_name,p.is_active,p.is_completed,p.is_deleted,p.id,fa.is_active,p.vote_average ", nativeQuery = true)
-    ProductHandleWebsite findOptionWebsiteByProductId(Integer productId, Integer accountId);
+    Optional<ProductHandleWebsite> findOptionWebsiteByProductId(Integer productId, Integer accountId);
 
     @Query(value = "select fa.product_id from favorites fa join products p on p.id=fa.product_id join accounts a on a.id=fa.account_id where p.id=?1 and a.id=?2", nativeQuery = true)
     List<Integer> checkFavorite(Integer productId, Integer accountId);

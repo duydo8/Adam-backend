@@ -154,5 +154,9 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+    @GetMapping("findByCateName")
+    public ResponseEntity<?> findByCateName(@RequestParam("name")String name){
+        return ResponseEntity.ok(new IGenericResponse<>(categoryService.findByName(name),200,""));
+    }
 
 }

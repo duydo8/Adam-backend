@@ -604,57 +604,12 @@ public class ProductWebsiteController {
             if (productOptional.isPresent()) {
                 if (account_id == null) {
                     isFavorite = false;
-                    ProductHandleValue productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
-                    productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
-                            productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                            , productHandleValue.getProductName(), productHandleValue.getVoteAverage(), isFavorite, null);
-                    List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
-                    Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-                    Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-                    List<ValueOption> colorOptionList = new ArrayList<>();
-
-                    for (Integer x : colorIdList
-                    ) {
-                        Optional<Color> color = colorService.findById(x);
-                        ValueOption colorOption = new ValueOption();
-                        colorOption.setId(color.get().getId());
-                        colorOption.setName(color.get().getColorName());
-                        colorOptionList.add(colorOption);
-
-                    }
-                    OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-                    List<ValueOption> sizeOptionList = new ArrayList<>();
-
-
-                    for (Integer x : sizeIdList
-                    ) {
-                        Optional<Size> sizeOptional = sizeService.findById(x);
-                        ValueOption sizeOption = new ValueOption();
-                        sizeOption.setId(sizeOptional.get().getId());
-                        sizeOption.setName(sizeOptional.get().getSizeName());
-                        sizeOptionList.add(sizeOption);
-
-                    }
-
-                    OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-                    //
-
-
-                    List<OptionProduct> optionProducts = new ArrayList<>();
-                    optionProducts.add(optionSizeProduct);
-                    optionProducts.add(optionColorProduct);
-
-                    productOptionalDTO.setOptions(optionProducts);
-
-                    return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
-
-                } else {
-                    isFavorite = true;
-                    ProductHandleWebsite productHandleValue = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
-                    if (productHandleValue != null) {
-                        productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
-                                productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                                , productHandleValue.getProductName(), productHandleValue.getVoteAverage(), isFavorite, null);
+                    Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
+                    if (productHandleValue.isPresent()) {
+                        productOptionalDTO = new ProductOptionalDTO(productHandleValue.get().getId(),
+                                productHandleValue.get().getDescription(), productHandleValue.get().getIsActive(),
+                                productHandleValue.get().getMaxPrice(), productHandleValue.get().getMinPrice()
+                                , productHandleValue.get().getProductName(), productHandleValue.get().getVoteAverage(), isFavorite, null);
                         List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
                         Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
                         Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
@@ -695,58 +650,107 @@ public class ProductWebsiteController {
 
                         return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
 
+                    } else {
+                        isFavorite = true;
+                        ProductHandleWebsite productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
+                        if (productHandleValue != null) {
+                            productOptionalDTO = new ProductOptionalDTO(productHandleValue1.getId(),
+                                    productHandleValue1.getDescription(), productHandleValue1.getIsActive(),
+                                    productHandleValue1.getMaxPrice(), productHandleValue1.getMinPrice()
+                                    , productHandleValue1.getProductName(), productHandleValue1.getVoteAverage(), isFavorite, null);
+                            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
+                            Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
+                            Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
+                            List<ValueOption> colorOptionList = new ArrayList<>();
+
+                            for (Integer x : colorIdList
+                            ) {
+                                Optional<Color> color = colorService.findById(x);
+                                ValueOption colorOption = new ValueOption();
+                                colorOption.setId(color.get().getId());
+                                colorOption.setName(color.get().getColorName());
+                                colorOptionList.add(colorOption);
+
+                            }
+                            OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
+                            List<ValueOption> sizeOptionList = new ArrayList<>();
+
+
+                            for (Integer x : sizeIdList
+                            ) {
+                                Optional<Size> sizeOptional = sizeService.findById(x);
+                                ValueOption sizeOption = new ValueOption();
+                                sizeOption.setId(sizeOptional.get().getId());
+                                sizeOption.setName(sizeOptional.get().getSizeName());
+                                sizeOptionList.add(sizeOption);
+
+                            }
+
+                            OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
+                            //
+
+
+                            List<OptionProduct> optionProducts = new ArrayList<>();
+                            optionProducts.add(optionSizeProduct);
+                            optionProducts.add(optionColorProduct);
+
+                            productOptionalDTO.setOptions(optionProducts);
+
+                            return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+
+                        }
                     }
+                    isFavorite = false;
+                    Optional<ProductHandleValue> productHandleValue2 = productSevice.findOptionWebsiteByProductId(product_id);
+                    productOptionalDTO = new ProductOptionalDTO(productHandleValue2.get().getId(),
+                            productHandleValue2.get().getDescription(), productHandleValue2.get().getIsActive(),
+                            productHandleValue2.get().getMaxPrice(), productHandleValue.get().getMinPrice()
+                            , productHandleValue2.get().getProductName(), productHandleValue2.get().getVoteAverage(), isFavorite, null);
+                    List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
+                    Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
+                    Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
+                    List<ValueOption> colorOptionList = new ArrayList<>();
+
+                    for (Integer x : colorIdList
+                    ) {
+                        Optional<Color> color = colorService.findById(x);
+                        ValueOption colorOption = new ValueOption();
+                        colorOption.setId(color.get().getId());
+                        colorOption.setName(color.get().getColorName());
+                        colorOptionList.add(colorOption);
+
+                    }
+                    OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
+                    List<ValueOption> sizeOptionList = new ArrayList<>();
+
+
+                    for (Integer x : sizeIdList
+                    ) {
+                        Optional<Size> sizeOptional = sizeService.findById(x);
+                        ValueOption sizeOption = new ValueOption();
+                        sizeOption.setId(sizeOptional.get().getId());
+                        sizeOption.setName(sizeOptional.get().getSizeName());
+                        sizeOptionList.add(sizeOption);
+
+                    }
+
+                    OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
+                    //
+
+
+                    List<OptionProduct> optionProducts = new ArrayList<>();
+                    optionProducts.add(optionSizeProduct);
+                    optionProducts.add(optionColorProduct);
+
+                    productOptionalDTO.setOptions(optionProducts);
+
+                    return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+
                 }
-                isFavorite = false;
-                ProductHandleValue productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
-                productOptionalDTO = new ProductOptionalDTO(productHandleValue.getId(),
-                        productHandleValue.getDescription(), productHandleValue.getIsActive(), productHandleValue.getMaxPrice(), productHandleValue.getMinPrice()
-                        , productHandleValue.getProductName(), productHandleValue.getVoteAverage(), isFavorite, null);
-                List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
-                Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-                Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-                List<ValueOption> colorOptionList = new ArrayList<>();
-
-                for (Integer x : colorIdList
-                ) {
-                    Optional<Color> color = colorService.findById(x);
-                    ValueOption colorOption = new ValueOption();
-                    colorOption.setId(color.get().getId());
-                    colorOption.setName(color.get().getColorName());
-                    colorOptionList.add(colorOption);
-
-                }
-                OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-                List<ValueOption> sizeOptionList = new ArrayList<>();
-
-
-                for (Integer x : sizeIdList
-                ) {
-                    Optional<Size> sizeOptional = sizeService.findById(x);
-                    ValueOption sizeOption = new ValueOption();
-                    sizeOption.setId(sizeOptional.get().getId());
-                    sizeOption.setName(sizeOptional.get().getSizeName());
-                    sizeOptionList.add(sizeOption);
-
-                }
-
-                OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-                //
-
-
-                List<OptionProduct> optionProducts = new ArrayList<>();
-                optionProducts.add(optionSizeProduct);
-                optionProducts.add(optionColorProduct);
-
-                productOptionalDTO.setOptions(optionProducts);
-
-                return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
-
             }
+            return ResponseEntity.badRequest().body(new IGenericResponse(200, "Không tìm thấy"));
 
-
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-        } catch (Exception e) {
+    } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }

@@ -10,8 +10,10 @@ import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -150,5 +152,32 @@ public class AccountWebsiteController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
+
+    }
+    @PostMapping("changePassword")
+    public ResponseEntity<?> updatePriority(@RequestParam("id")Integer id,
+                                            @RequestParam("password") String password,
+                                            @RequestParam("passwordNew")String passNew,
+                                            @RequestParam("confirm")String confirm){
+        Optional<Account> account= accountService.findById(id);
+        if(account.isPresent()){
+            if(!account.get().getPassword().equals(password)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"sai mật khẩu"));
+
+            }
+            if(!confirm.equals(passNew)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"Nhập lại mật khẩu không đúng"));
+
+            }
+            if(passNew.equals(password)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"Mật khẩu mới giống mật khẩu cũ"));
+
+            }
+            String x= passwordEncoder.encode(passNew);
+            account.get().setPassword(x);
+            accountService.save(account.get());
+            return ResponseEntity.ok().body(new IGenericResponse<>("",200,"Thành công"));
+        }
+        return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"ko tìm thấy"));
     }
 }

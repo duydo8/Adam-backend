@@ -143,15 +143,11 @@ phoneNumber= phoneNumber.substring(1,phoneNumber.length());
             if (accountOptional.isPresent()) {
                 accountOptional.get().setFullName(accountAdminDTO.getFullName());
                 accountOptional.get().setEmail(accountAdminDTO.getEmail());
-                accountOptional.get().setPhoneNumber(accountAdminDTO.getPhoneNumber());
-                accountOptional.get().setIsDelete(accountAdminDTO.getIsDelete());
+
                 accountOptional.get().setIsActive(accountAdminDTO.getIsActive());
                 accountOptional.get().setPriority(accountAdminDTO.getPriority());
                 accountOptional.get().setPassword(passwordEncoder.encode(accountAdminDTO.getPassword()));
-                if (accountAdminDTO.getRole().equalsIgnoreCase("admin")) {
-                    accountOptional.get().setRole(ERoleName.Admin);
-                }
-                accountOptional.get().setRole(ERoleName.User);
+
                 accountService.save(accountOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
             }
@@ -278,5 +274,41 @@ phoneNumber= phoneNumber.substring(1,phoneNumber.length());
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+    @PostMapping("updatePriority")
+    public ResponseEntity<?> updatePriority(@RequestParam("id")Integer id,
+                                            @RequestParam("priority") Double priority){
+        Optional<Account> account= accountService.findById(id);
+        if(account.isPresent()){
+            account.get().setPriority(priority);
+            accountService.save(account.get());
+            return ResponseEntity.ok().body(new IGenericResponse<>("",200,"Thành công"));
+        }
+        return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"ko tìm thấy"));
+    }
+    @PostMapping("changePassword")
+    public ResponseEntity<?> updatePriority(@RequestParam("id")Integer id,
+                                            @RequestParam("password") String password,
+                                            @RequestParam("passwordNew")String passNew,
+                                            @RequestParam("confirm")String confirm){
+        Optional<Account> account= accountService.findById(id);
+        if(account.isPresent()){
+            if(!account.get().getPassword().equals(password)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"sai mật khẩu"));
 
+            }
+            if(!confirm.equals(passNew)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"Nhập lại mật khẩu không đúng"));
+
+            }
+            if(passNew.equals(password)){
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"Mật khẩu mới giống mật khẩu cũ"));
+
+            }
+            String x= passwordEncoder.encode(passNew);
+            account.get().setPassword(x);
+            accountService.save(account.get());
+            return ResponseEntity.ok().body(new IGenericResponse<>("",200,"Thành công"));
+        }
+        return ResponseEntity.badRequest().body(new IGenericResponse<>("",400,"ko tìm thấy"));
+    }
 }
