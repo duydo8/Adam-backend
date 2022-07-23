@@ -53,7 +53,7 @@ public class ProductController {
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
                                               @RequestParam("size") int size
-            , @RequestParam("name") String name) {
+            , @RequestParam(value = "name",required = false) String name) {
         try {
             if(name==null){
                 return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(PageRequest.of(page, size)), 200, ""));
