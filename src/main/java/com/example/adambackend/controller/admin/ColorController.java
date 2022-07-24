@@ -29,7 +29,7 @@ public class ColorController {
     ModelMapper modelMapper;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam("name")String name) {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
         try {
             if(name==null){
                 return ResponseEntity.ok().body(new IGenericResponse<>(colorService.findAll(), 200, ""));
