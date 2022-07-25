@@ -18,4 +18,5 @@ public class DiscountOrderCreate {
     private Double orderMinRange;
     private Double orderMaxRange;
     private Integer eventId;
+
 }

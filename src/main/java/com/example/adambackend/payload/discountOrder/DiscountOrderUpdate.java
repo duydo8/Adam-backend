@@ -12,14 +12,9 @@ import java.time.LocalDateTime;
 public class DiscountOrderUpdate {
     private Integer id;
     private String discountName;
-    private String description;
-    private LocalDateTime createDate;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private Boolean isActive;
-    private Boolean isDeleted;
     private Double salePrice;
     private Double orderMinRange;
     private Double orderMaxRange;
-    private Integer eventId;
+
 }

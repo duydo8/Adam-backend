@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 public class EventUpdateDTO {
     private Integer id;
     private String eventName;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String description;
-    private Boolean type;
     private String image;
+    private Boolean isActive;
 }

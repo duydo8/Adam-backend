@@ -19,4 +19,6 @@ public interface DiscountOrderRepository extends JpaRepository<DiscountOrder, In
     @Modifying
     @Query("update DiscountOrder  dp set dp.isActive=false , dp.isDeleted=true where dp.id=?1")
     void updateIsActive(Integer id);
+    @Query("select dos from DiscountOrder dos where dos.event.id=?1")
+    List<DiscountOrder> findByEventId(Integer eventId);
 }

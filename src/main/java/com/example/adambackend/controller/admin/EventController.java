@@ -5,6 +5,7 @@ import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.event.EventDTO;
 import com.example.adambackend.payload.event.EventUpdateDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.EventRepository;
 import com.example.adambackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("admin/event")
 public class EventController {
     @Autowired
-    EventService eventService;
+    EventRepository eventService;
 
     @PostMapping("create")
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
@@ -46,11 +47,9 @@ public class EventController {
             Optional<Event> eventOptional = eventService.findById(eventUpdateDTO.getId());
             if (eventOptional.isPresent()) {
                 eventOptional.get().setEventName(eventUpdateDTO.getEventName());
-                eventOptional.get().setDescription(eventUpdateDTO.getDescription());
+                eventOptional.get().setIsActive(eventUpdateDTO.getIsActive());
                 eventOptional.get().setImage(eventUpdateDTO.getImage());
-                eventOptional.get().setType(eventUpdateDTO.getType());
-                eventOptional.get().setStartTime(eventUpdateDTO.getStartTime());
-                eventOptional.get().setEndTime(eventUpdateDTO.getEndTime());
+
                 return ResponseEntity.ok().body(new IGenericResponse<Event>(eventService.save(eventOptional.get()), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Event"));
@@ -75,5 +74,12 @@ public class EventController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
+    }
+    @GetMapping("findAll")
+    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
+        if(name==null){
+            return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(), 200, ""));
+
+        } return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(name), 200, ""));
     }
 }

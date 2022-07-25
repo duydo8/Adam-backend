@@ -3,12 +3,16 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.Dashboard;
+import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.AddressRepository;
 import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.service.AccountService;
+import com.example.adambackend.service.CartItemService;
 import com.example.adambackend.service.DetailOrderService;
 import com.example.adambackend.service.DetailProductService;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +44,10 @@ public class OrderController {
     DetailOrderService detailOrderService;
     @Autowired
     HistoryOrderRepository historyOrderRepository;
+    @Autowired
+    AddressRepository addressRepository;
+    @Autowired
+    CartItemService cartItemService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size,
@@ -210,21 +218,7 @@ public class OrderController {
     }
 
 
-    @DeleteMapping("delete")
-    public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
-        try {
-            Optional<Order> optionalOrder = orderService.findById(orderId);
-            if (optionalOrder.isPresent()) {
-                detailOrderService.deleteAllByOrderId(orderId);
-                orderService.deleteById(orderId);
-                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
-            }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+
 
     @GetMapping("orderSatistic")
     public ResponseEntity<?> sumTotalPriceByTime() {
@@ -315,6 +309,157 @@ public class OrderController {
             dashboardList.add(dashboard2);
             dashboardList.add(dashboard3);
             return ResponseEntity.ok().body(new IGenericResponse<>(dashboardList, 200, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
+        try {
+            Optional<Account> account = accountService.findById(orderWebsiteCreate.getAccountId());
+            Optional<Address> address = addressRepository.findById(orderWebsiteCreate.getAddressId());
+            if (address.isPresent() && account.isPresent()) {
+                Order order = new Order();
+                order.setAccount(account.get());
+                order.setCreateDate(LocalDateTime.now());
+                order.setStatus(1);
+                order.setAddress(address.get());
+                order.setFullName(orderWebsiteCreate.getFullName());
+                order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
+
+
+                order.setSalePrice(orderWebsiteCreate.getSalePrice());
+                Double ammountPrice = 0.0;
+                order.setAmountPrice(ammountPrice);
+                order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
+                order.setTotalPrice(0.0);
+                order = orderService.save(order);
+                List<CartItems> cartItemsList = new ArrayList<>();
+
+
+//
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()
+                ) {
+                    Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+                    if (cartItemsOptional.isPresent()) {
+
+                        cartItemsList.add(cartItemsOptional.get());
+                        DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
+
+                        if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
+                            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không đủ số lượng "));
+                        }
+
+                        ammountPrice += cartItemsOptional.get().getTotalPrice();
+                        detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
+                        detailProductService.save(detailProduct);
+                        cartItemService.updateIsActive(x);
+                        DetailOrder detailOrder = new DetailOrder();
+                        detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
+                        detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
+                        detailOrder.setCreateDate(LocalDateTime.now());
+                        detailOrder.setPrice(detailProduct.getPriceExport());
+                        detailOrder.setIsDeleted(false);
+                        detailOrder.setIsActive(true);
+                        detailOrder.setDetailProduct(detailProduct);
+                        detailOrder.setOrder(order);
+                        detailOrderService.save(detailOrder);
+
+
+                    }
+                }
+
+                order.setAmountPrice(ammountPrice);
+                order.setCartItems(cartItemsList);
+                Double totalPrice = ammountPrice - orderWebsiteCreate.getSalePrice();
+                if (totalPrice > 5000000) {
+                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
+                            "đơn hàng không được quá 5m, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
+                }
+                List<Order> orders = orderService.findAll();
+                String code = RandomString.make(64);
+                for (int i = 0; i < orders.size(); i++) {
+                    if (code.equals(orders.get(i).getOrder_code())) {
+                        code = RandomString.make((64));
+                        break;
+                    }
+                }
+                order.setOrder_code(code);
+                HistoryOrder historyOrder = new HistoryOrder();
+                order.setTotalPrice(totalPrice);
+                order = orderService.save(order);
+
+                historyOrder.setOrder(orderService.findById(order.getId()).get());
+                historyOrder.setDescription("create time");
+                historyOrder.setUpdateTime(LocalDateTime.now());
+                historyOrder.setIsActive(true);
+                historyOrder.setTotalPrice(order.getTotalPrice());
+                historyOrder.setStatus(1);
+                historyOrder = historyOrderRepository.save(historyOrder);
+                List<HistoryOrder> historyOrders = new ArrayList<>();
+                historyOrders.add(historyOrder);
+                order.setHistoryOrders(historyOrders);
+                order = orderService.save(order);
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()
+                ) {
+                    Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+                    if (cartItemsOptional.isPresent()) {
+                        cartItemsOptional.get().setOrder(order);
+                        cartItemService.save(cartItemsOptional.get());
+                    }
+                }
+
+                return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+
+
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
+        try {
+            Optional<Order> optionalOrder = orderService.findById(orderId);
+            if (optionalOrder.isPresent()) {
+                detailOrderService.deleteAllByOrderId(orderId);
+                orderService.deleteById(orderId);
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+
+    @GetMapping("findById")
+    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
+        try {
+            Optional<Order> order = orderService.findById(id);
+            if (order.isPresent()) {
+                return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
+
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+
+    @GetMapping("findByAccountId")
+    public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId, @RequestParam("status") Integer status) {
+        try {
+            Optional<Account> account = accountService.findById(accountId);
+            if (account.isPresent()) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findOrderByAccountId(accountId, status), 200, ""));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
