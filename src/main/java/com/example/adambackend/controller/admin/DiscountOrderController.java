@@ -40,7 +40,7 @@ public class DiscountOrderController {
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         try {
-            return ResponseEntity.ok(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -67,10 +67,10 @@ public class DiscountOrderController {
             Optional<Event> eventOptional = eventRepository.findById(eventId);
             if (eventOptional.isPresent()) {
                 List<DiscountOrder> discountOrders=discountOrderRepository.findByEventId(eventId);
-                return ResponseEntity.ok(new IGenericResponse<>(eventOptional.get(), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(eventOptional.get(), 200, ""));
 
             }
-            return ResponseEntity.ok(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -95,11 +95,23 @@ public class DiscountOrderController {
                 discountOrder.setStartTime(discountOrderCreate.getStartTime());
                 discountOrder.setSalePrice(discountOrderCreate.getSalePrice());
                 discountOrder.setEndTime(discountOrderCreate.getEndTime());
+                if(discountOrderCreate.getOrderMaxRange()<discountOrderCreate.getOrderMinRange()){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
 
+                }
+                if(eventOptional.get().getType()&& discountOrderCreate.getSalePrice()<1){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
 
-                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.save(discountOrder), 200, ""));
+                }
+                if(!eventOptional.get().getType()&& discountOrderCreate.getSalePrice()>1){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
+
+                }
+                discountOrder=discountOrderRepository.save(discountOrder);
+
+                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrder, 200, ""));
             }
-            return ResponseEntity.ok(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -111,13 +123,24 @@ public class DiscountOrderController {
         try {
             Optional<DiscountOrder> discountOrderOptional = discountOrderRepository.findById(discountOrderUpdate.getId());
             if ( discountOrderOptional.isPresent()) {
+                Event event= discountOrderOptional.get().getEvent();
+                if(discountOrderUpdate.getOrderMaxRange()<discountOrderUpdate.getOrderMinRange()){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
+
+                }
+                if(event.getType()&& discountOrderUpdate.getSalePrice()<1){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
+
+                }
+                if(!event.getType()&& discountOrderUpdate.getSalePrice()>1){
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
+
+                }
                 discountOrderOptional.get().setDiscountName(discountOrderUpdate.getDiscountName());
                 discountOrderOptional.get().setIsActive(discountOrderUpdate.getIsActive());
-
                 discountOrderOptional.get().setSalePrice(discountOrderUpdate.getSalePrice());
                 discountOrderOptional.get().setOrderMaxRange(discountOrderUpdate.getOrderMaxRange());
                 discountOrderOptional.get().setOrderMinRange(discountOrderUpdate.getOrderMinRange());
-
                 return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.save(discountOrderOptional.get()), 200, ""));
             }
             return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
