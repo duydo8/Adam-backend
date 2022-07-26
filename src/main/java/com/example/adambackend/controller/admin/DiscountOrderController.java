@@ -55,7 +55,7 @@ public class DiscountOrderController {
                 return ResponseEntity.ok(new IGenericResponse<>(discountOrderOptional.get(), 200, ""));
 
             }
-            return ResponseEntity.ok(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -98,7 +98,7 @@ public class DiscountOrderController {
                 discountOrder.setEndTime(discountOrderCreate.getEndTime());
 
 
-                return ResponseEntity.ok(new IGenericResponse<>(discountOrderRepository.save(discountOrder), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.save(discountOrder), 200, ""));
             }
             return ResponseEntity.ok(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
@@ -119,9 +119,9 @@ public class DiscountOrderController {
                 discountOrderOptional.get().setOrderMaxRange(discountOrderUpdate.getOrderMaxRange());
                 discountOrderOptional.get().setOrderMinRange(discountOrderUpdate.getOrderMinRange());
 
-                return ResponseEntity.ok(new IGenericResponse<>(discountOrderRepository.save(discountOrderOptional.get()), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.save(discountOrderOptional.get()), 200, ""));
             }
-            return ResponseEntity.ok(new HandleExceptionDemo(400, "not found"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -132,7 +132,7 @@ public class DiscountOrderController {
     public ResponseEntity<?> updateIsActive(@RequestParam("id") Integer id) {
         try {
             discountProductRepository.updateIsActive(id);
-            return ResponseEntity.ok(new IGenericResponse<>("", 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
 
         } catch (Exception e) {
             e.printStackTrace();
