@@ -38,10 +38,14 @@ public class DiscountOrderController {
     OrderRepository orderRepository;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
         try {
-            return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
-        } catch (Exception e) {
+            if(name==null){
+                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
+
+            } return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(name), 200, ""));
+
+          } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
