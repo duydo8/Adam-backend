@@ -27,8 +27,7 @@ import java.util.Optional;
 public class DiscountOrderController {
     @Autowired
     DiscountOrderRepository discountOrderRepository;
-    @Autowired
-    DiscountProductRepository discountProductRepository;
+
     @Autowired
     EventRepository eventRepository;
     @Autowired
@@ -131,7 +130,7 @@ public class DiscountOrderController {
     @PutMapping("updateIsActive")
     public ResponseEntity<?> updateIsActive(@RequestParam("id") Integer id) {
         try {
-            discountProductRepository.updateIsActive(id);
+            discountOrderRepository.updateIsActive(id);
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
 
         } catch (Exception e) {
