@@ -15,13 +15,6 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 public class Event {
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "event")
-    List<DiscountProduct> discountProducts;
-    @JsonIgnore
-    @OneToMany(mappedBy = "event")
-    List<DiscountOrder> discountOrders;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -40,5 +33,10 @@ public class Event {
     private LocalDateTime createDate;
     private Boolean type;
     private String image;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "event")
+    List<DiscountProduct> discountProducts;
+    @JsonIgnore
+    @OneToMany(mappedBy = "event")
+    List<DiscountOrder> discountOrders;
 }

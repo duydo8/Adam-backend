@@ -13,7 +13,7 @@ public class EventDTO {
     private String eventName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private LocalDateTime createDate;
+
     private String description;
     private Boolean type;
     private String image;

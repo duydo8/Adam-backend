@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
-@RequestMapping("admin/event")
+@RequestMapping("/admin/event")
 public class EventController {
     @Autowired
     EventRepository eventService;
@@ -24,7 +25,7 @@ public class EventController {
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
         try {
             Event event = new Event();
-            event.setCreateDate(eventDTO.getCreateDate());
+            event.setCreateDate(LocalDateTime.now());
             event.setEventName(eventDTO.getEventName());
             event.setEndTime(eventDTO.getEndTime());
             event.setStartTime(eventDTO.getStartTime());
