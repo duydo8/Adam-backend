@@ -41,7 +41,7 @@ public class DiscountOrderController {
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         try {
-            return ResponseEntity.ok(new IGenericResponse<>(discountProductRepository.findAll(), 200, ""));
+            return ResponseEntity.ok(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
