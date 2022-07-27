@@ -25,4 +25,8 @@ public interface DiscountOrderRepository extends JpaRepository<DiscountOrder, In
     List<DiscountOrder> findByEventId(Integer eventId);
     @Query(value = "select c from DiscountOrder c where c.isActive=true and c.isDeleted=false and c.discountName like concat('%',:name,'%') ")
     List<DiscountOrder> findAll(@Param("name")  String name);
+    @Query(value = "select * from discount_orders  where order_min_range <?1 and order_max_range > ?1 and " +
+            "DATEDIFF(CURRENT_DATE(),start_time)>0 and DATEDIFF(end_time,CURRENT_DATE())>0 " +
+            "and is_active=1 and is_deleted=0 and event_id=?2",nativeQuery = true)
+    List<DiscountOrder> findByTotalPriceAndTime(Double price,Integer eventId);
 }

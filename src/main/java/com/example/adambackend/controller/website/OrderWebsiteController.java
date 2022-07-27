@@ -4,6 +4,8 @@ import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.DiscountOrderRepository;
+import com.example.adambackend.repository.EventRepository;
 import com.example.adambackend.repository.HistoryOrderRepository;
 import com.example.adambackend.service.*;
 import net.bytebuddy.utility.RandomString;
@@ -12,9 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000000)
@@ -22,6 +23,10 @@ import java.util.Optional;
 public class OrderWebsiteController {
     @Autowired
     OrderService orderService;
+    @Autowired
+    EventRepository eventRepository;
+    @Autowired
+    DiscountOrderRepository discountOrderRepository;
     @Autowired
     AccountService accountService;
     @Autowired
@@ -46,6 +51,8 @@ public class OrderWebsiteController {
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
+
+
             Optional<Account> account = accountService.findById(orderWebsiteCreate.getAccountId());
             Optional<Address> address = addressService.findById(orderWebsiteCreate.getAddressId());
             if (address.isPresent() && account.isPresent()) {
@@ -56,11 +63,9 @@ public class OrderWebsiteController {
                 order.setAddress(address.get());
                 order.setFullName(orderWebsiteCreate.getFullName());
                 order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-
-
                 order.setSalePrice(orderWebsiteCreate.getSalePrice());
                 Double ammountPrice = 0.0;
-order.setAmountPrice(ammountPrice);
+                order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
                 order.setTotalPrice(0.0);
                 order = orderService.save(order);
@@ -101,10 +106,10 @@ order.setAmountPrice(ammountPrice);
 
                 order.setAmountPrice(ammountPrice);
                 order.setCartItems(cartItemsList);
-                Double totalPrice = ammountPrice - orderWebsiteCreate.getSalePrice();
+                Double totalPrice = 0.0;
                 if (totalPrice > 5000000) {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
-                            "đơn hàng không được quá 5m, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
+                            "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
                 List<Order> orders = orderService.findAll();
                 String code = RandomString.make(64);
@@ -114,6 +119,29 @@ order.setAmountPrice(ammountPrice);
                         break;
                     }
                 }
+                Set<Integer> idx= new HashSet<>();
+                List<DiscountOrder> discountOrders= new ArrayList<>();
+                List<Event> events= eventRepository.findAllByTime();
+                for (Event e: events
+                     ) {
+                    discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
+                    discountOrders.stream().map(d->idx.add(d.getId())).close();
+
+                }
+                Double salePrice=0.0;
+                Double salePricePercent=0.0;
+                for (Integer x: idx
+                     ) {
+                    DiscountOrder discountOrder=discountOrderRepository.getById(x);
+                    if(discountOrder.getSalePrice()<1){
+                        salePricePercent+= discountOrder.getSalePrice();
+                    }else {
+                        salePrice += discountOrder.getSalePrice();
+                    }
+                }
+                Double totalSalePrice=salePrice+ salePricePercent*ammountPrice;
+                order.setSalePrice(totalSalePrice);
+                totalPrice=ammountPrice-totalSalePrice;
                 order.setOrder_code(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);

@@ -17,9 +17,7 @@ import java.util.List;
 @Table(name = "discount_orders")
 public class DiscountOrder {
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "discountOrder")
-    List<Order> orders = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -46,5 +44,7 @@ public class DiscountOrder {
     @JoinColumn(name = "event_id")
     private Event event;
 
-
+//    @ManyToOne
+//    @JoinColumn(name="order_id")
+//    private Order order;
 }
