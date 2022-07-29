@@ -3,6 +3,7 @@ package com.example.adambackend.controller.general;
 
 import com.example.adambackend.config.TwilioSendSms;
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.entities.UserInfo;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.request.AccountLoginRequestDto;
@@ -11,12 +12,14 @@ import com.example.adambackend.payload.response.AccountDto;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.JwtResponse;
 import com.example.adambackend.repository.AccountRepository;
+import com.example.adambackend.repository.UserInfoRepository;
 import com.example.adambackend.security.AccountDetailsService;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.service.AccountService;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -52,6 +56,10 @@ public class AuthController {
     ModelMapper modelMapper;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    UserInfoRepository userInfoRepository;
+    @Value("${jwt.expirationDateInMS}")
+    private  int expirationDateInMS;
 
     @PostMapping("authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
@@ -65,7 +73,37 @@ public class AuthController {
             AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
             ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
 
+            List<UserInfo> userInfoList= userInfoRepository.findAll();
+            if(userInfoList.size()>0){
+                boolean check= false;
+                for (UserInfo u: userInfoList
+                     ) {
+                    if(u.getUsername().equals(loginRequest.getUsername())){
+                        u.setToken(jwt);
+                        u.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+                        u.setIsDeleted(false);
+                        userInfoRepository.save(u);
+                        check=true;
+                        break;
+                    }
+                }
+                if(check=false){
+                    UserInfo userInfo= new UserInfo();
+                    userInfo.setUsername(loginRequest.getUsername());
+                    userInfo.setToken(jwt);
+                    userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+                    userInfo.setIsDeleted(false);
+                    userInfoRepository.save(userInfo);
 
+                }
+
+            }
+            UserInfo userInfo= new UserInfo();
+            userInfo.setUsername(loginRequest.getUsername());
+            userInfo.setToken(jwt);
+            userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+            userInfo.setIsDeleted(false);
+            userInfoRepository.save(userInfo);
             return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
                     userDetails.getId(),
                     userDetails.getUsername(),
@@ -76,6 +114,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
         try {
@@ -125,6 +164,22 @@ public class AuthController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+    @GetMapping("logout")
+    public ResponseEntity<?> logout(@RequestParam("token")String token){
+        try{
+            Optional<UserInfo> userInfo= userInfoRepository.findByToken(token);
+            if(userInfo.isPresent()){
+                userInfo.get().setIsDeleted(true);
+                return ResponseEntity.ok().body(new IGenericResponse<>(userInfoRepository.save(userInfo.get()),200,""));
+            }
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+
         }
     }
     @PostMapping("forgotPassword")
