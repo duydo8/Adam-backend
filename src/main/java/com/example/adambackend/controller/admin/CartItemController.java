@@ -54,8 +54,8 @@ public class CartItemController {
                 }
 
                 CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                        , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                        detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
+                        , cartItemWebsiteCreate.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductOptional.get() ,
                         true, LocalDateTime.now());
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }

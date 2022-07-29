@@ -49,13 +49,26 @@ public class CartItemWebsiteController {
                 ) {
                     if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
                         c.setQuantity(c.getQuantity() + 1);
-                        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
+                        if (cartItemWebsiteCreate.getQuantity() >= 10) {
+                            return ResponseEntity.badRequest().body(
+                                    new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
+                        }
+                        if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
+                            return ResponseEntity.badRequest().body(
+                                    new HandleExceptionDemo(400, "Không đủ số lượng"));
+                        }
+                        CartItems cartItems = new CartItems(null, c.getQuantity()
+                                , c.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                                detailProductOptional.get() ,
+                                true, LocalDateTime.now());
+
+                        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
                     }
                 }
 
                 CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                        , cartItemWebsiteCreate.getTotalPrice(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                        detailProductService.findById(cartItemWebsiteCreate.getDetailProductId()).get(),
+                        , cartItemWebsiteCreate.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductOptional.get() ,
                         true, LocalDateTime.now());
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }
