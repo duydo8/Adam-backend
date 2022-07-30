@@ -64,7 +64,7 @@ public class AuthController {
     @PostMapping("authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(     
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);

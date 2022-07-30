@@ -50,12 +50,14 @@ public class OrderController {
     CartItemService cartItemService;
 
     @GetMapping("findAllByPageble")
-    public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size,
-                                              @RequestParam(value = "status", required = false) Integer status) {
+    public ResponseEntity<?> findAllByPageble(@RequestParam("page") Integer page,
+                                              @RequestParam("size") Integer size,
+                                              @RequestParam(value = "st", required = false)
+                                                  Integer status) {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
-            Page<Order> page1 = orderService.findByStatus(status, pageable);
-            return ResponseEntity.ok().body(new IGenericResponse<Page<Order>>(page1, 200, "Page product"));
+            Page<Order> page1 = orderService.findByStatus( pageable,status);
+            return ResponseEntity.ok().body(new IGenericResponse<>(page1, 200, "Page product"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

@@ -54,7 +54,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
     @Query(value = "select * from tags where order_code like '%?1%'",nativeQuery = true)
     List<Order>  findByName(String name);
-    @Query(value = "select o from Order o where (o.status=?1 or ?1 is null) ")
-    Page<Order> findByStatus(Integer status, Pageable pageable);
+    @Query( "select o from Order o where (o.status=?1 or ?1 is null) ")
+    Page<Order> findByStatus( Pageable pageable,int status);
 }
 

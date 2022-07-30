@@ -22,7 +22,8 @@ public class Order {
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    private Integer status;
+    @Column(name="status")
+    private int status;
 
     @Column(name = "full_name")
     private String fullName;
