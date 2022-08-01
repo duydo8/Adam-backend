@@ -2,11 +2,13 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Order;
 import com.example.adambackend.entities.Tag;
+import com.example.adambackend.payload.order.OrderFindAll;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -52,9 +54,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "join products p on dp.product_id=p.id \n" +
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
-    @Query(value = "select * from tags where order_code like '%?1%'",nativeQuery = true)
-    List<Order>  findByName(String name);
-    @Query( "select o from Order o where (o.status=?1 or ?1 is null) ")
-    Page<Order> findByStatus( Pageable pageable,int status);
+
+    @Query( value = "select id as id,status as status,create_date as createDate,account_id as accountId," +
+            "full_name as fullName,phone_number as phoneNumber,amount_price as amountPrice,sale_price as salePrice," +
+            "total_price as totalPrice,address_id as addressId,address_detail as addressDetail,order_code as orderCode" +
+            " from orders  where 1=1 and (:status is null or status=:status) ",nativeQuery = true)
+    List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
 }
 

@@ -50,18 +50,19 @@ public class OrderController {
     CartItemService cartItemService;
 
     @GetMapping("findAllByPageble")
-    public ResponseEntity<?> findAllByPageble(@RequestParam("page") Integer page,
-                                              @RequestParam("size") Integer size,
-                                              @RequestParam(value = "st", required = false)
-                                                  Integer status) {
-        try {
-            Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
-            Page<Order> page1 = orderService.findByStatus( pageable,status);
-            return ResponseEntity.ok().body(new IGenericResponse<>(page1, 200, "Page product"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
+    public ResponseEntity<?> findAllByPageble(@RequestParam(value = "status", required = false)
+                                                  Integer status,
+                                              @RequestParam("page") Integer page,
+                                              @RequestParam("size") Integer size)
+                                               {
+        //try {
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by("create_date").ascending());
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByStatus( pageable,status), 200, "Page product"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+//        }
     }
 
     @PutMapping("updateByIdAndStatus")
@@ -330,8 +331,6 @@ public class OrderController {
                 order.setAddress(address.get());
                 order.setFullName(orderWebsiteCreate.getFullName());
                 order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-
-
                 order.setSalePrice(orderWebsiteCreate.getSalePrice());
                 Double ammountPrice = 0.0;
                 order.setAmountPrice(ammountPrice);
@@ -383,12 +382,12 @@ public class OrderController {
                 List<Order> orders = orderService.findAll();
                 String code = RandomString.make(64);
                 for (int i = 0; i < orders.size(); i++) {
-                    if (code.equals(orders.get(i).getOrder_code())) {
+                    if (code.equals(orders.get(i).getOrderCode())) {
                         code = RandomString.make((64));
                         break;
                     }
                 }
-                order.setOrder_code(code);
+                order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);
                 order = orderService.save(order);

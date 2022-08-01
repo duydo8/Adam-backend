@@ -114,7 +114,7 @@ public class OrderWebsiteController {
                 List<Order> orders = orderService.findAll();
                 String code = RandomString.make(64);
                 for (int i = 0; i < orders.size(); i++) {
-                    if (code.equals(orders.get(i).getOrder_code())) {
+                    if (code.equals(orders.get(i).getOrderCode())) {
                         code = RandomString.make((64));
                         break;
                     }
@@ -142,7 +142,7 @@ public class OrderWebsiteController {
                 Double totalSalePrice=salePrice+ salePricePercent*ammountPrice;
                 order.setSalePrice(totalSalePrice);
                 totalPrice=ammountPrice-totalSalePrice;
-                order.setOrder_code(code);
+                order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);
                 order = orderService.save(order);

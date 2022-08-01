@@ -44,7 +44,4 @@ public class DiscountOrder {
     @JoinColumn(name = "event_id")
     private Event event;
 
-//    @ManyToOne
-//    @JoinColumn(name="order_id")
-//    private Order order;
 }

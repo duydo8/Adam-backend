@@ -19,6 +19,7 @@ public class DetailOrder {
     private Integer id;
     private Integer quantity;
     private Double price;
+    @Column(name="total_price")
     private Double totalPrice;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -34,7 +35,5 @@ public class DetailOrder {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @ManyToOne
-    @JoinColumn(name = "discount_product_id")
-    private DiscountProduct discountProduct;
+
 }

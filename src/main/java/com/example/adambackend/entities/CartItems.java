@@ -19,7 +19,7 @@ public class CartItems {
     private Integer id;
     private int quantity;
     @Column(name = "total_price")
-    private double totalPrice;
+    private Double totalPrice;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -35,7 +35,7 @@ public class CartItems {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public CartItems(Integer id, int quantity, double totalPrice, Account account, DetailProduct detailProduct, Boolean isActive, LocalDateTime createDate) {
+    public CartItems(Integer id, int quantity, Double totalPrice, Account account, DetailProduct detailProduct, Boolean isActive, LocalDateTime createDate) {
         this.id = id;
         this.quantity = quantity;
         this.totalPrice = totalPrice;

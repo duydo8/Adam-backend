@@ -1,6 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Address;
+import com.example.adambackend.payload.address.AddressDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public interface AddressService {
 
     Address save(Address address);
 
-    List<Address> findAll();
+    List<AddressDTO> findAll();
 
     List<Address> findByAccountId(Integer accountId);
 }
