@@ -4,6 +4,7 @@ import com.example.adambackend.config.TwilioSendSms;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.account.AccountAdminCreate;
 import com.example.adambackend.payload.account.AccountAdminDTO;
 import com.example.adambackend.payload.account.AccountArrayId;
 import com.example.adambackend.payload.account.AccountResponse;
@@ -39,56 +40,49 @@ public class AccountController {
     ModelMapper modelMapper;
 
     @PostMapping("/createAccount")
-    public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<IGenericResponse> registerUser(@RequestBody AccountAdminCreate accountAdminCreate) {
         try {
-            if (accountService.existsByUsername(signUpRequest.getUsername())) {
+            if (accountService.existsByUsername(accountAdminCreate.getUsername())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new IGenericResponse(400, "Username has been used"));
             }
 
-            if (accountService.existsByEmail(signUpRequest.getEmail())) {
+            if (accountService.existsByEmail(accountAdminCreate.getEmail())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new IGenericResponse(400, "Email has been used"));
             }
-            System.out.println(signUpRequest.getPhoneNumber());
-            Optional<Account> account= accountService.findByUsername(signUpRequest.getPhoneNumber());
+            if (accountService.existsByPhoneNumber(accountAdminCreate.getPhoneNumber())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new IGenericResponse(400, "PhoneNumber has been used"));
+            }
 
-            if(account.isPresent()){
-                account.get().setCreateDate(LocalDateTime.now());
-                account.get().setIsActive(true);
-                account.get().setIsDelete(false);
-                if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
-                    account.get().setRole(ERoleName.Admin);
-                } else {
-                    account.get().setRole(ERoleName.User);
-                }
-
-                account.get().setPriority(0.0);
-                System.out.println(account.get().getTimeValid());
-                if(LocalDateTime.now().isBefore(account.get().getTimeValid())){
-                    System.out.println(account.get().getVerificationCode());
-                    System.out.println(signUpRequest.getCode());
-                    if(account.get().getVerificationCode()==(signUpRequest.getCode())){
-                        account.get().setTimeValid(null);
-                        account.get().setVerificationCode(null);
-                        Account account1 = accountService.save(account.get());
-
-                        AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-                        return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "thanh cong"));
-                    }
-                    return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng nhập lại"));
-
-                }
-                accountService.deleteById(account.get().getId());
-                return ResponseEntity.badRequest().body(new IGenericResponse(" ",400,"Đã quá thời gian chờ"));
+            Account account= new Account();
+            account.setPriority(0.0);
+            account.setUsername(accountAdminCreate.getUsername());
+            account.setEmail(accountAdminCreate.getEmail());
+            if(accountAdminCreate.getRole().equalsIgnoreCase("admin")){
+                account.setRole(ERoleName.Admin);
+            }else if(accountAdminCreate.getRole().equalsIgnoreCase("user")){
+                account.setRole(ERoleName.User);
+            }else{
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Can't find Role"));
 
             }
-                return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng xác nhận lại số điện thoại của bạn"));
 
+            account.setEmail(accountAdminCreate.getEmail());
+            account.setPassword(passwordEncoder.encode(accountAdminCreate.getPassword()));
+            account.setFullName(accountAdminCreate.getFullName());
+            account.setCreateDate(LocalDateTime.now());
+            account.setPhoneNumber(accountAdminCreate.getPhoneNumber());
+            account.setIsActive(true);
+            account.setIsDelete(false);
 
-         } catch (Exception e) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(account), 200, "thành công"));
+
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }

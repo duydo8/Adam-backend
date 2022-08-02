@@ -66,6 +66,10 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.existsByEmail(email);
     }
 
+    @Override
+    public Boolean existsByPhoneNumber(String phoneNumber) {
+        return accountRepository.existsByPhoneNumber(phoneNumber);
+    }
 
 
     @Override

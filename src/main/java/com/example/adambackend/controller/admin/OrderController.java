@@ -3,6 +3,8 @@ package com.example.adambackend.controller.admin;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.order.Dashboard;
+import com.example.adambackend.payload.order.OrderFindAll;
+import com.example.adambackend.payload.order.OrderFindAllResponse;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.AddressRepository;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000000)
@@ -57,8 +60,17 @@ public class OrderController {
                                                {
         //try {
 
-            Pageable pageable = PageRequest.of(page, size, Sort.by("create_date").ascending());
-            return ResponseEntity.ok().body(new IGenericResponse<>(orderService.findByStatus( pageable,status), 200, "Page product"));
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
+
+            List<OrderFindAll> orderFindAlls= orderService.findByStatus(pageable,status);
+            List<OrderFindAllResponse> orderFindAllResponses=orderFindAlls.stream()
+                    .map(e->new OrderFindAllResponse(e.getId(),e.getStatus(),e.getCreateDate(),
+                            e.getAccount(),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
+                            e.getSalePrice(),e.getTotalPrice(),addressRepository.
+                            findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page product"));
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

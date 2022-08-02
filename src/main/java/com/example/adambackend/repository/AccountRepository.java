@@ -23,6 +23,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+    Boolean existsByPhoneNumber(String phoneNumber);
 
     @Query(value = "select * from accounts where phone_number=?1", nativeQuery = true)
     Optional<Account> findByPhoneNumber(String phoneNumber);

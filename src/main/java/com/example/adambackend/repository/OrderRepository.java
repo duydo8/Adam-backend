@@ -55,10 +55,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
 
-    @Query( value = "select id as id,status as status,create_date as createDate,account_id as accountId," +
-            "full_name as fullName,phone_number as phoneNumber,amount_price as amountPrice,sale_price as salePrice," +
-            "total_price as totalPrice,address_id as addressId,address_detail as addressDetail,order_code as orderCode" +
-            " from orders  where 1=1 and (:status is null or status=:status) ",nativeQuery = true)
+    @Query( value = "select o.id as id,o.status as status,o.createDate as createDate,o.account as account," +
+            "o.fullName as fullName,o.phoneNumber as phoneNumber,o.amountPrice as amountPrice," +
+            "o.salePrice as salePrice,o.totalPrice as totalPrice,o.address.id as addressId," +
+            "o.addressDetail as addressDetail,o.orderCode as orderCode" +
+            " from Order o where 1=1 and (:status is null or o.status=:status) ")
     List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
 }
 

@@ -25,6 +25,7 @@ public interface AccountService {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+    Boolean existsByPhoneNumber(String phoneNumber);
 
 
     void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
