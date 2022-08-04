@@ -12,7 +12,6 @@ import java.util.List;
 public class OrderWebsiteCreate {
     private String fullName;
     private String phoneNumber;
-    private Double salePrice;
     private String addressDetail;
     private Integer addressId;
     private Integer accountId;

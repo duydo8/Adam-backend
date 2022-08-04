@@ -63,7 +63,7 @@ public class OrderWebsiteController {
                 order.setAddress(address.get());
                 order.setFullName(orderWebsiteCreate.getFullName());
                 order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-                order.setSalePrice(orderWebsiteCreate.getSalePrice());
+
                 Double ammountPrice = 0.0;
                 order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());

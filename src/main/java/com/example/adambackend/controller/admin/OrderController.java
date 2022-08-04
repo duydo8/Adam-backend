@@ -7,13 +7,8 @@ import com.example.adambackend.payload.order.OrderFindAll;
 import com.example.adambackend.payload.order.OrderFindAllResponse;
 import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.AddressRepository;
-import com.example.adambackend.repository.HistoryOrderRepository;
-import com.example.adambackend.repository.OrderRepository;
-import com.example.adambackend.service.AccountService;
-import com.example.adambackend.service.CartItemService;
-import com.example.adambackend.service.DetailOrderService;
-import com.example.adambackend.service.DetailProductService;
+import com.example.adambackend.repository.*;
+import com.example.adambackend.service.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,6 +43,12 @@ public class OrderController {
     AddressRepository addressRepository;
     @Autowired
     CartItemService cartItemService;
+    @Autowired
+    EventRepository eventRepository;
+    @Autowired
+    DiscountOrderRepository discountOrderRepository;
+    @Autowired
+    AddressService addressService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam(value = "status", required = false)
@@ -58,7 +56,7 @@ public class OrderController {
                                               @RequestParam("page") Integer page,
                                               @RequestParam("size") Integer size)
                                                {
-        //try {
+        try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
 
@@ -71,10 +69,10 @@ public class OrderController {
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page product"));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-//        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 
     @PutMapping("updateByIdAndStatus")
@@ -334,7 +332,7 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
             Optional<Account> account = accountService.findById(orderWebsiteCreate.getAccountId());
-            Optional<Address> address = addressRepository.findById(orderWebsiteCreate.getAddressId());
+            Optional<Address> address = addressService.findById(orderWebsiteCreate.getAddressId());
             if (address.isPresent() && account.isPresent()) {
                 Order order = new Order();
                 order.setAccount(account.get());
@@ -343,7 +341,7 @@ public class OrderController {
                 order.setAddress(address.get());
                 order.setFullName(orderWebsiteCreate.getFullName());
                 order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-                order.setSalePrice(orderWebsiteCreate.getSalePrice());
+
                 Double ammountPrice = 0.0;
                 order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
@@ -386,10 +384,10 @@ public class OrderController {
 
                 order.setAmountPrice(ammountPrice);
                 order.setCartItems(cartItemsList);
-                Double totalPrice = ammountPrice - orderWebsiteCreate.getSalePrice();
+                Double totalPrice = 0.0;
                 if (totalPrice > 5000000) {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
-                            "đơn hàng không được quá 5m, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
+                            "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
                 List<Order> orders = orderService.findAll();
                 String code = RandomString.make(64);
@@ -399,6 +397,29 @@ public class OrderController {
                         break;
                     }
                 }
+                Set<Integer> idx= new HashSet<>();
+                List<DiscountOrder> discountOrders= new ArrayList<>();
+                List<Event> events= eventRepository.findAllByTime();
+                for (Event e: events
+                ) {
+                    discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
+                    discountOrders.stream().map(d->idx.add(d.getId())).close();
+
+                }
+                Double salePrice=0.0;
+                Double salePricePercent=0.0;
+                for (Integer x: idx
+                ) {
+                    DiscountOrder discountOrder=discountOrderRepository.getById(x);
+                    if(discountOrder.getSalePrice()<1){
+                        salePricePercent+= discountOrder.getSalePrice();
+                    }else {
+                        salePrice += discountOrder.getSalePrice();
+                    }
+                }
+                Double totalSalePrice=salePrice+ salePricePercent*ammountPrice;
+                order.setSalePrice(totalSalePrice);
+                totalPrice=ammountPrice-totalSalePrice;
                 order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);

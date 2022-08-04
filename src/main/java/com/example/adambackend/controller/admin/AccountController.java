@@ -71,7 +71,6 @@ public class AccountController {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Can't find Role"));
 
             }
-
             account.setEmail(accountAdminCreate.getEmail());
             account.setPassword(passwordEncoder.encode(accountAdminCreate.getPassword()));
             account.setFullName(accountAdminCreate.getFullName());
@@ -79,9 +78,7 @@ public class AccountController {
             account.setPhoneNumber(accountAdminCreate.getPhoneNumber());
             account.setIsActive(true);
             account.setIsDelete(false);
-
             return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(account), 200, "thành công"));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -99,7 +96,7 @@ public class AccountController {
             }
             TwilioSendSms twilioSendSms = new TwilioSendSms();
             int code = new Random().nextInt(999999);
-phoneNumber= phoneNumber.substring(1,phoneNumber.length());
+            phoneNumber= phoneNumber.substring(1,phoneNumber.length());
             twilioSendSms.sendCode(phoneNumber, code);
             Account account= new Account();
             account.setPhoneNumber(phoneNumber);
