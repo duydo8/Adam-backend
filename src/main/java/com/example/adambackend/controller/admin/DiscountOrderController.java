@@ -78,7 +78,7 @@ public class DiscountOrderController {
         }
     }
 
-    @GetMapping("create")
+    @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody DiscountOrderCreate discountOrderCreate) {
         try {
             DiscountOrder discountOrder = new DiscountOrder();
@@ -108,7 +108,13 @@ public class DiscountOrderController {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
 
                 }
+
                 discountOrder=discountOrderRepository.save(discountOrder);
+                List<DiscountOrder> discountOrders=eventOptional.get().getDiscountOrders();
+                discountOrders.add(discountOrder);
+                eventOptional.get().setDiscountOrders(discountOrders);
+                eventRepository.save(eventOptional.get());
+
 
                 return ResponseEntity.ok().body(new IGenericResponse<>(discountOrder, 200, ""));
             }

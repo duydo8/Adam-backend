@@ -22,7 +22,7 @@ public class Order {
     private Integer status;
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private Account account;
     @Column(name = "full_name")
@@ -35,15 +35,13 @@ public class Order {
     private Double salePrice;
     @Column(name = "total_price")
     private Double totalPrice;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
-
     @Column(name = "address_detail")
     private String addressDetail;
     @Column(name="order_code")
     private String orderCode;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HistoryOrder> historyOrders= new ArrayList<>();
     @JsonIgnore
@@ -52,8 +50,4 @@ public class Order {
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<DetailOrder> detailOrders = new ArrayList<>();
-
-
-
-
 }

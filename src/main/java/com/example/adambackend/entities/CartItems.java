@@ -17,7 +17,7 @@ public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private int quantity;
+    private Integer quantity;
     @Column(name = "total_price")
     private Double totalPrice;
     @ManyToOne

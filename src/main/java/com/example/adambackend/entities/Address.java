@@ -25,7 +25,6 @@ public class Address {
     private Boolean isDeleted;
     @Column(name = "create_date")
     private LocalDateTime createDate;
-
     @ManyToOne
     @JoinColumn(name = "ward_id")
     private Ward ward;
@@ -40,10 +39,7 @@ public class Address {
     @JsonIgnore
     @OneToMany(mappedBy = "address")
     private List<Order> orders = new ArrayList<>();
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+
     @ManyToOne
     @JoinColumn(name = "province_id")
     private Province province;

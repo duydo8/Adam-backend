@@ -16,8 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "discount_orders")
 public class DiscountOrder {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

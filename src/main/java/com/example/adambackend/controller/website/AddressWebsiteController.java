@@ -67,7 +67,7 @@ public class AddressWebsiteController {
                 address.setCreateDate(LocalDateTime.now());
                 address.setIsActive(true);
                 address.setIsDeleted(false);
-                address.setAccount(account.get());
+
                 address.setProvince(province.get());
                 address.setDistrict(district.get());
                 address.setWard(ward.get());
@@ -96,7 +96,7 @@ public class AddressWebsiteController {
             if (account.isPresent() && province.isPresent() && district.isPresent() && ward.isPresent() && address.isPresent()) {
                 Address address1 = address.get();
                 address1.setAddressDetail(addressWebsiteUpdate.getAddressDetail());
-                address1.setAccount(account.get());
+
                 address1.setProvince(province.get());
                 address1.setDistrict(district.get());
                 address1.setWard(ward.get());
@@ -123,9 +123,9 @@ public class AddressWebsiteController {
             Optional<Account> account = accountService.findById(accountId);
             Optional<Address> address1 = addressService.findById(accountId);
             if (account.isPresent() && address1.isPresent()) {
-                List<Address> addresses = account.get().getAddressList();
-                addresses.remove(address1.get());
-                account.get().setAddressList(addresses);
+
+
+
                 accountService.save(account.get());
                 addressService.deleteById(addressId);
                 return ResponseEntity.ok().body(new HandleExceptionDemo(200, "successfully"));
