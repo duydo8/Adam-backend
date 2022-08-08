@@ -1,8 +1,12 @@
 package com.example.adambackend.controller.general;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.payload.response.Response;
 import com.example.adambackend.service.impl.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,25 +27,54 @@ public class FileUploadController {
 
     @Autowired
     private FileStorageService fileStorageService;
-
+    Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+            "cloud_name", "dyzq75un4",
+            "api_key", "113684863585229",
+            "api_secret", "sboa3R1ujWeluS03XPMHh7sjSsc"));
     @PostMapping("/uploadFile")
-    public Response uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
+        File file1=convertToFile(file);
 
-        return new Response(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+
+            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+            return ResponseEntity.ok().body(new IGenericResponse<>(uploadResult.get("url"),200,"upload thành công"));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        }
+
     }
+    public File convertToFile(MultipartFile multipartFile) {
+        File file = new File("src/main/resources/targetFile.tmp");
 
+        try (OutputStream os = new FileOutputStream(file)) {
+            os.write(multipartFile.getBytes());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
+    }
     @PostMapping("/uploadMultipleFiles")
-    public List<Response> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
+    public ResponseEntity<?> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        List<File> fileList= Arrays.asList(files).stream().map(e->convertToFile(e)).collect(Collectors.toList());
+        List<Object> listUrl= new ArrayList<>();
+        for (File f: fileList
+             ) {
+            try {
+                Map uploadResult = cloudinary.uploader().upload(f, ObjectUtils.emptyMap());
+                listUrl.add(uploadResult.get("url"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        }
+        return ResponseEntity.ok().body(new IGenericResponse<>(listUrl,200,"upload thành công"));
+
     }
 }

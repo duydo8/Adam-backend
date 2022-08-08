@@ -346,6 +346,7 @@ public class OrderController {
                 order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
                 order.setTotalPrice(0.0);
+                order.setSalePrice(0.0);
                 order = orderService.save(order);
                 List<CartItems> cartItemsList = new ArrayList<>();
 
@@ -360,7 +361,8 @@ public class OrderController {
                         DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
                         if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
-                            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không đủ số lượng "));
+                            return ResponseEntity.badRequest().
+                                    body(new HandleExceptionDemo(400, "Không đủ số lượng "));
                         }
 
                         ammountPrice += cartItemsOptional.get().getTotalPrice();
@@ -389,36 +391,42 @@ public class OrderController {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
-                List<Order> orders = orderService.findAll();
+//                List<Order> orders = orderService.findAll();
                 String code = RandomString.make(64);
-                for (int i = 0; i < orders.size(); i++) {
-                    if (code.equals(orders.get(i).getOrderCode())) {
-                        code = RandomString.make((64));
-                        break;
-                    }
-                }
-                Set<Integer> idx= new HashSet<>();
+//                for (int i = 0; i < orders.size(); i++) {
+//                    if (code.equals(orders.get(i).getOrderCode())) {
+//                        code = RandomString.make((64));
+//                        break;
+//                    }
+//                }
+                List<Integer> idx= new ArrayList<>();
                 List<DiscountOrder> discountOrders= new ArrayList<>();
                 List<Event> events= eventRepository.findAllByTime();
                 for (Event e: events
                 ) {
                     discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
-                    discountOrders.stream().map(d->idx.add(d.getId())).close();
+                    for (DiscountOrder d: discountOrders
+                    ) {
+                        idx.add(d.getId());
+                    }
 
                 }
+                System.out.println(idx);
                 Double salePrice=0.0;
                 Double salePricePercent=0.0;
                 for (Integer x: idx
                 ) {
                     DiscountOrder discountOrder=discountOrderRepository.getById(x);
+
                     if(discountOrder.getSalePrice()<1){
                         salePricePercent+= discountOrder.getSalePrice();
+
                     }else {
                         salePrice += discountOrder.getSalePrice();
                     }
                 }
-                Double totalSalePrice=salePrice+ salePricePercent*ammountPrice;
-                order.setSalePrice(totalSalePrice);
+                double totalSalePrice=salePrice + (salePricePercent*ammountPrice);
+                order.setSalePrice((double)Math.round(totalSalePrice));
                 totalPrice=ammountPrice-totalSalePrice;
                 order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
