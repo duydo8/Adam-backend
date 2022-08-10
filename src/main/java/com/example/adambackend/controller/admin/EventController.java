@@ -1,9 +1,12 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.entities.Color;
 import com.example.adambackend.entities.Event;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.event.EventDTO;
 import com.example.adambackend.payload.event.EventUpdateDTO;
+import com.example.adambackend.payload.event.ListEventId;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.EventRepository;
 import com.example.adambackend.service.EventService;
@@ -12,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -82,5 +86,29 @@ public class EventController {
             return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(), 200, ""));
 
         } return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(name), 200, ""));
+    }
+    @DeleteMapping("deleteByListId")
+    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListEventId listEventId) {
+        try {
+            List<Integer> list = listEventId.getListId();
+
+            if (list.size() > 0) {
+                for (Integer x : list
+                ) {
+                    Optional<Event> eventOptional = eventService.findById(x);
+
+                    if (eventOptional.isPresent()) {
+
+                        eventService.updateEventDeleted(x);
+
+                    }
+                }
+                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
+            }
+            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
     }
 }

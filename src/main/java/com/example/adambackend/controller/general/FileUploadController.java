@@ -15,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -61,20 +58,21 @@ public class FileUploadController {
     }
     @PostMapping("/uploadMultipleFiles")
     public ResponseEntity<?> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        List<File> fileList= Arrays.asList(files).stream().map(e->convertToFile(e)).collect(Collectors.toList());
+        List<MultipartFile> multipartFiles= Arrays.asList(files);
+        try {
+        List<File> fileList= multipartFiles.stream().map(e->convertToFile(e)).collect(Collectors.toList());
         List<Object> listUrl= new ArrayList<>();
         for (File f: fileList
              ) {
-            try {
-                Map uploadResult = cloudinary.uploader().upload(f, ObjectUtils.emptyMap());
+
+                ObjectUtils objectUtils= new ObjectUtils();
+                Map map= objectUtils.emptyMap();
+                Map uploadResult = cloudinary.uploader().upload(f,new HashMap());
                 listUrl.add(uploadResult.get("url"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
         }
         return ResponseEntity.ok().body(new IGenericResponse<>(listUrl,200,"upload thành công"));
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
