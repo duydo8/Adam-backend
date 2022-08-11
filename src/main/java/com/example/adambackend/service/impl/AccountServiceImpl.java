@@ -1,6 +1,7 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
@@ -48,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<Account> findById(Integer id) {
-        return accountRepository.findByIds(id);
+        return accountRepository.findById(id);
     }
 
     @Override
@@ -69,6 +70,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean existsByPhoneNumber(String phoneNumber) {
         return accountRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public AccountDTOs findByIds(Integer id) {
+        return accountRepository.findByIds(id);
     }
 
 

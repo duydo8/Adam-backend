@@ -2,6 +2,9 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Event;
+import com.example.adambackend.enums.ERoleName;
+
+import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,7 +35,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findByRoleName(String role);
 
     @Query("select a from Account a where a.isActive=true and a.isDelete=false and a.id=?1")
-    Optional<Account> findByIds(Integer id);
+    Optional<Account> findById(Integer id);
 
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
     public Account findByVerificationCode(String code);
@@ -56,5 +59,9 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     void updateAccountDeleted(Integer id);
     @Query(value = "select * from accounts where username like '%?1%'",nativeQuery = true)
     List<Account> findByName(String name);
+    @Query(value = "select a.id as id, a.username as username, a.full_name as fullName, " +
+            "a.email as email, " +
+            "a.phone_number as phoneNumber from accounts a where a.id=?1",nativeQuery = true)
+    AccountDTOs findByIds(Integer id);
 
 }

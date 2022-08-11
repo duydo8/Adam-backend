@@ -1,6 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
 
 import javax.mail.MessagingException;
@@ -26,6 +27,7 @@ public interface AccountService {
 
     Boolean existsByEmail(String email);
     Boolean existsByPhoneNumber(String phoneNumber);
+    AccountDTOs findByIds(Integer id);
 
 
     void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;

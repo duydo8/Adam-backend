@@ -8,7 +8,7 @@ public interface OrderFindAll {
      Integer getId();
      Integer getStatus();
      LocalDateTime getCreateDate();
-     Account getAccount();
+     Integer getAccountId();
      String getFullName();
      String getPhoneNumber();
      Double getAmountPrice();

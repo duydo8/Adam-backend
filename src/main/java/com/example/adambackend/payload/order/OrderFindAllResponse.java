@@ -2,6 +2,8 @@ package com.example.adambackend.payload.order;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.Address;
+
+import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.address.AddressResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +22,7 @@ public class OrderFindAllResponse {
 
     private LocalDateTime createDate;
 
-    private Account account;
+    private AccountDTOs account;
 
     private String fullName;
 

@@ -55,7 +55,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
 
-    @Query( value = "select o.id as id,o.status as status,o.createDate as createDate,o.account as account," +
+    @Query( value = "select o.id as id,o.status as status,o.createDate as createDate,o.account.id as AccountId," +
             "o.fullName as fullName,o.phoneNumber as phoneNumber,o.amountPrice as amountPrice," +
             "o.salePrice as salePrice,o.totalPrice as totalPrice,o.address.id as addressId," +
             "o.addressDetail as addressDetail,o.orderCode as orderCode" +

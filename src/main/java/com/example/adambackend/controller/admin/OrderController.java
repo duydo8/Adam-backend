@@ -63,7 +63,7 @@ public class OrderController {
             List<OrderFindAll> orderFindAlls= orderService.findByStatus(pageable,status);
             List<OrderFindAllResponse> orderFindAllResponses=orderFindAlls.stream()
                     .map(e->new OrderFindAllResponse(e.getId(),e.getStatus(),e.getCreateDate(),
-                            e.getAccount(),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
+                            accountService.findByIds(e.getAccountId()),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
                             e.getSalePrice(),e.getTotalPrice(),addressRepository.
                             findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()))
                     .collect(Collectors.toList());
