@@ -38,6 +38,7 @@ public class DiscountOrder {
     private Double orderMinRange;
     @Column(name = "order_max_range")
     private Double orderMaxRange;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;

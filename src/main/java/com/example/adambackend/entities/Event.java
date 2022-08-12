@@ -34,7 +34,7 @@ public class Event {
     private Boolean type;
     private String image;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "event")
     List<DiscountOrder> discountOrders;
 }
