@@ -1,13 +1,16 @@
 package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.Color;
+import com.example.adambackend.entities.DiscountOrder;
 import com.example.adambackend.entities.Event;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.event.EventDTO;
+import com.example.adambackend.payload.event.EventFindAll;
 import com.example.adambackend.payload.event.EventUpdateDTO;
 import com.example.adambackend.payload.event.ListEventId;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.DiscountOrderRepository;
 import com.example.adambackend.repository.EventRepository;
 import com.example.adambackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -24,6 +29,8 @@ import java.util.Optional;
 public class EventController {
     @Autowired
     EventRepository eventService;
+    @Autowired
+    DiscountOrderRepository discountOrderRepository;
 
     @PostMapping("create")
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
@@ -82,10 +89,40 @@ public class EventController {
     }
     @GetMapping("findAll")
     public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
+        List<Event> events= new ArrayList<>();
         if(name==null){
-            return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(), 200, ""));
+            events=eventService.findAll();
 
-        } return ResponseEntity.ok().body(new IGenericResponse<>(eventService.findAll(name), 200, ""));
+        }else{
+           events=eventService.findAll(name);
+        }
+        List<EventFindAll> eventFindAlls= new ArrayList<>();
+
+
+        for (Event e: events
+             ) {
+            EventFindAll eventFindAll= new EventFindAll();
+            eventFindAll.setId(e.getId());
+            eventFindAll.setEventName(e.getEventName());
+            eventFindAll.setType(e.getType());
+            eventFindAll.setCreateDate(e.getCreateDate());
+            eventFindAll.setDescription(e.getDescription());
+            eventFindAll.setImage(e.getImage());
+            eventFindAll.setIsDelete(e.getIsDelete());
+            eventFindAll.setIsActive(e.getIsActive());
+            eventFindAll.setStartTime(e.getStartTime());
+            eventFindAll.setEndTime(e.getEndTime());
+            List<DiscountOrder> discountOrders= discountOrderRepository.findByEventId(e.getId());
+            Double salePrice=0.0;
+            for (DiscountOrder d: discountOrders
+                 ) {
+                salePrice+=d.getSalePrice();
+            }
+            eventFindAll.setSalePrice(salePrice);
+            eventFindAlls.add(eventFindAll);
+        }
+        return ResponseEntity.ok().body(new IGenericResponse<>(eventFindAlls,200,"thanh cong"));
+
     }
     @DeleteMapping("deleteByListId")
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListEventId listEventId) {

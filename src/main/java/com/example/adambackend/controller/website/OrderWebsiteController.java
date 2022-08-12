@@ -40,14 +40,7 @@ public class OrderWebsiteController {
     @Autowired
     DetailProductService detailProductService;
 
-    //    @GetMapping("findTop5OrderByCreateTime")
-//    public ResponseEntity<?> findTop5OrderByCreateTime(@RequestParam("account_id") Integer accountId) {
-//        Optional<Account> account = accountService.findById(accountId);
-//        if (account.isPresent()) {
-//            return ResponseEntity.ok().body(new IGenericResponse<List<Order>>(orderService.findTop5ByOrderLessThanOrderByCreateDateDesc(accountId), 200, ""));
-//        }
-//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
-//    }
+
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
@@ -122,11 +115,10 @@ public class OrderWebsiteController {
 //                    }
 //                }
                 List<Integer> idx= new ArrayList<>();
-                List<DiscountOrder> discountOrders= new ArrayList<>();
                 List<Event> events= eventRepository.findAllByTime();
                 for (Event e: events
                      ) {
-                    discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
+                    List<DiscountOrder> discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
                     for (DiscountOrder d: discountOrders
                          ) {
                         idx.add(d.getId());
