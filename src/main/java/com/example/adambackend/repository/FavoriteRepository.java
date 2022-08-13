@@ -39,7 +39,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteId> 
     List<Integer> findTop10FavoriteProductId();
 
 
-    @Query("select fa from Favorite  fa join Account  a on fa.account.id=a.id join Product  p on p.id=fa.product.id where a.id=?1 and p.id=?2")
+    @Query("select fa from  Favorite fa where fa.account.id=?1 and fa.product.id=?2")
     Optional<Favorite> findByAccountIdAndProductId(Integer accountId, Integer productId);
 
     @Transactional

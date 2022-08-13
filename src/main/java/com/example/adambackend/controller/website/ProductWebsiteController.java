@@ -6,6 +6,7 @@ import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.product.ProductWebsiteDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
+import com.example.adambackend.repository.FavoriteRepository;
 import com.example.adambackend.repository.MaterialProductRepository;
 import com.example.adambackend.repository.OrderRepository;
 import com.example.adambackend.repository.TagProductRepository;
@@ -593,15 +594,18 @@ public class ProductWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
+@Autowired
+    FavoriteRepository favoriteRepository;
     @GetMapping("findOptionProductById")
     public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
                                                    @RequestParam(value = "account_id", required = false) Integer account_id) {
         try {
+            Optional<Favorite> favorite = favoriteRepository.findByAccountIdAndProductId(account_id, product_id);
+
             Optional<Product> productOptional = productSevice.findById(product_id);
             Boolean isFavorite = false;
             ProductOptionalDTO productOptionalDTO = null;
-            if (productOptional.isPresent()) {
+            if (productOptional.isPresent() && favorite.isPresent()) {
                 if (account_id == null) {
                     isFavorite = false;
                     Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
@@ -649,67 +653,121 @@ public class ProductWebsiteController {
                         productOptionalDTO.setOptions(optionProducts);
 
                         return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+                    } else {
+                        return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
                     }
-                    return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
-
                 } else {
-                        isFavorite = true;
-                        Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
-                        if (productHandleValue1.isPresent()) {
-                            productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),
-                                    productHandleValue1.get().getDescription(), productHandleValue1.get().getIsActive(),
-                                    productHandleValue1.get().getMaxPrice(), productHandleValue1.get().getMinPrice()
-                                    , productHandleValue1.get().getProductName(), productHandleValue1.get().getVoteAverage(), isFavorite, null);
-                            List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
-                            Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-                            Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-                            List<ValueOption> colorOptionList = new ArrayList<>();
+                    isFavorite = true;
+                    Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
+                    if (productHandleValue1.isPresent()) {
+                        productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),
+                                productHandleValue1.get().getDescription(), productHandleValue1.get().getIsActive(),
+                                productHandleValue1.get().getMaxPrice(), productHandleValue1.get().getMinPrice()
+                                , productHandleValue1.get().getProductName(), productHandleValue1.get().getVoteAverage(), isFavorite, null);
+                        List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
+                        Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
+                        Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
+                        List<ValueOption> colorOptionList = new ArrayList<>();
 
-                            for (Integer x : colorIdList
-                            ) {
-                                Optional<Color> color = colorService.findById(x);
-                                ValueOption colorOption = new ValueOption();
-                                colorOption.setId(color.get().getId());
-                                colorOption.setName(color.get().getColorName());
-                                colorOptionList.add(colorOption);
+                        for (Integer x : colorIdList
+                        ) {
+                            Optional<Color> color = colorService.findById(x);
+                            ValueOption colorOption = new ValueOption();
+                            colorOption.setId(color.get().getId());
+                            colorOption.setName(color.get().getColorName());
+                            colorOptionList.add(colorOption);
 
-                            }
-                            OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-                            List<ValueOption> sizeOptionList = new ArrayList<>();
-
-
-                            for (Integer x : sizeIdList
-                            ) {
-                                Optional<Size> sizeOptional = sizeService.findById(x);
-                                ValueOption sizeOption = new ValueOption();
-                                sizeOption.setId(sizeOptional.get().getId());
-                                sizeOption.setName(sizeOptional.get().getSizeName());
-                                sizeOptionList.add(sizeOption);
-
-                            }
-
-                            OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-                            //
-
-
-                            List<OptionProduct> optionProducts = new ArrayList<>();
-                            optionProducts.add(optionSizeProduct);
-                            optionProducts.add(optionColorProduct);
-
-                            productOptionalDTO.setOptions(optionProducts);
-
-                            return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
-
-                        }else {
-
-                            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
                         }
+                        OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
+                        List<ValueOption> sizeOptionList = new ArrayList<>();
+
+
+                        for (Integer x : sizeIdList
+                        ) {
+                            Optional<Size> sizeOptional = sizeService.findById(x);
+                            ValueOption sizeOption = new ValueOption();
+                            sizeOption.setId(sizeOptional.get().getId());
+                            sizeOption.setName(sizeOptional.get().getSizeName());
+                            sizeOptionList.add(sizeOption);
+
+                        }
+
+                        OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
+                        //
+
+
+                        List<OptionProduct> optionProducts = new ArrayList<>();
+                        optionProducts.add(optionSizeProduct);
+                        optionProducts.add(optionColorProduct);
+
+                        productOptionalDTO.setOptions(optionProducts);
+
+                        return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+
+                    } else {
+
+                        return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
+                    }
                 }
 
             }
-            return ResponseEntity.badRequest().body(new IGenericResponse(200, "Không tìm thấy"));
+            if (productOptional.isPresent() && !favorite.isPresent()) {
+                if (account_id == null) {
+                    isFavorite = false;
+                    Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
+                    if (productHandleValue.isPresent()) {
+                        productOptionalDTO = new ProductOptionalDTO(productHandleValue.get().getId(),
+                                productHandleValue.get().getDescription(), productHandleValue.get().getIsActive(),
+                                productHandleValue.get().getMaxPrice(), productHandleValue.get().getMinPrice()
+                                , productHandleValue.get().getProductName(), productHandleValue.get().getVoteAverage(), isFavorite, null);
+                        List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
+                        Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
+                        Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
+                        List<ValueOption> colorOptionList = new ArrayList<>();
 
-    } catch (Exception e) {
+                        for (Integer x : colorIdList
+                        ) {
+                            Optional<Color> color = colorService.findById(x);
+                            ValueOption colorOption = new ValueOption();
+                            colorOption.setId(color.get().getId());
+                            colorOption.setName(color.get().getColorName());
+                            colorOptionList.add(colorOption);
+
+                        }
+                        OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
+                        List<ValueOption> sizeOptionList = new ArrayList<>();
+
+
+                        for (Integer x : sizeIdList
+                        ) {
+                            Optional<Size> sizeOptional = sizeService.findById(x);
+                            ValueOption sizeOption = new ValueOption();
+                            sizeOption.setId(sizeOptional.get().getId());
+                            sizeOption.setName(sizeOptional.get().getSizeName());
+                            sizeOptionList.add(sizeOption);
+
+                        }
+
+                        OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
+                        //
+
+
+                        List<OptionProduct> optionProducts = new ArrayList<>();
+                        optionProducts.add(optionSizeProduct);
+                        optionProducts.add(optionColorProduct);
+
+                        productOptionalDTO.setOptions(optionProducts);
+
+                        return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
+                    } else {
+                        return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
+                    }
+
+
+                }
+            }
+            return ResponseEntity.ok().body(new IGenericResponse(200, "Không tìm thấy"));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }

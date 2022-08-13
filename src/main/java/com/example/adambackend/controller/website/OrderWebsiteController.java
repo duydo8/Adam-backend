@@ -106,7 +106,7 @@ public class OrderWebsiteController {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
-//                List<Order> orders = orderService.findAll();
+//                List<Order> orders = orderFService.findAll();
                 String code = RandomString.make(64);
 //                for (int i = 0; i < orders.size(); i++) {
 //                    if (code.equals(orders.get(i).getOrderCode())) {
