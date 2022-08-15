@@ -93,6 +93,8 @@ public class OrderWebsiteController {
                         detailOrder.setIsActive(true);
                         detailOrder.setDetailProduct(detailProduct);
                         detailOrder.setOrder(order);
+                        String x1= RandomString.make(64)+ order.getId();
+                        detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
 
 
@@ -106,14 +108,9 @@ public class OrderWebsiteController {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
-//                List<Order> orders = orderFService.findAll();
-                String code = RandomString.make(64);
-//                for (int i = 0; i < orders.size(); i++) {
-//                    if (code.equals(orders.get(i).getOrderCode())) {
-//                        code = RandomString.make((64));
-//                        break;
-//                    }
-//                }
+
+                String code = RandomString.make(64)+order.getId();
+
                 List<Integer> idx= new ArrayList<>();
                 List<Event> events= eventRepository.findAllByTime();
                 for (Event e: events

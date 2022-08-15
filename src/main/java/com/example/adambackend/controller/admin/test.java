@@ -2,6 +2,8 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.DetailOrder;
 import com.example.adambackend.entities.Order;
+import com.example.adambackend.payload.detailOrder.DetailOrderDTO;
+import com.example.adambackend.payload.detailOrder.DetailOrderDTOResponse;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DetailOrderRepository;
 import com.example.adambackend.repository.OrderRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class test {
@@ -23,12 +26,15 @@ public class test {
     @PostMapping("updateDetailCode")
     public ResponseEntity<?> updateDetailCode(){
 
-        List<DetailOrder> detailOrderList=detailOrderRepository.findAll();
-        for (int i=0;i<detailOrderList.size();i++
+        List<DetailOrderDTO> detailOrderList=detailOrderRepository.findAlls();
+        List<DetailOrderDTOResponse> detailOrderDTOResponses= detailOrderList.stream().map(e->new
+                DetailOrderDTOResponse(e.getId(),e.getQuantity(),e.getPrice(),e.getTotalPrice(),e.getIsDeleted(),e.getDetailOrderCode()
+        ,e.getIsActive(),e.getCreateDate(),e.getReason(),e.getOrderId())).collect(Collectors.toList());
+        System.out.println(detailOrderDTOResponses.size());
+        for (int i=0;i<detailOrderDTOResponses.size();i++
              ) {
-            String x= RandomString.make(3)+ detailOrderList.get(i).getOrder().getId()+i;
-            detailOrderList.get(i).setDetailOrderCode(x);
-            detailOrderRepository.save(detailOrderList.get(i));
+            String x= RandomString.make(3)+ detailOrderDTOResponses.get(i).getOrderId()+i;
+            detailOrderRepository.updateById(x,detailOrderDTOResponses.get(i).getId());
         }
         return  ResponseEntity.ok().body(new IGenericResponse<>("",200,""));
         

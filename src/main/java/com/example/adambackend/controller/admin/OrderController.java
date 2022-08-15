@@ -149,10 +149,21 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-//    @PostMapping("updateReturnOrder")
-//    public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn){
-//        Order
-//    }
+    @PostMapping("updateReturnOrder")
+    public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn){
+        Optional<DetailOrder> detailOrder= detailOrderService.findByCode(orderReturn.getDetailCode());
+        Optional<Order> orderOptional=orderService.findByCode(orderReturn.getOrderCode());
+        if(detailOrder.isPresent()&& orderOptional.isPresent()){
+            detailOrderService.updateReason(orderReturn.getReason(),detailOrder.get().getId());
+            orderService.updateReturnOrder(orderReturn.getReturnPrice(),orderReturn.getTotalPrice()
+                    ,orderReturn.getStatus(),orderOptional.get().getId());
+            return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
+
+        }else{
+            return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
+
+        }
+    }
 
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Order order) {
@@ -379,6 +390,8 @@ public class OrderController {
                         detailOrder.setIsActive(true);
                         detailOrder.setDetailProduct(detailProduct);
                         detailOrder.setOrder(order);
+                        String x1= RandomString.make(64)+ order.getId();
+                        detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
 
 
@@ -392,14 +405,9 @@ public class OrderController {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
-//                List<Order> orders = orderService.findAll();
-                String code = RandomString.make(64);
-//                for (int i = 0; i < orders.size(); i++) {
-//                    if (code.equals(orders.get(i).getOrderCode())) {
-//                        code = RandomString.make((64));
-//                        break;
-//                    }
-//                }
+
+                String code = RandomString.make(64)+order.getId();
+
                 List<Integer> idx= new ArrayList<>();
                 List<DiscountOrder> discountOrders= new ArrayList<>();
                 List<Event> events= eventRepository.findAllByTime();

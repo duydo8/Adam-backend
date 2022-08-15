@@ -601,13 +601,12 @@ public class ProductWebsiteController {
                                                    @RequestParam(value = "account_id", required = false) Integer account_id) {
         try {
             Optional<Favorite> favorite = favoriteRepository.findByAccountIdAndProductId(account_id, product_id);
-
             Optional<Product> productOptional = productSevice.findById(product_id);
             Boolean isFavorite = false;
             ProductOptionalDTO productOptionalDTO = null;
-            if (productOptional.isPresent() && favorite.isPresent()) {
-                if (account_id == null) {
-                    isFavorite = false;
+            if (productOptional.isPresent()  ) {
+                if (!favorite.isPresent()) {
+
                     Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
                     if (productHandleValue.isPresent()) {
                         productOptionalDTO = new ProductOptionalDTO(productHandleValue.get().getId(),
@@ -618,7 +617,6 @@ public class ProductWebsiteController {
                         Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
                         Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
                         List<ValueOption> colorOptionList = new ArrayList<>();
-
                         for (Integer x : colorIdList
                         ) {
                             Optional<Color> color = colorService.findById(x);
@@ -657,7 +655,7 @@ public class ProductWebsiteController {
                         return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
                     }
                 } else {
-                    isFavorite = true;
+                 isFavorite=true;
                     Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
                     if (productHandleValue1.isPresent()) {
                         productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),

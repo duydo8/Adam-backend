@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,9 +33,11 @@ public class DetailOrder {
     private LocalDateTime createDate;
     @Column(name="reason")
     private String reason;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

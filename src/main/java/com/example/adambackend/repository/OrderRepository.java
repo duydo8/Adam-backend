@@ -4,15 +4,20 @@ import com.example.adambackend.entities.Order;
 import com.example.adambackend.entities.Tag;
 import com.example.adambackend.payload.order.OrderFindAll;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
@@ -63,5 +68,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
     @Query(value = "select count(*) from orders where status is null or status=?1",nativeQuery = true)
     Integer countTotalElementOrder(Integer status);
+    @Query(value = "select * from orders where order_code=?1",nativeQuery = true)
+    Optional<Order> findByCode(String code);
+    @Transactional
+    @Modifying
+    @Query(value = "update orders set return_order_price=?1,total_price=?2,status=?3 where id=?4",nativeQuery = true)
+    void updateReturnOrder(Double returnPrice, Double totalPrice, Integer status, Integer id);
 }
 

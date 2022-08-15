@@ -10,12 +10,14 @@ import java.util.Optional;
 public interface DetailOrderService {
 
     Optional<DetailOrder> findById(Integer id);
+    void updateReason(String reason, Integer id);
 
     void deleteById(Integer id);
 
     DetailOrder save(DetailOrder detailOrder);
 
     List<DetailOrder> findAll();
+    Optional<DetailOrder> findByCode(String code);
 
 
     List<DetailOrder> findAllByOrderId(Integer orderId);

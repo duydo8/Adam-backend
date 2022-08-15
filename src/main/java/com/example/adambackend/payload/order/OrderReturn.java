@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderReturn {
-    private Integer orderCode;
-    private Integer detailId;
+    private String orderCode;
+    private String detailCode;
     private Integer status;
-    private Double price;
+    private Double returnPrice;
     private String reason;
+    private Double totalPrice;
 }

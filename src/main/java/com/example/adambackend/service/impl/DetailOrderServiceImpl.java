@@ -21,6 +21,11 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     }
 
     @Override
+    public Optional<DetailOrder> findByCode(String code) {
+        return detailOrderRepository.findByCode(code);
+    }
+
+    @Override
     public DetailOrder save(DetailOrder detailOrder) {
         return detailOrderRepository.save(detailOrder);
     }
@@ -33,6 +38,11 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     @Override
     public Optional<DetailOrder> findById(Integer id) {
         return detailOrderRepository.findById(id);
+    }
+
+    @Override
+    public void updateReason(String reason, Integer id) {
+        detailOrderRepository.updateReason(reason, id);
     }
 
     @Override
