@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class CommentAdminDTO {
     private Integer id;
     private String content;
-    private Double vote;
+    private Integer vote;
     //    private LocalDateTime timeCreated;
     private CommentStatus commentStatus;
 //    private Integer accountId;

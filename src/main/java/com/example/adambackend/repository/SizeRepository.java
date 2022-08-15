@@ -18,13 +18,13 @@ public interface SizeRepository extends JpaRepository<Size, Integer> {
     @Query(value = "select * from sizes s join detail_products dp on dp.size_id= s.id where dp.id=?1 and" +
             " s.is_active=1 and s.is_deleted=0 ", nativeQuery = true)
     Optional<Size> findByDetailProductId(Integer detailProductId);
-    @Query(value = "select c from Size c where c.isActive=true and c.isDeleted=false and  c.sizeName like concat('%',:name,'%') ")
+    @Query(value = "select c from Size c where c.isActive=true and c.isDeleted=false and  c.sizeName like concat('%',:name,'%') order by c.createDate desc")
     List<Size> findAll(@Param("name")  String name);
     @Modifying
     @Transactional
     @Query(value = "update sizes set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateProductsDeleted(Integer id);
 
-    @Query(value = "select * from sizes where is_active=1 and is_deleted=0", nativeQuery = true)
+    @Query(value = "select * from sizes where is_active=1 and is_deleted=0 order by create_date desc", nativeQuery = true)
     List<Size> findAll();
 }

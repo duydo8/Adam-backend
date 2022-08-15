@@ -18,7 +18,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findByName(String name);
     @Query(value = "select c from Event c where c.isActive=true and c.isDelete=false and  c.eventName like concat('%',:name,'%') ")
     List<Event> findAll(@Param("name")  String name);
-    @Query(value = "select c from Event c where c.isActive=true and c.isDelete=false ")
+    @Query(value = "select c from Event c where c.isActive=true and c.isDelete=false order by c.createDate")
     List<Event> findAll();
     @Query(value = "select * from events  where  " +
             "DATEDIFF(CURRENT_DATE(),start_time)>0 " +

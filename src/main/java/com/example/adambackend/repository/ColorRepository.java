@@ -24,8 +24,8 @@ public interface ColorRepository extends JpaRepository<Color, Integer> {
     @Query(value = "update colors set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateColorsDeleted(Integer id);
 
-    @Query(value = "select * from colors where is_active=1 and is_deleted=0", nativeQuery = true)
+    @Query(value = "select * from colors where is_active=1 and is_deleted=0 order by create_date", nativeQuery = true)
     List<Color> findAll();
-    @Query(value = "select c from Color c where c.isActive=true and c.isDeleted=false and c.colorName like concat('%',:name,'%') ")
+    @Query(value = "select c from Color c where c.isActive=true and c.isDeleted=false and c.colorName like concat('%',:name,'%') order by c.createDate ")
     List<Color> findAll(@Param("name")  String name);
 }

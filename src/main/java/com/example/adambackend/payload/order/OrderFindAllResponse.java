@@ -40,4 +40,5 @@ public class OrderFindAllResponse {
     private String addressDetail;
 
     private String orderCode;
+    private Integer totalElement;
 }

@@ -26,8 +26,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query(value = "update categories set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateCategoriesDeleted(Integer id);
 
-    @Query(value = "select * from categories where is_active=1 and is_deleted=0", nativeQuery = true)
+    @Query(value = "select * from categories where is_active=1 and is_deleted=0 order by create_date desc", nativeQuery = true)
     List<Category> findAll();
-    @Query(value = "select c from Category c where c.isActive=true and c.isDeleted=false and c.categoryName like concat('%',:name,'%') ")
+    @Query(value = "select c from Category c where c.isActive=true and c.isDeleted=false and c.categoryName like concat('%',:name,'%') order by c.createDate desc")
     List<Category> findAll(@Param("name")  String name);
 }

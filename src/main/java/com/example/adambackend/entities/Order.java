@@ -42,6 +42,8 @@ public class Order {
     private String addressDetail;
     @Column(name="order_code")
     private String orderCode;
+    @Column(name="return_order_price")
+    private Double returnOrderPrice=0.0;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HistoryOrder> historyOrders= new ArrayList<>();
     @JsonIgnore

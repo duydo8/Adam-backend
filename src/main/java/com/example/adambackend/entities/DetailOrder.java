@@ -23,12 +23,15 @@ public class DetailOrder {
     private Double totalPrice;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-
+    @Column(name="detail_order_code")
+    private String detailOrderCode;
 
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "create_date")
     private LocalDateTime createDate;
+    @Column(name="reason")
+    private String reason;
     @ManyToOne
     @JoinColumn(name = "detail_product_id")
     private DetailProduct detailProduct;

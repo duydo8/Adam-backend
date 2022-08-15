@@ -48,7 +48,8 @@ public class ProductWebsiteController {
     TagProductRepository tagProductRepository;
     @Autowired
     MaterialProductRepository materialProductRepository;
-
+    @Autowired
+    FavoriteRepository favoriteRepository;
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         try {
@@ -594,8 +595,7 @@ public class ProductWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-@Autowired
-    FavoriteRepository favoriteRepository;
+
     @GetMapping("findOptionProductById")
     public ResponseEntity<?> findOptionProductById(@RequestParam("product_id") Integer product_id,
                                                    @RequestParam(value = "account_id", required = false) Integer account_id) {

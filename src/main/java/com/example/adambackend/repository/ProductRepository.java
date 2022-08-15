@@ -21,32 +21,32 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true")
     Page<Product> findAll(Pageable pageable);
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') ")
+    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') order by c.createDate desc")
     Page<Product> findAll(@Param("name")  String name,Pageable pageable);
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true")
+    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc" )
     List<Product> findAll();
     @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
 
-    @Query(value = "select pro.id as id, pro.productName as productName,pro.image as productImage, " +
+    @Query(value = "select  pro.id as id, pro.productName as productName,pro.image as productImage, " +
             " pro.createDate as createDate,pro.description as Description ,min(dp.priceExport) as " +
             " minPrice, max (dp.priceExport)as maxPrice " +
             "            from Product pro " +
-            "            join Category ca on pro.category.id=ca.id " +
             "            join DetailProduct dp on pro.id=dp.product.id " +
-            "            join Size s on dp.size.id=s.id " +
-            "            join TagProduct tp on tp.product.id=pro.id " +
-            "            join Tag t on t.id=tp.tag.id " +
-            "            join MaterialProduct mp on mp.product.id=pro.id " +
-            "            join Material m on m.id=mp.material.id  " +
-            "            join Color co on co.id=dp.color.id " +
-            "where pro.isActive=true and pro.isDelete=false and " +
-
-            " ca.id=?1  or ?1 is null or dp.size.id=?2  or ?2 is null \n" +
-            "or dp.color.id=?3 or ?3 is null or  m.id=?4  or ?4 is null \n" +
-            "or t.id=?5  or ?5 is null or dp.priceExport BETWEEN ?6  and ?7  " +
-            "GROUP BY pro.productName,pro.image,pro.createDate,pro.id order by pro.id ")
+            "          left  join Category ca on pro.category.id=ca.id " +
+            "           left join Size s on dp.size.id=s.id " +
+            "          left  join TagProduct tp on tp.product.id=pro.id " +
+            "           left join Tag t on t.id=tp.tag.id " +
+            "          left  join MaterialProduct mp on mp.product.id=pro.id " +
+            "          left  join Material m on m.id=mp.material.id  " +
+            "         left   join Color co on co.id=dp.color.id " +
+            "where pro.isActive=true and pro.isDelete=false and pro.isComplete=true and " +
+            " ca.id=?1  or ?1 is null and s.id=?2  or ?2 is null " +
+            " and co.id=?3 or ?3 is null and  m.id=?4  or ?4 is null " +
+            " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7  " +
+            " GROUP BY pro.productName,pro.image,pro.createDate,pro.id"+
+            " order by pro.id ")
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 

@@ -69,7 +69,7 @@ public class CommentWebsiteController {
         try {
             Optional<Comment> comment1 = commentService.findById(id);
             if (comment1.isPresent()) {
-                Double vote = comment1.get().getVote();
+                Integer vote = comment1.get().getVote();
                 int commentTotal = commentService.countCommentByProduct(comment1.get().getProduct().getId());
 
                 double voteAverage = comment1.get().getProduct().getVoteAverage();
