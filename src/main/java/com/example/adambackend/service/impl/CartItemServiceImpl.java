@@ -2,6 +2,7 @@ package com.example.adambackend.service.impl;
 
 
 import com.example.adambackend.entities.CartItems;
+import com.example.adambackend.payload.cart.CartItemResponse;
 import com.example.adambackend.repository.CartItemRepository;
 import com.example.adambackend.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public Optional<CartItems> findById(Integer id) {
         return cartItemRepository.findById(id);
+    }
+
+    @Override
+    public List<CartItemResponse> findByOrderId(Integer orderId) {
+        return cartItemRepository.findByOrderId(orderId);
     }
 
     @Override

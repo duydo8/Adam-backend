@@ -2,6 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.cart.CartItemDTO;
 import com.example.adambackend.payload.order.*;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.*;
@@ -58,14 +59,19 @@ public class OrderController {
             Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
             Integer totalElement=orderService.countTotalElementOrder(status);
             List<OrderFindAll> orderFindAlls= orderService.findByStatus(pageable,status);
-            List<OrderFindAllResponse> orderFindAllResponses=orderFindAlls.stream()
+
+            List<OrderFindAllResponse> orderFindAllResponses=  orderFindAlls.stream()
                     .map(e->new OrderFindAllResponse(e.getId(),e.getStatus(),e.getCreateDate(),
                             accountService.findByIds(e.getAccountId()),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
                             e.getSalePrice(),e.getTotalPrice(),addressRepository.
-                            findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode(),totalElement))
+                            findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()
+                            ,cartItemService.findByOrderId(e.getId()).stream().map(c->new CartItemDTO(c.getId(),c.getQuantity(),
+                            c.getTotalPrice(),c.getAccountId(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
+                    ,c.getCreateDate())).collect(Collectors.toList()),
+                            totalElement))
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page product"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page Order"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -463,9 +469,9 @@ public class OrderController {
                 }
 
                 return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
-            }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
-        } catch (Exception e) {
+            }else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+            }  } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }

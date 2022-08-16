@@ -46,7 +46,7 @@ public class Order {
     private Double returnOrderPrice=0.0;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HistoryOrder> historyOrders= new ArrayList<>();
-    @JsonIgnore
+
     @OneToMany(mappedBy = "order")
     private List<CartItems> cartItems = new ArrayList<>();
     @JsonIgnore

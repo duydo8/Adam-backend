@@ -25,7 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAll(@Param("name")  String name,Pageable pageable);
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc" )
     List<Product> findAll();
-    @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0   order by p.create_date desc limit 10", nativeQuery = true)
+    @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
 
@@ -34,13 +34,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             " minPrice, max (dp.priceExport)as maxPrice " +
             "            from Product pro " +
             "            join DetailProduct dp on pro.id=dp.product.id " +
-            "          left  join Category ca on pro.category.id=ca.id " +
-            "           left join Size s on dp.size.id=s.id " +
-            "          left  join TagProduct tp on tp.product.id=pro.id " +
-            "           left join Tag t on t.id=tp.tag.id " +
-            "          left  join MaterialProduct mp on mp.product.id=pro.id " +
-            "          left  join Material m on m.id=mp.material.id  " +
-            "         left   join Color co on co.id=dp.color.id " +
+            "            join Category ca on pro.category.id=ca.id " +
+            "            join Size s on dp.size.id=s.id " +
+            "            join TagProduct tp on tp.product.id=pro.id " +
+            "            join Tag t on t.id=tp.tag.id " +
+            "            join MaterialProduct mp on mp.product.id=pro.id " +
+            "            join Material m on m.id=mp.material.id  " +
+            "            join Color co on co.id=dp.color.id " +
             "where pro.isActive=true and pro.isDelete=false and pro.isComplete=true and " +
             " ca.id=?1  or ?1 is null and s.id=?2  or ?2 is null " +
             " and co.id=?3 or ?3 is null and  m.id=?4  or ?4 is null " +
