@@ -67,8 +67,8 @@ public class OrderController {
                             findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()
                             ,cartItemService.findByOrderId(e.getId()).stream().map(c->new CartItemDTO(c.getId(),c.getQuantity(),
                             c.getTotalPrice(),c.getAccountId(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
-                    ,c.getCreateDate())).collect(Collectors.toList()),
-                            totalElement))
+                    ,c.getCreateDate())).collect(Collectors.toList()),totalElement
+                            ))
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page Order"));

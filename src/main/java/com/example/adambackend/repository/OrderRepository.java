@@ -66,7 +66,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "o.addressDetail as addressDetail,o.orderCode as orderCode " +
             " from Order o where 1=1 and (:status is null or o.status=:status) ")
     List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
-    @Query(value = "select count(*) from orders where status is null or status=?1",nativeQuery = true)
+    @Query(value = "select count(*) from orders where ?1 is null or status=?1",nativeQuery = true)
     Integer countTotalElementOrder(Integer status);
     @Query(value = "select * from orders where order_code=?1",nativeQuery = true)
     Optional<Order> findByCode(String code);
