@@ -75,6 +75,7 @@ public class AddressWebsiteController {
                 address.setFullName(addressWebsiteCreate.getFullName());
                 address.setIsDeleted(addressWebsiteCreate.getIsDefault());
                 address.setIsDefault(false);
+                address.setAccount(account.get());
                 Address address1 = addressService.save(address);
                 return ResponseEntity.ok().body(new IGenericResponse<>(address1, 200, ""));
             }

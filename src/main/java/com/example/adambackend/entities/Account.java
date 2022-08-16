@@ -45,7 +45,9 @@ public class Account {
     private LocalDateTime createDate;
 
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Address> addresses = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     List<Comment> commentList = new ArrayList<>();
