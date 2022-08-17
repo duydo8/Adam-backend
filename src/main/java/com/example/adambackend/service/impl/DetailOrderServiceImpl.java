@@ -22,7 +22,7 @@ public class DetailOrderServiceImpl implements DetailOrderService {
     }
 
     @Override
-    public Optional<DetailOrder> findByCode(String code) {
+    public DetailOrder findByCode(String code) {
         return detailOrderRepository.findByCode(code);
     }
 

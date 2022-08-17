@@ -21,7 +21,7 @@ public interface DetailOrderService {
     DetailOrder save(DetailOrder detailOrder);
 
     List<DetailOrder> findAll();
-    Optional<DetailOrder> findByCode(String code);
+    DetailOrder findByCode(String code);
 
 
     List<DetailOrder> findAllByOrderId(Integer orderId);

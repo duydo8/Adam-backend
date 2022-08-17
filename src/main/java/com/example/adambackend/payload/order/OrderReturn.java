@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderReturn {
-    private List<String> orderCode;
-    private String detailCode;
+    private String orderCode;
+    private List<String>  detailCode;
     private Integer status;
     private Double returnPrice;
     private String reason;

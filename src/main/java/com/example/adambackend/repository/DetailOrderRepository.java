@@ -42,7 +42,7 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Intege
     @Query(value = "update detail_orders set detail_order_code=?1 where id=?2",nativeQuery = true)
     void updateById(String x,Integer id);
     @Query(value = "select * from detail_orders where detail_order_code=?1",nativeQuery = true)
-    Optional<DetailOrder> findByCode(String code);
+    DetailOrder findByCode(String code);
     @Transactional
     @Modifying
     @Query(value = "update detail_orders set reason=?1 where id=?2",nativeQuery = true)
