@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderReturn {
-    private String orderCode;
+    private List<String> orderCode;
     private String detailCode;
     private Integer status;
     private Double returnPrice;

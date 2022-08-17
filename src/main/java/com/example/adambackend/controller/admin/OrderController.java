@@ -158,17 +158,16 @@ public class OrderController {
     @PostMapping("updateReturnOrder")
     public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn){
         Optional<DetailOrder> detailOrder= detailOrderService.findByCode(orderReturn.getDetailCode());
-        Optional<Order> orderOptional=orderService.findByCode(orderReturn.getOrderCode());
-        if(detailOrder.isPresent()&& orderOptional.isPresent()){
-            detailOrderService.updateReason(orderReturn.getReason(),detailOrder.get().getId());
-            orderService.updateReturnOrder(orderReturn.getReturnPrice(),orderReturn.getTotalPrice()
-                    ,orderReturn.getStatus(),orderOptional.get().getId());
-            return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
-
-        }else{
-            return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
-
+        for(String x: orderReturn.getOrderCode()) {
+            Optional<Order> orderOptional = orderService.findByCode(x);
+            if (detailOrder.isPresent() && orderOptional.isPresent()) {
+                detailOrderService.updateReason(orderReturn.getReason(), detailOrder.get().getId());
+                orderService.updateReturnOrder(orderReturn.getReturnPrice(), orderReturn.getTotalPrice()
+                        , orderReturn.getStatus(), orderOptional.get().getId());
+            }
         }
+        return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
+
     }
 
     @PutMapping("update")
