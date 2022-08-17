@@ -2,6 +2,8 @@ package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.DetailOrder;
 import com.example.adambackend.entities.Product;
+import com.example.adambackend.payload.cart.CartItemResponse;
+import com.example.adambackend.payload.detailOrder.DetailOrderAdmin;
 import com.example.adambackend.payload.detailOrder.DetailOrderDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -45,5 +47,13 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Intege
     @Modifying
     @Query(value = "update detail_orders set reason=?1 where id=?2",nativeQuery = true)
     void updateReason(String reason, Integer id);
+    @Query(value = "select do.detail_order_code from detail_orders do " +
+
+            "where do.id=?1",nativeQuery = true)
+    String findCodeById(Integer id);
+    @Query(value = "select id as id,quantity as quantity,total_price as totalPrice," +
+            "detail_product_id as detailProductId, is_active as isActive," +
+            "create_date as createDate from detail_orders where order_id=?1",nativeQuery = true)
+    List<DetailOrderAdmin> findByOrderId(Integer orderId);
 
 }

@@ -2,14 +2,14 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.cart.CartItemDTO;
+
+import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
 import com.example.adambackend.payload.order.*;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.*;
 import com.example.adambackend.service.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -65,9 +65,9 @@ public class OrderController {
                             accountService.findByIds(e.getAccountId()),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
                             e.getSalePrice(),e.getTotalPrice(),addressRepository.
                             findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()
-                            ,cartItemService.findByOrderId(e.getId()).stream().map(c->new CartItemDTO(c.getId(),c.getQuantity(),
-                            c.getTotalPrice(),c.getAccountId(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
-                    ,c.getCreateDate())).collect(Collectors.toList()),totalElement
+                            ,detailOrderService.findByOrderId(e.getId()).stream().map(c->new DetailOrderPayLoad(c.getId(),c.getQuantity(),
+                            c.getTotalPrice(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
+                    ,c.getCreateDate(),detailOrderService.findCodeById(c.getId()))).collect(Collectors.toList()),totalElement
                             ))
                     .collect(Collectors.toList());
 

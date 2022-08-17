@@ -1,4 +1,4 @@
-package com.example.adambackend.payload.cart;
+package com.example.adambackend.payload.detailOrder;
 
 import com.example.adambackend.entities.DetailProduct;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemDTO {
+public class DetailOrderPayLoad {
     Integer id;
     Integer quantity;
     Double totalPrice;
-    Integer accountId;
+
     DetailProduct detailProduct;
     Boolean isActive;
     LocalDateTime createDate;
+    String detailOrderCode;
+
 }
