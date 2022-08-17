@@ -25,7 +25,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAll(@Param("name")  String name,Pageable pageable);
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc" )
     List<Product> findAll();
-    @Query(value = "select * from products p where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 order by p.create_date desc limit 10", nativeQuery = true)
+    @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 " +
+            " and dp.price_export !=0 order by p.create_date desc limit 10", nativeQuery = true)
     List<Product> findTop10productByCreateDate();
 
 

@@ -1,8 +1,6 @@
 package com.example.adambackend.controller.general;
 
 
-import com.example.adambackend.config.BeanConfig;
-import com.example.adambackend.config.TokenStoreConfig;
 import com.example.adambackend.config.TwilioSendSms;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.UserInfo;
@@ -18,26 +16,19 @@ import com.example.adambackend.repository.UserInfoRepository;
 import com.example.adambackend.security.AccountDetailsService;
 import com.example.adambackend.security.jwtConfig.JwtUtils;
 import com.example.adambackend.service.AccountService;
-import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.web.bind.annotation.*;
 
-import javax.activation.DataSource;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,27 +49,11 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
-    @Autowired
-    BeanConfig beanConfig;
-    @Autowired
-    TokenStoreConfig tokenStoreConfig;
 
 
 
-    @Resource(name="tokenServices")
-    ConsumerTokenServices tokenServices;
 
-    @RequestMapping(method = RequestMethod.POST, value = "tokens/revoke")
-    @ResponseBody
-    public String revokeToken(@RequestParam("token") String tokenId) {
-        tokenServices.revokeToken(tokenId);
-        return tokenId;
-    }
-    private final TokenStore tokenStore;
 
-    private AuthController(TokenStore tokenStore){
-        this.tokenStore=tokenStore;
-    }
 
     @Autowired
     JwtUtils jwtUtils;
