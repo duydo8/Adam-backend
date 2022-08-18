@@ -67,11 +67,11 @@ public class OrderController {
                             findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()
                             ,detailOrderService.findByOrderId(e.getId()).stream().map(c->new DetailOrderPayLoad(c.getId(),c.getQuantity(),
                             c.getTotalPrice(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
-                    ,c.getCreateDate(),detailOrderService.findCodeById(c.getId()))).collect(Collectors.toList()),totalElement
+                    ,c.getCreateDate(),detailOrderService.findCodeById(c.getId()))).collect(Collectors.toList())
                             ))
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(orderFindAllResponses, 200, "Page Order"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(new OrderAdmin(orderFindAllResponses,totalElement), 200, "Page Order"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -168,6 +168,7 @@ public class OrderController {
 
 
         }
+        
             return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
 
         }else{

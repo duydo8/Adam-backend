@@ -28,6 +28,6 @@ public class OrderFindAllResponse {
     private String addressDetail;
     private String orderCode;
     private List<DetailOrderPayLoad> detailOrders;
-    private Integer totalElement;
+
 
 }
