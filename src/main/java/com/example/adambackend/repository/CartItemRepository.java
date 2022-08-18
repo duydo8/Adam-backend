@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItems, Integer> {
-    @Query(value = "select * from cart_items where account_id=?1 and is_active=1", nativeQuery = true)
+    @Query(value = "select * from cart_items where account_id=?1 and is_active=1 and order_id=null", nativeQuery = true)
     List<CartItems> findCartItemsByAccountId(Integer id);
 
     @Modifying

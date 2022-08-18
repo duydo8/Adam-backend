@@ -604,7 +604,7 @@ public class ProductWebsiteController {
             Optional<Product> productOptional = productSevice.findById(product_id);
             Boolean isFavorite = false;
             ProductOptionalDTO productOptionalDTO = null;
-            if (productOptional.isPresent()  ) {
+            if (productOptional.isPresent() ) {
                 if (!favorite.isPresent()) {
 
                     Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
@@ -708,63 +708,10 @@ public class ProductWebsiteController {
                     }
                 }
 
+            } else {
+                return ResponseEntity.ok().body(new IGenericResponse(200, ""));
             }
-            if (productOptional.isPresent() && !favorite.isPresent()) {
-                if (account_id == null) {
-                    isFavorite = false;
-                    Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
-                    if (productHandleValue.isPresent()) {
-                        productOptionalDTO = new ProductOptionalDTO(productHandleValue.get().getId(),
-                                productHandleValue.get().getDescription(), productHandleValue.get().getIsActive(),
-                                productHandleValue.get().getMaxPrice(), productHandleValue.get().getMinPrice()
-                                , productHandleValue.get().getProductName(), productHandleValue.get().getVoteAverage(), isFavorite, null);
-                        List<DetailProduct> detailProducts = detailProductService.findAllByProductId(product_id);
-                        Set<Integer> colorIdList = detailProducts.stream().map(e -> e.getColor().getId()).collect(Collectors.toSet());
-                        Set<Integer> sizeIdList = detailProducts.stream().map(e -> e.getSize().getId()).collect(Collectors.toSet());
-                        List<ValueOption> colorOptionList = new ArrayList<>();
 
-                        for (Integer x : colorIdList
-                        ) {
-                            Optional<Color> color = colorService.findById(x);
-                            ValueOption colorOption = new ValueOption();
-                            colorOption.setId(color.get().getId());
-                            colorOption.setName(color.get().getColorName());
-                            colorOptionList.add(colorOption);
-
-                        }
-                        OptionProduct optionColorProduct = new OptionProduct("Color", colorOptionList);
-                        List<ValueOption> sizeOptionList = new ArrayList<>();
-
-
-                        for (Integer x : sizeIdList
-                        ) {
-                            Optional<Size> sizeOptional = sizeService.findById(x);
-                            ValueOption sizeOption = new ValueOption();
-                            sizeOption.setId(sizeOptional.get().getId());
-                            sizeOption.setName(sizeOptional.get().getSizeName());
-                            sizeOptionList.add(sizeOption);
-
-                        }
-
-                        OptionProduct optionSizeProduct = new OptionProduct("Size", sizeOptionList);
-                        //
-
-
-                        List<OptionProduct> optionProducts = new ArrayList<>();
-                        optionProducts.add(optionSizeProduct);
-                        optionProducts.add(optionColorProduct);
-
-                        productOptionalDTO.setOptions(optionProducts);
-
-                        return ResponseEntity.ok().body(new IGenericResponse<>(productOptionalDTO, 200, ""));
-                    } else {
-                        return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
-                    }
-
-
-                }
-            }
-            return ResponseEntity.ok().body(new IGenericResponse(200, "Không tìm thấy"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

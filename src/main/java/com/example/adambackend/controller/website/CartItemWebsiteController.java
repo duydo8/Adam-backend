@@ -145,7 +145,7 @@ public class CartItemWebsiteController {
 
 
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200 , ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

@@ -172,7 +172,7 @@ public class AccountController {
 
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
             } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
