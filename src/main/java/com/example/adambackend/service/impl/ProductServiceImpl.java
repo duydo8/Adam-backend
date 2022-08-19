@@ -2,6 +2,7 @@ package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.ProductTop10Create;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.ProductRepository;
@@ -56,7 +57,7 @@ public class ProductServiceImpl implements ProductSevice {
     }
 
     @Override
-    public List<Product> findTop10productByCreateDate() {
+    public List<ProductTop10Create> findTop10productByCreateDate() {
         return productRepository.findTop10productByCreateDate();
     }
 

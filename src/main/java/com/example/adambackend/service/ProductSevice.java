@@ -2,6 +2,7 @@ package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.ProductTop10Create;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface ProductSevice {
 
     Page<Product> findPage(int page, int size);
 
-    List<Product> findTop10productByCreateDate();
+    List<ProductTop10Create> findTop10productByCreateDate();
 
     List<Product> findAllByTagName(String tagName);
 

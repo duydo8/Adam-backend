@@ -3,6 +3,7 @@ package com.example.adambackend.controller.website;
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.ProductTop10Create;
 import com.example.adambackend.payload.product.ProductWebsiteDTO;
 import com.example.adambackend.payload.productWebsiteDTO.*;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -64,9 +65,9 @@ public class ProductWebsiteController {
     @GetMapping("findTop10productByCreateDate")
     public ResponseEntity<?> findTop10productByCreateDate() {
         try {
-            List<Product> products = productSevice.findTop10productByCreateDate();
+            List<ProductTop10Create> products = productSevice.findTop10productByCreateDate();
             List<ProductWebsiteDTO> productDTOS = new ArrayList<>();
-            for (Product product : products) {
+            for (ProductTop10Create product : products) {
                 ProductWebsiteDTO productWebsiteDTO = new ProductWebsiteDTO();
                 productWebsiteDTO.setId(product.getId());
                 productWebsiteDTO.setProductName(product.getProductName());
@@ -77,18 +78,8 @@ public class ProductWebsiteController {
                 productWebsiteDTO.setIsActive(product.getIsActive());
                 productWebsiteDTO.setIsDelete(product.getIsDelete());
                 productWebsiteDTO.setVoteAverage(product.getVoteAverage());
-                List<DetailProduct> detailProducts = product.getDetailProducts();
-
-                List<Double> price = detailProducts.stream().
-                        map(e -> e.getPriceExport()).collect(Collectors.toList());
-                Collections.sort(price);
-                for (int i = 0; i < price.size(); i++) {
-                    Double minPrice = price.get(0);
-                    Double maxPrice = price.get(price.size() - 1);
-                    productWebsiteDTO.setMaxPrice(maxPrice);
-                    productWebsiteDTO.setMinPrice(minPrice);
-                }
-
+                productWebsiteDTO.setMinPrice(product.getMinPrice());
+                productWebsiteDTO.setMaxPrice(product.getMaxPrice());
                 productDTOS.add(productWebsiteDTO);
             }
 

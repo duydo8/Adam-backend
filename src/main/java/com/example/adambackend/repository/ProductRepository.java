@@ -3,6 +3,7 @@ package com.example.adambackend.repository;
 import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
+import com.example.adambackend.payload.product.ProductTop10Create;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import org.springframework.data.domain.Page;
@@ -25,9 +26,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAll(@Param("name")  String name,Pageable pageable);
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc" )
     List<Product> findAll();
-    @Query(value = "select * from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 " +
-            " and dp.price_export !=0 order by p.create_date desc limit 10", nativeQuery = true)
-    List<Product> findTop10productByCreateDate();
+    @Query(value = "select distinct(p.id) as id, p.product_name as productName, p.description as description,p.is_deleted as isDelete," +
+            "p.image as image,p.vote_average as VoteAverage, p.create_date as CreateDate,p.is_completed as IsComplete,p.is_active," +
+            "MIN(dp.price_export) as  minPrice, MAX(dp.price_export)as maxPrice" +
+
+            "   from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 " +
+            " and dp.price_export !=0 GROUP BY p.id,p.product_name,p.description,p.is_deleted,p.image,p.vote_average,p.create_date,p.is_completed,p.is_active" +
+            " order by p.create_date desc limit 10", nativeQuery = true)
+    List<ProductTop10Create> findTop10productByCreateDate();
 
 
     @Query(value = "select  pro.id as id, pro.productName as productName,pro.image as productImage, " +
