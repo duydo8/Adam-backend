@@ -25,7 +25,7 @@ public class FileUploadController {
             "api_key", "113684863585229",
             "api_secret", "sboa3R1ujWeluS03XPMHh7sjSsc"));
     @PostMapping("/uploadFile")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadFile(@RequestParam(value = "file",required = false) MultipartFile file) {
         try {
 
         File file1=convertToFile(file);

@@ -198,10 +198,10 @@ public class ProductController {
             Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
             if (product1.isPresent()) {
 
-                productSevice.updateProductsIsActive(productUpdateIsActive.getIsActive(), productUpdateIsActive.getId());
-                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
+                productSevice.updateProductsIsActive(productUpdateIsActive.getIs_active(), productUpdateIsActive.getId());
+                return ResponseEntity.ok().body(new IGenericResponse<>(200, "Thành công"));
             }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
+            return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
