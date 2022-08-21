@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductUpdateIsActive {
+    private Integer is_active;
     private Integer id;
-    private Boolean isActive;
+
 
 }

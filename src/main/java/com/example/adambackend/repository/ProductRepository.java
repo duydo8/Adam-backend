@@ -51,7 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "where pro.isActive=true and pro.isDelete=false and pro.isComplete=true and " +
             " ca.id=?1  or ?1 is null and s.id=?2  or ?2 is null " +
             " and co.id=?3 or ?3 is null and  m.id=?4  or ?4 is null " +
-            " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7  " +
+            " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7 and dp.priceExport !=0 " +
             " GROUP BY pro.productName,pro.image,pro.createDate,pro.id"+
             " order by pro.id ")
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
@@ -96,5 +96,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update products set is_active=?1 where id=?2", nativeQuery = true)
-    void updateProductsIsActive(Boolean isActive, Integer id);
+    void updateProductsIsActive(Integer isActive, Integer id);
 }
