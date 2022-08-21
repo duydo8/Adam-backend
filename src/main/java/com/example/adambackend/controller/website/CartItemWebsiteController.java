@@ -60,7 +60,7 @@ public class CartItemWebsiteController {
                         CartItems cartItems = new CartItems(null, c.getQuantity()
                                 , c.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
                                 detailProductOptional.get() ,
-                                true, LocalDateTime.now());
+                                true, LocalDateTime.now(),null);
 
                         return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
                     }
@@ -69,7 +69,7 @@ public class CartItemWebsiteController {
                 CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
                         , cartItemWebsiteCreate.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
                         detailProductOptional.get() ,
-                        true, LocalDateTime.now());
+                        true, LocalDateTime.now(),null);
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));

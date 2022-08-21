@@ -17,7 +17,6 @@ public class ProductUpdateDTO {
     private Boolean isDelete;
     private String image;
     private Double voteAverage;
-
     private Integer categoryId;
     private List<Integer> tagProductIds = new ArrayList<>();
     private List<Integer> materialProductIds = new ArrayList<>();

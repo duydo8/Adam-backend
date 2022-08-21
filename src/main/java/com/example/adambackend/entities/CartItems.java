@@ -35,13 +35,5 @@ public class CartItems {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public CartItems(Integer id, int quantity, Double totalPrice, Account account, DetailProduct detailProduct, Boolean isActive, LocalDateTime createDate) {
-        this.id = id;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.account = account;
-        this.detailProduct = detailProduct;
-        this.isActive = isActive;
-        this.createDate = createDate;
-    }
+
 }
