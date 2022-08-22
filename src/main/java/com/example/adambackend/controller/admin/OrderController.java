@@ -481,7 +481,35 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+@GetMapping("findSalePrice")
+public ResponseEntity<?> findSalePrice(@RequestParam("amount_price") Double ammountPrice){
+    List<Integer> idx = new ArrayList<>();
+    List<DiscountOrder> discountOrders = new ArrayList<>();
+    List<Event> events = eventRepository.findAllByTime();
+    for (Event e : events
+    ) {
+        discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+        for (DiscountOrder d : discountOrders
+        ) {
+            idx.add(d.getId());
+        }
 
+    }
+    Double salePrice = 0.0;
+    Double salePricePercent = 0.0;
+    for (Integer x : idx
+    ) {
+        DiscountOrder discountOrder = discountOrderRepository.getById(x);
+
+        if (discountOrder.getSalePrice() < 1) {
+            salePricePercent += discountOrder.getSalePrice();
+
+        } else {
+            salePrice += discountOrder.getSalePrice();
+        }
+    }
+    return ResponseEntity.ok().body(new IGenericResponse<>(salePrice + (salePricePercent * ammountPrice),200,"thành công"));
+}
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
