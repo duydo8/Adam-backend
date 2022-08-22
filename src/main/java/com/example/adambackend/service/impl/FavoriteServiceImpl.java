@@ -1,7 +1,6 @@
 package com.example.adambackend.service.impl;
 
 import com.example.adambackend.entities.Favorite;
-import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 import com.example.adambackend.repository.FavoriteRepository;
 import com.example.adambackend.service.FavoriteService;
@@ -15,10 +14,12 @@ import java.util.Optional;
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     FavoriteRepository favoriteRepository;
-@Override
-public void  deleteByIdAccountAndProduct(Integer accountId,Integer productId){
-    favoriteRepository.deleteByIdAccountAndProduct(accountId, productId);
-}
+
+    @Override
+    public void deleteByIdAccountAndProduct(Integer accountId, Integer productId) {
+        favoriteRepository.deleteByIdAccountAndProduct(accountId, productId);
+    }
+
     @Override
     public List<Favorite> findAll() {
         return favoriteRepository.findAll();
@@ -28,7 +29,6 @@ public void  deleteByIdAccountAndProduct(Integer accountId,Integer productId){
     public Favorite save(Favorite Favorite) {
         return favoriteRepository.save(Favorite);
     }
-
 
 
     @Override

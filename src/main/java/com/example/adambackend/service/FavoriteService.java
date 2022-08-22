@@ -1,7 +1,6 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Favorite;
-import com.example.adambackend.entities.FavoriteId;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.Optional;
 
 public interface FavoriteService {
 
-    void deleteByIdAccountAndProduct(Integer accountId,Integer productId);
+    void deleteByIdAccountAndProduct(Integer accountId, Integer productId);
 
     Favorite save(Favorite favorite);
 

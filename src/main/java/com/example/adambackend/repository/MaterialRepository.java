@@ -1,8 +1,6 @@
 package com.example.adambackend.repository;
 
-import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.entities.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +19,7 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
     @Query(value = "select * from materials where is_active=1 and is_deleted=0", nativeQuery = true)
     List<Material> findAll();
+
     @Query(value = "select c from Material c where c.isActive=true and c.isDeleted=false and  c.materialName like concat('%',:name,'%') ")
-    List<Material> findAll(@Param("name")  String name);
+    List<Material> findAll(@Param("name") String name);
 }

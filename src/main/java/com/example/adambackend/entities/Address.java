@@ -47,6 +47,6 @@ public class Address {
     @JoinColumn(name = "district_id")
     private District district;
     @ManyToOne
-    @JoinColumn(name="account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
 }

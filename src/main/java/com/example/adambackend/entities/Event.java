@@ -1,6 +1,5 @@
 package com.example.adambackend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 public class Event {
+    @OneToMany(mappedBy = "event")
+    List<DiscountOrder> discountOrders;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,8 +34,4 @@ public class Event {
     private LocalDateTime createDate;
     private Boolean type;
     private String image;
-
-
-    @OneToMany(mappedBy = "event")
-    List<DiscountOrder> discountOrders;
 }

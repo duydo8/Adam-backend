@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -124,7 +123,6 @@ public class AddressWebsiteController {
             Optional<Account> account = accountService.findById(accountId);
             Optional<Address> address1 = addressService.findById(accountId);
             if (account.isPresent() && address1.isPresent()) {
-
 
 
                 accountService.save(account.get());

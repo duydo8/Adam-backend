@@ -58,18 +58,18 @@ public class CartItemWebsiteController {
                                     new HandleExceptionDemo(400, "Không đủ số lượng"));
                         }
                         CartItems cartItems = new CartItems(null, c.getQuantity()
-                                , c.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                                detailProductOptional.get() ,
-                                true, LocalDateTime.now(),null);
+                                , c.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                                detailProductOptional.get(),
+                                true, LocalDateTime.now(), null);
 
                         return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
                     }
                 }
 
                 CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                        , cartItemWebsiteCreate.getQuantity()*detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                        detailProductOptional.get() ,
-                        true, LocalDateTime.now(),null);
+                        , cartItemWebsiteCreate.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductOptional.get(),
+                        true, LocalDateTime.now(), null);
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
@@ -145,7 +145,7 @@ public class CartItemWebsiteController {
 
 
             }
-            return ResponseEntity.ok().body(new HandleExceptionDemo(200 , ""));
+            return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

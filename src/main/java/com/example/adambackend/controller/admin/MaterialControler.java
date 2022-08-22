@@ -29,11 +29,12 @@ public class MaterialControler {
     MaterialProductRepository materialProductRepository;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
-        if(name==null){
+    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
+        if (name == null) {
             return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
 
-        } return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(name), 200, ""));
+        }
+        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(name), 200, ""));
     }
 
     @PostMapping("create")

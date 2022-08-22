@@ -29,12 +29,13 @@ public class TagController {
     TagProductRepository tagProductRepository;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
-            if(name==null){
+            if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(), 200, ""));
 
-            } return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(name), 200, ""));
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(name), 200, ""));
 
         } catch (Exception e) {
             e.printStackTrace();

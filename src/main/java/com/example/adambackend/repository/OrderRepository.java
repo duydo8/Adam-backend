@@ -1,11 +1,8 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.Order;
-import com.example.adambackend.entities.Tag;
 import com.example.adambackend.payload.order.OrderFindAll;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
-import io.swagger.models.auth.In;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,19 +56,22 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
 
-    @Query( value = "select o.id as id,o.status as status,o.createDate as createDate,o.account.id as AccountId," +
+    @Query(value = "select o.id as id,o.status as status,o.createDate as createDate,o.account.id as AccountId," +
             "o.fullName as fullName,o.phoneNumber as phoneNumber,o.amountPrice as amountPrice," +
             "o.salePrice as salePrice,o.totalPrice as totalPrice,o.address.id as addressId," +
             "o.addressDetail as addressDetail,o.orderCode as orderCode " +
             " from Order o where 1=1 and (:status is null or o.status=:status) ")
     List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
-    @Query(value = "select count(*) from orders where ?1 is null or status=?1",nativeQuery = true)
+
+    @Query(value = "select count(*) from orders where ?1 is null or status=?1", nativeQuery = true)
     Integer countTotalElementOrder(Integer status);
-    @Query(value = "select * from orders where order_code=?1",nativeQuery = true)
+
+    @Query(value = "select * from orders where order_code=?1", nativeQuery = true)
     Optional<Order> findByCode(String code);
+
     @Transactional
     @Modifying
-    @Query(value = "update orders set return_order_price=?1,total_price=?2,status=?3 where id=?4",nativeQuery = true)
+    @Query(value = "update orders set return_order_price=?1,total_price=?2,status=?3 where id=?4", nativeQuery = true)
     void updateReturnOrder(Double returnPrice, Double totalPrice, Integer status, Integer id);
 }
 

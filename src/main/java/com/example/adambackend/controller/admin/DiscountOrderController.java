@@ -1,6 +1,7 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.*;
+import com.example.adambackend.entities.DiscountOrder;
+import com.example.adambackend.entities.Event;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.discountOrder.DiscountOrderCreate;
 import com.example.adambackend.payload.discountOrder.DiscountOrderUpdate;
@@ -35,18 +36,20 @@ public class DiscountOrderController {
     OrderRepository orderRepository;
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
-            if(name==null){
+            if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
 
-            } return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(name), 200, ""));
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(name), 200, ""));
 
-          } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @GetMapping("findById")
     public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
         try {
@@ -67,7 +70,7 @@ public class DiscountOrderController {
         try {
             Optional<Event> eventOptional = eventRepository.findById(eventId);
             if (eventOptional.isPresent()) {
-                List<DiscountOrder> discountOrders=discountOrderRepository.findByEventId(eventId);
+                List<DiscountOrder> discountOrders = discountOrderRepository.findByEventId(eventId);
                 return ResponseEntity.ok().body(new IGenericResponse<>(eventOptional.get(), 200, ""));
 
             }
@@ -84,7 +87,7 @@ public class DiscountOrderController {
             DiscountOrder discountOrder = new DiscountOrder();
 
             Optional<Event> eventOptional = eventRepository.findById(discountOrderCreate.getEventId());
-            if ( eventOptional.isPresent()) {
+            if (eventOptional.isPresent()) {
                 discountOrder.setOrderMinRange(discountOrderCreate.getOrderMinRange());
                 discountOrder.setOrderMaxRange(discountOrderCreate.getOrderMaxRange());
                 discountOrder.setEvent(eventOptional.get());
@@ -96,21 +99,21 @@ public class DiscountOrderController {
                 discountOrder.setStartTime(discountOrderCreate.getStartTime());
                 discountOrder.setSalePrice(discountOrderCreate.getSalePrice());
                 discountOrder.setEndTime(discountOrderCreate.getEndTime());
-                if(discountOrderCreate.getOrderMaxRange()<discountOrderCreate.getOrderMinRange()){
+                if (discountOrderCreate.getOrderMaxRange() < discountOrderCreate.getOrderMinRange()) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
 
                 }
-                if(eventOptional.get().getType()&& discountOrderCreate.getSalePrice()<1){
+                if (eventOptional.get().getType() && discountOrderCreate.getSalePrice() < 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
 
                 }
-                if(!eventOptional.get().getType()&& discountOrderCreate.getSalePrice()>1){
+                if (!eventOptional.get().getType() && discountOrderCreate.getSalePrice() > 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
 
                 }
 
-                discountOrder=discountOrderRepository.save(discountOrder);
-                List<DiscountOrder> discountOrders=eventOptional.get().getDiscountOrders();
+                discountOrder = discountOrderRepository.save(discountOrder);
+                List<DiscountOrder> discountOrders = eventOptional.get().getDiscountOrders();
                 discountOrders.add(discountOrder);
                 eventOptional.get().setDiscountOrders(discountOrders);
                 eventRepository.save(eventOptional.get());
@@ -129,17 +132,17 @@ public class DiscountOrderController {
     public ResponseEntity<?> update(@RequestBody DiscountOrderUpdate discountOrderUpdate) {
         try {
             Optional<DiscountOrder> discountOrderOptional = discountOrderRepository.findById(discountOrderUpdate.getId());
-            if ( discountOrderOptional.isPresent()) {
-                Event event= discountOrderOptional.get().getEvent();
-                if(discountOrderUpdate.getOrderMaxRange()<discountOrderUpdate.getOrderMinRange()){
+            if (discountOrderOptional.isPresent()) {
+                Event event = discountOrderOptional.get().getEvent();
+                if (discountOrderUpdate.getOrderMaxRange() < discountOrderUpdate.getOrderMinRange()) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
 
                 }
-                if(event.getType()&& discountOrderUpdate.getSalePrice()<1){
+                if (event.getType() && discountOrderUpdate.getSalePrice() < 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
 
                 }
-                if(!event.getType()&& discountOrderUpdate.getSalePrice()>1){
+                if (!event.getType() && discountOrderUpdate.getSalePrice() > 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
 
                 }

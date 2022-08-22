@@ -1,7 +1,5 @@
 package com.example.adambackend.repository;
 
-import com.example.adambackend.entities.Category;
-import com.example.adambackend.entities.Size;
 import com.example.adambackend.entities.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,6 +23,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     @Query(value = "select * from tags where is_active=1 and is_deleted=0 order by create_date desc", nativeQuery = true)
     List<Tag> findAll();
+
     @Query(value = "select c from Tag c where c.isActive=true and c.isDelete=false and  c.tagName like concat('%',:name,'%') order by c.createDate desc")
-    List<Tag> findAll(@Param("name")  String name);
+    List<Tag> findAll(@Param("name") String name);
 }

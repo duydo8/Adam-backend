@@ -13,7 +13,7 @@ public class AccountAdminDTO {
     private String email;
     private String password;
     private Boolean isActive;
-    private Double priority;
+
 
 
 }

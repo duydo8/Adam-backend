@@ -14,8 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000000)
@@ -93,7 +94,7 @@ public class OrderWebsiteController {
                         detailOrder.setIsActive(true);
                         detailOrder.setDetailProduct(detailProduct);
                         detailOrder.setOrder(order);
-                        String x1= RandomString.make(64)+ order.getId();
+                        String x1 = RandomString.make(64) + order.getId();
                         detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
 
@@ -109,36 +110,36 @@ public class OrderWebsiteController {
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
 
-                String code = RandomString.make(64)+order.getId();
+                String code = RandomString.make(64) + order.getId();
 
-                List<Integer> idx= new ArrayList<>();
-                List<Event> events= eventRepository.findAllByTime();
-                for (Event e: events
-                     ) {
-                    List<DiscountOrder> discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
-                    for (DiscountOrder d: discountOrders
-                         ) {
+                List<Integer> idx = new ArrayList<>();
+                List<Event> events = eventRepository.findAllByTime();
+                for (Event e : events
+                ) {
+                    List<DiscountOrder> discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+                    for (DiscountOrder d : discountOrders
+                    ) {
                         idx.add(d.getId());
                     }
 
                 }
                 System.out.println(idx);
-                Double salePrice=0.0;
-                Double salePricePercent=0.0;
-                for (Integer x: idx
-                     ) {
-                    DiscountOrder discountOrder=discountOrderRepository.getById(x);
+                Double salePrice = 0.0;
+                Double salePricePercent = 0.0;
+                for (Integer x : idx
+                ) {
+                    DiscountOrder discountOrder = discountOrderRepository.getById(x);
 
-                    if(discountOrder.getSalePrice()<1){
-                        salePricePercent+= discountOrder.getSalePrice();
+                    if (discountOrder.getSalePrice() < 1) {
+                        salePricePercent += discountOrder.getSalePrice();
 
-                    }else {
+                    } else {
                         salePrice += discountOrder.getSalePrice();
                     }
                 }
-                Double totalSalePrice=salePrice + (salePricePercent*ammountPrice);
+                Double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
                 order.setSalePrice(totalSalePrice);
-                totalPrice=ammountPrice-totalSalePrice;
+                totalPrice = ammountPrice - totalSalePrice;
                 order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);

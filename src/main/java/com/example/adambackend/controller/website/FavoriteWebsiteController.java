@@ -68,7 +68,7 @@ public class FavoriteWebsiteController {
             Optional<Product> productOptional = productSevice.findById(productId);
             if (productOptional.isPresent() && accountOptional.isPresent()) {
                 if (favorite.isPresent()) {
-                    favoriteService.deleteByIdAccountAndProduct(accountId,productId);
+                    favoriteService.deleteByIdAccountAndProduct(accountId, productId);
                     return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
 
                 } else {

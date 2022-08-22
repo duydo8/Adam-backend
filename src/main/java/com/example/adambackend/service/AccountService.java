@@ -26,7 +26,9 @@ public interface AccountService {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+
     Boolean existsByPhoneNumber(String phoneNumber);
+
     AccountDTOs findByIds(Integer id);
 
 

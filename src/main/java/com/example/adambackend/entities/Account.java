@@ -19,6 +19,21 @@ import java.util.List;
 
 public class Account {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Address> addresses = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Comment> commentList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Favorite> favoriteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<CartItems> cartItemsList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    List<Order> orderList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,22 +59,6 @@ public class Account {
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Address> addresses = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Comment> commentList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Favorite> favoriteList;
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<CartItems> cartItemsList = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Order> orderList = new ArrayList<>();
     public Account(String username, String email, String password, String phoneNumber, String fullName) {
         this.username = username;
         this.email = email;

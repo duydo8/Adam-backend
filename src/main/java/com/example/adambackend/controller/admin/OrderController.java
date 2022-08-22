@@ -2,7 +2,6 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
-
 import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
 import com.example.adambackend.payload.order.*;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -17,7 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,28 +52,27 @@ public class OrderController {
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam(value = "status", required = false)
-                                                  Integer status,
+                                              Integer status,
                                               @RequestParam("page") Integer page,
-                                              @RequestParam("size") Integer size)
-                                               {
+                                              @RequestParam("size") Integer size) {
         try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
-            Integer totalElement=orderService.countTotalElementOrder(status);
-            List<OrderFindAll> orderFindAlls= orderService.findByStatus(pageable,status);
+            Integer totalElement = orderService.countTotalElementOrder(status);
+            List<OrderFindAll> orderFindAlls = orderService.findByStatus(pageable, status);
 
-            List<OrderFindAllResponse> orderFindAllResponses=  orderFindAlls.stream()
-                    .map(e->new OrderFindAllResponse(e.getId(),e.getStatus(),e.getCreateDate(),
-                            accountService.findByIds(e.getAccountId()),e.getFullName(),e.getPhoneNumber(),e.getAmountPrice(),
-                            e.getSalePrice(),e.getTotalPrice(),addressRepository.
-                            findByAddressId(e.getAddressId()),e.getAddressDetail(),e.getOrderCode()
-                            ,detailOrderService.findByOrderId(e.getId()).stream().map(c->new DetailOrderPayLoad(c.getId(),c.getQuantity(),
-                            c.getTotalPrice(),detailProductService.findById(c.getDetailProductId()).get(),c.getIsActive()
-                    ,c.getCreateDate(),detailOrderService.findCodeById(c.getId()))).collect(Collectors.toList())
-                            ))
+            List<OrderFindAllResponse> orderFindAllResponses = orderFindAlls.stream()
+                    .map(e -> new OrderFindAllResponse(e.getId(), e.getStatus(), e.getCreateDate(),
+                            accountService.findByIds(e.getAccountId()), e.getFullName(), e.getPhoneNumber(), e.getAmountPrice(),
+                            e.getSalePrice(), e.getTotalPrice(), addressRepository.
+                            findByAddressId(e.getAddressId()), e.getAddressDetail(), e.getOrderCode()
+                            , detailOrderService.findByOrderId(e.getId()).stream().map(c -> new DetailOrderPayLoad(c.getId(), c.getQuantity(),
+                            c.getTotalPrice(), detailProductService.findById(c.getDetailProductId()).get(), c.getIsActive()
+                            , c.getCreateDate(), detailOrderService.findCodeById(c.getId()))).collect(Collectors.toList())
+                    ))
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(new OrderAdmin(orderFindAllResponses,totalElement), 200, "Page Order"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(new OrderAdmin(orderFindAllResponses, totalElement), 200, "Page Order"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -155,23 +156,21 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @PostMapping("updateReturnOrder")
-    public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn){
-        Optional<Order> orderOptional=orderService.findByCode(orderReturn.getOrderCode());
-        if( orderOptional.isPresent()){
-        for (String x: orderReturn.getDetailCode()
-             ) {
-            DetailOrder detailOrder= detailOrderService.findByCode(x);
+    public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn) {
+        Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
+        if (orderOptional.isPresent()) {
+            for (String x : orderReturn.getDetailCode()
+            ) {
+                DetailOrder detailOrder = detailOrderService.findByCode(x);
+                detailOrderService.updateReason(orderReturn.getReason(), detailOrder.getId());
+                orderService.updateReturnOrder(orderReturn.getReturnPrice(), orderReturn.getTotalPrice(), orderReturn.getStatus(), orderOptional.get().getId());
+            }
 
-                detailOrderService.updateReason(orderReturn.getReason(),detailOrder.getId());
-                orderService.updateReturnOrder(orderReturn.getReturnPrice(),orderReturn.getTotalPrice(),orderReturn.getStatus(),orderOptional.get().getId());
-
-
-        }
-        
             return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
 
-        }else{
+        } else {
             return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
 
         }
@@ -254,8 +253,6 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi... "));
         }
     }
-
-
 
 
     @GetMapping("orderSatistic")
@@ -403,7 +400,7 @@ public class OrderController {
                         detailOrder.setIsActive(true);
                         detailOrder.setDetailProduct(detailProduct);
                         detailOrder.setOrder(order);
-                        String x1= RandomString.make(64)+ order.getId();
+                        String x1 = RandomString.make(64) + order.getId();
                         detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
 
@@ -419,37 +416,37 @@ public class OrderController {
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
 
-                String code = RandomString.make(64)+order.getId();
+                String code = RandomString.make(64) + order.getId();
 
-                List<Integer> idx= new ArrayList<>();
-                List<DiscountOrder> discountOrders= new ArrayList<>();
-                List<Event> events= eventRepository.findAllByTime();
-                for (Event e: events
+                List<Integer> idx = new ArrayList<>();
+                List<DiscountOrder> discountOrders = new ArrayList<>();
+                List<Event> events = eventRepository.findAllByTime();
+                for (Event e : events
                 ) {
-                    discountOrders= discountOrderRepository.findByTotalPriceAndTime(ammountPrice,e.getId());
-                    for (DiscountOrder d: discountOrders
+                    discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+                    for (DiscountOrder d : discountOrders
                     ) {
                         idx.add(d.getId());
                     }
 
                 }
                 System.out.println(idx);
-                Double salePrice=0.0;
-                Double salePricePercent=0.0;
-                for (Integer x: idx
+                Double salePrice = 0.0;
+                Double salePricePercent = 0.0;
+                for (Integer x : idx
                 ) {
-                    DiscountOrder discountOrder=discountOrderRepository.getById(x);
+                    DiscountOrder discountOrder = discountOrderRepository.getById(x);
 
-                    if(discountOrder.getSalePrice()<1){
-                        salePricePercent+= discountOrder.getSalePrice();
+                    if (discountOrder.getSalePrice() < 1) {
+                        salePricePercent += discountOrder.getSalePrice();
 
-                    }else {
+                    } else {
                         salePrice += discountOrder.getSalePrice();
                     }
                 }
-                double totalSalePrice=salePrice + (salePricePercent*ammountPrice);
-                order.setSalePrice((double)Math.round(totalSalePrice));
-                totalPrice=ammountPrice-totalSalePrice;
+                double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
+                order.setSalePrice((double) Math.round(totalSalePrice));
+                totalPrice = ammountPrice - totalSalePrice;
                 order.setOrderCode(code);
                 HistoryOrder historyOrder = new HistoryOrder();
                 order.setTotalPrice(totalPrice);
@@ -475,10 +472,11 @@ public class OrderController {
                     }
                 }
 
-                return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
-            }else {
+                return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, "Thành công"));
+            } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
-            }  } catch (Exception e) {
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }

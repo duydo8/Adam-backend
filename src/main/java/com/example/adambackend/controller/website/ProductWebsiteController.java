@@ -51,6 +51,7 @@ public class ProductWebsiteController {
     MaterialProductRepository materialProductRepository;
     @Autowired
     FavoriteRepository favoriteRepository;
+
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page, @RequestParam("size") int size) {
         try {
@@ -595,7 +596,7 @@ public class ProductWebsiteController {
             Optional<Product> productOptional = productSevice.findById(product_id);
             Boolean isFavorite = false;
             ProductOptionalDTO productOptionalDTO = null;
-            if (productOptional.isPresent() ) {
+            if (productOptional.isPresent()) {
                 if (!favorite.isPresent()) {
 
                     Optional<ProductHandleValue> productHandleValue = productSevice.findOptionWebsiteByProductId(product_id);
@@ -646,7 +647,7 @@ public class ProductWebsiteController {
                         return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "that bai"));
                     }
                 } else {
-                 isFavorite=true;
+                    isFavorite = true;
                     Optional<ProductHandleWebsite> productHandleValue1 = productSevice.findOptionWebsiteByAccountIdProductId(product_id, account_id);
                     if (productHandleValue1.isPresent()) {
                         productOptionalDTO = new ProductOptionalDTO(productHandleValue1.get().getId(),

@@ -12,7 +12,6 @@ import com.example.adambackend.repository.TagProductRepository;
 import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,12 +52,13 @@ public class ProductController {
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
                                               @RequestParam("size") int size
-            , @RequestParam(value = "name",required = false) String name) {
+            , @RequestParam(value = "name", required = false) String name) {
         try {
-            if(name==null){
+            if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(PageRequest.of(page, size)), 200, ""));
 
-            } return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name,PageRequest.of(page, size)), 200, ""));
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, PageRequest.of(page, size)), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

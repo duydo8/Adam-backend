@@ -23,17 +23,18 @@ import java.util.Optional;
 public class AuthTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
     @Autowired
+    UserInfoRepository userInfoRepository;
+    @Autowired
     private JwtUtils jwtUtils;
     @Autowired
     private AccountDetailsServiceImpl accountDetailsService;
-    @Autowired
-    UserInfoRepository userInfoRepository;
-    public Boolean check(String token){
-        Optional<UserInfo> userInfoOptional= userInfoRepository.findByToken(token);
-        if(!userInfoOptional.isPresent()){
+
+    public Boolean check(String token) {
+        Optional<UserInfo> userInfoOptional = userInfoRepository.findByToken(token);
+        if (!userInfoOptional.isPresent()) {
             return false;
-        }else{
-            if(userInfoOptional.get().getIsDeleted()){
+        } else {
+            if (userInfoOptional.get().getIsDeleted()) {
                 return false;
             }
             return true;
@@ -45,7 +46,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)&& check(jwt)) {
+            if (jwt != null && jwtUtils.validateJwtToken(jwt) && check(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = accountDetailsService.loadUserByUsername(username);

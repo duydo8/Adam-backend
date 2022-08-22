@@ -106,12 +106,13 @@ public class CategoryController {
     }
 
     @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name",required = false)String name) {
+    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
-            if(name==null){
+            if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(), 200, ""));
 
-            } return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(name), 200, ""));
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(name), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

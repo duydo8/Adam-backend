@@ -1,6 +1,5 @@
 package com.example.adambackend.repository;
 
-import com.example.adambackend.entities.Category;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.product.ProductTop10Create;
@@ -22,10 +21,13 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true")
     Page<Product> findAll(Pageable pageable);
+
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') order by c.createDate desc")
-    Page<Product> findAll(@Param("name")  String name,Pageable pageable);
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc" )
+    Page<Product> findAll(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc")
     List<Product> findAll();
+
     @Query(value = "select distinct(p.id) as id, p.product_name as productName, p.description as description,p.is_deleted as isDelete," +
             "p.image as image,p.vote_average as VoteAverage, p.create_date as CreateDate,p.is_completed as IsComplete,p.is_active," +
             "MIN(dp.price_export) as  minPrice, MAX(dp.price_export)as maxPrice" +
@@ -52,7 +54,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             " ca.id=?1  or ?1 is null and s.id=?2  or ?2 is null " +
             " and co.id=?3 or ?3 is null and  m.id=?4  or ?4 is null " +
             " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7 and dp.priceExport !=0 " +
-            " GROUP BY pro.productName,pro.image,pro.createDate,pro.id"+
+            " GROUP BY pro.productName,pro.image,pro.createDate,pro.id" +
             " order by pro.id ")
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
                                                           Double bottomPrice, Double topPrice, Pageable pageable);

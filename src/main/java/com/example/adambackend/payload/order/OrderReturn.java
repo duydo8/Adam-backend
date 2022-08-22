@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderReturn {
     private String orderCode;
-    private List<String>  detailCode;
+    private List<String> detailCode;
     private Integer status;
     private Double returnPrice;
     private String reason;

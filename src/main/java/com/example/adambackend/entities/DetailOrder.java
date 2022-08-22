@@ -20,18 +20,18 @@ public class DetailOrder {
     private Integer id;
     private Integer quantity;
     private Double price;
-    @Column(name="total_price")
+    @Column(name = "total_price")
     private Double totalPrice;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @Column(name="detail_order_code")
+    @Column(name = "detail_order_code")
     private String detailOrderCode;
 
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    @Column(name="reason")
+    @Column(name = "reason")
     private String reason;
     @JsonIgnore
     @ManyToOne

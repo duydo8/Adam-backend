@@ -19,8 +19,9 @@ public interface CartItemRepository extends JpaRepository<CartItems, Integer> {
     @Transactional
     @Query(value = "update cart_items set is_active=0 where id=?1", nativeQuery = true)
     void updateIsActive(Integer id);
+
     @Query(value = "select id as id,quantity as quantity,total_price as totalPrice," +
             "account_id as accountId,detail_product_id as detailProductId, is_active as isActive," +
-            "create_date as createDate from cart_items where order_id=?1",nativeQuery = true)
+            "create_date as createDate from cart_items where order_id=?1", nativeQuery = true)
     List<CartItemResponse> findByOrderId(Integer orderId);
 }

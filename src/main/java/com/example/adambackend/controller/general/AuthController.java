@@ -25,11 +25,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,10 +48,6 @@ public class AuthController {
     PasswordEncoder encoder;
 
 
-
-
-
-
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
@@ -66,12 +59,12 @@ public class AuthController {
     @Autowired
     UserInfoRepository userInfoRepository;
     @Value("${jwt.expirationDateInMS}")
-    private  int expirationDateInMS;
+    private int expirationDateInMS;
 
     @PostMapping("authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AccountLoginRequestDto loginRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(     
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -80,35 +73,35 @@ public class AuthController {
             AccountDetailsService userDetails = (AccountDetailsService) authentication.getPrincipal();
             ERoleName roles = accountRepository.findByUsername(loginRequest.getUsername()).get().getRole();
 
-            List<UserInfo> userInfoList= userInfoRepository.findAll();
-            if(userInfoList.size()>0){
-                boolean check= false;
-                for (UserInfo u: userInfoList
-                     ) {
-                    if(u.getUsername().equals(loginRequest.getUsername())){
+            List<UserInfo> userInfoList = userInfoRepository.findAll();
+            if (userInfoList.size() > 0) {
+                boolean check = false;
+                for (UserInfo u : userInfoList
+                ) {
+                    if (u.getUsername().equals(loginRequest.getUsername())) {
                         u.setToken(jwt);
-                        u.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+                        u.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
                         u.setIsDeleted(false);
                         userInfoRepository.save(u);
-                        check=true;
+                        check = true;
                         break;
                     }
                 }
-                if(check=false){
-                    UserInfo userInfo= new UserInfo();
+                if (check = false) {
+                    UserInfo userInfo = new UserInfo();
                     userInfo.setUsername(loginRequest.getUsername());
                     userInfo.setToken(jwt);
-                    userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+                    userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
                     userInfo.setIsDeleted(false);
                     userInfoRepository.save(userInfo);
 
                 }
 
             }
-            UserInfo userInfo= new UserInfo();
+            UserInfo userInfo = new UserInfo();
             userInfo.setUsername(loginRequest.getUsername());
             userInfo.setToken(jwt);
-            userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS/1000));
+            userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
             userInfo.setIsDeleted(false);
             userInfoRepository.save(userInfo);
             return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
@@ -174,46 +167,49 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @GetMapping("logout")
-    public ResponseEntity<?> logout(@RequestParam("token")String token){
-        try{
-            Optional<UserInfo> userInfo= userInfoRepository.findByToken(token);
-            if(userInfo.isPresent()){
+    public ResponseEntity<?> logout(@RequestParam("token") String token) {
+        try {
+            Optional<UserInfo> userInfo = userInfoRepository.findByToken(token);
+            if (userInfo.isPresent()) {
                 userInfo.get().setIsDeleted(true);
-                return ResponseEntity.ok().body(new IGenericResponse<>(userInfoRepository.save(userInfo.get()),200,""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(userInfoRepository.save(userInfo.get()), 200, ""));
             }
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
 
         }
     }
+
     @PostMapping("forgotPassword")
-    public ResponseEntity<?> forgotPassword(@RequestParam("username")String username,
-                                  @RequestParam("phone_number")String phoneNumber,
-                                  @RequestParam("code")String code){
-        Optional<Account> accountOptional= accountService.findByUsername(username);
-        if(accountOptional.isPresent()&& accountOptional.get().getPhoneNumber().equals(phoneNumber)){
+    public ResponseEntity<?> forgotPassword(@RequestParam("username") String username,
+                                            @RequestParam("phone_number") String phoneNumber,
+                                            @RequestParam("code") String code) {
+        Optional<Account> accountOptional = accountService.findByUsername(username);
+        if (accountOptional.isPresent() && accountOptional.get().getPhoneNumber().equals(phoneNumber)) {
             int code1 = new Random().nextInt(999999);
             accountOptional.get().setVerificationCode(code1);
             accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
             TwilioSendSms twilioSendSms = new TwilioSendSms();
             twilioSendSms.sendCode(accountOptional.get().getPhoneNumber(), code1);
             return ResponseEntity.ok(new IGenericResponse<>
-                    ("code đã được gửi hiệu lực trong 30p",200,""));
-        }else {
+                    ("code đã được gửi hiệu lực trong 30p", 200, ""));
+        } else {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("ko tìm thấy", 400, ""));
         }
     }
+
     @GetMapping("verify")
     public ResponseEntity<?> verify(@RequestParam("code") String code, @RequestParam("id") Integer id) {
         try {
             Optional<Account> accountOptional = accountService.findById(id);
             if (accountOptional.isPresent()) {
                 if (accountOptional.get().getVerificationCode().equals(code)
-                        && accountOptional.get().getTimeValid().isBefore(LocalDateTime.now())  ) {
+                        && accountOptional.get().getTimeValid().isBefore(LocalDateTime.now())) {
                     accountOptional.get().setIsActive(true);
                     ;
                     return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, "thành công"));
