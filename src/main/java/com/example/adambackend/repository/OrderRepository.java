@@ -71,7 +71,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "update orders set return_order_price=?1,total_price=?2,status=?3 where id=?4", nativeQuery = true)
-    void updateReturnOrder(Double returnPrice, Double totalPrice, Integer status, Integer id);
+    @Query(value = "update orders set return_order_price=?1,amount_price=?2,total_price=?3,status=?4 where id=?5", nativeQuery = true)
+    void updateReturnOrder(Double returnPrice,Double amountPrice, Double totalPrice, Integer status, Integer id);
 }
 

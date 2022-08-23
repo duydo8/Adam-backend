@@ -1,5 +1,6 @@
-package com.example.adambackend.payload.cart;
+package com.example.adambackend.payload.order;
 
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,16 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class CartItemWebsiteCreate {
-
+public class OrderPayBackResponse {
     private Integer quantity;
-
-
-
-    private Integer accountId;
-
-    private Integer detailProductId;
-
+    private Double totalPrice;
 
 }

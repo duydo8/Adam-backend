@@ -2,6 +2,7 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.entities.*;
 import com.example.adambackend.exception.HandleExceptionDemo;
+import com.example.adambackend.payload.detailOrder.DetailOrderAdminPayBack;
 import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
 import com.example.adambackend.payload.order.*;
 import com.example.adambackend.payload.response.IGenericResponse;
@@ -159,24 +160,122 @@ public class OrderController {
 
     @PostMapping("updateReturnOrder")
     public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn) {
-        Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
-        if (orderOptional.isPresent()) {
-            for (String x : orderReturn.getDetailCode()
-            ) {
-                DetailOrder detailOrder = detailOrderService.findByCode(x);
-                detailOrderService.updateReason(orderReturn.getReason(), detailOrder.getId());
-                orderService.updateReturnOrder(orderReturn.getReturnPrice(), orderReturn.getTotalPrice(), orderReturn.getStatus(), orderOptional.get().getId());
+try {
+    Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
+    if (orderOptional.isPresent()) {
+        List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
+        Integer totalQuantity = 0;
+        Double returnPrice = 0.0;
+Double amountPrice=0.0;
+        for (DetailOrderAdminPayBack x : detailOrderCode
+        ) {
+
+            DetailOrder detailOrder = detailOrderService.findByCode(x.getDetailOrderCode());
+            if (detailOrder.getQuantity() < x.getQuantity()) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không được trừ số lượng lớn hơn số lượng đã mua"));
             }
+            if (x.getQuantity() < 0) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không hợp lệ"));
+            }
+            detailOrderService.updateReason(orderReturn.getReason(), detailOrder.getId());
+            returnPrice += detailOrder.getPrice() * x.getQuantity()*0.2;
+            amountPrice+=detailOrder.getPrice()*detailOrder.getQuantity();
+            totalQuantity += x.getQuantity();
+            DetailProduct detailProduct= detailOrder.getDetailProduct();
+            detailProduct.setQuantity(detailProduct.getQuantity()+x.getQuantity());
+            detailProductService.save(detailProduct);
+            if(detailOrder.getQuantity()==x.getQuantity()){
+                detailOrderService.deleteById(detailOrder.getId());
+            }
+        }
+        returnPrice = returnPrice + 30000;
+        Double totalAmountPrice = orderOptional.get().getAmountPrice()-amountPrice ;
+        Double salePrice= getSalePrice(totalAmountPrice);
+        Double totalPrice=totalAmountPrice-salePrice+returnPrice;
+        HistoryOrder historyOrder = new HistoryOrder();
+        historyOrder.setOrder(orderOptional.get());
+        historyOrder.setUpdateTime(LocalDateTime.now());
+        historyOrder.setStatus(orderReturn.getStatus());
+        historyOrder.setIsActive(true);
+        historyOrder.setDescription("order payback");
+        historyOrder.setTotalPrice(totalPrice);
+        historyOrderRepository.save(historyOrder);
+        orderService.updateReturnOrder(returnPrice,totalAmountPrice, totalPrice, orderReturn.getStatus(), orderOptional.get().getId());
+        return ResponseEntity.ok().body(new IGenericResponse<>(new OrderPayBackResponse(totalQuantity,totalPrice), 200, "thanh cong"));
+    } else {
+        return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
+    }
+}catch (Exception e){
+    return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+}
+    }
+    @PutMapping("updateOrderPayBack")
+public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orderUpdatePayBack){
 
-            return ResponseEntity.ok().body(new IGenericResponse<>(200, "thanh cong"));
+        Optional<Order> orderOptional= orderService.findById(orderUpdatePayBack.getOrderId());
+        List<CartItems> cartItemsList = orderOptional.get().getCartItems();
+        Double ammountPrice = orderOptional.get().getAmountPrice();
+        for (Integer x : orderUpdatePayBack.getCartItemIds()
+        ) {
+            Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+            if (cartItemsOptional.isPresent()) {
 
-        } else {
-            return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
+                cartItemsList.add(cartItemsOptional.get());
+                DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
+                if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
+                    return ResponseEntity.badRequest().
+                            body(new HandleExceptionDemo(400, "Không đủ số lượng "));
+                }
+
+                ammountPrice += cartItemsOptional.get().getTotalPrice();
+                detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
+                detailProductService.save(detailProduct);
+                cartItemService.updateIsActive(x);
+                DetailOrder detailOrder = new DetailOrder();
+                detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
+                detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
+                detailOrder.setCreateDate(LocalDateTime.now());
+                detailOrder.setPrice(detailProduct.getPriceExport());
+                detailOrder.setIsDeleted(false);
+                detailOrder.setIsActive(true);
+                detailOrder.setDetailProduct(detailProduct);
+                detailOrder.setOrder(orderOptional.get());
+                String x1 = RandomString.make(64) + orderOptional.get().getId();
+                detailOrder.setDetailOrderCode(x1);
+                detailOrderService.save(detailOrder);
+            }
+        }
+        orderOptional.get().setAmountPrice(ammountPrice);
+        orderOptional.get().setCartItems(cartItemsList);
+        Double salePrice=getSalePrice(ammountPrice);
+        System.out.println(salePrice);
+        orderOptional.get().setSalePrice(salePrice);
+        orderOptional.get().setTotalPrice(ammountPrice-salePrice);
+        Order order = orderService.save(orderOptional.get());
+        HistoryOrder historyOrder = new HistoryOrder();
+        historyOrder.setOrder(orderService.findById(order.getId()).get());
+        historyOrder.setDescription("create time");
+        historyOrder.setUpdateTime(LocalDateTime.now());
+        historyOrder.setIsActive(true);
+        historyOrder.setTotalPrice(order.getTotalPrice());
+        historyOrder.setStatus(1);
+        historyOrder = historyOrderRepository.save(historyOrder);
+        List<HistoryOrder> historyOrders = orderOptional.get().getHistoryOrders();
+        historyOrders.add(historyOrder);
+        order.setHistoryOrders(historyOrders);
+        order = orderService.save(order);
+        for (Integer x : orderUpdatePayBack.getCartItemIds()
+        ) {
+            Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+            if (cartItemsOptional.isPresent()) {
+                cartItemsOptional.get().setOrder(order);
+                cartItemService.save(cartItemsOptional.get());
+            }
         }
 
+        return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, "Thành công"));
     }
-
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Order order) {
         try {
@@ -349,7 +448,36 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+public Double getSalePrice(Double ammountPrice){
+    List<Integer> idx = new ArrayList<>();
+    List<DiscountOrder> discountOrders = new ArrayList<>();
+    List<Event> events = eventRepository.findAllByTime();
+    for (Event e : events
+    ) {
+        discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+        for (DiscountOrder d : discountOrders
+        ) {
+            idx.add(d.getId());
+        }
 
+    }
+    System.out.println(idx);
+    Double salePrice = 0.0;
+    Double salePricePercent = 0.0;
+    for (Integer x : idx
+    ) {
+        DiscountOrder discountOrder = discountOrderRepository.getById(x);
+
+        if (discountOrder.getSalePrice() < 1) {
+            salePricePercent += discountOrder.getSalePrice();
+
+        } else {
+            salePrice += discountOrder.getSalePrice();
+        }
+    }
+    double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
+    return totalSalePrice;
+}
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
@@ -411,58 +539,21 @@ public class OrderController {
                 order.setAmountPrice(ammountPrice);
                 order.setCartItems(cartItemsList);
                 Double totalPrice = 0.0;
+
+
+                String code = RandomString.make(64) + order.getId();
+
+               Double totalSalePrice= getSalePrice(ammountPrice);
+                order.setSalePrice((double) Math.round(totalSalePrice));
+                totalPrice = ammountPrice - totalSalePrice;
+                order.setOrderCode(code);
+
+                order.setTotalPrice(totalPrice);
                 if (totalPrice > 5000000) {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
                             "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
                 }
 
-                String code = RandomString.make(64) + order.getId();
-
-                List<Integer> idx = new ArrayList<>();
-                List<DiscountOrder> discountOrders = new ArrayList<>();
-                List<Event> events = eventRepository.findAllByTime();
-                for (Event e : events
-                ) {
-                    discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
-                    for (DiscountOrder d : discountOrders
-                    ) {
-                        idx.add(d.getId());
-                    }
-
-                }
-                System.out.println(idx);
-                Double salePrice = 0.0;
-                Double salePricePercent = 0.0;
-                for (Integer x : idx
-                ) {
-                    DiscountOrder discountOrder = discountOrderRepository.getById(x);
-
-                    if (discountOrder.getSalePrice() < 1) {
-                        salePricePercent += discountOrder.getSalePrice();
-
-                    } else {
-                        salePrice += discountOrder.getSalePrice();
-                    }
-                }
-                double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
-                order.setSalePrice((double) Math.round(totalSalePrice));
-                totalPrice = ammountPrice - totalSalePrice;
-                order.setOrderCode(code);
-                HistoryOrder historyOrder = new HistoryOrder();
-                order.setTotalPrice(totalPrice);
-                order = orderService.save(order);
-
-                historyOrder.setOrder(orderService.findById(order.getId()).get());
-                historyOrder.setDescription("create time");
-                historyOrder.setUpdateTime(LocalDateTime.now());
-                historyOrder.setIsActive(true);
-                historyOrder.setTotalPrice(order.getTotalPrice());
-                historyOrder.setStatus(1);
-                historyOrder = historyOrderRepository.save(historyOrder);
-                List<HistoryOrder> historyOrders = new ArrayList<>();
-                historyOrders.add(historyOrder);
-                order.setHistoryOrders(historyOrders);
-                order = orderService.save(order);
                 for (Integer x : orderWebsiteCreate.getCartItemIdList()
                 ) {
                     Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
