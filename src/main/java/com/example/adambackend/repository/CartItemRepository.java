@@ -15,7 +15,8 @@ import java.util.Optional;
 public interface CartItemRepository extends JpaRepository<CartItems, Integer> {
     @Query(value = "select * from cart_items where account_id=?1 and is_active=1 and order_id is null", nativeQuery = true)
     List<CartItems> findCartItemsByAccountId(Integer id);
-    @Query(value = "select  * from cart_items where order_id !=null and id=?1",nativeQuery = true)
+
+    @Query(value = "select  * from cart_items where order_id !=null and id=?1", nativeQuery = true)
     Optional<CartItems> findById(Integer id);
 
     @Modifying

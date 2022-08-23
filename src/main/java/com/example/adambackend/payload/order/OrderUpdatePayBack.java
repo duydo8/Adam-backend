@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.ElementCollection;
-import java.util.Iterator;
 import java.util.List;
 
 @Data

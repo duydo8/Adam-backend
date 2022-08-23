@@ -160,59 +160,60 @@ public class OrderController {
 
     @PostMapping("updateReturnOrder")
     public ResponseEntity<?> updateReturnOrder(@RequestBody OrderReturn orderReturn) {
-try {
-    Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
-    if (orderOptional.isPresent()) {
-        List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
-        Integer totalQuantity = 0;
-        Double returnPrice = 0.0;
-Double amountPrice=0.0;
-        for (DetailOrderAdminPayBack x : detailOrderCode
-        ) {
+        try {
+            Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
+            if (orderOptional.isPresent()) {
+                List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
+                Integer totalQuantity = 0;
+                Double returnPrice = 0.0;
+                Double amountPrice = 0.0;
+                for (DetailOrderAdminPayBack x : detailOrderCode
+                ) {
 
-            DetailOrder detailOrder = detailOrderService.findByCode(x.getDetailOrderCode());
-            if (detailOrder.getQuantity() < x.getQuantity()) {
-                return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không được trừ số lượng lớn hơn số lượng đã mua"));
+                    DetailOrder detailOrder = detailOrderService.findByCode(x.getDetailOrderCode());
+                    if (detailOrder.getQuantity() < x.getQuantity()) {
+                        return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không được trừ số lượng lớn hơn số lượng đã mua"));
+                    }
+                    if (x.getQuantity() < 0) {
+                        return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không hợp lệ"));
+                    }
+                    detailOrderService.updateReason(orderReturn.getReason(), detailOrder.getId());
+                    returnPrice += detailOrder.getPrice() * x.getQuantity() * 0.2;
+                    amountPrice += detailOrder.getPrice() * detailOrder.getQuantity();
+                    totalQuantity += x.getQuantity();
+                    DetailProduct detailProduct = detailOrder.getDetailProduct();
+                    detailProduct.setQuantity(detailProduct.getQuantity() + x.getQuantity());
+                    detailProductService.save(detailProduct);
+                    if (detailOrder.getQuantity() == x.getQuantity()) {
+                        detailOrderService.deleteById(detailOrder.getId());
+                    }
+                }
+                returnPrice = returnPrice + 30000;
+                Double totalAmountPrice = orderOptional.get().getAmountPrice() - amountPrice;
+                Double salePrice = getSalePrice(totalAmountPrice);
+                Double totalPrice = totalAmountPrice - salePrice + returnPrice;
+                HistoryOrder historyOrder = new HistoryOrder();
+                historyOrder.setOrder(orderOptional.get());
+                historyOrder.setUpdateTime(LocalDateTime.now());
+                historyOrder.setStatus(orderReturn.getStatus());
+                historyOrder.setIsActive(true);
+                historyOrder.setDescription("order payback");
+                historyOrder.setTotalPrice(totalPrice);
+                historyOrderRepository.save(historyOrder);
+                orderService.updateReturnOrder(returnPrice, totalAmountPrice, totalPrice, orderReturn.getStatus(), orderOptional.get().getId());
+                return ResponseEntity.ok().body(new IGenericResponse<>(new OrderPayBackResponse(totalQuantity, totalPrice), 200, "thanh cong"));
+            } else {
+                return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
             }
-            if (x.getQuantity() < 0) {
-                return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không hợp lệ"));
-            }
-            detailOrderService.updateReason(orderReturn.getReason(), detailOrder.getId());
-            returnPrice += detailOrder.getPrice() * x.getQuantity()*0.2;
-            amountPrice+=detailOrder.getPrice()*detailOrder.getQuantity();
-            totalQuantity += x.getQuantity();
-            DetailProduct detailProduct= detailOrder.getDetailProduct();
-            detailProduct.setQuantity(detailProduct.getQuantity()+x.getQuantity());
-            detailProductService.save(detailProduct);
-            if(detailOrder.getQuantity()==x.getQuantity()){
-                detailOrderService.deleteById(detailOrder.getId());
-            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
         }
-        returnPrice = returnPrice + 30000;
-        Double totalAmountPrice = orderOptional.get().getAmountPrice()-amountPrice ;
-        Double salePrice= getSalePrice(totalAmountPrice);
-        Double totalPrice=totalAmountPrice-salePrice+returnPrice;
-        HistoryOrder historyOrder = new HistoryOrder();
-        historyOrder.setOrder(orderOptional.get());
-        historyOrder.setUpdateTime(LocalDateTime.now());
-        historyOrder.setStatus(orderReturn.getStatus());
-        historyOrder.setIsActive(true);
-        historyOrder.setDescription("order payback");
-        historyOrder.setTotalPrice(totalPrice);
-        historyOrderRepository.save(historyOrder);
-        orderService.updateReturnOrder(returnPrice,totalAmountPrice, totalPrice, orderReturn.getStatus(), orderOptional.get().getId());
-        return ResponseEntity.ok().body(new IGenericResponse<>(new OrderPayBackResponse(totalQuantity,totalPrice), 200, "thanh cong"));
-    } else {
-        return ResponseEntity.ok().body(new IGenericResponse<>(200, "ko tim thay"));
     }
-}catch (Exception e){
-    return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
-}
-    }
-    @PutMapping("updateOrderPayBack")
-public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orderUpdatePayBack){
 
-        Optional<Order> orderOptional= orderService.findById(orderUpdatePayBack.getOrderId());
+    @PutMapping("updateOrderPayBack")
+    public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orderUpdatePayBack) {
+
+        Optional<Order> orderOptional = orderService.findById(orderUpdatePayBack.getOrderId());
         List<CartItems> cartItemsList = orderOptional.get().getCartItems();
         Double ammountPrice = orderOptional.get().getAmountPrice();
         for (Integer x : orderUpdatePayBack.getCartItemIds()
@@ -248,10 +249,10 @@ public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orde
         }
         orderOptional.get().setAmountPrice(ammountPrice);
         orderOptional.get().setCartItems(cartItemsList);
-        Double salePrice=getSalePrice(ammountPrice);
+        Double salePrice = getSalePrice(ammountPrice);
         System.out.println(salePrice);
         orderOptional.get().setSalePrice(salePrice);
-        orderOptional.get().setTotalPrice(ammountPrice-salePrice);
+        orderOptional.get().setTotalPrice(ammountPrice - salePrice);
         Order order = orderService.save(orderOptional.get());
         HistoryOrder historyOrder = new HistoryOrder();
         historyOrder.setOrder(orderService.findById(order.getId()).get());
@@ -276,6 +277,7 @@ public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orde
 
         return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, "Thành công"));
     }
+
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody Order order) {
         try {
@@ -448,36 +450,38 @@ public ResponseEntity<?> updateOrderPayBack(@RequestBody OrderUpdatePayBack orde
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-public Double getSalePrice(Double ammountPrice){
-    List<Integer> idx = new ArrayList<>();
-    List<DiscountOrder> discountOrders = new ArrayList<>();
-    List<Event> events = eventRepository.findAllByTime();
-    for (Event e : events
-    ) {
-        discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
-        for (DiscountOrder d : discountOrders
+
+    public Double getSalePrice(Double ammountPrice) {
+        List<Integer> idx = new ArrayList<>();
+        List<DiscountOrder> discountOrders = new ArrayList<>();
+        List<Event> events = eventRepository.findAllByTime();
+        for (Event e : events
         ) {
-            idx.add(d.getId());
+            discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+            for (DiscountOrder d : discountOrders
+            ) {
+                idx.add(d.getId());
+            }
+
         }
+        System.out.println(idx);
+        Double salePrice = 0.0;
+        Double salePricePercent = 0.0;
+        for (Integer x : idx
+        ) {
+            DiscountOrder discountOrder = discountOrderRepository.getById(x);
 
-    }
-    System.out.println(idx);
-    Double salePrice = 0.0;
-    Double salePricePercent = 0.0;
-    for (Integer x : idx
-    ) {
-        DiscountOrder discountOrder = discountOrderRepository.getById(x);
+            if (discountOrder.getSalePrice() < 1) {
+                salePricePercent += discountOrder.getSalePrice();
 
-        if (discountOrder.getSalePrice() < 1) {
-            salePricePercent += discountOrder.getSalePrice();
-
-        } else {
-            salePrice += discountOrder.getSalePrice();
+            } else {
+                salePrice += discountOrder.getSalePrice();
+            }
         }
+        double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
+        return totalSalePrice;
     }
-    double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
-    return totalSalePrice;
-}
+
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
@@ -543,7 +547,7 @@ public Double getSalePrice(Double ammountPrice){
 
                 String code = RandomString.make(64) + order.getId();
 
-               Double totalSalePrice= getSalePrice(ammountPrice);
+                Double totalSalePrice = getSalePrice(ammountPrice);
                 order.setSalePrice((double) Math.round(totalSalePrice));
                 totalPrice = ammountPrice - totalSalePrice;
                 order.setOrderCode(code);
@@ -572,35 +576,36 @@ public Double getSalePrice(Double ammountPrice){
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-@GetMapping("findSalePrice")
-public ResponseEntity<?> findSalePrice(@RequestParam("amount_price") Double ammountPrice){
-    List<Integer> idx = new ArrayList<>();
-    List<DiscountOrder> discountOrders = new ArrayList<>();
-    List<Event> events = eventRepository.findAllByTime();
-    for (Event e : events
-    ) {
-        discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
-        for (DiscountOrder d : discountOrders
+
+    @GetMapping("findSalePrice")
+    public ResponseEntity<?> findSalePrice(@RequestParam("amount_price") Double ammountPrice) {
+        List<Integer> idx = new ArrayList<>();
+        List<DiscountOrder> discountOrders = new ArrayList<>();
+        List<Event> events = eventRepository.findAllByTime();
+        for (Event e : events
         ) {
-            idx.add(d.getId());
+            discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+            for (DiscountOrder d : discountOrders
+            ) {
+                idx.add(d.getId());
+            }
+
         }
+        Double salePrice = 0.0;
+        Double salePricePercent = 0.0;
+        for (Integer x : idx
+        ) {
+            DiscountOrder discountOrder = discountOrderRepository.getById(x);
 
-    }
-    Double salePrice = 0.0;
-    Double salePricePercent = 0.0;
-    for (Integer x : idx
-    ) {
-        DiscountOrder discountOrder = discountOrderRepository.getById(x);
+            if (discountOrder.getSalePrice() < 1) {
+                salePricePercent += discountOrder.getSalePrice();
 
-        if (discountOrder.getSalePrice() < 1) {
-            salePricePercent += discountOrder.getSalePrice();
-
-        } else {
-            salePrice += discountOrder.getSalePrice();
+            } else {
+                salePrice += discountOrder.getSalePrice();
+            }
         }
+        return ResponseEntity.ok().body(new IGenericResponse<>(salePrice + (salePricePercent * ammountPrice), 200, "thành công"));
     }
-    return ResponseEntity.ok().body(new IGenericResponse<>(salePrice + (salePricePercent * ammountPrice),200,"thành công"));
-}
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {

@@ -15,5 +15,4 @@ public class AccountAdminDTO {
     private Boolean isActive;
 
 
-
 }

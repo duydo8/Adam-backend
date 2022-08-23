@@ -13,7 +13,6 @@ public class CartItemWebsiteCreate {
     private Integer quantity;
 
 
-
     private Integer accountId;
 
     private Integer detailProductId;
