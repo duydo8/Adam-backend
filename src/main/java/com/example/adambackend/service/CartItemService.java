@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface CartItemService {
 
     Optional<CartItems> findById(Integer id);
+    Optional<CartItems> findByIds(Integer id);
 
     List<CartItemResponse> findByOrderId(Integer orderId);
 

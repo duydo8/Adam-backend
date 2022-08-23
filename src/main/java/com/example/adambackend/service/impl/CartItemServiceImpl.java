@@ -16,6 +16,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Autowired
     CartItemRepository cartItemRepository;
 
+
     @Override
     public List<CartItems> findAll() {
         return cartItemRepository.findAll();
@@ -34,6 +35,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public Optional<CartItems> findById(Integer id) {
         return cartItemRepository.findById(id);
+    }
+
+    @Override
+    public Optional<CartItems> findByIds(Integer id) {
+        return cartItemRepository.findByIds(id);
     }
 
     @Override

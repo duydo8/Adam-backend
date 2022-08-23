@@ -464,7 +464,7 @@ public class OrderController {
             }
 
         }
-        System.out.println(idx);
+
         Double salePrice = 0.0;
         Double salePricePercent = 0.0;
         for (Integer x : idx
@@ -508,7 +508,7 @@ public class OrderController {
 //
                 for (Integer x : orderWebsiteCreate.getCartItemIdList()
                 ) {
-                    Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+                    Optional<CartItems> cartItemsOptional = cartItemService.findByIds(x);
                     if (cartItemsOptional.isPresent()) {
 
                         cartItemsList.add(cartItemsOptional.get());
