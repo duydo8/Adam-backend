@@ -47,9 +47,13 @@ public class AccountWebsiteController {
             Optional<Account> account = accountService.findByPhoneNumber(signUpRequest.getPhoneNumber());
 
             if (account.isPresent()) {
+                account.get().setUsername(signUpRequest.getUsername());
+                account.get().setEmail(signUpRequest.getEmail());
+                account.get().setFullName(signUpRequest.getFullName());
                 account.get().setCreateDate(LocalDateTime.now());
                 account.get().setIsActive(true);
                 account.get().setIsDelete(false);
+                account.get().setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
                     account.get().setRole(ERoleName.Admin);
                 } else {
