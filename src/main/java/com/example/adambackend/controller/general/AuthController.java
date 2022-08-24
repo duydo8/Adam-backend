@@ -185,21 +185,28 @@ public class AuthController {
         }
     }
 
-    @PostMapping("forgotPassword")
-    public ResponseEntity<?> forgotPassword(@RequestParam("username") String username,
-                                            @RequestParam("phone_number") String phoneNumber,
-                                            @RequestParam("code") String code) {
-        Optional<Account> accountOptional = accountService.findByUsername(username);
-        if (accountOptional.isPresent() && accountOptional.get().getPhoneNumber().equals(phoneNumber)) {
-            int code1 = new Random().nextInt(999999);
-            accountOptional.get().setVerificationCode(code1);
-            accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
-            TwilioSendSms twilioSendSms = new TwilioSendSms();
-            twilioSendSms.sendCode(accountOptional.get().getPhoneNumber(), code1);
-            return ResponseEntity.ok(new IGenericResponse<>
-                    ("code đã được gửi hiệu lực trong 30p", 200, ""));
-        } else {
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("ko tìm thấy", 400, ""));
+    @GetMapping("forgotPassword")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
+                                            @RequestParam("password") String password,
+                                            @RequestParam("confirm") String confirm) {
+        try {
+            Optional<Account> accountOptional = accountService.findByEmail(email);
+            if (accountOptional.isPresent()) {
+                if (password.equals(confirm)) {
+                    accountOptional.get().setPassword(passwordEncoder.encode(password));
+
+                    return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
+                } else {
+                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "confirm is not equal password"));
+
+                }
+
+            } else {
+                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
 
