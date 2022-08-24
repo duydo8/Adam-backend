@@ -132,7 +132,7 @@ public class AccountWebsiteController {
             return ResponseEntity.ok().body(new IGenericResponse<>(200,"không tìm thấy tài khoản"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Định dạng gửi là +84......."));
         }
     }
     @GetMapping("forgotPassword")
