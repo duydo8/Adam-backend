@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,7 +165,7 @@ public class OrderController {
             Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
             if (orderOptional.isPresent()) {
                 List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
-                if(LocalDateTime.now().minusDays(3).isAfter(orderOptional.get().getCreateDate())) {
+                if(LocalDate.now().minusDays(3).isAfter(orderOptional.get().getCreateDate().toLocalDate())) {
                     return ResponseEntity.ok().body(new IGenericResponse<>( 200, "quá hạn đổi trả"));
                 }
                 Integer totalQuantity = 0;
