@@ -117,7 +117,7 @@ public class AccountWebsiteController {
         }
     }
 
-    @PostMapping("forgotPassword")
+    @GetMapping("forgotPassword")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
                                             @RequestParam("password") String password,
                                             @RequestParam("confirm") String confirm) {
