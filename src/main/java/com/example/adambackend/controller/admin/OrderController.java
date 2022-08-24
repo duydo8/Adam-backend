@@ -164,7 +164,7 @@ public class OrderController {
             Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
             if (orderOptional.isPresent()) {
                 List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
-                if(LocalDateTime.now().minusDays(3).isBefore(orderOptional.get().getCreateDate())) {
+                if(LocalDateTime.now().minusDays(3).isAfter(orderOptional.get().getCreateDate())) {
                     return ResponseEntity.ok().body(new IGenericResponse<>( 200, "quá hạn đổi trả"));
                 }
                 Integer totalQuantity = 0;
