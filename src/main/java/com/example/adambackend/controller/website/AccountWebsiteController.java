@@ -116,22 +116,46 @@ public class AccountWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-    @GetMapping("forgotPassword")
-    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
-                                            @RequestParam("password") String password,
-                                            @RequestParam("confirm") String confirm) {
+    @GetMapping("sendCode")
+    public ResponseEntity<?> sendCode(@RequestParam("phone_number")String phoneNumber){
         try {
-            Optional<Account> accountOptional = accountService.findByEmail(email);
+            Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
+            if(accountOptional.isPresent()){
+                TwilioSendSms twilioSendSms = new TwilioSendSms();
+                int code = new Random().nextInt(999999);
+                twilioSendSms.sendCode(phoneNumber, code);
+                accountOptional.get().setVerificationCode(code);
+                accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
+                accountService.save(accountOptional.get());
+                return ResponseEntity.ok().body(new IGenericResponse<>(code,200,"thanh cong"));
+            }
+            return ResponseEntity.ok().body(new IGenericResponse<>(200,"không tìm thấy tài khoản"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+        }
+    }
+    @GetMapping("forgotPassword")
+    public ResponseEntity<?> forgotPassword(@RequestParam("phone_number") String phoneNumber,
+                                            @RequestParam("password") String password,
+                                            @RequestParam("confirm") String confirm,
+                                            @RequestParam("code")Integer code) {
+        try {
+            Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
             if (accountOptional.isPresent()) {
-                if (password.equals(confirm)) {
-                    accountOptional.get().setPassword(passwordEncoder.encode(password));
+                if(code==accountOptional.get().getVerificationCode()&& LocalDateTime.now().isAfter(accountOptional.get().getTimeValid())){
+                    if (password.equals(confirm)) {
+                        accountOptional.get().setPassword(passwordEncoder.encode(password));
 
-                    return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
-                } else {
-                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "confirm is not equal password"));
+                        return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
+                    } else {
+                        return ResponseEntity.ok().body(new HandleExceptionDemo(400, "confirm is not equal password"));
 
+                    }
+                }else{
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, " code không đúng hoặc quá hạn "));
                 }
+
 
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
