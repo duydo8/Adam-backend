@@ -27,10 +27,7 @@ public class FileUploadController {
     @PostMapping("/uploadFile")
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-
             File file1 = convertToFile(file);
-
-
             Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
             return ResponseEntity.ok().body(new IGenericResponse<>(uploadResult.get("url"), 200, "upload thành công"));
 

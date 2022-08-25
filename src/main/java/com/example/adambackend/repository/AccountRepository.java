@@ -32,7 +32,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query(value = "select * from Account a where a.roleName=?1", nativeQuery = true)
     List<Account> findByRoleName(String role);
 
-    @Query("select a from Account a where a.isActive=true and a.isDelete=false and a.id=?1")
+    @Query("select a from Account a where  a.id=?1")
     Optional<Account> findById(Integer id);
 
     @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")

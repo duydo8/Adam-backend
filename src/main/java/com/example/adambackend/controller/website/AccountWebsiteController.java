@@ -130,7 +130,7 @@ public class AccountWebsiteController {
                 return ResponseEntity.ok().body(new IGenericResponse<>(code,200,"thanh cong"));
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(200,"không tìm thấy tài khoản"));
-        } catch (Exception e) {
+        } catch (Exception  e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Định dạng gửi là +84......."));
         }
@@ -139,24 +139,24 @@ public class AccountWebsiteController {
     public ResponseEntity<?> forgotPassword(@RequestParam("phone_number") String phoneNumber,
                                             @RequestParam("password") String password,
                                             @RequestParam("confirm") String confirm,
-                                            @RequestParam("code")Integer code) {
+                                            @RequestParam("code")int code) {
         try {
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
             if (accountOptional.isPresent()) {
-                if(code==accountOptional.get().getVerificationCode()&& LocalDateTime.now().isAfter(accountOptional.get().getTimeValid())){
-                    if (password.equals(confirm)) {
-                        accountOptional.get().setPassword(passwordEncoder.encode(password));
-
-                        return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
+                if(code == accountOptional.get().getVerificationCode()) {
+                    if (LocalDateTime.now().isBefore(accountOptional.get().getTimeValid())) {
+                        if (password.equals(confirm)) {
+                            accountOptional.get().setPassword(passwordEncoder.encode(password));
+                            return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, "Thành công"));
+                        } else {
+                            return ResponseEntity.ok().body(new IGenericResponse<>(200, "Confirm ko giống pass"));
+                        }
                     } else {
-                        return ResponseEntity.ok().body(new HandleExceptionDemo(400, "confirm is not equal password"));
-
+                        return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Quá hạn"));
                     }
                 }else{
-                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, " code không đúng hoặc quá hạn "));
+                    return ResponseEntity.ok().body(new HandleExceptionDemo(400, " code không đúng "));
                 }
-
-
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
             }

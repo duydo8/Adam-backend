@@ -178,11 +178,11 @@ public class ProductController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("product_id") Integer sizeId) {
+    public ResponseEntity<?> delete(@RequestParam("product_id") Integer productId) {
         try {
-            Optional<Product> product1 = productSevice.findById(sizeId);
+            Optional<Product> product1 = productSevice.findById(productId);
             if (product1.isPresent()) {
-                productSevice.deleteById(sizeId);
+                productSevice.deleteById(productId);
                 return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
@@ -195,6 +195,7 @@ public class ProductController {
     @PutMapping("updateIsActive")
     public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive) {
         try {
+            System.out.println(productUpdateIsActive.getIs_active()+" "+ productUpdateIsActive.getId());
             Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
             if (product1.isPresent()) {
 
