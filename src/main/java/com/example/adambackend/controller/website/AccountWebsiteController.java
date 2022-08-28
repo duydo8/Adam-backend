@@ -44,7 +44,7 @@ public class AccountWebsiteController {
                         .body(new IGenericResponse(400, "Email has been used"));
             }
             System.out.println(signUpRequest.getPhoneNumber());
-            Optional<Account> account = accountService.findByPhoneNumber(signUpRequest.getPhoneNumber());
+            Optional<Account> account = accountService.findByPhoneNumber("84"+signUpRequest.getPhoneNumber().substring(1,signUpRequest.getPhoneNumber().length()));
 
             if (account.isPresent()) {
                 account.get().setUsername(signUpRequest.getUsername());

@@ -59,7 +59,7 @@ public class OrderController {
                                               @RequestParam("size") Integer size) {
         try {
 
-            Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").ascending());
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").descending());
             Integer totalElement = orderService.countTotalElementOrder(status);
             List<OrderFindAll> orderFindAlls = orderService.findByStatus(pageable, status);
 
