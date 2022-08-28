@@ -13,6 +13,8 @@ import com.example.adambackend.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +56,14 @@ public class ProductController {
                                               @RequestParam("size") int size
             , @RequestParam(value = "name", required = false) String name) {
         try {
+            Pageable pageable= PageRequest.of(page, size,Sort.by("createDate").descending());
             if (name == null) {
-                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(PageRequest.of(page, size)), 200, ""));
 
-            }
-            return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, PageRequest.of(page, size)), 200, ""));
-        } catch (Exception e) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(pageable), 200, ""));
+
+            }else {
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, pageable), 200, ""));
+            }    } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
@@ -173,7 +177,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Xin chờ"));
         }
     }
 

@@ -200,14 +200,12 @@ public class DetailProductController {
                         detailProduct.get().setPriceExport(n.getPriceExport());
                         detailProduct.get().setQuantity(n.getQuantity());
 
-                        detailProduct.get().setProductImage(n.getImage());
-
-                        DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
                         Product p = productSevice.findByDetailProductId(detailProduct.get().getId());
                         p.setIsComplete(true);
                         productSevice.save(p);
+                        detailProduct.get().setProductImage(p.getImage());
+                        DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
                         detailProducts.add(detailProduct1);
-
                     }
 
                 }

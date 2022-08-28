@@ -41,21 +41,15 @@ public class AccountController {
         try {
             if (accountService.existsByUsername(accountAdminCreate.getUsername())) {
                 return ResponseEntity
-                        .badRequest()
-                        .body(new IGenericResponse(400, "Username has been used"));
+                        .ok()
+                        .body(new IGenericResponse(200, "Username has been used"));
             }
 
             if (accountService.existsByEmail(accountAdminCreate.getEmail())) {
                 return ResponseEntity
-                        .badRequest()
-                        .body(new IGenericResponse(400, "Email has been used"));
+                        .ok()
+                        .body(new IGenericResponse(200, "Email has been used"));
             }
-            if (accountService.existsByPhoneNumber(accountAdminCreate.getPhoneNumber())) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new IGenericResponse(400, "PhoneNumber has been used"));
-            }
-
             Account account = new Account();
             account.setPriority(0.0);
             account.setUsername(accountAdminCreate.getUsername());
@@ -66,7 +60,6 @@ public class AccountController {
                 account.setRole(ERoleName.User);
             } else {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Can't find Role"));
-
             }
             account.setEmail(accountAdminCreate.getEmail());
             account.setPassword(passwordEncoder.encode(accountAdminCreate.getPassword()));
@@ -81,7 +74,6 @@ public class AccountController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
     @PostMapping("verify")
     public ResponseEntity<?> verify(@RequestParam("phone_number") String phoneNumber) {
         try {

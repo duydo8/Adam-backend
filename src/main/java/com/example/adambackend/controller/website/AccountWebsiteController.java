@@ -106,11 +106,13 @@ public class AccountWebsiteController {
             account.setPhoneNumber(phoneNumber);
             account.setUsername(phoneNumber);
             account.setRole(ERoleName.User);
+            account.setIsActive(false);
+            account.setIsDelete(true);
             account.setPassword(passwordEncoder.encode("123456"));
             account.setVerificationCode(code);
             account.setTimeValid(LocalDateTime.now().plusMinutes(30));
             accountService.save(account);
-            return ResponseEntity.ok().body(new IGenericResponse(code, 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse(code, 200, "Thành công"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

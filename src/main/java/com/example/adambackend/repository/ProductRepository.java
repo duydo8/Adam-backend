@@ -19,10 +19,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true")
+    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true  ")
     Page<Product> findAll(Pageable pageable);
 
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') order by c.createDate desc")
+    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') ")
     Page<Product> findAll(@Param("name") String name, Pageable pageable);
 
     @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc")
@@ -53,7 +53,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "where pro.isActive=true and pro.isDelete=false and pro.isComplete=true and " +
             " ca.id=?1  or ?1 is null and s.id=?2  or ?2 is null " +
             " and co.id=?3 or ?3 is null and  m.id=?4  or ?4 is null " +
-            " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7 and dp.priceExport !=0 " +
+            " and t.id=?5  or ?5 is null  and dp.priceExport BETWEEN ?6  and ?7  " +
             " GROUP BY pro.productName,pro.image,pro.createDate,pro.id" +
             " order by pro.id ")
     Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
