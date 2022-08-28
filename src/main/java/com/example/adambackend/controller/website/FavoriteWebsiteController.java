@@ -80,7 +80,7 @@ public class FavoriteWebsiteController {
 
                 }
             }
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 200, ""));
 
 
         } catch (Exception e) {
