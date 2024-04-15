@@ -1,4 +1,4 @@
-package com.example.adambackend.payload.order;
+package com.example.adambackend.payload.satistic;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dashboard {
-    private String name;
-    private List<String> labels;
-    private List<Double> data;
+	private String name;
+	private List<String> labels;
+	private List<Double> data;
 }

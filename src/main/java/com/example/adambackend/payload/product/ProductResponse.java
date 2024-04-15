@@ -14,16 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductResponse {
-    private Integer id;
-    private String productName;
-    private String description;
-    private Boolean isDelete;
-    private String image;
-    private Double voteAverage;
-    private LocalDateTime createDate;
-    private Category category;
-    private List<Tag> tagList;
-    private List<Material> materialList;
-    private Boolean isActive;
-    private Boolean isComplete;
+	private Integer id;
+	private String productName;
+	private String description;
+	private String image;
+	private Double voteAverage;
+	private LocalDateTime createDate;
+	private Integer status;
+	private Category category;
+	private List<Tag> tagList;
+	private List<Material> materialList;
 }

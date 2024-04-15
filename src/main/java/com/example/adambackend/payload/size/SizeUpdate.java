@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SizeUpdate {
-    private Integer id;
-    private String sizeName;
-    private Boolean isDeleted;
-    private Boolean isActive;
+	private Integer id;
+	private String sizeName;
+	private Integer status;
 }

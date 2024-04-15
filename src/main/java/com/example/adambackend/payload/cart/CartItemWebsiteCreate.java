@@ -9,13 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CartItemWebsiteCreate {
-
-    private Integer quantity;
-
-
-    private Integer accountId;
-
-    private Integer detailProductId;
-
-
+	private Integer quantity;
+	private Integer accountId;
+	private Integer detailProductId;
 }

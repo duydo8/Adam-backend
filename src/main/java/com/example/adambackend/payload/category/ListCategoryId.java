@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListCategoryId {
-    List<Integer> listCategoryId;
+	List<Integer> listCategoryId;
 }

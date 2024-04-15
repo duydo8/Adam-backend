@@ -1,25 +1,25 @@
 package com.example.adambackend.payload.account;
 
 public interface AccountResponse {
-    Integer getId();
+	Integer getId();
 
-    String getUsername();
+	String getUsername();
 
-    String getFullName();
+	String getFullName();
 
-    String getEmail();
+	String getEmail();
 
-    String getPhoneNumber();
+	String getPhoneNumber();
 
-    String getPassword();
+	String getPassword();
 
-    String getRole();
+	String getRole();
 
-    Boolean getIsActive();
+	Boolean getIsActive();
 
-    Boolean getIsDeleted();
+	Boolean getIsDeleted();
 
-    Double getPriority();
+	Double getPriority();
 
 
 }

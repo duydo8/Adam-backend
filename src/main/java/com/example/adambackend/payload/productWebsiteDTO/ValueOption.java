@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValueOption {
-    private Integer id;
-    private String name;
+	private Integer id;
+	private String name;
 }

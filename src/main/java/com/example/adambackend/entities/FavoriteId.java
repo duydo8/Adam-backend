@@ -13,10 +13,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class FavoriteId implements Serializable {
-    @Column(name = "account_id")
-    private Integer accountId;
-    @Column(name = "product_id")
-    private Integer productId;
-
-
+	@Column(name = "account_id")
+	private Integer accountId;
+	@Column(name = "product_id")
+	private Integer productId;
 }

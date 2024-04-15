@@ -8,25 +8,25 @@ import java.time.LocalDateTime;
 
 
 public interface AddressResponse {
-    Integer getId();
+	Integer getId();
 
-    String getAddressDetail();
+	String getAddressDetail();
 
-    Boolean getIsDeleted();
+	Boolean getIsDeleted();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 
-    Ward getWard();
+	Ward getWard();
 
-    Boolean getIsActive();
+	Boolean getIsActive();
 
-    String getPhoneNumber();
+	String getPhoneNumber();
 
-    String getFullName();
+	String getFullName();
 
-    Boolean getIsDefault();
+	Boolean getIsDefault();
 
-    Province getProvince();
+	Province getProvince();
 
-    District getDistrict();
+	District getDistrict();
 }

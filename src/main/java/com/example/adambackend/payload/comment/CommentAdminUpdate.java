@@ -11,14 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentAdminUpdate {
-    private Integer id;
-    private String content;
-    private Integer vote;
-    private LocalDateTime timeCreated;
-    private CommentStatus commentStatus;
-    private Integer accountId;
-
-    private Integer productId;
-
-    private Boolean isActive;
+	private Integer id;
+	private String content;
+	private Integer vote;
+	private LocalDateTime timeCreated;
+	private CommentStatus commentStatus;
+	private Integer accountId;
+	private Integer productId;
+	private Integer status;
 }

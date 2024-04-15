@@ -10,14 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailOrderDTOResponse {
-    Integer id;
-    Integer quantity;
-    Double price;
-    Double totalPrice;
-    Boolean isDeleted;
-    String detailOrderCode;
-    Boolean isActive;
-    LocalDateTime createDate;
-    String reason;
-    Integer orderId;
+	Integer id;
+	Integer quantity;
+	Double price;
+	Double totalPrice;
+	Integer status;
+	String detailOrderCode;
+	LocalDateTime createDate;
+	String reason;
+	Integer orderId;
 }

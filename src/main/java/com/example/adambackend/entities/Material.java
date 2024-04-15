@@ -16,18 +16,14 @@ import java.util.List;
 @Entity
 @Table(name = "materials")
 public class Material {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "material_name")
-    private String materialName;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    @JsonIgnore
-    @OneToMany(mappedBy = "material")
-    private List<MaterialProduct> materialProducts = new ArrayList<>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String materialName;
+	private Integer status;
+	private LocalDateTime createDate;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "material")
+	private List<MaterialProduct> materialProducts = new ArrayList<>();
 }

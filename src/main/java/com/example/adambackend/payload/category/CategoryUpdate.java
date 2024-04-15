@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryUpdate {
-    private Integer id;
-    private String categoryName;
-    private Boolean isDeleted;
-    private Boolean isActive;
-    private Integer categoryParentId;
+	private Integer id;
+	private String categoryName;
+	private Integer status;
+	private Integer categoryParentId;
 }

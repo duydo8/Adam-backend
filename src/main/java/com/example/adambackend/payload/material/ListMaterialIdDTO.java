@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListMaterialIdDTO {
-    List<Integer> listMaterialId;
+	List<Integer> listMaterialId;
 }

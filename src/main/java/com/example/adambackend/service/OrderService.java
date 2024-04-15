@@ -19,7 +19,7 @@ public interface OrderService {
 
     Page<Order> findAll(Pageable pageable);
 
-    Double sumTotalPriceByTime(Integer month);
+    List<Double> sumTotalPriceByTime(Integer month);
 
     //    @Override
     //    public List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId) {
@@ -33,11 +33,11 @@ public interface OrderService {
 
     Integer countsuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
 
-    Double sumSuccessOrderByTime(Integer month);
+    List<Double> sumSuccessOrderByTime(Integer month);
 
-    Double sumCancelOrderByTime(Integer month);
+    List<Double> sumCancelOrderByTime(Integer month);
 
-    Double sumPaybackOrderByTime(Integer month);
+    List<Double> sumPaybackOrderByTime(Integer month);
 
 //    List<Order> findTop5ByOrderLessThanOrderByCreateDateDesc(Integer accountId);
 }

@@ -56,7 +56,7 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Intege
     String findCodeById(Integer id);
 
     @Query(value = "select id as id,quantity as quantity,total_price as totalPrice," +
-            "detail_product_id as detailProductId, is_active as isActive," +
+            "detail_product_id as detailProductId, status as status," +
             "create_date as createDate from detail_orders where order_id=?1", nativeQuery = true)
     List<DetailOrderAdmin> findByOrderId(Integer orderId);
 

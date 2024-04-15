@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiscountOrderUpdate {
-    private Integer id;
-    private String discountName;
-    private Boolean isActive;
-    private Double salePrice;
-    private Double orderMinRange;
-    private Double orderMaxRange;
-
+	private Integer id;
+	private String discountName;
+	private Integer status;
+	private Double salePrice;
+	private Double orderMinRange;
+	private Double orderMaxRange;
 }

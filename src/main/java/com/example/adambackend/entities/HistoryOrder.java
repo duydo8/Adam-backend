@@ -14,20 +14,17 @@ import java.time.LocalDateTime;
 @Table(name = "history_orders")
 @Entity
 public class HistoryOrder {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer status;
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
-    private String description;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "total_price")
-    private Double totalPrice;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private Integer status;
+	private LocalDateTime updateTime;
+	private String description;
+	private Double totalPrice;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
 
 }

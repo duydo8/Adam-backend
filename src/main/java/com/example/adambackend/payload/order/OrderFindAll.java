@@ -3,27 +3,27 @@ package com.example.adambackend.payload.order;
 import java.time.LocalDateTime;
 
 public interface OrderFindAll {
-    Integer getId();
+	Integer getId();
 
-    Integer getStatus();
+	Integer getStatus();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 
-    Integer getAccountId();
+	Integer getAccountId();
 
-    String getFullName();
+	String getFullName();
 
-    String getPhoneNumber();
+	String getPhoneNumber();
 
-    Double getAmountPrice();
+	Double getAmountPrice();
 
-    Double getSalePrice();
+	Double getSalePrice();
 
-    Double getTotalPrice();
+	Double getTotalPrice();
 
-    Integer getAddressId();
+	Integer getAddressId();
 
-    String getAddressDetail();
+	String getAddressDetail();
 
-    String getOrderCode();
+	String getOrderCode();
 }

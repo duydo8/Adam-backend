@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressWebsiteCreate {
-    private String addressDetail;
-    private Integer accountId;
-    private Integer provinceId;
-    private Integer districtId;
-    private Integer wardId;
-    private String phoneNumber;
-    private String fullName;
-    private Boolean isDefault;
+	private String addressDetail;
+	private Integer accountId;
+	private Integer provinceId;
+	private Integer districtId;
+	private Integer wardId;
+	private String phoneNumber;
+	private String fullName;
+	private Boolean isDefault;
 }

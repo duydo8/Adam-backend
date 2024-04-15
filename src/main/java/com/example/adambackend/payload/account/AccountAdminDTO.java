@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountAdminDTO {
-    private Integer id;
-    private String fullName;
-    private String email;
-    private String password;
-    private Boolean isActive;
-
-
+	private Integer id;
+	private String fullName;
+	private String email;
+	private String password;
+	private Integer status;
 }

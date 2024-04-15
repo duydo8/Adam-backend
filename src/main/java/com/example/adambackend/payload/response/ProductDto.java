@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-    private Integer id;
-    private String productName;
-    private String description;
-    private boolean isDelete;
-    private String image;
+	private Integer id;
+	private String productName;
+	private String description;
+	private Integer status;
+	private String image;
 }

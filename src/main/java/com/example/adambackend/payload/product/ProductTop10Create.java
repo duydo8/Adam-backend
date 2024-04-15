@@ -3,25 +3,25 @@ package com.example.adambackend.payload.product;
 import java.time.LocalDateTime;
 
 public interface ProductTop10Create {
-    Integer getId();
+	Integer getId();
 
-    String getProductName();
+	String getProductName();
 
-    String getDescription();
+	String getDescription();
 
-    Boolean getIsDelete();
+	Boolean getIsDelete();
 
-    String getImage();
+	String getImage();
 
-    Double getVoteAverage();
+	Double getVoteAverage();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 
-    Boolean getIsComplete();
+	Boolean getIsComplete();
 
-    Boolean getIsActive();
+	Boolean getIsActive();
 
-    Double getMinPrice();
+	Double getMinPrice();
 
-    Double getMaxPrice();
+	Double getMaxPrice();
 }

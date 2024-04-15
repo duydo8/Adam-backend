@@ -31,17 +31,17 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query(value = "select count(*) from orders where status=6 and create_date between ?1 and ?2", nativeQuery = true)
     Integer countSuccessOrderByTime(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 ", nativeQuery = true)
-    Double sumTotalPriceByTime(Integer month);
+    @Query(value = "select count(*) from orders where year(create_date) = ?1 ", nativeQuery = true)
+    List<Double> sumTotalPriceByTime(Integer year);
 
-    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=6", nativeQuery = true)
-    Double sumSuccessOrderByTime(Integer month);
+    @Query(value = "select count(*) from orders where year(create_date) = ?1 and status=6", nativeQuery = true)
+    List<Double> sumSuccessOrderByTime(Integer year);
 
-    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=-1", nativeQuery = true)
-    Double sumPaybackOrderByTime(Integer month);
+    @Query(value = "select count(*) from orders where year(create_date) = ?1 and status=-1", nativeQuery = true)
+    List<Double> sumPaybackOrderByTime(Integer year);
 
-    @Query(value = "select count(*) from orders where month(create_date)=?1 and year(create_date)=2022 and status=0", nativeQuery = true)
-    Double sumCancelOrderByTime(Integer month);
+    @Query(value = "select count(*) from orders where year(create_date) = ?1 and status=0", nativeQuery = true)
+    List<Double> sumCancelOrderByTime(Integer year);
 
     @Query(value = "select o.id from orders o join detail_orders dos on o.id=dos.order_id \n" +
             "join detail_products dp on dp.id=dos.detail_product_id \n" +

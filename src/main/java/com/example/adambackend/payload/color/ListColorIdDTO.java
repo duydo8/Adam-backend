@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListColorIdDTO {
-    List<Integer> listColorId;
+	List<Integer> listColorId;
 }

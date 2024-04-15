@@ -14,26 +14,24 @@ import java.time.LocalDateTime;
 @Table(name = "cart_items")
 @Entity
 public class CartItems {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer quantity;
-    @Column(name = "total_price")
-    private Double totalPrice;
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-    @ManyToOne
-    @JoinColumn(name = "detail_product_id")
-    private DetailProduct detailProduct;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private Integer quantity;
+	private Double totalPrice;
+	private Integer status;
+	private LocalDateTime createDate;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
 
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
+
+	@ManyToOne
+	@JoinColumn(name = "detail_product_id")
+	private DetailProduct detailProduct;
 }

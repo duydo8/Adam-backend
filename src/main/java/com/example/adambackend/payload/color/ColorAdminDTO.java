@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ColorAdminDTO {
-    private Integer id;
-    private String colorName;
-    private Boolean isDeleted;
-    private Boolean isActive;
-
+	private Integer id;
+	private String colorName;
+	private Integer status;
 }

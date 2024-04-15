@@ -1,18 +1,18 @@
 package com.example.adambackend.payload.productWebsiteDTO;
 
 public interface ProductHandleWebsite {
-    Integer getId();
+	Integer getId();
 
-    String getDescription();
+	String getDescription();
 
-    Boolean getIsActive();
+	Boolean getIsActive();
 
-    Double getMaxPrice();
+	Double getMaxPrice();
 
-    Double getMinPrice();
+	Double getMinPrice();
 
-    String getProductName();
+	String getProductName();
 
-    Double getVoteAverage();
+	Double getVoteAverage();
 
 }

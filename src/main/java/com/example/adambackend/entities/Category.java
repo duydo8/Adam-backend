@@ -16,22 +16,15 @@ import java.util.List;
 @Table(name = "categories")
 @Entity
 public class Category {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String categoryName;
+	private Integer status;
+	private LocalDateTime createDate;
+	private Integer categoryParentId;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    List<Product> products = new ArrayList<>();
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "category_name")
-    private String categoryName;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    @Column(name = "category_parent_id")
-    private Integer categoryParentId;
-    @Column(name = "is_active")
-    private Boolean isActive;
-
+	@JsonIgnore
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+	List<Product> products = new ArrayList<>();
 }

@@ -16,37 +16,33 @@ import java.util.List;
 @Table(name = "address")
 @Entity
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "address_detail")
-    private String addressDetail;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    @ManyToOne
-    @JoinColumn(name = "ward_id")
-    private Ward ward;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    @Column(name = "full_name")
-    private String fullName;
-    @Column(name = "is_default")
-    private Boolean isDefault;
-    @JsonIgnore
-    @OneToMany(mappedBy = "address")
-    private List<Order> orders = new ArrayList<>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String addressDetail;
+	private Integer status;
+	private LocalDateTime createDate;
+	private String phoneNumber;
+	private String fullName;
+	private Boolean isDefault;
 
-    @ManyToOne
-    @JoinColumn(name = "province_id")
-    private Province province;
-    @ManyToOne
-    @JoinColumn(name = "district_id")
-    private District district;
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+	@ManyToOne
+	@JoinColumn(name = "ward_id")
+	private Ward ward;
+
+	@ManyToOne
+	@JoinColumn(name = "province_id")
+	private Province province;
+
+	@ManyToOne
+	@JoinColumn(name = "district_id")
+	private District district;
+
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "address")
+	private List<Order> orders = new ArrayList<>();
 }

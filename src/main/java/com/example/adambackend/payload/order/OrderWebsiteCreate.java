@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderWebsiteCreate {
-    private String fullName;
-    private String phoneNumber;
-    private String addressDetail;
-    private Integer addressId;
-    private Integer accountId;
-    private List<Integer> cartItemIdList;
+	private String fullName;
+	private String phoneNumber;
+	private String addressDetail;
+	private Integer addressId;
+	private Integer accountId;
+	private List<Integer> cartItemIdList;
 }

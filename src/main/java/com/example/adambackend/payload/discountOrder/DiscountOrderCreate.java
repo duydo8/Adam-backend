@@ -10,14 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiscountOrderCreate {
-    private String discountName;
-    private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Double salePrice;
-    private Double orderMinRange;
-    private Double orderMaxRange;
-    private Integer eventId;
+	private String discountName;
+	private String description;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private Double salePrice;
+	private Double orderMinRange;
+	private Double orderMaxRange;
+	private Integer eventId;
 //    private Integer orderId;
-
 }

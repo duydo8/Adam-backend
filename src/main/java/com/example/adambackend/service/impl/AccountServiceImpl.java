@@ -1,11 +1,14 @@
 package com.example.adambackend.service.impl;
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -65,10 +68,6 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.existsByEmail(email);
     }
 
-    @Override
-    public Boolean existsByPhoneNumber(String phoneNumber) {
-        return accountRepository.existsByPhoneNumber(phoneNumber);
-    }
 
     @Override
     public AccountDTOs findByIds(Integer id) {
@@ -117,23 +116,50 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Double countTotalAccount(Integer month) {
-        return accountRepository.countTotalAccount(month);
+    public List<Double> countTotalAccount(Integer year) {
+        return accountRepository.countTotalAccount(year);
     }
 
     @Override
-    public Double countTotalSignUpAccount(Integer month) {
-        return accountRepository.countTotalSignUpAccount(month);
+    public List<Double> countTotalSignUpAccount(Integer year) {
+        return accountRepository.countTotalSignUpAccount(year);
 
     }
 
     @Override
-    public Double countTotalAccountInOrder(Integer month) {
-        return accountRepository.countTotalAccountInOrder(month);
+    public List<Double> countTotalAccountInOrder(Integer year) {
+        return accountRepository.countTotalAccountInOrder(year);
     }
 
     @Override
-    public void updateAccountDeleted(Integer id) {
+    public void updateAccountDeleted(String id) {
         accountRepository.updateAccountDeleted(id);
+    }
+
+    @Override
+    public Account getById(Integer id){
+        return accountRepository.getById(id);
+    }
+
+    @Override
+    public Account findByUserNameAndEmailAndPhoneNumber(String username, String email, String phoneNumber) {
+        return accountRepository.findByUserNameAndEmailAndPhoneNumber(username, email, phoneNumber);
+    }
+
+    @Override
+    public String checkAccountRegistration(String username, String email, String phoneNumber) {
+        Account account = accountRepository.findByUserNameAndEmailAndPhoneNumber(username, email, phoneNumber);
+        if (CommonUtil.isNotNull(account)) {
+            if (account.getUsername().equals(username)) {
+                return "Username has been used";
+            }
+            if (account.getEmail().equals(email)) {
+                return "Email has been used";
+            }
+            if (account.getPhoneNumber().equals(phoneNumber)) {
+                return "PhoneNumber has been used";
+            }
+        }
+        return "";
     }
 }

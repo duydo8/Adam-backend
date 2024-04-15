@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventUpdateDTO {
-    private Integer id;
-    private String eventName;
-    private String image;
-    private Boolean isActive;
+	private Integer id;
+	private String eventName;
+	private String image;
+	private Integer status;
 }

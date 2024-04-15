@@ -14,9 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionalProduct {
-    private Set<Tag> tagList;
-    private Set<Material> materialList;
-    private Set<Color> colorList;
-    private Set<Size> sizeList;
-
+	private Set<Tag> tagList;
+	private Set<Material> materialList;
+	private Set<Color> colorList;
+	private Set<Size> sizeList;
 }

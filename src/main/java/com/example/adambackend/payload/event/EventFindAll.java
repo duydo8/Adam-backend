@@ -10,21 +10,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventFindAll {
-    private Integer id;
-
-    private String eventName;
-
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-    private String description;
-
-    private Boolean isDelete;
-
-    private Boolean isActive;
-
-    private LocalDateTime createDate;
-    private Boolean type;
-    private String image;
-    private Double salePrice;
+	private Integer id;
+	private String eventName;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private String description;
+	private Integer status;
+	private LocalDateTime createDate;
+	private Boolean type;
+	private String image;
+	private Double salePrice;
 }

@@ -3,15 +3,15 @@ package com.example.adambackend.payload.detailOrder;
 import java.time.LocalDateTime;
 
 public interface DetailOrderAdmin {
-    Integer getId();
+	Integer getId();
 
-    Integer getQuantity();
+	Integer getQuantity();
 
-    Double getTotalPrice();
+	Double getTotalPrice();
 
-    Integer getDetailProductId();
+	Integer getDetailProductId();
 
-    Boolean getIsActive();
+	Integer status();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 }

@@ -15,53 +15,51 @@ import java.util.Optional;
 @Repository
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-    @Query("select a from Account  a where a.username=?1")
-    Optional<Account> findByUsername(String username);
+	@Query("select a from Account  a where a.username = ?1 and a.status = 1")
+	Optional<Account> findByUsername(String username);
 
-    Optional<Account> findByEmail(String email);
+	Optional<Account> findByEmail(String email);
 
-    Boolean existsByUsername(String username);
+	Boolean existsByUsername(String username);
 
-    Boolean existsByEmail(String email);
+	Boolean existsByEmail(String email);
 
-    Boolean existsByPhoneNumber(String phoneNumber);
+	Boolean existsByPhoneNumber(String phoneNumber);
 
-    @Query(value = "select * from accounts where phone_number=?1", nativeQuery = true)
-    Optional<Account> findByPhoneNumber(String phoneNumber);
+	@Query(value = "select * from accounts where phone_number = ?1 and status = 1", nativeQuery = true)
+	Optional<Account> findByPhoneNumber(String phoneNumber);
 
-    @Query(value = "select * from Account a where a.roleName=?1", nativeQuery = true)
-    List<Account> findByRoleName(String role);
+	@Query(value = "select * from Account a where a.roleName= ?1 and a.status = 1", nativeQuery = true)
+	List<Account> findByRoleName(String role);
 
-    @Query("select a from Account a where  a.id=?1")
-    Optional<Account> findById(Integer id);
+	@Query("select a from Account a where  a.id= ?1 and a.status = 1")
+	Optional<Account> findById(Integer id);
 
-    @Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
-    public Account findByVerificationCode(String code);
+	@Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
+	public Account findByVerificationCode(String code);
 
-    @Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
-            "role as role, is_active as isActive, is_deleted as isDeleted, priority as priority from accounts where is_active=1 and is_deleted=0", nativeQuery = true)
-    public List<AccountResponse> findAlls();
+	@Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
+			"role as role, status as status, priority as priority from accounts where status = 1", nativeQuery = true)
+	public List<AccountResponse> findAlls();
 
-    @Query(value = "select count(*) from accounts where is_active=1 and is_deleted=0 and month(create_date)=?1 and year(create_date)=2022 ", nativeQuery = true)
-    Double countTotalAccount(Integer month);
+	@Query(value = "select count(*) from accounts where status = 1 and year(create_date) = ?1", nativeQuery = true)
+	List<Double> countTotalAccount(Integer year);
 
-    @Query(value = "select count(*) from accounts where month(create_date)=?1 and year(create_date)=2022 ", nativeQuery = true)
-    Double countTotalSignUpAccount(Integer month);
+	@Query(value = "select count(*) from accounts where status = 1 and year(create_date) = ?1", nativeQuery = true)
+	List<Double> countTotalSignUpAccount(Integer year);
 
-    @Query(value = "select count(a.id) from accounts a where a.id in (select account_id from orders) and month(create_date)=?1 and year(create_date)=2022 ", nativeQuery = true)
-    Double countTotalAccountInOrder(Integer month);
+	@Query(value = "select count(a.id) from accounts a where  a.status = 1 and year(create_date) = ?1 and a.id in (select account_id from orders)  ", nativeQuery = true)
+	List<Double> countTotalAccountInOrder(Integer year);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update accounts set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
-    void updateAccountDeleted(Integer id);
+	@Modifying
+	@Transactional
+	@Query(value = "update accounts set status = 0 where id in ('?1') ", nativeQuery = true)
+	void updateAccountDeleted(String id);
 
-    @Query(value = "select * from accounts where username like '%?1%'", nativeQuery = true)
-    List<Account> findByName(String name);
+	@Query(value = "select a.id as id, a.username as username, a.full_name as fullName, a.email as email, " +
+			"a.phone_number as phoneNumber from accounts a where a.id=?1 and a.status = 1", nativeQuery = true)
+	AccountDTOs findByIds(Integer id);
 
-    @Query(value = "select a.id as id, a.username as username, a.full_name as fullName, " +
-            "a.email as email, " +
-            "a.phone_number as phoneNumber from accounts a where a.id=?1", nativeQuery = true)
-    AccountDTOs findByIds(Integer id);
-
+	@Query(value = "select a from Account a where a.username = ?1 or a.email = ?2 or a.phoneNumber = ?3 and a.status = 1")
+	Account findByUserNameAndEmailAndPhoneNumber(String username, String email, String phoneNumber);
 }

@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CartItemWebsiteUpdate {
-    private Integer id;
-    private Integer quantity;
-    private Double totalPrice;
-
+	private Integer id;
+	private Integer quantity;
+	private Double totalPrice;
 }

@@ -13,13 +13,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_info")
 public class UserInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String username;
-    private String token;
-    @Column(name = "time_valid")
-    private LocalDateTime timeValid;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String username;
+	private String token;
+	private LocalDateTime timeValid;
+	private Integer status;
 }

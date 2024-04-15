@@ -17,40 +17,38 @@ import java.util.List;
 @Entity
 public class Product {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String productName;
+	private String description;
+	// 0: not active, 1: active, 2:complete
+	private Integer status;
+	private String image;
+	private Double voteAverage;
+	private LocalDateTime createDate;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<Comment> comments = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<Favorite> favorites = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    List<DetailProduct> detailProducts = new ArrayList<>();
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "product_name")
-    private String productName;
-    private String description;
-    @Column(name = "is_deleted")
-    private Boolean isDelete;
-    private String image;
-    @Column(name = "vote_average")
-    private Double voteAverage;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    @Column(name = "is_completed")
-    private Boolean isComplete;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<TagProduct> tagProducts = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<MaterialProduct> materialProducts = new ArrayList<>();
-    @Column(name = "is_active")
-    private Boolean isActive;
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "product")
+	private List<TagProduct> tagProducts = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "product")
+	private List<MaterialProduct> materialProducts = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "product")
+	List<Comment> comments = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "product")
+	List<Favorite> favorites = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "product")
+	List<DetailProduct> detailProducts = new ArrayList<>();
 }

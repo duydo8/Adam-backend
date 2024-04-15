@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListTagIdDTO {
-    List<Integer> tagIdList;
+	List<Integer> tagIdList;
 }

@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderAdmin {
-    List<OrderFindAllResponse> orders;
-    private Integer totalElement;
+	List<OrderFindAllResponse> orders;
+	private Integer totalElement;
 }

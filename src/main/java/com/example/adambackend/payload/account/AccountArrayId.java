@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountArrayId {
-    private List<Integer> accountIdList;
+	private List<Integer> accountIdList;
 }

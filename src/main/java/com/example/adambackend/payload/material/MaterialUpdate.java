@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MaterialUpdate {
-    private Integer id;
-    private String materialName;
-    private Boolean isDeleted;
-    private Boolean isActive;
+	private Integer id;
+	private String materialName;
+	private Integer status;
 }

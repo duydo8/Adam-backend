@@ -43,8 +43,8 @@ public class OrderSerivceImpl implements OrderService {
     }
 
     @Override
-    public Double sumTotalPriceByTime(Integer month) {
-        return orderRepository.sumTotalPriceByTime(month);
+    public List<Double> sumTotalPriceByTime(Integer year) {
+        return orderRepository.sumTotalPriceByTime(year);
     }
 
     //    @Override
@@ -73,17 +73,17 @@ public class OrderSerivceImpl implements OrderService {
     }
 
     @Override
-    public Double sumSuccessOrderByTime(Integer month) {
-        return orderRepository.sumSuccessOrderByTime(month);
+    public List<Double> sumSuccessOrderByTime(Integer year) {
+        return orderRepository.sumSuccessOrderByTime(year);
     }
 
     @Override
-    public Double sumCancelOrderByTime(Integer month) {
-        return orderRepository.sumCancelOrderByTime(month);
+    public List<Double> sumCancelOrderByTime(Integer year) {
+        return orderRepository.sumCancelOrderByTime(year);
     }
 
     @Override
-    public Double sumPaybackOrderByTime(Integer month) {
-        return orderRepository.sumPaybackOrderByTime(month);
+    public List<Double> sumPaybackOrderByTime(Integer year) {
+        return orderRepository.sumPaybackOrderByTime(year);
     }
 }
