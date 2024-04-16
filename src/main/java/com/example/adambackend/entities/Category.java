@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.category.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,11 @@ public class Category {
 	@JsonIgnore
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	List<Product> products = new ArrayList<>();
+
+	public Category(CategoryDTO categoryDTO){
+		this.categoryName = categoryDTO.getCategoryName();
+		this.status = 1;
+		this.createDate = LocalDateTime.now();
+		this.categoryParentId = categoryDTO.getCategoryParentId();
+	}
 }

@@ -4,8 +4,8 @@ import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.CartItems;
 import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.cart.CartItemWebsiteCreate;
-import com.example.adambackend.payload.cart.CartItemWebsiteUpdate;
+import com.example.adambackend.payload.cart.CartItemCreate;
+import com.example.adambackend.payload.cart.CartItemUpdate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.CartItemService;
@@ -31,34 +31,34 @@ public class CartItemWebsiteController {
 
 
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {
+    public ResponseEntity<?> create(@RequestBody CartItemCreate cartItemCreate) {
         try {
-            Optional<Account> accountOptional = accountService.findById(cartItemWebsiteCreate.getAccountId());
-            Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
-            if (cartItemWebsiteCreate.getQuantity() >= 10) {
+            Optional<Account> accountOptional = accountService.findById(cartItemCreate.getAccountId());
+            Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemCreate.getDetailProductId());
+            if (cartItemCreate.getQuantity() >= 10) {
                 return ResponseEntity.badRequest().body(
                         new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
             }
-            if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
+            if (detailProductOptional.get().getQuantity() < cartItemCreate.getQuantity()) {
                 return ResponseEntity.badRequest().body(
                         new HandleExceptionDemo(400, "Không đủ số lượng"));
             }
             if (accountOptional.isPresent() && detailProductOptional.isPresent()) {
-                List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemWebsiteCreate.getAccountId());
+                List<CartItems> cartItemsList = cartItemService.findByAccountId(cartItemCreate.getAccountId());
                 for (CartItems c : cartItemsList
                 ) {
                     if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
                         c.setQuantity(c.getQuantity() + 1);
-                        if (cartItemWebsiteCreate.getQuantity() >= 10) {
+                        if (cartItemCreate.getQuantity() >= 10) {
                             return ResponseEntity.badRequest().body(
                                     new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
                         }
-                        if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
+                        if (detailProductOptional.get().getQuantity() < cartItemCreate.getQuantity()) {
                             return ResponseEntity.badRequest().body(
                                     new HandleExceptionDemo(400, "Không đủ số lượng"));
                         }
                         CartItems cartItems = new CartItems(null, c.getQuantity()
-                                , c.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                                , c.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemCreate.getAccountId()).get(),
                                 detailProductOptional.get(),
                                 true, LocalDateTime.now(), null);
 
@@ -66,8 +66,8 @@ public class CartItemWebsiteController {
                     }
                 }
 
-                CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                        , cartItemWebsiteCreate.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                CartItems cartItems = new CartItems(null, cartItemCreate.getQuantity()
+                        , cartItemCreate.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemCreate.getAccountId()).get(),
                         detailProductOptional.get(),
                         true, LocalDateTime.now(), null);
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
@@ -80,13 +80,13 @@ public class CartItemWebsiteController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody CartItemWebsiteUpdate cartItemWebsiteUpdate) {
+    public ResponseEntity<?> update(@RequestBody CartItemUpdate cartItemUpdate) {
         try {
-            Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItemWebsiteUpdate.getId());
+            Optional<CartItems> cartItemsOptional = cartItemService.findById(cartItemUpdate.getId());
             if (cartItemsOptional.isPresent()) {
                 CartItems cartItems = cartItemsOptional.get();
-                cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
-                cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
+                cartItems.setQuantity(cartItemUpdate.getQuantity());
+                cartItems.setTotalPrice(cartItemUpdate.getTotalPrice());
                 return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));

@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.color.ColorDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,10 @@ public class Color {
 	@JsonIgnore
 	@OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
 	private List<DetailProduct> detailProducts = new ArrayList<>();
+
+	public Color(ColorDTO colorDTO){
+		this.colorName = colorDTO.getColorName();
+		this.status = 1;
+		this.createDate = LocalDateTime.now();
+	}
 }

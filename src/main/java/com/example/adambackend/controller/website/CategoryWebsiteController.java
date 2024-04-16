@@ -20,11 +20,11 @@ public class CategoryWebsiteController {
     @Autowired
     CategoryRepository categoryService;
 
-    @GetMapping("findAllCategoryParentId")
-    public ResponseEntity<IGenericResponse> findAllCategoryParentId() {
+    @GetMapping("findAllCategoryParent")
+    public ResponseEntity<IGenericResponse> findAllCategoryParent() {
         try {
             List<CategoryResponse> categoryResponseList = new ArrayList<>();
-            List<Category> categories = categoryService.findAllCategoryParentId();
+            List<Category> categories = categoryService.findAllCategoryParent();
             for (Category category : categories
             ) {
                 CategoryResponse categoryResponse = new CategoryResponse();

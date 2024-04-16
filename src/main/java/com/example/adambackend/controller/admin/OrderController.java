@@ -33,7 +33,7 @@ public class OrderController {
 	private final List<String> months = Arrays.asList("January", "February", "March", "April", "May",
 			"June", "July", "August", "September", "October", "November", "December");
 	@Autowired
-	OrderRepository orderService;
+	OrderService orderService;
 	@Autowired
 	DetailProductService detailProductService;
 	@Autowired
@@ -41,7 +41,7 @@ public class OrderController {
 	@Autowired
 	DetailOrderService detailOrderService;
 	@Autowired
-	HistoryOrderRepository historyOrderRepository;
+	HistoryOrderService historyOrderRepository;
 	@Autowired
 	AddressRepository addressRepository;
 	@Autowired
@@ -377,13 +377,13 @@ public class OrderController {
 			Dashboard dashboard2 = new Dashboard();
 			dashboard2.setName("Đơn Hủy");
 			dashboard2.setLabels(months);
-			List<Double> doubleList2 = Arrays.asList(orderService.sumCancelOrderByTime(LocalDate.now().getYear());
+			List<Double> doubleList2 = orderService.sumCancelOrderByTime(LocalDate.now().getYear());
 			dashboard2.setData(doubleList2);
 
 			Dashboard dashboard3 = new Dashboard();
 			dashboard3.setName("Đơn Đổi Trả");
 			dashboard3.setLabels(months);
-			List<Double> doubleList3 = Arrays.asList(orderService.sumPaybackOrderByTime(LocalDate.now().getYear());
+			List<Double> doubleList3 = orderService.sumPaybackOrderByTime(LocalDate.now().getYear());
 			dashboard3.setData(doubleList3);
 
 			dashboardList.add(dashboard);
@@ -474,8 +474,7 @@ public class OrderController {
 						detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
 						detailOrder.setCreateDate(LocalDateTime.now());
 						detailOrder.setPrice(detailProduct.getPriceExport());
-						detailOrder.setIsDeleted(false);
-						detailOrder.setIsActive(true);
+						detailOrder.setStatus(1);
 						detailOrder.setDetailProduct(detailProduct);
 						detailOrder.setOrder(order);
 						String x1 = RandomString.make(64) + order.getId();
@@ -489,18 +488,14 @@ public class OrderController {
 				order.setAmountPrice(ammountPrice);
 				order.setCartItems(cartItemsList);
 				Double totalPrice = 0.0;
-
-
 				String code = RandomString.make(64) + order.getId();
-
 				Double totalSalePrice = getSalePrice(ammountPrice);
 				order.setSalePrice((double) Math.round(totalSalePrice));
 				totalPrice = ammountPrice - totalSalePrice;
 				order.setOrderCode(code);
-
 				order.setTotalPrice(totalPrice);
 				if (totalPrice > 5000000) {
-					return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
+					return ResponseEntity.badRequest().body(new IGenericResponse(400,
 							"đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
 				}
 
@@ -515,7 +510,7 @@ public class OrderController {
 
 				return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, "Thành công"));
 			} else {
-				return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy "));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -560,7 +555,7 @@ public class OrderController {
 			if (optionalOrder.isPresent()) {
 				detailOrderService.deleteAllByOrderId(orderId);
 				orderService.deleteById(orderId);
-				return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
+				return ResponseEntity.ok().body(new IGenericResponse(200, ""));
 			}
 			return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Order"));
 		} catch (Exception e) {

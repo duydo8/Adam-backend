@@ -65,5 +65,6 @@ public class Account {
 	public Account() {
 		this.createDate = LocalDateTime.now();
 		this.status = 0;
+		this.priority = 0.0;
 	}
 }

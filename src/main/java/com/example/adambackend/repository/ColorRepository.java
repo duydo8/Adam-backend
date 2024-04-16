@@ -13,18 +13,24 @@ import java.util.Optional;
 
 @Repository
 public interface ColorRepository extends JpaRepository<Color, Integer> {
-    @Query(value = "select * from colors c join detail_products dp on dp.color_id= c.id " +
-            "where dp.id=?1 and  c.is_active=1 and c.is_deleted=0 ", nativeQuery = true)
-    Optional<Color> findByDetailProductId(Integer detailProductId);
+	@Query(value = "select * from colors c join detail_products dp on dp.color_id= c.id " +
+			"where dp.id=?1 and  c.status = 1", nativeQuery = true)
+	Optional<Color> findByDetailProductId(Integer detailProductId);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update colors set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
-    void updateColorsDeleted(Integer id);
+	@Modifying
+	@Transactional
+	@Query(value = "update colors set status = 1 where id = ?1", nativeQuery = true)
+	void updateColorsDeleted(Integer id);
 
-    @Query(value = "select * from colors where is_active=1 and is_deleted=0 order by create_date", nativeQuery = true)
-    List<Color> findAll();
+	@Query(value = "select * from colors where status = 1 order by create_date", nativeQuery = true)
+	List<Color> findAll();
 
-    @Query(value = "select c from Color c where c.isActive=true and c.isDeleted=false and c.colorName like concat('%',:name,'%') order by c.createDate ")
-    List<Color> findAll(@Param("name") String name);
+	@Query(value = "select c from Color c where c.status = 1 and c.colorName like concat('%',:name,'%') order by c.createDate ")
+	List<Color> findAll(@Param("name") String name);
+
+	@Query("SELECT c from Color c where c.status = 1 and c.id = ?1")
+	Optional<Color> findById(Integer id);
+
+	@Query("SELECT c from Color c where c.status = 1 and c.colorName = ?1")
+	Color findByName(String name);
 }

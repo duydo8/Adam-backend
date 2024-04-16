@@ -1,19 +1,22 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Comment;
-import com.example.adambackend.enums.CommentStatus;
-import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.comment.CommentAdminDTO;
-import com.example.adambackend.payload.comment.CommentAdminUpdate;
+import com.example.adambackend.payload.comment.CommentDTO;
+import com.example.adambackend.payload.comment.ListCommentId;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.CommentService;
-import com.example.adambackend.service.ProductSevice;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,146 +26,104 @@ import java.util.stream.Collectors;
 @CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("admin/comment")
 public class CommentController {
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    ProductSevice productService;
 
-    @GetMapping("countCommentByAccountIdAndProductId")
-    public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {
-        try {
-            return ResponseEntity.ok().body(new IGenericResponse<Integer>(commentService.countCommentByAccountIdAndProductId(idAccount, idProduct), 200, "countCommentByAccountIdAndProductId"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@Autowired
+	private CommentService commentService;
 
-    @PutMapping("changeStatusComment")
-    public ResponseEntity<?> changeStatusComment(@RequestParam("comment_id") Integer commentId,
-                                                 @RequestParam("status") String status) {
-        try {
-            //Comment comment= commentService.findCommentByIdAccountAndIdProduct(idAccount,idProduct);
-            Optional<Comment> comment = commentService.findById(commentId);
-            if (comment.isPresent()) {
-                if (status.equalsIgnoreCase(String.valueOf(CommentStatus.ACTIVE))) {
-                    comment.get().setCommentStatus(CommentStatus.ACTIVE);
-                } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.PENDING))) {
-                    comment.get().setCommentStatus(CommentStatus.PENDING);
-                } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.DELETE))) {
-                    comment.get().setCommentStatus(CommentStatus.DELETE);
-                } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED))) {
-                    comment.get().setCommentStatus(CommentStatus.UPDATED);
-                } else if (status.equalsIgnoreCase(String.valueOf(CommentStatus.UPDATED_ACTIVE))) {
-                    comment.get().setCommentStatus(CommentStatus.UPDATED_ACTIVE);
-                } else {
-                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy status"));
-                }
-                commentService.save(comment.get());
-                CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
-                return ResponseEntity.ok().body(new IGenericResponse<CommentDto>(commentDto, 200, "update successfully"));
-            } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("countCommentByAccountIdAndProductId")
+	public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {
+		try {
+			return ResponseEntity.ok().body(new IGenericResponse(commentService.countCommentByAccountIdAndProductId(idAccount
+					, idProduct), 200, "countCommentByAccountIdAndProductId"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @GetMapping("findAllByAccountIdAndProductId")
-    public ResponseEntity<?> changeStatusComment(@RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
-        try {
-            List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
-            if (comments.size() > 0) {
-                List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
-                return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
-            } else {
-                return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Không tìm thấy comment by account id: " + accountId
-                        + " product id: " + productId));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@PutMapping("changeStatusComment")
+	public ResponseEntity<?> changeStatusComment(@RequestParam("comment_id") Integer commentId,
+												 @RequestParam("status") int status) {
+		try {
+			Optional<Comment> comment = commentService.findById(commentId);
+			if (comment.isPresent()) {
+				comment.get().setCommentStatus(status);
+				commentService.save(comment.get());
+				return ResponseEntity.ok().body(new IGenericResponse(commentService.save(comment.get()), 200, "update successfully"));
+			} else {
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found comment"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
-        try {
-            return ResponseEntity.ok(new IGenericResponse<>(commentService.findAll(), 200, ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findAllByAccountIdAndProductId")
+	public ResponseEntity<?> findAllByAccountIdAndProductId(@RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
+		try {
+			List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
+			if (comments.size() > 0) {
+				List<CommentDto> commentDtoList = comments.stream().map(c -> new CommentDto(c)).collect(Collectors.toList());
+				return ResponseEntity.ok().body(new IGenericResponse(commentDtoList, 200, "find all comment successfully"));
+			} else {
+				return ResponseEntity.ok().body(new IGenericResponse(400, "not found comment by account id: " + accountId
+						+ " product id: " + productId));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody CommentAdminDTO commentAdminDTO) {
-        try {
-            Optional<Comment> commentOptional = commentService.findById(commentAdminDTO.getId());
-            if (commentOptional.isPresent()) {
-                Comment comment = commentOptional.get();
-                comment.setVote(commentAdminDTO.getVote());
-                comment.setCommentStatus(commentAdminDTO.getCommentStatus());
-                //    comment.setAccount(accountService.findById(commentAdminDTO.getAccountId()).get());
-                //     comment.setProduct(productService.findById(commentAdminDTO.getProductId()).get());
-                comment.setIsActive(commentAdminDTO.getIsActive());
-                comment.setContent(commentAdminDTO.getContent());
-                //      comment.setTimeCreated(commentAdminDTO.getTimeCreated());
+	@GetMapping("findAll")
+	public ResponseEntity<?> findAll() {
+		try {
+			return ResponseEntity.ok(new IGenericResponse<>(commentService.findAll(), 200, "successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
+	@PutMapping("update")
+	public ResponseEntity<?> update(@RequestBody CommentDTO commentDTO) {
+		try {
+			Comment comment = commentService.update(commentDTO);
+			if (CommonUtil.isNotNull(comment)) {
+				return ResponseEntity.ok().body(new IGenericResponse(comment, 200, "successfully"));
+			}
+			return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found comment"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-                commentService.save(comment);
-                CommentAdminUpdate commentAdminUpdate = new CommentAdminUpdate(commentAdminDTO.getId(),
-                        commentAdminDTO.getContent(), commentAdminDTO.getVote(),
-                        comment.getTimeCreated(), commentAdminDTO.getCommentStatus(), comment.getAccount().getId(),
-                        comment.getProduct().getId(), commentAdminDTO.getIsActive());
-                return ResponseEntity.ok().body(new IGenericResponse<>(commentAdminUpdate, 200, "success"));
-            }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@DeleteMapping("delete")
+	public ResponseEntity<?> delete(@RequestParam("id") Integer Id) {
+		try {
+			Optional<Comment> commentOptional = commentService.findById(Id);
+			if (commentOptional.isPresent()) {
+				commentService.deleteById(Id);
+				return ResponseEntity.ok().body(new IGenericResponse(200, "successfully"));
+			}
+			return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found comment"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @DeleteMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam("id") Integer Id) {
-        try {
-            Optional<Comment> commentOptional = commentService.findById(Id);
-            if (commentOptional.isPresent()) {
-                commentService.deleteById(Id);
-                return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
-            }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
-
-//    @DeleteMapping("deleteByListId")
-//    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListColorIdDTO listColorIdDTO) {
-//        List<Integer> list = listColorIdDTO.getListColorId();
-//        System.out.println(list.size());
-//        if (list.size() > 0) {
-//            for (Integer x : list
-//            ) {
-//                Optional<Color> colorOptional = colorService.findById(x);
-//
-//                if (colorOptional.isPresent()) {
-//
-//                    colorService.deleteById(x);
-//
-//                }
-//            }
-//            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
-//        }
-//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, " Không tìm thấy"));
-//    }
+	@DeleteMapping("deleteByListId")
+	public ResponseEntity<?> deleteListId(@RequestBody ListCommentId listCommentId) {
+		try {
+			String message = commentService.updateCommentDeleted(listCommentId.getListId());
+			return ResponseEntity.ok().body(new IGenericResponse(200, message));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
 }

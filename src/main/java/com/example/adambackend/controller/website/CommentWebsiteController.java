@@ -121,8 +121,8 @@ public class CommentWebsiteController {
         try {
             List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
             if (comments.size() > 0) {
-                List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
-                return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
+                List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c)).collect(Collectors.toList());
+                return ResponseEntity.ok().body(new IGenericResponse(commentDtos, 200, "find all comment successfully"));
             } else {
                 return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy comment by account id: " + accountId
                         + " product id: " + productId));

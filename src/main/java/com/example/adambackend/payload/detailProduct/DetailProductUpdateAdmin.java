@@ -12,9 +12,8 @@ public class DetailProductUpdateAdmin {
 	private Integer quantity;
 	private Double priceImport;
 	private Double priceExport;
-	private Boolean isDelete;
+	private Integer status;
 	private String productImage;
-	private Boolean isActive;
 	private Integer colorId;
 	private Integer sizeId;
 }

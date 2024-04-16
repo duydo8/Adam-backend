@@ -1,25 +1,33 @@
 package com.example.adambackend.payload.account;
 
-public interface AccountResponse {
-	Integer getId();
 
-	String getUsername();
+import com.example.adambackend.enums.ERoleName;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	String getFullName();
+@NoArgsConstructor
+@Data
+public class AccountResponse {
+	Integer id;
+	String username;
+	String fullName;
+	String email;
+	String phoneNumber;
+	String password;
+	String role;
+	Integer status;
+	Double priority;
 
-	String getEmail();
-
-	String getPhoneNumber();
-
-	String getPassword();
-
-	String getRole();
-
-	Boolean getIsActive();
-
-	Boolean getIsDeleted();
-
-	Double getPriority();
-
-
+	public AccountResponse(Integer id, String username, String fullName, String email, String phoneNumber, String password,
+	                       ERoleName role, Integer status, Double priority) {
+		this.id = id;
+		this.username = username;
+		this.fullName = fullName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.role = String.valueOf(role);
+		this.status = status;
+		this.priority = priority;
+	}
 }

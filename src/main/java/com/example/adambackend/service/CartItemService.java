@@ -1,6 +1,9 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.CartItems;
+import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.payload.cart.CartItemCreate;
 import com.example.adambackend.payload.cart.CartItemResponse;
 
 import java.util.List;
@@ -22,4 +25,8 @@ public interface CartItemService {
     List<CartItems> findByAccountId(Integer accountId);
 
     void updateIsActive(Integer id);
+
+    String validateCreateCartItem(CartItemCreate cartItemCreate, DetailProduct detailProduct);
+
+    CartItems createCartItem(Account account, DetailProduct detailProduct, CartItemCreate cartItemCreate);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountArrayId {
+public class ListAccountId {
 	private List<Integer> accountIdList;
 }

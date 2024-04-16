@@ -38,8 +38,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 	@Query("SELECT a FROM Account a WHERE a.verificationCode = ?1")
 	public Account findByVerificationCode(String code);
 
-	@Query(value = "select id as id, username as username, full_name as fullName, email as email, phone_number as phoneNumber, password as password, " +
-			"role as role, status as status, priority as priority from accounts where status = 1", nativeQuery = true)
+	@Query(value = "select new com.example.adambackend.payload.account.AccountResponse(a.id , a.username, a.fullName, a.email," +
+			" a.phoneNumber, a.password, a.role, a.status, a.priority) from Account a where a.status = 1")
 	public List<AccountResponse> findAlls();
 
 	@Query(value = "select count(*) from accounts where status = 1 and year(create_date) = ?1", nativeQuery = true)

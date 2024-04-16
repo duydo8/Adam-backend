@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CartItemWebsiteCreate {
+public class CartItemCreate {
 	private Integer quantity;
 	private Integer accountId;
 	private Integer detailProductId;

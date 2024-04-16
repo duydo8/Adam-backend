@@ -49,13 +49,12 @@ public class DetailProductController {
                 DetailProduct detailProduct = new DetailProduct();
                 detailProduct.setQuantity(detailProductDTO.getQuantity());
                 detailProduct.setProduct(product.get());
-                detailProduct.setProductImage(detailProductDTO.getProductImage());
+                detailProduct.setImageProduct(detailProductDTO.getProductImage());
                 detailProduct.setPriceImport(detailProductDTO.getPriceImport());
                 detailProduct.setPriceExport(detailProductDTO.getPriceExport());
-                detailProduct.setIsDelete(false);
+                detailProduct.setStatus(1);
                 detailProduct.setColor(color.get());
                 detailProduct.setSize(size.get());
-                detailProduct.setIsActive(true);
                 detailProduct.setCreateDate(LocalDateTime.now());
                 detailProductService.save(detailProduct);
                 List<DetailProduct> detailProducts = product.get().getDetailProducts();
@@ -84,9 +83,8 @@ public class DetailProductController {
                 detailProduct.setQuantity(detailProductUpdateAdmin.getQuantity());
                 detailProduct.setPriceExport(detailProductUpdateAdmin.getPriceExport());
                 detailProduct.setPriceImport(detailProductUpdateAdmin.getPriceImport());
-                detailProduct.setIsDelete(detailProductUpdateAdmin.getIsDelete());
-                detailProduct.setProductImage(detailProductUpdateAdmin.getProductImage());
-                detailProduct.setIsActive(detailProductUpdateAdmin.getIsActive());
+                detailProduct.setStatus(detailProductUpdateAdmin.getStatus());
+                detailProduct.setImageProduct(detailProductUpdateAdmin.getProductImage());
                 detailProduct.setColor(colorOptional.get());
                 detailProduct.setSize(sizeOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(detailProductUpdateAdmin, 200, ""));
@@ -158,8 +156,6 @@ public class DetailProductController {
                         detailProduct.setPriceImport(detailProductRequest.getPriceImport());
                         detailProduct.setPriceExport(detailProductRequest.getPriceExport());
                         detailProduct.setQuantity(detailProductRequest.getQuantity());
-                        detailProduct.setIsDelete(false);
-                        detailProduct.setIsActive(true);
 
                         detailProduct.setCreateDate(LocalDateTime.now());
                         detailProduct.setColor(colorList.get(j));
@@ -170,7 +166,8 @@ public class DetailProductController {
                     }
 
                 }
-                productOptional.get().setIsComplete(false);
+                // product is not complete
+                productOptional.get().setStatus(2);
                 return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
 
             } else {
@@ -195,7 +192,7 @@ public class DetailProductController {
                     Optional<DetailProduct> detailProduct = detailProductService.findById(n.getId());
                     if (detailProduct.isPresent()) {
 
-                        detailProduct.get().setIsActive(n.getIsActive());
+                        detailProduct.get(). (n.getIsActive());
                         detailProduct.get().setPriceImport(n.getPriceImport());
                         detailProduct.get().setPriceExport(n.getPriceExport());
                         detailProduct.get().setQuantity(n.getQuantity());
