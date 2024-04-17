@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class DistrictServiceImpl implements DistrictService {
     @Autowired
-    DistrictRepository districtRepository;
+    private DistrictRepository districtRepository;
 
     @Override
     public List<District> findAll() {

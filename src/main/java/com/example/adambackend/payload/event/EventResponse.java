@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventFindAll {
+public class EventResponse {
 	private Integer id;
 	private String eventName;
 	private LocalDateTime startTime;

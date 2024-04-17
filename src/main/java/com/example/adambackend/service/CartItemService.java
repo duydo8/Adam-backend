@@ -11,22 +11,23 @@ import java.util.Optional;
 
 public interface CartItemService {
 
-    Optional<CartItems> findById(Integer id);
-    Optional<CartItems> findByIds(Integer id);
+	Optional<CartItems> findById(Integer id);
 
-    List<CartItemResponse> findByOrderId(Integer orderId);
+	Optional<CartItems> findByIds(Integer id);
 
-    void deleteById(Integer id);
+	List<CartItemResponse> findByOrderId(Integer orderId);
 
-    CartItems save(CartItems cartItems);
+	void deleteById(Integer id);
 
-    List<CartItems> findAll();
+	CartItems save(CartItems cartItems);
 
-    List<CartItems> findByAccountId(Integer accountId);
+	List<CartItems> findAll();
 
-    void updateIsActive(Integer id);
+	List<CartItems> findByAccountId(Integer accountId);
 
-    String validateCreateCartItem(CartItemCreate cartItemCreate, DetailProduct detailProduct);
+	void updateStatus(Integer status, Integer id);
 
-    CartItems createCartItem(Account account, DetailProduct detailProduct, CartItemCreate cartItemCreate);
+	String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, DetailProduct detailProduct);
+
+	CartItems createCartItem(Account account, DetailProduct detailProduct, CartItemCreate cartItemCreate);
 }

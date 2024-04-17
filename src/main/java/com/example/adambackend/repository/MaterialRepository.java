@@ -12,14 +12,17 @@ import java.util.List;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Integer> {
-    @Transactional
-    @Modifying
-    @Query(value = "update materials set is_active=0 , is_deleted=1 where id=?1", nativeQuery = true)
-    void updateDeleteByArrayId(Integer id);
+	@Transactional
+	@Modifying
+	@Query(value = "update materials set status = 0 where id = ?1", nativeQuery = true)
+	void updateDeleteById(Integer id);
 
-    @Query(value = "select * from materials where is_active=1 and is_deleted=0", nativeQuery = true)
-    List<Material> findAll();
+	@Query(value = "select * from materials where status = 1", nativeQuery = true)
+	List<Material> findAll();
 
-    @Query(value = "select c from Material c where c.isActive=true and c.isDeleted=false and  c.materialName like concat('%',:name,'%') ")
-    List<Material> findAll(@Param("name") String name);
+	@Query(value = "select c from Material c where c.status = 1 and (:name is null or c.materialName like concat('%',:name,'%')) ")
+	List<Material> findAll(@Param("name") String name);
+
+	@Query("select m from Material m where m.status = 1 and m.materialName = ?1")
+	Material findByName(String name);
 }

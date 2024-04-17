@@ -196,14 +196,14 @@ public class ProductController {
         }
     }
 
-    @PutMapping("updateIsActive")
+    @PutMapping("updateStatus")
     public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive) {
         try {
-            System.out.println(productUpdateIsActive.getIs_active()+" "+ productUpdateIsActive.getId());
+            System.out.println(productUpdateIsActive.getStatus()+" "+ productUpdateIsActive.getId());
             Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
             if (product1.isPresent()) {
 
-                productSevice.updateProductsIsActive(productUpdateIsActive.getIs_active(), productUpdateIsActive.getId());
+                productSevice.updateProductsIsActive(productUpdateIsActive.getStatus(), productUpdateIsActive.getId());
                 return ResponseEntity.ok().body(new IGenericResponse<>(200, "Thành công"));
             }
             return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy"));
@@ -214,7 +214,7 @@ public class ProductController {
     }
 
     @PostMapping("createArrayOptionValueProduct")
-    public ResponseEntity<?> createArrayOptionValueProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<?> createArrayOptionValueProduct(Integer productId, Integer detailProductId) {
         try {
             List<Tag> tagList = new ArrayList<>();
             List<Material> materialList = new ArrayList<>();

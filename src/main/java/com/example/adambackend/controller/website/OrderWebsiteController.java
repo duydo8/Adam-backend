@@ -84,14 +84,13 @@ public class OrderWebsiteController {
                         ammountPrice += cartItemsOptional.get().getTotalPrice();
                         detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
                         detailProductService.save(detailProduct);
-                        cartItemService.updateIsActive(x);
+                        cartItemService.updateStatus(0, x);
                         DetailOrder detailOrder = new DetailOrder();
                         detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
                         detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
                         detailOrder.setCreateDate(LocalDateTime.now());
                         detailOrder.setPrice(detailProduct.getPriceExport());
-                        detailOrder.setIsDeleted(false);
-                        detailOrder.setIsActive(true);
+                        detailOrder.setStatus(1);
                         detailOrder.setDetailProduct(detailProduct);
                         detailOrder.setOrder(order);
                         String x1 = RandomString.make(64) + order.getId();
@@ -148,7 +147,6 @@ public class OrderWebsiteController {
                 historyOrder.setOrder(orderService.findById(order.getId()).get());
                 historyOrder.setDescription("create time");
                 historyOrder.setUpdateTime(LocalDateTime.now());
-                historyOrder.setIsActive(true);
                 historyOrder.setTotalPrice(order.getTotalPrice());
                 historyOrder.setStatus(1);
                 historyOrder = historyOrderRepository.save(historyOrder);

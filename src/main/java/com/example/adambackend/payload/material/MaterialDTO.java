@@ -8,5 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MaterialDTO {
+	private Integer id;
 	private String materialName;
+	private Integer status;
 }

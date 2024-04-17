@@ -1,5 +1,6 @@
 package com.example.adambackend.service.impl;
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.product.CustomProductFilterRequest;
 import com.example.adambackend.payload.product.ProductTop10Create;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductSevice {
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Override
     public List<Product> findAll() {
@@ -34,8 +35,8 @@ public class ProductServiceImpl implements ProductSevice {
 
     @Override
     public Boolean checkFavorite(Integer productId, Integer accountId) {
-        List<Integer> x = productRepository.checkFavorite(productId, accountId);
-        if (x == null || x.size() == 0) {
+        List<Integer> listProductId = productRepository.checkFavorite(productId, accountId);
+        if (CommonUtil.isNotNull(listProductId) && !listProductId.isEmpty()) {
             return false;
         }
         return true;
@@ -91,5 +92,10 @@ public class ProductServiceImpl implements ProductSevice {
     @Override
     public Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId) {
         return productRepository.findOptionByProductId(productId);
+    }
+
+    @Override
+    public void updateStatusProductById(Integer status, Integer id){
+         productRepository.updateStatusProduct(status,id);
     }
 }

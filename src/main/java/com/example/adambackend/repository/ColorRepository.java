@@ -19,7 +19,7 @@ public interface ColorRepository extends JpaRepository<Color, Integer> {
 
 	@Modifying
 	@Transactional
-	@Query(value = "update colors set status = 1 where id = ?1", nativeQuery = true)
+	@Query(value = "update colors set status = 0 where id = ?1", nativeQuery = true)
 	void updateColorsDeleted(Integer id);
 
 	@Query(value = "select * from colors where status = 1 order by create_date", nativeQuery = true)

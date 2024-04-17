@@ -238,7 +238,7 @@ public class OrderController {
 				ammountPrice += cartItemsOptional.get().getTotalPrice();
 				detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
 				detailProductService.save(detailProduct);
-				cartItemService.updateIsActive(x);
+				cartItemService.updateStatus(0, x);
 				DetailOrder detailOrder = new DetailOrder();
 				detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
 				detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());
@@ -408,7 +408,6 @@ public class OrderController {
 			) {
 				idx.add(d.getId());
 			}
-
 		}
 
 		Double salePrice = 0.0;
@@ -468,7 +467,7 @@ public class OrderController {
 						ammountPrice += cartItemsOptional.get().getTotalPrice();
 						detailProduct.setQuantity(detailProduct.getQuantity() - cartItemsOptional.get().getQuantity());
 						detailProductService.save(detailProduct);
-						cartItemService.updateIsActive(x);
+						cartItemService.updateStatus(0,x);
 						DetailOrder detailOrder = new DetailOrder();
 						detailOrder.setQuantity(cartItemsOptional.get().getQuantity());
 						detailOrder.setTotalPrice(cartItemsOptional.get().getTotalPrice());

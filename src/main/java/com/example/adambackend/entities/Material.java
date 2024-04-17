@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.material.MaterialDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,11 @@ public class Material {
 	@JsonIgnore
 	@OneToMany(mappedBy = "material")
 	private List<MaterialProduct> materialProducts = new ArrayList<>();
+
+	public Material(MaterialDTO materialDTO) {
+		this.id = materialDTO.getId();
+		this.materialName = materialDTO.getMaterialName();
+		this.status = materialDTO.getStatus();
+		this.createDate = LocalDateTime.now();
+	}
 }

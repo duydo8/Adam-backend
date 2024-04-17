@@ -1,14 +1,18 @@
 package com.example.adambackend.service.impl;
 
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.CartItems;
 import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.cart.CartItemCreate;
 import com.example.adambackend.payload.cart.CartItemResponse;
+import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.CartItemRepository;
 import com.example.adambackend.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,17 +61,23 @@ public class CartItemServiceImpl implements CartItemService {
 	}
 
 	@Override
-	public void updateIsActive(Integer id) {
-		cartItemRepository.updateIsActive(id);
+	public void updateStatus(Integer status, Integer id) {
+		cartItemRepository.updateStatus(status, id);
 	}
 
 	@Override
-	public String validateCreateCartItem(CartItemCreate cartItemCreate, DetailProduct detailProduct) {
+	public String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, DetailProduct detailProduct) {
+		if (account.isEmpty()) {
+			return "not found account";
+		}
+		if (!CommonUtil.isNotNull(detailProduct)) {
+			return "not found product";
+		}
 		if (cartItemCreate.getQuantity() >= 10) {
-			return "Không thể mua số lượng >10";
+			return "can't buy quantity > 10";
 		}
 		if (detailProduct.getQuantity() < cartItemCreate.getQuantity()) {
-			return "Không đủ số lượng";
+			return "not enough quantity";
 		}
 		return null;
 	}

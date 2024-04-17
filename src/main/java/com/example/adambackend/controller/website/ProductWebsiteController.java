@@ -66,25 +66,7 @@ public class ProductWebsiteController {
     @GetMapping("findTop10productByCreateDate")
     public ResponseEntity<?> findTop10productByCreateDate() {
         try {
-            List<ProductTop10Create> products = productSevice.findTop10productByCreateDate();
-            List<ProductWebsiteDTO> productDTOS = new ArrayList<>();
-            for (ProductTop10Create product : products) {
-                ProductWebsiteDTO productWebsiteDTO = new ProductWebsiteDTO();
-                productWebsiteDTO.setId(product.getId());
-                productWebsiteDTO.setProductName(product.getProductName());
-                productWebsiteDTO.setCreateDate(product.getCreateDate());
-                productWebsiteDTO.setDescription(product.getDescription());
-                productWebsiteDTO.setImage(product.getImage());
-                productWebsiteDTO.setIsComplete(product.getIsComplete());
-                productWebsiteDTO.setIsActive(product.getIsActive());
-                productWebsiteDTO.setIsDelete(product.getIsDelete());
-                productWebsiteDTO.setVoteAverage(product.getVoteAverage());
-                productWebsiteDTO.setMinPrice(product.getMinPrice());
-                productWebsiteDTO.setMaxPrice(product.getMaxPrice());
-                productDTOS.add(productWebsiteDTO);
-            }
-
-            return ResponseEntity.ok().body(new IGenericResponse<>(productDTOS, 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findTop10productByCreateDate(), 200, "successfully"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

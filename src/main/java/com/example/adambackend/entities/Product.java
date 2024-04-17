@@ -16,13 +16,12 @@ import java.util.List;
 @Table(name = "products")
 @Entity
 public class Product {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String productName;
 	private String description;
-	// 0: not active, 1: active, 2:complete
+	// 0: not active - not complete, 1: active
 	private Integer status;
 	private String image;
 	private Double voteAverage;

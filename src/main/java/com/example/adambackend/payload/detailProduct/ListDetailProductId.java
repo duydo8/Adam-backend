@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListDetailProductIdDTO {
+public class ListDetailProductId {
 	List<Integer> listDetailProductId;
 }

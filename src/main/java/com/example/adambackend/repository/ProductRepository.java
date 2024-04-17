@@ -19,13 +19,13 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query("SELECT p FROM Product p where p.isDelete=false  and p.isActive=true and p.isComplete=true  ")
+    @Query("SELECT p FROM Product p where p.status = 1")
     Page<Product> findAll(Pageable pageable);
 
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true and c.productName like concat('%',:name,'%') ")
+    @Query(value = "select p from Product p where p.status = 1 and p.productName like concat('%',:name,'%') ")
     Page<Product> findAll(@Param("name") String name, Pageable pageable);
 
-    @Query(value = "select c from Product c where c.isActive=true and c.isDelete=false and c.isComplete=true order by c.createDate desc")
+    @Query(value = "select p from Product p where p.status = 1 order by p.createDate desc")
     List<Product> findAll();
 
     @Query(value = "select distinct(p.id) as id, p.product_name as productName, p.description as description,p.is_deleted as isDelete," +
@@ -92,11 +92,15 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "update products set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
+    @Query(value = "update products set status = 0 where id = ?1", nativeQuery = true)
     void updateProductsDeleted(Integer id);
 
     @Modifying
     @Transactional
-    @Query(value = "update products set is_active=?1 where id=?2", nativeQuery = true)
-    void updateProductsIsActive(Integer isActive, Integer id);
+    @Query(value = "update products set status = ?1 where id = ?2", nativeQuery = true)
+    void updateStatusProduct(Integer status, Integer id);
+
+    @Query("select p from Product  p where p.status = 1 and p.id = ?1")
+    Optional<Product> findById(Integer id);
+
 }

@@ -37,13 +37,8 @@ public class CartItemController {
 		try {
 			Optional<Account> account = accountService.findById(cartItemCreate.getAccountId());
 			Optional<DetailProduct> detailProduct = detailProductService.findById(cartItemCreate.getDetailProductId());
-			if (!account.isPresent()) {
-				return ResponseEntity.ok().body(new IGenericResponse<>(400, "not found account"));
-			}
-			if (!detailProduct.isPresent()) {
-				return ResponseEntity.ok().body(new IGenericResponse<>(400, "not found product"));
-			}
-			String error = cartItemService.validateCreateCartItem(cartItemCreate, detailProduct.get());
+
+			String error = cartItemService.validateCreateCartItem(account,cartItemCreate, detailProduct.get());
 			if (CommonUtil.isNotNull(error)) {
 				return ResponseEntity.ok().body(new IGenericResponse<>(200, error));
 			}

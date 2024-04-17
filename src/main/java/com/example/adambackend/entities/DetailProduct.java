@@ -30,10 +30,12 @@ public class DetailProduct {
 	@JoinColumn(name = "color_id")
 	private Color color;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "size_id")
 	private Size size;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;

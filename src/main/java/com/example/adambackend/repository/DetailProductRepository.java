@@ -18,12 +18,12 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, In
 
 	@Transactional
 	@Modifying
-	@Query(value = "delete from detail_products where product_id=?1", nativeQuery = true)
+	@Query(value = "delete from detail_products where product_id = ?1", nativeQuery = true)
 	void deleteByProductId(Integer productId);
 
 	@Modifying
 	@Transactional
-	@Query(value = "update detail_products set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
+	@Query(value = "update detail_products set status = 0 where id = ?1", nativeQuery = true)
 	void updateDetailProductsDeleted(Integer id);
 
 	@Query("select dp from DetailProduct dp where dp.status = 1 and dp.id = ?1")

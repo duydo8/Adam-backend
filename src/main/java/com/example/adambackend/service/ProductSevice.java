@@ -40,4 +40,6 @@ public interface ProductSevice {
     Optional<ProductHandleWebsite> findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId);
 
     Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId);
+
+    void updateStatusProductById(Integer status, Integer id);
 }
