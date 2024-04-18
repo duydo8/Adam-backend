@@ -56,11 +56,9 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "where o.id=?1 GROUP BY p.id,p.product_name,p.image,p.create_date", nativeQuery = true)
     List<CustomProductFilterRequest> findByOrderId(Integer orderId);
 
-    @Query(value = "select o.id as id,o.status as status,o.createDate as createDate,o.account.id as AccountId," +
-            "o.fullName as fullName,o.phoneNumber as phoneNumber,o.amountPrice as amountPrice," +
-            "o.salePrice as salePrice,o.totalPrice as totalPrice,o.address.id as addressId," +
-            "o.addressDetail as addressDetail,o.orderCode as orderCode " +
-            " from Order o where 1=1 and (:status is null or o.status=:status) ")
+    @Query(value = "select new com.example.adambackend.payload.order.OrderFindAll(o.id, o.status, o.createDate, o.account.id, " +
+            "o.fullName, o.phoneNumber, o.amountPrice, o.salePrice, o.totalPrice, o.address.id, " +
+            "o.addressDetail ,o.orderCode ) from Order o where (:status is null or o.status=:status) ")
     List<OrderFindAll> findByStatus(Pageable pageable, @Param("status") Integer status);
 
     @Query(value = "select count(*) from orders where ?1 is null or status=?1", nativeQuery = true)

@@ -21,7 +21,7 @@ public interface ProductSevice {
 
     Product save(Product product);
 
-    List<Product> findAll();
+    Page<Product> findAll( String name,Pageable pageable);
 
     Page<Product> findPage(int page, int size);
 

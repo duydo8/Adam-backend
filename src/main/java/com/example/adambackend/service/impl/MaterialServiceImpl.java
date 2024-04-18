@@ -3,6 +3,7 @@ package com.example.adambackend.service.impl;
 import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Material;
 import com.example.adambackend.repository.MaterialRepository;
+import com.example.adambackend.service.MaterialProductService;
 import com.example.adambackend.service.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class MaterialServiceImpl implements MaterialService {
 	@Autowired
 	private MaterialRepository materialRepository;
+
+	@Autowired
+	private MaterialProductService materialProductService;
 
 	@Override
 	public List<Material> findAll(String name) {
@@ -30,7 +34,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public void deleteById(Integer id) {
-		materialRepository.updateDeleteByArrayId(id);
+		materialRepository.updateDeleteById(id);
 	}
 
 	@Override
@@ -38,5 +42,16 @@ public class MaterialServiceImpl implements MaterialService {
 		return materialRepository.findById(id);
 	}
 
-
+	@Override
+	public void updateDeletedByListId(List<Integer> materialIs){
+		if (materialIs.size() > 0) {
+			for (Integer x : materialIs) {
+				Optional<Material> materialOptional = materialRepository.findById(x);
+				if (materialOptional.isPresent()) {
+					materialProductService.updateMaterialProductsDeletedByMaterialId(x);
+					materialRepository.updateDeleteById(x);
+				}
+			}
+		}
+	}
 }

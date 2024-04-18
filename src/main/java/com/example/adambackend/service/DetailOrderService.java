@@ -3,6 +3,7 @@ package com.example.adambackend.service;
 import com.example.adambackend.entities.DetailOrder;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.detailOrder.DetailOrderAdmin;
+import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface DetailOrderService {
 
     void deleteById(Integer id);
 
-    List<DetailOrderAdmin> findByOrderId(Integer orderId);
+    List<DetailOrderPayLoad> findByOrderId(Integer orderId);
 
     String findCodeById(Integer id);
 

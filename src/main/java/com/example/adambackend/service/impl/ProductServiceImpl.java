@@ -20,82 +20,82 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductSevice {
-    @Autowired
-    private ProductRepository productRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
-    @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
+	@Override
+	public Page<Product> findAll(String name, Pageable pageable) {
+		return productRepository.findAll(name, pageable);
+	}
 
-    @Override
-    public Page<Product> findPage(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page, size, Sort.by("createDate").descending()));
-    }
+	@Override
+	public Page<Product> findPage(int page, int size) {
+		return productRepository.findAll(PageRequest.of(page, size, Sort.by("createDate").descending()));
+	}
 
-    @Override
-    public Boolean checkFavorite(Integer productId, Integer accountId) {
-        List<Integer> listProductId = productRepository.checkFavorite(productId, accountId);
-        if (CommonUtil.isNotNull(listProductId) && !listProductId.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public Boolean checkFavorite(Integer productId, Integer accountId) {
+		List<Integer> listProductId = productRepository.checkFavorite(productId, accountId);
+		if (CommonUtil.isNotNull(listProductId) && !listProductId.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public Product save(Product Product) {
-        return productRepository.save(Product);
-    }
+	@Override
+	public Product save(Product Product) {
+		return productRepository.save(Product);
+	}
 
-    @Override
-    public void deleteById(Integer id) {
-        productRepository.deleteById(id);
-    }
+	@Override
+	public void deleteById(Integer id) {
+		productRepository.deleteById(id);
+	}
 
-    @Override
-    public Optional<Product> findById(Integer id) {
-        return productRepository.findById(id);
-    }
+	@Override
+	public Optional<Product> findById(Integer id) {
+		return productRepository.findById(id);
+	}
 
-    @Override
-    public List<ProductTop10Create> findTop10productByCreateDate() {
-        return productRepository.findTop10productByCreateDate();
-    }
+	@Override
+	public List<ProductTop10Create> findTop10productByCreateDate() {
+		return productRepository.findTop10productByCreateDate();
+	}
 
-    @Override
-    public List<Product> findAllByTagName(String tagName) {
-        return productRepository.findAllByTagName(tagName);
-    }
+	@Override
+	public List<Product> findAllByTagName(String tagName) {
+		return productRepository.findAllByTagName(tagName);
+	}
 
-    @Override
-    public Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
-                                                                 Double bottomPrice, Double topPrice, Pageable pageable) {
-        return productRepository.findPageableByOption(categoryId, sizeId,
-                colorId, materialId, tagId, bottomPrice, topPrice, pageable);
-    }
+	@Override
+	public Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
+																 Double bottomPrice, Double topPrice, Pageable pageable) {
+		return productRepository.findPageableByOption(categoryId, sizeId,
+				colorId, materialId, tagId, bottomPrice, topPrice, pageable);
+	}
 
-    @Override
-    public List<Product> findTop10ProductBestSale() {
-        return productRepository.findTop10ProductBestSale();
-    }
+	@Override
+	public List<Product> findTop10ProductBestSale() {
+		return productRepository.findTop10ProductBestSale();
+	}
 
-    @Override
-    public Product findByDetailProductId(Integer detalId) {
-        return productRepository.findByDetailProductId(detalId);
-    }
+	@Override
+	public Product findByDetailProductId(Integer detalId) {
+		return productRepository.findByDetailProductId(detalId);
+	}
 
-    @Override
-    public Optional<ProductHandleWebsite> findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId) {
-        return productRepository.findOptionWebsiteByProductId(productId, accountId);
-    }
+	@Override
+	public Optional<ProductHandleWebsite> findOptionWebsiteByAccountIdProductId(Integer productId, Integer accountId) {
+		return productRepository.findOptionWebsiteByProductId(productId, accountId);
+	}
 
-    @Override
-    public Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId) {
-        return productRepository.findOptionByProductId(productId);
-    }
+	@Override
+	public Optional<ProductHandleValue> findOptionWebsiteByProductId(Integer productId) {
+		return productRepository.findOptionByProductId(productId);
+	}
 
-    @Override
-    public void updateStatusProductById(Integer status, Integer id){
-         productRepository.updateStatusProduct(status,id);
-    }
+	@Override
+	public void updateStatusProductById(Integer status, Integer id) {
+		productRepository.updateStatusProduct(status, id);
+	}
 }

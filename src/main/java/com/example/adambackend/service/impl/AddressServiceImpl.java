@@ -11,31 +11,40 @@ import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
-    @Autowired
-    AddressRepository addressRepository;
+	@Autowired
+	private AddressRepository addressRepository;
 
-    @Override
-    public List<Address> findAll() {
-        return addressRepository.findAll();
-    }
+	@Override
+	public List<Address> findAll() {
+		return addressRepository.findAll();
+	}
 
-    @Override
-    public Address save(Address Address) {
-        return addressRepository.save(Address);
-    }
+	@Override
+	public Address save(Address Address) {
+		return addressRepository.save(Address);
+	}
 
-    @Override
-    public void deleteById(Integer id) {
-        addressRepository.deleteById(id);
-    }
+	@Override
+	public void deleteById(Integer id) {
+		addressRepository.deleteById(id);
+	}
 
-    @Override
-    public Optional<Address> findById(Integer id) {
-        return addressRepository.findById(id);
-    }
+	@Override
+	public Optional<Address> findById(Integer id) {
+		return addressRepository.findById(id);
+	}
 
-    @Override
-    public List<Address> findByAccountId(Integer accountId) {
-        return addressRepository.findByAccountId(accountId);
-    }
+	@Override
+	public List<Address> findByAccountId(Integer accountId) {
+		return addressRepository.findByAccountId(accountId);
+	}
+
+	@Override
+	public Address findByAddressId(Integer id) {
+		Optional<Address> address = addressRepository.findById(id);
+		if (address.isPresent()) {
+			return address.get();
+		}
+		return null;
+	}
 }

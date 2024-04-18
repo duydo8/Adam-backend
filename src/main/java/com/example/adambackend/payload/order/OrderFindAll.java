@@ -1,29 +1,25 @@
 package com.example.adambackend.payload.order;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-public interface OrderFindAll {
-	Integer getId();
-
-	Integer getStatus();
-
-	LocalDateTime getCreateDate();
-
-	Integer getAccountId();
-
-	String getFullName();
-
-	String getPhoneNumber();
-
-	Double getAmountPrice();
-
-	Double getSalePrice();
-
-	Double getTotalPrice();
-
-	Integer getAddressId();
-
-	String getAddressDetail();
-
-	String getOrderCode();
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderFindAll {
+	private Integer id;
+	private Integer status;
+	private LocalDateTime createDate;
+	private Integer accountId;
+	private String fullName;
+	private String phoneNumber;
+	private Double amountPrice;
+	private Double salePrice;
+	private Double totalPrice;
+	private Integer addressId;
+	private String addressDetail;
+	private String orderCode;
 }

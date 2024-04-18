@@ -12,19 +12,21 @@ import java.util.List;
 
 @Repository
 public interface MaterialProductRepository extends JpaRepository<MaterialProduct, MaterialProductPK> {
-    @Transactional
-    @Modifying
-    @Query(value = "delete from material_products where material_id=?1", nativeQuery = true)
-    Integer deleteByMateralId(Integer materialId);
 
-    @Query(value = "select material_id from material_products where product_id=?1 and is_active=1 and is_deleted=0", nativeQuery = true)
+    @Query(value = "select material_id from material_products where product_id=?1 and status = 1", nativeQuery = true)
     List<Integer> findMaterialIdByProductId(Integer productId);
 
     @Modifying
     @Transactional
-    @Query(value = "update material_products set is_deleted=1 and is_active=0 where material_id =?1", nativeQuery = true)
-    void updateMaterialProductsDeleted(Integer id);
+    @Query(value = "update material_products set status =0 where  product_id= ?1", nativeQuery = true)
+    void updateDeletedByProductId(Integer productId);
 
-    @Query(value = "select * from material_products where is_active=1 and is_deleted=0", nativeQuery = true)
+    @Modifying
+    @Transactional
+    @Query(value = "update material_products set status =1 where material_id = ?1", nativeQuery = true)
+    void updateMaterialProductsDeletedByMaterialId(Integer id);
+
+    @Query(value = "select * from material_products where status = 1", nativeQuery = true)
     List<MaterialProduct> findAlls();
+
 }

@@ -1,15 +1,18 @@
 package com.example.adambackend.repository;
 
 import com.example.adambackend.entities.DetailOrder;
+import com.example.adambackend.entities.DetailProduct;
 import com.example.adambackend.entities.Product;
 import com.example.adambackend.payload.detailOrder.DetailOrderAdmin;
 import com.example.adambackend.payload.detailOrder.DetailOrderDTO;
+import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -54,10 +57,7 @@ public interface DetailOrderRepository extends JpaRepository<DetailOrder, Intege
 
             "where do.id=?1", nativeQuery = true)
     String findCodeById(Integer id);
-
-    @Query(value = "select id as id,quantity as quantity,total_price as totalPrice," +
-            "detail_product_id as detailProductId, status as status," +
-            "create_date as createDate from detail_orders where order_id=?1", nativeQuery = true)
-    List<DetailOrderAdmin> findByOrderId(Integer orderId);
-
+    @Query(value = "select new com.example.adambackend.payload.detailOrder.DetailOrderPayLoad(id, quantity, totalPrice," +
+            "  status, createDate, detailOrderCode, detailProduct) from DetailOrder where order.id = ?1 and status = 1")
+    List<DetailOrderPayLoad> findByOrderId(Integer orderId);
 }

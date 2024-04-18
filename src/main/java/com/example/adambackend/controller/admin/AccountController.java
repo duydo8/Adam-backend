@@ -49,7 +49,7 @@ public class AccountController {
 			return ResponseEntity.ok().body(new IGenericResponse(account, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -64,7 +64,7 @@ public class AccountController {
 			return ResponseEntity.ok().body(new IGenericResponse(code, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class AccountController {
 			return ResponseEntity.ok(new IGenericResponse(accountList, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -110,7 +110,7 @@ public class AccountController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -125,7 +125,7 @@ public class AccountController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -135,7 +135,7 @@ public class AccountController {
 			return ResponseEntity.ok().body(new IGenericResponse<>(accountService.statisticInAccountAdmin(months), 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class AccountController {
 			return ResponseEntity.ok().body(new IGenericResponse(200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -162,9 +162,9 @@ public class AccountController {
 		if (account.isPresent()) {
 			account.get().setPriority(priority);
 			accountService.save(account.get());
-			return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "successfully"));
+			return ResponseEntity.ok().body(new IGenericResponse<>(200, "successfully"));
 		}
-		return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+		return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "not found"));
 	}
 
 	@PostMapping("changePassword")
@@ -178,9 +178,9 @@ public class AccountController {
 			String passwordEncode = passwordEncoder.encode(passNew);
 			account.get().setPassword(passwordEncode);
 			accountService.save(account.get());
-			return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "successfully"));
+			return ResponseEntity.ok().body(new IGenericResponse<>(200, "successfully"));
 		}
-		return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+		return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "not found"));
 	}
 
 	@PostMapping("/createAdminAccount")
@@ -195,7 +195,7 @@ public class AccountController {
 			return ResponseEntity.ok().body(new IGenericResponse<>(account, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 }

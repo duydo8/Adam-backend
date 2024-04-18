@@ -15,4 +15,5 @@ public interface MaterialService {
 	Optional<Material> findById(Integer id);
 
 
+	void updateDeletedByListId(List<Integer> materialIs);
 }

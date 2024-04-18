@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,10 @@ public class HistoryOrder {
 	@JoinColumn(name = "order_id")
 	private Order order;
 
+	public HistoryOrder(Order order) {
+		this.status = order.getStatus();
+		this.updateTime = LocalDateTime.now();
+		this.description = String.valueOf(OrderStatus.getOrderStatusFromValue(order.getStatus()));
+		this.totalPrice = order.getTotalPrice();
+	}
 }

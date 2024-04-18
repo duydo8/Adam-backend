@@ -26,4 +26,7 @@ public interface EventService {
     List<EventResponse> findAllEvent(String name);
 
     void deleteListEventById(List<Integer> listEventId);
+
+
+    List<Event> findAllByTime();
 }

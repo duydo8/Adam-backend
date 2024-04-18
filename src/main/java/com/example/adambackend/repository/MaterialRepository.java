@@ -25,4 +25,6 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
 	@Query("select m from Material m where m.status = 1 and m.materialName = ?1")
 	Material findByName(String name);
+
+
 }

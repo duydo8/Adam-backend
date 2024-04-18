@@ -24,4 +24,10 @@ public interface DiscountOrderService {
 	String validateCreateDisccountOrder(Event event, DiscountOrderDTO discountOrderDTO);
 
 	DiscountOrder createDiscountOrder(Event event, DiscountOrderDTO discountOrderDTO);
+
+	void updateDiscountOrder(DiscountOrder discountOrder, DiscountOrderDTO discountOrderDTO);
+
+	List<DiscountOrder> findByTotalPriceAndTime(Double price, Integer eventId);
+
+	DiscountOrder getById(Integer id);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
@@ -21,4 +22,7 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
 //            "join Ward w on w.id=a.ward.id"
 			+ " where a.id=?1")
 	AddressResponse findByAddressId(Integer id);
+
+	@Query("select a from Address a where a.id = ?1 and a.status = 1")
+	Optional<Address> findById(Integer id);
 }

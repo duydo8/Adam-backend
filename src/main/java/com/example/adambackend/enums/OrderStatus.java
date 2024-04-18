@@ -12,7 +12,20 @@ public enum OrderStatus {
 	delivery(7);
 	private int value;
 
+	public int getValue() {
+		return value;
+	}
+
 	private OrderStatus(int value) {
 		this.value = value;
+	}
+
+	public static OrderStatus getOrderStatusFromValue(int value) {
+		for (OrderStatus status : OrderStatus.values()) {
+			if (status.getValue() == value) {
+				return status;
+			}
+		}
+		return null;
 	}
 }

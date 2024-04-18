@@ -84,4 +84,24 @@ public class DiscountOrderServiceImpl implements DiscountOrderService {
 
 		return discountOrder;
 	}
+
+	@Override
+	public void updateDiscountOrder(DiscountOrder discountOrder, DiscountOrderDTO discountOrderDTO){
+		discountOrder.setDiscountName(discountOrderDTO.getDiscountName());
+		discountOrder.setStatus(discountOrderDTO.getStatus());
+		discountOrder.setSalePrice(discountOrderDTO.getSalePrice());
+		discountOrder.setOrderMaxRange(discountOrderDTO.getOrderMaxRange());
+		discountOrder.setOrderMinRange(discountOrderDTO.getOrderMinRange());
+		discountOrderRepository.save(discountOrder);
+	}
+
+	@Override
+	public List<DiscountOrder> findByTotalPriceAndTime(Double price, Integer eventId){
+		return discountOrderRepository.findByTotalPriceAndTime(price,eventId);
+	}
+
+	@Override
+	public DiscountOrder getById(Integer id) {
+		return discountOrderRepository.getById(id);
+	}
 }

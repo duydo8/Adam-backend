@@ -1,54 +1,99 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.*;
+import com.example.adambackend.entities.Category;
+import com.example.adambackend.entities.Color;
+import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.entities.Material;
+import com.example.adambackend.entities.MaterialProduct;
+import com.example.adambackend.entities.MaterialProductPK;
+import com.example.adambackend.entities.Product;
+import com.example.adambackend.entities.Size;
+import com.example.adambackend.entities.Tag;
+import com.example.adambackend.entities.TagProduct;
+import com.example.adambackend.entities.TagProductPK;
 import com.example.adambackend.exception.HandleExceptionDemo;
-import com.example.adambackend.payload.product.*;
+import com.example.adambackend.payload.product.ListProductIdDTO;
+import com.example.adambackend.payload.product.ProductDTO;
+import com.example.adambackend.payload.product.ProductResponse;
+import com.example.adambackend.payload.product.ProductUpdateDTO;
+import com.example.adambackend.payload.product.ProductUpdateIsActive;
 import com.example.adambackend.payload.productWebsiteDTO.OptionalProduct;
-import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.MaterialProductRepository;
-import com.example.adambackend.repository.ProductRepository;
-import com.example.adambackend.repository.TagProductRepository;
-import com.example.adambackend.service.*;
+import com.example.adambackend.service.CategoryService;
+import com.example.adambackend.service.ColorService;
+import com.example.adambackend.service.CommentService;
+import com.example.adambackend.service.DetailProductService;
+import com.example.adambackend.service.FavoriteService;
+import com.example.adambackend.service.MaterialProductService;
+import com.example.adambackend.service.MaterialService;
+import com.example.adambackend.service.ProductSevice;
+import com.example.adambackend.service.SizeService;
+import com.example.adambackend.service.TagProductService;
+import com.example.adambackend.service.TagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 36000000)
 @RequestMapping("admin/product")
 public class ProductController {
+
     @Autowired
-    ProductRepository productSevice;
+    private ProductSevice productSevice;
+
     @Autowired
-    MaterialService materialService;
+    private MaterialService materialService;
+
     @Autowired
-    TagService tagService;
+    private TagService tagService;
+
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
+
     @Autowired
-    MaterialProductRepository materialProductRepository;
+    private MaterialProductService materialProductService;
+
     @Autowired
-    TagProductRepository tagProductRepository;
+    private TagProductService tagProductService;
+
     @Autowired
-    SizeService sizeService;
+    private SizeService sizeService;
+
     @Autowired
-    ColorService colorService;
+    private ColorService colorService;
+
     @Autowired
-    DetailProductService detailProductService;
+    private DetailProductService detailProductService;
+
     @Autowired
-    FavoriteService favoriteService;
+    private FavoriteService favoriteService;
+
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
+
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
 
     @GetMapping("findAllByPageble")
@@ -57,13 +102,8 @@ public class ProductController {
             , @RequestParam(value = "name", required = false) String name) {
         try {
             Pageable pageable= PageRequest.of(page, size,Sort.by("createDate").descending());
-            if (name == null) {
-
-                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(pageable), 200, ""));
-
-            }else {
                 return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, pageable), 200, ""));
-            }    } catch (Exception e) {
+            } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
@@ -75,9 +115,7 @@ public class ProductController {
             if (categoryService.findById(productDTO.getCategoryId()).isPresent()) {
                 Product product = new Product();
                 product.setVoteAverage(0.0);
-                product.setIsDelete(false);
-                product.setIsActive(false);
-                product.setIsComplete(false);
+                product.setStatus(9);
                 product.setProductName(productDTO.getProductName());
                 product.setDescription(productDTO.getDescription());
                 product.setImage(productDTO.getImage());
@@ -99,26 +137,21 @@ public class ProductController {
         try {
             Optional<Product> product1 = productSevice.findById(productUpdateDTO.getId());
             Optional<Category> categoryOptional = categoryService.findById((productUpdateDTO.getCategoryId()));
-            if (product1.isPresent() && categoryOptional.isPresent()) {
+            if (product1.isPresent() ) {
                 product1.get().setProductName(productUpdateDTO.getProductName());
                 product1.get().setVoteAverage(productUpdateDTO.getVoteAverage());
-                product1.get().setIsDelete(false);
                 product1.get().setDescription(productUpdateDTO.getDescription());
                 product1.get().setImage(productUpdateDTO.getImage());
 
-                product1.get().setIsDelete(productUpdateDTO.getIsDelete());
-                product1.get().setIsActive(productUpdateDTO.getIsActive());
-                product1.get().setCategory(categoryOptional.get());
+                product1.get().setStatus(productUpdateDTO.getStatus());
+                if(categoryOptional.isPresent()){
+                    product1.get().setCategory(categoryOptional.get());
+                }
                 List<TagProduct> tagProductList = product1.get().getTagProducts();
                 List<MaterialProduct> materialProductList = product1.get().getMaterialProducts();
-                for (TagProduct tagProduct : tagProductList
-                ) {
-                    tagProductRepository.deleteById(tagProduct.getTagProductPK());
-                }
-                for (MaterialProduct materialProduct : materialProductList
-                ) {
-                    materialProductRepository.deleteById(materialProduct.getMaterialProductPK());
-                }
+                tagProductService.updateDeletedByProductId(productUpdateDTO.getId());
+                materialProductService.updateDeletedByProductId(productUpdateDTO.getId());
+
                 productSevice.save(product1.get());
                 List<Material> materialList = new ArrayList<>();
                 List<Tag> tagList = new ArrayList<>();
@@ -163,15 +196,15 @@ public class ProductController {
                 productResponse.setId(product.getId());
                 productResponse.setProductName(product.getProductName());
                 productResponse.setVoteAverage(product.getVoteAverage());
-                productResponse.setIsDelete(product.getIsDelete());
+
                 productResponse.setDescription(product.getDescription());
                 productResponse.setImage(product.getImage());
                 productResponse.setCreateDate(product.getCreateDate());
-                productResponse.setIsActive(product.getIsActive());
+
                 productResponse.setCategory(categoryOptional.get());
                 productResponse.setTagList(tagList);
                 productResponse.setMaterialList(materialList);
-                productResponse.setIsComplete(product.getIsComplete());
+
                 return ResponseEntity.ok().body(new IGenericResponse<ProductResponse>(productResponse, 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));

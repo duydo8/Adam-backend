@@ -108,4 +108,9 @@ public class EventServiceImpl implements EventService {
 			}
 		}
 	}
+
+	@Override
+	public List<Event> findAllByTime(){
+		return eventRepository.findAllByTime();
+	}
 }

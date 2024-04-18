@@ -24,104 +24,99 @@ import java.util.Optional;
 @RestController
 @RequestMapping("admin/discountOrder")
 public class DiscountOrderController {
-    @Autowired
-    private DiscountOrderService discountOrderService;
+	@Autowired
+	private DiscountOrderService discountOrderService;
 
-    @Autowired
-    private EventService eventService;
+	@Autowired
+	private EventService eventService;
 
-    @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
-        try {
-            return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderService.findAll(name), 200, "successfully"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findAll")
+	public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
+		try {
+			return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderService.findAll(name), 200, "successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @GetMapping("findById")
-    public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
-        try {
-            Optional<DiscountOrder> discountOrderOptional = discountOrderService.findById(id);
-            if (discountOrderOptional.isPresent()) {
-                return ResponseEntity.ok(new IGenericResponse<>(discountOrderOptional.get(), 200, "successfully"));
-            }
-            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findById")
+	public ResponseEntity<?> findById(@RequestParam("id") Integer id) {
+		try {
+			Optional<DiscountOrder> discountOrderOptional = discountOrderService.findById(id);
+			if (discountOrderOptional.isPresent()) {
+				return ResponseEntity.ok(new IGenericResponse<>(discountOrderOptional.get(), 200, "successfully"));
+			}
+			return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @GetMapping("findByEventId")
-    public ResponseEntity<?> findByEventId(@RequestParam("event_id") Integer eventId) {
-        try {
-            Optional<Event> eventOptional = eventService.findById(eventId);
-            if (eventOptional.isPresent()) {
-                List<DiscountOrder> discountOrders = discountOrderService.findByEventId(eventId);
-                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrders, 200, "successfully"));
-            }
-            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findByEventId")
+	public ResponseEntity<?> findByEventId(@RequestParam("event_id") Integer eventId) {
+		try {
+			Optional<Event> eventOptional = eventService.findById(eventId);
+			if (eventOptional.isPresent()) {
+				List<DiscountOrder> discountOrders = discountOrderService.findByEventId(eventId);
+				return ResponseEntity.ok().body(new IGenericResponse<>(discountOrders, 200, "successfully"));
+			}
+			return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody DiscountOrderDTO discountOrderDTO) {
-        try {
-            Event event = eventService.findExistById(discountOrderDTO.getEventId());
-            String errors = discountOrderService.validateCreateDisccountOrder(event,discountOrderDTO);
-            if(CommonUtil.isNotNull(errors)){
-                return ResponseEntity.ok().body(new IGenericResponse(400, errors));
-            }
+	@PostMapping("create")
+	public ResponseEntity<?> create(@RequestBody DiscountOrderDTO discountOrderDTO) {
+		try {
+			Event event = eventService.findExistById(discountOrderDTO.getEventId());
+			String errors = discountOrderService.validateCreateDisccountOrder(event, discountOrderDTO);
+			if (CommonUtil.isNotNull(errors)) {
+				return ResponseEntity.ok().body(new IGenericResponse(400, errors));
+			}
 
-            DiscountOrder discountOrder =  discountOrderService.createDiscountOrder(event, discountOrderDTO);
-            if(CommonUtil.isNotNull(discountOrder)){
-                return ResponseEntity.ok().body(new IGenericResponse(discountOrder, 200, "successfully"));
-            }
-            return ResponseEntity.ok().body(new IGenericResponse(400, "not found"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+			DiscountOrder discountOrder = discountOrderService.createDiscountOrder(event, discountOrderDTO);
+			if (CommonUtil.isNotNull(discountOrder)) {
+				return ResponseEntity.ok().body(new IGenericResponse(discountOrder, 200, "successfully"));
+			}
+			return ResponseEntity.ok().body(new IGenericResponse(400, "not found"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody DiscountOrderDTO discountOrderUpdate) {
-        try {
-            Optional<DiscountOrder> discountOrderOptional = discountOrderService.findById(discountOrderUpdate.getId());
-            if (discountOrderOptional.isPresent()) {
-                Event event = discountOrderOptional.get().getEvent();
-                String errors = discountOrderService.validateCreateDisccountOrder(event,discountOrderUpdate);
-                if(CommonUtil.isNotNull(errors)){
-                    return ResponseEntity.ok().body(new IGenericResponse(400, errors));
-                }
+	@PutMapping("update")
+	public ResponseEntity<?> update(@RequestBody DiscountOrderDTO discountOrderUpdate) {
+		try {
+			Optional<DiscountOrder> discountOrderOptional = discountOrderService.findById(discountOrderUpdate.getId());
+			if (discountOrderOptional.isPresent()) {
+				Event event = discountOrderOptional.get().getEvent();
+				String errors = discountOrderService.validateCreateDisccountOrder(event, discountOrderUpdate);
+				if (CommonUtil.isNotNull(errors)) {
+					return ResponseEntity.ok().body(new IGenericResponse(400, errors));
+				}
+				discountOrderService.updateDiscountOrder(discountOrderOptional.get(), discountOrderUpdate);
+				return ResponseEntity.ok().body(new HandleExceptionDemo(200, "successfully"));
+			}
+			return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-                discountOrderOptional.get().setDiscountName(discountOrderUpdate.getDiscountName());
-                discountOrderOptional.get().setStatus(discountOrderUpdate.getStatus());
-                discountOrderOptional.get().setSalePrice(discountOrderUpdate.getSalePrice());
-                discountOrderOptional.get().setOrderMaxRange(discountOrderUpdate.getOrderMaxRange());
-                discountOrderOptional.get().setOrderMinRange(discountOrderUpdate.getOrderMinRange());
-                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderService.save(discountOrderOptional.get()), 200, ""));
-            }
-            return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
-
-    @PutMapping("updateIsActive")
-    public ResponseEntity<?> updateIsActive(@RequestParam("id") Integer id) {
-        try {
-            discountOrderService.updateStatusById(0 , id);
-            return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "successfully"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@PutMapping("updateIsActive")
+	public ResponseEntity<?> updateIsActive(@RequestParam("id") Integer id) {
+		try {
+			discountOrderService.updateStatusById(0, id);
+			return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 }

@@ -11,4 +11,7 @@ import java.util.List;
 public interface HistoryOrderRepository extends JpaRepository<HistoryOrder, Integer> {
     @Query(value = "select ho from HistoryOrder  ho where ho.order.id=?1")
     List<HistoryOrder> findByOrderId(Integer orderId);
+
+    @Query("select ho from HistoryOrder ho where ho.order.id = ?1 order by ho.updateTime limit 1")
+    HistoryOrder findLastHistoryOrderByOrderId(Integer orderId);
 }
