@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.service.SizeService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +29,9 @@ public class Size {
 
 	@Column(name = "create_date")
 	private LocalDateTime createDate;
+
+	public Size(){
+		this.createDate = LocalDateTime.now();
+		this.status = 1;
+	}
 }

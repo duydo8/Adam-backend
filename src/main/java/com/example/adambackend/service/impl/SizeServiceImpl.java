@@ -1,6 +1,8 @@
 package com.example.adambackend.service.impl;
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Size;
+import com.example.adambackend.payload.size.SizeDTO;
 import com.example.adambackend.repository.SizeRepository;
 import com.example.adambackend.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,21 @@ public class SizeServiceImpl implements SizeService {
     SizeRepository sizeRepository;
 
     @Override
-    public List<Size> findAll() {
-        return sizeRepository.findAll();
+    public List<Size> findAll(String name) {
+        return sizeRepository.findAll(name);
     }
 
     @Override
     public Size save(Size Size) {
+        if (CommonUtil.isNotNull(sizeRepository.findByName(Size.getSizeName()))) {
+            return null;
+        }
         return sizeRepository.save(Size);
     }
 
     @Override
     public void deleteById(Integer id) {
-        sizeRepository.deleteById(id);
+        sizeRepository.updateSizeDeleted(id);
     }
 
     @Override
@@ -37,5 +42,21 @@ public class SizeServiceImpl implements SizeService {
     @Override
     public Optional<Size> findByDetailProductId(Integer detailProductId) {
         return sizeRepository.findByDetailProductId(detailProductId);
+    }
+
+    @Override
+    public Size save(SizeDTO sizeDTO) {
+        Size size = sizeRepository.findByName(sizeDTO.getSizeName());
+        if(CommonUtil.isNotNull(size)){
+            return null;
+        }
+        size = new Size();
+        size.setSizeName(sizeDTO.getSizeName());
+        return sizeRepository.save(size);
+    }
+
+    @Override
+    public Size findByName(String name) {
+        return sizeRepository.findByName(name);
     }
 }

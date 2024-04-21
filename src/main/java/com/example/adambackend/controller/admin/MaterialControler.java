@@ -2,13 +2,10 @@ package com.example.adambackend.controller.admin;
 
 import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.exception.IGenericResponse;
 import com.example.adambackend.payload.material.ListMaterialIdDTO;
 import com.example.adambackend.payload.material.MaterialDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.MaterialProductService;
 import com.example.adambackend.service.MaterialService;
-import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

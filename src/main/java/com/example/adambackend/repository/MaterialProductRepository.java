@@ -23,7 +23,7 @@ public interface MaterialProductRepository extends JpaRepository<MaterialProduct
 
     @Modifying
     @Transactional
-    @Query(value = "update material_products set status =1 where material_id = ?1", nativeQuery = true)
+    @Query(value = "update material_products set status = 0 where material_id = ?1", nativeQuery = true)
     void updateMaterialProductsDeletedByMaterialId(Integer id);
 
     @Query(value = "select * from material_products where status = 1", nativeQuery = true)

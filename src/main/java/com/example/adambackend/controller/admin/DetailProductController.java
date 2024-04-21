@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(value = "*", maxAge = 36000000)
 @RequestMapping("admin/detailProduct")
 public class DetailProductController {
 

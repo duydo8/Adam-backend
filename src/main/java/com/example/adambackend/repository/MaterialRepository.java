@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Integer> {
@@ -25,6 +26,9 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
 	@Query("select m from Material m where m.status = 1 and m.materialName = ?1")
 	Material findByName(String name);
+
+	@Query("select m from Material m where m.id = ?1 and m.status = 1")
+	Optional<Material> findById(Integer id);
 
 
 }

@@ -13,7 +13,7 @@ public interface TagService {
 
     Tag save(Tag tag);
 
-    List<Tag> findAll();
+    List<Tag> findAll(String name);
 
     Optional<Tag> findByTagName(String tagName);
 

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("admin/district")
 public class DistrictController {
     @Autowired

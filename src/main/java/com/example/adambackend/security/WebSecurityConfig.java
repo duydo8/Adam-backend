@@ -24,75 +24,72 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableGlobalMethodSecurity(
 //        securedEnabled = true,
 //        jsr250Enabled = true,
-        prePostEnabled = true)
+		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-    @Autowired
-    AccountDetailsServiceImpl accountDetailsService;
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+	@Autowired
+	private AccountDetailsServiceImpl accountDetailsService;
 
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
+	@Autowired
+	private AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public AuthTokenFilter tokenAuthenticationFilter() {
-        return new AuthTokenFilter();
-    }
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
 
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public AuthTokenFilter tokenAuthenticationFilter() {
+		return new AuthTokenFilter();
+	}
 
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 
-                .exceptionHandling()
-                .authenticationEntryPoint(new AuthEntryPointJwt())
-                .and()
-                .authorizeRequests()
-                .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
+	@Bean(BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-                .permitAll().and()
-
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+				.exceptionHandling()
+				.authenticationEntryPoint(new AuthEntryPointJwt())
+				.and()
+				.authorizeRequests()
+				.antMatchers("/",
+						"/error",
+						"/favicon.ico",
+						"/**/*.png",
+						"/**/*.gif",
+						"/**/*.svg",
+						"/**/*.jpg",
+						"/**/*.html",
+						"/**/*.css",
+						"/**/*.js")
+				.permitAll().and()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //                .authorizeRequests().antMatchers("/api/admin/**").hasAuthority("Admin")
 //                .and().authorizeRequests().antMatchers("/api/user/**").hasAuthority("User")
 //                .and().authorizeRequests().antMatchers( "/**","/*").permitAll()
 //                .anyRequest().authenticated();
-                .authorizeRequests().anyRequest().permitAll();
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+				.authorizeRequests().anyRequest().permitAll();
+		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        // Global CORS configuration
-        registry.addMapping("/**") // Allow CORS for all endpoints
-                .allowedOrigins("*") // Allow requests from any origin
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // Allowed HTTP methods
-                .allowedHeaders("*"); // Allowed headers
-    }
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		// Global CORS configuration
+		registry.addMapping("/**") // Allow CORS for all endpoints
+				.allowedOrigins("*") // Allow requests from any origin
+				.allowedMethods("GET", "POST", "PUT", "DELETE") // Allowed HTTP methods
+				.allowedHeaders("*"); // Allowed headers
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.tag.TagDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,11 @@ public class Tag {
 	@JsonIgnore
 	@OneToMany(mappedBy = "tag")
 	private List<TagProduct> tagProducts = new ArrayList<>();
+
+
+	public Tag(TagDTO tagDTO){
+		this.createDate = LocalDateTime.now();
+		this.status = 1;
+		this.tagName = tagDTO.getTagName();
+	}
 }

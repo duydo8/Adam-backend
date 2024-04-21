@@ -19,7 +19,7 @@ public interface TagProductRepository extends JpaRepository<TagProduct, TagProdu
     @Transactional
     @Modifying
     @Query(value = "update tag_products set status = 0 where tag_id=?1", nativeQuery = true)
-    void updateDeletedTagId(Integer productId);
+    void updateDeletedByTagId(Integer tagId);
 
     @Transactional
     @Modifying
