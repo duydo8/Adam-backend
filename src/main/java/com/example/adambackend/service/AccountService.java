@@ -45,4 +45,6 @@ public interface AccountService {
 	Integer generateCodeByPhoneNumber(String phoneNumber);
 
     List<Dashboard> statisticInAccountAdmin(List<String> months);
+
+	Optional<Account> findByUsername(String username);
 }

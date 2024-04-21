@@ -28,19 +28,15 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo metaInfo() {
-
 		ApiInfo apiInfo = new ApiInfo(
 				"Atividades API REST",
 				"API REST de cadastro de atividades.",
 				"1.0",
 				"Terms of Service",
-				new Contact("Duy", "localhost:8080",
-						" "),
+				new Contact("Duy", "localhost:8080", " "),
 				"Apache License Version 2.0",
 				"https://www.apache.org/licesen.html", new ArrayList<VendorExtension>()
 		);
-
 		return apiInfo;
 	}
-
 }

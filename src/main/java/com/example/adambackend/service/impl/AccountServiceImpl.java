@@ -214,4 +214,9 @@ public class AccountServiceImpl implements AccountService {
 
 		return Arrays.asList(dashboard, dashboard1, dashboard2);
 	}
+
+	@Override
+	public Optional<Account> findByUsername(String username) {
+		return accountRepository.findByUsername(username);
+	}
 }
