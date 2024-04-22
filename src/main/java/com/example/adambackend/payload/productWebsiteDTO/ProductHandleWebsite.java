@@ -5,7 +5,7 @@ public interface ProductHandleWebsite {
 
 	String getDescription();
 
-	Boolean getIsActive();
+	Integer getStatus();
 
 	Double getMaxPrice();
 

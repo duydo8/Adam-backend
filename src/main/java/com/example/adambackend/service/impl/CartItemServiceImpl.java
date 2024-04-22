@@ -66,17 +66,17 @@ public class CartItemServiceImpl implements CartItemService {
 	}
 
 	@Override
-	public String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, DetailProduct detailProduct) {
+	public String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, Optional<DetailProduct> detailProduct) {
 		if (account.isEmpty()) {
 			return "not found account";
 		}
-		if (!CommonUtil.isNotNull(detailProduct)) {
+		if (detailProduct.isEmpty()) {
 			return "not found product";
 		}
 		if (cartItemCreate.getQuantity() >= 10) {
 			return "can't buy quantity > 10";
 		}
-		if (detailProduct.getQuantity() < cartItemCreate.getQuantity()) {
+		if (detailProduct.get().getQuantity() < cartItemCreate.getQuantity()) {
 			return "not enough quantity";
 		}
 		return null;

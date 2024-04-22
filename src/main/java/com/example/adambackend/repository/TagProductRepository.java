@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface TagProductRepository extends JpaRepository<TagProduct, TagProductPK> {
 
-    @Query(value = "select tag_id from tag_products where product_id=?1 and  status = 0", nativeQuery = true)
+    @Query(value = "select tag_id from tag_products where product_id = ?1 and  status = 1", nativeQuery = true)
     List<Integer> findTagIdByProductId(Integer productId);
 
     @Transactional

@@ -477,14 +477,21 @@ public class OrderSerivceImpl implements OrderService {
 		String code = RandomString.make(64) + order.getId();
 		Double totalSalePrice = this.getSalePrice(ammountPrice);
 		order.setSalePrice((double) Math.round(totalSalePrice));
-		totalPrice = ammountPrice - totalSalePrice;
 		order.setOrderCode(code);
-		order.setTotalPrice(totalPrice);
+		totalPrice = ammountPrice - totalSalePrice;
 		if (totalPrice > ORDER_MAX_PRICE) {
 			return new IGenericResponse(400, "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất ");
 		}
-		for (Integer x : orderWebsiteCreate.getCartItemIdList()) {
-			Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
+		order.setTotalPrice(totalPrice);
+		HistoryOrder historyOrder = new HistoryOrder();
+		historyOrder.setOrder(orderRepository.findById(order.getId()).get());
+		historyOrder.setDescription("create time");
+		historyOrder.setUpdateTime(LocalDateTime.now());
+		historyOrder.setTotalPrice(order.getTotalPrice());
+		historyOrder.setStatus(1);
+		historyOrderService.save(historyOrder);
+		for (Integer id : orderWebsiteCreate.getCartItemIdList()) {
+			Optional<CartItems> cartItemsOptional = cartItemService.findById(id);
 			if (cartItemsOptional.isPresent()) {
 				cartItemsOptional.get().setOrder(order);
 				cartItemService.save(cartItemsOptional.get());

@@ -137,9 +137,8 @@ public class OrderController {
 			Optional<Address> address = addressService.findById(orderWebsiteCreate.getAddressId());
 			if (address.isPresent() && account.isPresent()) {
 				return ResponseEntity.ok().body(new IGenericResponse(orderService.createOder(orderWebsiteCreate, account.get(), address.get()), 200, "successfully"));
-			} else {
-				return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy "));
 			}
+			return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy "));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));

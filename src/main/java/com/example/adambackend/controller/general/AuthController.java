@@ -93,9 +93,7 @@ public class AuthController {
 					userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
 					userInfo.setStatus(1);
 					userInfoService.save(userInfo);
-
 				}
-
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUsername(loginRequest.getUsername());
@@ -118,32 +116,22 @@ public class AuthController {
 	@PostMapping("/createAccount")
 	public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
 		try {
-			Account account = accountService.findByUserNameAndEmailAndPhoneNumber(signUpRequest.getUsername(),
+			String error = accountService.checkAccountRegistration(signUpRequest.getUsername(),
 					signUpRequest.getEmail(), signUpRequest.getPhoneNumber());
-
-			if (CommonUtil.isNotNull(account)) {
-				if (account.getUsername().equals(signUpRequest.getUsername())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "Username has been used"));
-				}
-				if (account.getEmail().equals(signUpRequest.getEmail())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "Email has been used"));
-				}
-				if (account.getPhoneNumber().equals(signUpRequest.getPhoneNumber())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "PhoneNumber has been used"));
-				}
+			if (CommonUtil.isNotNull(error)) {
+				return ResponseEntity.ok().body(new IGenericResponse(error, 400, "validate errors"));
 			}
-
-			account = new Account(signUpRequest.getUsername(),
+			Account account = new Account(signUpRequest.getUsername(),
 					signUpRequest.getEmail(),
 					passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber(),
 					signUpRequest.getFullName()
 			);
-			account.setCreateDate(LocalDateTime.now());
-			account.setStatus(0);
 			if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
 				account.setRole(ERoleName.Admin);
-			} else {
+			} else if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.User))) {
 				account.setRole(ERoleName.User);
+			} else {
+				return ResponseEntity.ok().body(new IGenericResponse(200, "can't find role"));
 			}
 			Random rand = new Random();
 			int code = rand.nextInt(999999 - 100000 + 1) + 100000;
@@ -152,12 +140,12 @@ public class AuthController {
 			TwilioSendSms twilioSendSms = new TwilioSendSms();
 			twilioSendSms.sendCode(account.getPhoneNumber(), code);
 			account.setPriority(0.0);
-			Account account1 = accountService.save(account);
-			AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+			account = accountService.save(account);
+			AccountDto accountDto = modelMapper.map(account, AccountDto.class);
 			return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -169,19 +157,18 @@ public class AuthController {
 				userInfo.get().setStatus(0);
 				return ResponseEntity.ok().body(new IGenericResponse<>(userInfoService.save(userInfo.get()), 200, ""));
 			}
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "not found"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
 	@GetMapping("forgotPassword")
 	public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
-	                                        @RequestParam("password") String password,
-	                                        @RequestParam("confirm") String confirm) {
+											@RequestParam("password") String password,
+											@RequestParam("confirm") String confirm) {
 		try {
 			Optional<Account> accountOptional = accountService.findByEmail(email);
 			if (accountOptional.isPresent()) {
@@ -196,7 +183,7 @@ public class AuthController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 

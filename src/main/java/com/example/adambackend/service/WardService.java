@@ -13,4 +13,6 @@ public interface WardService {
     void deleteById(Integer id);
 
     Optional<Ward> findById(Integer id);
+
+    List<Ward> findByDistrictId(Integer districtId);
 }

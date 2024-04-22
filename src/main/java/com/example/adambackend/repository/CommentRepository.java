@@ -29,7 +29,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query(value = "select c from comments c join products p on c.product_id = p.id where p.id = ?1 and p.status = 1 " +
             "and c.commentStatus= 1 ", nativeQuery = true)
-    List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId);
+    List<Comment> findAllCommentByProductId(Integer productId);
 
     @Query(value = "select top(10) c from comments c join products p on c.product_id = p.id where p.id = ?1 and c.comment_status == 1 order by c.create_date", nativeQuery = true)
     List<Comment> findTop10CommentByProductId(Integer productId);

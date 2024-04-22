@@ -5,7 +5,7 @@ public interface ProductHandleValue {
 
 	String getDescription();
 
-	Boolean getIsActive();
+	Integer getStatus();
 
 	Double getMaxPrice();
 

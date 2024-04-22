@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressWebsiteUpdate {
+public class AddressWebsiteDto {
 	private Integer id;
 	private String addressDetail;
 	private Integer accountId;
@@ -17,4 +17,5 @@ public class AddressWebsiteUpdate {
 	private String phoneNumber;
 	private String fullName;
 	private Boolean isDefault;
+	private Integer status;
 }

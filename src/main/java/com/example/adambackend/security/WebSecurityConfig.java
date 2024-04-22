@@ -26,8 +26,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //        jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-	@Autowired
-	private AccountDetailsServiceImpl accountDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

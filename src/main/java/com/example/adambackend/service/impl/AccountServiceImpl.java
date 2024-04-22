@@ -187,7 +187,7 @@ public class AccountServiceImpl implements AccountService {
 		account.setPassword(passwordEncoder.encode("123456"));
 		account.setVerificationCode(code);
 		account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-		account.setStatus(1);
+		account.setStatus(0);
 		accountRepository.save(account);
 		return code;
 	}
@@ -218,5 +218,65 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Optional<Account> findByUsername(String username) {
 		return accountRepository.findByUsername(username);
+	}
+
+	@Override
+	public String getForgotPasswordResponse(String phoneNumber, String password, String confirm, int code) {
+		Optional<Account> accountOptional = accountRepository.findByPhoneNumber(phoneNumber);
+		if (accountOptional.isPresent() && CommonUtil.isNotNull(accountOptional.get().getVerificationCode())) {
+			if (accountOptional.get().getVerificationCode() == code) {
+				if (LocalDateTime.now().isBefore(accountOptional.get().getTimeValid())) {
+					if (password.equals(confirm)) {
+						accountOptional.get().setPassword(passwordEncoder.encode(password));
+						accountRepository.save(accountOptional.get());
+						return "successfully";
+					} else {
+						return "Confirm ko giống pass";
+					}
+				} else {
+					return "Quá hạn";
+				}
+			} else {
+				return " code không đúng ";
+			}
+		} else {
+			return "Không tìm thấy account";
+		}
+	}
+
+	@Override
+	public String getMessageChangePassword(Integer id, String password, String passNew, String confirm) {
+		Optional<Account> account = accountRepository.findById(id);
+		if (account.isPresent()) {
+			if (!account.get().getPassword().equals(password)) {
+				return "sai mật khẩu";
+
+			}
+			if (!confirm.equals(passNew)) {
+				return "Nhập lại mật khẩu không đúng";
+
+			}
+			if (passNew.equals(password)) {
+				return "Mật khẩu mới giống mật khẩu cũ";
+
+			}
+			String encode = passwordEncoder.encode(passNew);
+			account.get().setPassword(encode);
+			accountRepository.save(account.get());
+			return "successfully";
+		}
+		return "not found";
+	}
+
+	@Override
+	public Integer sendCode(Account account) {
+		TwilioSendSms twilioSendSms = new TwilioSendSms();
+		Random rand = new Random();
+		int code = rand.nextInt(999999 - 100000 + 1) + 100000;
+		twilioSendSms.sendCode(account.getPhoneNumber(), code);
+		account.setVerificationCode(code);
+		account.setTimeValid(LocalDateTime.now().plusMinutes(30));
+		accountRepository.save(account);
+		return code;
 	}
 }

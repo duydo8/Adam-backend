@@ -43,7 +43,7 @@ public class AccountController {
 			String error = accountService.checkAccountRegistration(accountAdminCreate.getUsername(),
 					accountAdminCreate.getEmail(), accountAdminCreate.getPhoneNumber());
 			if (CommonUtil.isNotNull(error)) {
-				return ResponseEntity.ok().body(new IGenericResponse(200, error));
+				return ResponseEntity.ok().body(new IGenericResponse(400, error));
 			}
 			Account account = accountService.getAccountFromAccountAdminCreate(accountAdminCreate);
 			return ResponseEntity.ok().body(new IGenericResponse(account, 200, "successfully"));
@@ -58,7 +58,7 @@ public class AccountController {
 		try {
 			Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
 			if (accountOptional.isPresent() && accountOptional.get().getTimeValid() == null) {
-				return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "PhoneNumber has been used"));
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "PhoneNumber has been used"));
 			}
 			Integer code = accountService.generateCodeByPhoneNumber(phoneNumber);
 			return ResponseEntity.ok().body(new IGenericResponse(code, 200, "successfully"));

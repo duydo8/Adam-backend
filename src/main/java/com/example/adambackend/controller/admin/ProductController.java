@@ -75,7 +75,7 @@ public class ProductController {
 
 	@GetMapping("findAllByPageble")
 	public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
-	                                          @RequestParam("size") int size
+											  @RequestParam("size") int size
 			, @RequestParam(value = "name", required = false) String name) {
 		try {
 			Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").descending());
@@ -166,12 +166,12 @@ public class ProductController {
 				List<Integer> listTagId = tagProductService.findTagIdByProductId(id);
 				List<Integer> listMaterialId = materialProductService.findMaterialIdByProductId(id);
 				List<DetailProduct> detailProductList = detailProductService.findAllByProductId(id);
+
 				Set<Tag> tagList = new HashSet<>();
 				Set<Material> materialList = new HashSet<>();
 				Set<Color> colorList = new HashSet<>();
 				Set<Size> sizeList = new HashSet<>();
-				for (DetailProduct dp : detailProductList
-				) {
+				for (DetailProduct dp : detailProductList) {
 					Optional<Color> c = colorService.findByDetailProductId(dp.getId());
 					Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
 					if (c.isPresent()) {
@@ -181,23 +181,20 @@ public class ProductController {
 						sizeList.add(s.get());
 					}
 				}
-				for (Integer x : listTagId) {
-					Optional<Tag> tagOptional = tagService.findById(x);
-					tagList.add(tagOptional.get());
+				for (Integer tagId : listTagId) {
+					Optional<Tag> tagOptional = tagService.findById(tagId);
+					if (tagOptional.isPresent()) {
+						tagList.add(tagOptional.get());
+					}
 				}
-				for (Integer x : listMaterialId) {
-					Optional<Material> materialOptional = materialService.findById(x);
-					materialList.add(materialOptional.get());
-				}
-				System.out.println(colorList.size());
-				if (colorList.size() == 0) {
-					colorList = Collections.<Color>emptySet();
-				}
-				if (sizeList.size() == 0) {
-					sizeList = Collections.<Size>emptySet();
+				for (Integer materialId : listMaterialId) {
+					Optional<Material> materialOptional = materialService.findById(materialId);
+					if (materialOptional.isPresent()) {
+						materialList.add(materialOptional.get());
+					}
 				}
 				OptionalProduct optionalProduct = new OptionalProduct(tagList, materialList, colorList, sizeList);
-				return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct, 200, ""));
+				return ResponseEntity.ok().body(new IGenericResponse<>(optionalProduct, 200, "successfully"));
 			}
 			return ResponseEntity.badRequest().body(new IGenericResponse(400, "Không tìm thấy"));
 		} catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.example.adambackend.security;
 
 import com.example.adambackend.entities.Account;
-import com.example.adambackend.repository.AccountRepository;
+import com.example.adambackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,14 +12,14 @@ import javax.transaction.Transactional;
 
 @Service
 public class AccountDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    AccountRepository accountRepository;
+	@Autowired
+	private AccountService accountService;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account user = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-        return AccountDetailsService.build(user);
-    }
+	@Override
+	@Transactional
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Account user = accountService.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+		return AccountDetailsService.build(user);
+	}
 }

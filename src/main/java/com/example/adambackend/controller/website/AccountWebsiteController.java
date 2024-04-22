@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("account")
 public class AccountWebsiteController {
 
@@ -36,27 +35,15 @@ public class AccountWebsiteController {
 	@PostMapping("/createAccount")
 	public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
 		try {
-			Account account = accountService.findByUserNameAndEmailAndPhoneNumber(signUpRequest.getUsername(),
-					signUpRequest.getEmail(), signUpRequest.getPhoneNumber());
-			if (CommonUtil.isNotNull(account)) {
-				if (account.getUsername().equals(signUpRequest.getUsername())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "Username has been used"));
-				}
-				if (account.getEmail().equals(signUpRequest.getEmail())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "Email has been used"));
-				}
-				if (account.getPhoneNumber().equals(signUpRequest.getPhoneNumber())) {
-					return ResponseEntity.ok().body(new IGenericResponse(200, "PhoneNumber has been used"));
-				}
-			} else {
-				account = new Account();
+			String error = accountService.checkAccountRegistration(signUpRequest.getUsername(), signUpRequest.getEmail(),
+					signUpRequest.getPhoneNumber());
+			if (CommonUtil.isNotNull(error)) {
+				return ResponseEntity.ok().body(new IGenericResponse(error, 400, "validate error"));
 			}
+			Account account = new Account();
 			account.setUsername(signUpRequest.getUsername());
 			account.setEmail(signUpRequest.getEmail());
 			account.setFullName(signUpRequest.getFullName());
-			account.setCreateDate(LocalDateTime.now());
-			account.setStatus(1);
-			account.setPriority(0.0);
 			account.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 			if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
 				account.setRole(ERoleName.Admin);
@@ -70,17 +57,17 @@ public class AccountWebsiteController {
 				if (account.getVerificationCode() == (signUpRequest.getCode())) {
 					account.setTimeValid(null);
 					account.setVerificationCode(null);
-					Account account1 = accountService.save(account);
-					AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
+					account = accountService.save(account);
+					AccountDto accountDto = modelMapper.map(account, AccountDto.class);
 					return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "successfully"));
 				}
-				return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng nhập lại"));
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "Vui lòng nhập lại"));
 			}
 			accountService.deleteById(account.getId());
-			return ResponseEntity.badRequest().body(new IGenericResponse(" ", 400, "Đã quá thời gian chờ"));
+			return ResponseEntity.badRequest().body(new IGenericResponse(400, "Đã quá thời gian chờ"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
 		}
 	}
 
@@ -91,22 +78,8 @@ public class AccountWebsiteController {
 			if (accountOptional.isPresent() && accountOptional.get().getTimeValid() == null) {
 				return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "số điện thoại này đã được đăng ký"));
 			}
-
-			TwilioSendSms twilioSendSms = new TwilioSendSms();
-			Random rand = new Random();
-			int code = rand.nextInt(999999 - 100000 + 1) + 100000;
-			phoneNumber = phoneNumber.substring(1, phoneNumber.length());
-			twilioSendSms.sendCode(phoneNumber, code);
-			Account account = new Account();
-			account.setPhoneNumber(phoneNumber);
-			account.setUsername(phoneNumber);
-			account.setRole(ERoleName.User);
-			account.setStatus(0);
-			account.setPassword(passwordEncoder.encode("123456"));
-			account.setVerificationCode(code);
-			account.setTimeValid(LocalDateTime.now().plusMinutes(30));
-			accountService.save(account);
-			return ResponseEntity.ok().body(new IGenericResponse(code, 200, "Thành công"));
+			Integer code = accountService.generateCodeByPhoneNumber(phoneNumber);
+			return ResponseEntity.ok().body(new IGenericResponse(code, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -118,14 +91,8 @@ public class AccountWebsiteController {
 		try {
 			Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
 			if (accountOptional.isPresent()) {
-				TwilioSendSms twilioSendSms = new TwilioSendSms();
-				Random rand = new Random();
-				int code = rand.nextInt(999999 - 100000 + 1) + 100000;
-				twilioSendSms.sendCode(phoneNumber, code);
-				accountOptional.get().setVerificationCode(code);
-				accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
-				accountService.save(accountOptional.get());
-				return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, "thanh cong"));
+				int code = accountService.sendCode(accountOptional.get());
+				return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, "successfully"));
 			}
 			return ResponseEntity.ok().body(new IGenericResponse<>(200, "không tìm thấy tài khoản"));
 		} catch (Exception e) {
@@ -136,29 +103,12 @@ public class AccountWebsiteController {
 
 	@GetMapping("forgotPassword")
 	public ResponseEntity<?> forgotPassword(@RequestParam("phone_number") String phoneNumber,
-	                                        @RequestParam("password") String password,
-	                                        @RequestParam("confirm") String confirm,
-	                                        @RequestParam("code") int code) {
+											@RequestParam("password") String password,
+											@RequestParam("confirm") String confirm,
+											@RequestParam("code") int code) {
 		try {
-			Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
-			if (accountOptional.isPresent()) {
-				if (code == accountOptional.get().getVerificationCode()) {
-					if (LocalDateTime.now().isBefore(accountOptional.get().getTimeValid())) {
-						if (password.equals(confirm)) {
-							accountOptional.get().setPassword(passwordEncoder.encode(password));
-							return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, "Thành công"));
-						} else {
-							return ResponseEntity.ok().body(new IGenericResponse<>(200, "Confirm ko giống pass"));
-						}
-					} else {
-						return ResponseEntity.ok().body(new IGenericResponse(400, "Quá hạn"));
-					}
-				} else {
-					return ResponseEntity.ok().body(new IGenericResponse(400, " code không đúng "));
-				}
-			} else {
-				return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy account"));
-			}
+			String message = accountService.getForgotPasswordResponse(phoneNumber, password, confirm, code);
+			return ResponseEntity.ok().body(new IGenericResponse<>(200, message));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -178,33 +128,13 @@ public class AccountWebsiteController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
 		}
-
 	}
 
 	@PostMapping("changePassword")
-	public ResponseEntity<?> updatePriority(@RequestParam("id") Integer id,
-	                                        @RequestParam("password") String password,
-	                                        @RequestParam("passwordNew") String passNew,
-	                                        @RequestParam("confirm") String confirm) {
-		Optional<Account> account = accountService.findById(id);
-		if (account.isPresent()) {
-			if (!account.get().getPassword().equals(password)) {
-				return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "sai mật khẩu"));
-
-			}
-			if (!confirm.equals(passNew)) {
-				return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Nhập lại mật khẩu không đúng"));
-
-			}
-			if (passNew.equals(password)) {
-				return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Mật khẩu mới giống mật khẩu cũ"));
-
-			}
-			String x = passwordEncoder.encode(passNew);
-			account.get().setPassword(x);
-			accountService.save(account.get());
-			return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
-		}
-		return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "ko tìm thấy"));
+	public ResponseEntity<?> changePassword(@RequestParam("id") Integer id,
+											@RequestParam("password") String password,
+											@RequestParam("passwordNew") String passNew,
+											@RequestParam("confirm") String confirm) {
+		return ResponseEntity.ok().body(new IGenericResponse<>(200, accountService.getMessageChangePassword(id, password, passNew, confirm)));
 	}
 }

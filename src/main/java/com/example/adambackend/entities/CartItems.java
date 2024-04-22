@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "cart_items")
 @Entity
 public class CartItems {
@@ -34,4 +33,9 @@ public class CartItems {
 	@ManyToOne
 	@JoinColumn(name = "detail_product_id")
 	private DetailProduct detailProduct;
+
+	public CartItems() {
+		this.status = 1;
+		this.createDate = LocalDateTime.now();
+	}
 }

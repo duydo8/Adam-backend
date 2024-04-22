@@ -24,7 +24,7 @@ public interface CommentService {
 	Comment createCommentwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId,
 												   Integer accountId, Integer commentStatus, int vote);
 
-	List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId);
+	List<Comment> findAllCommentByProductId(Integer productId);
 
 	List<Comment> findTop10CommentByProductId(Integer productId);
 

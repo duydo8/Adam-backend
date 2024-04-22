@@ -27,7 +27,7 @@ public interface CartItemService {
 
 	void updateStatus(Integer status, Integer id);
 
-	String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, DetailProduct detailProduct);
+	String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, Optional<DetailProduct> detailProduct);
 
 	CartItems createCartItem(Account account, DetailProduct detailProduct, CartItemCreate cartItemCreate);
 }

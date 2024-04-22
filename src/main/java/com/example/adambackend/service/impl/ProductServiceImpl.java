@@ -16,6 +16,7 @@ import com.example.adambackend.payload.product.ProductTop10Create;
 import com.example.adambackend.payload.product.ProductUpdateDTO;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleValue;
 import com.example.adambackend.payload.productWebsiteDTO.ProductHandleWebsite;
+import com.example.adambackend.payload.productWebsiteDTO.ProductWebstieFilterDTO;
 import com.example.adambackend.payload.request.ProductRequest;
 import com.example.adambackend.repository.ProductRepository;
 import com.example.adambackend.service.CategoryService;
@@ -101,10 +102,37 @@ public class ProductServiceImpl implements ProductSevice {
 	}
 
 	@Override
-	public Page<CustomProductFilterRequest> findPageableByOption(Integer categoryId, Integer sizeId, Integer colorId, Integer materialId, Integer tagId,
-																 Double bottomPrice, Double topPrice, Pageable pageable) {
-		return productRepository.findPageableByOption(categoryId, sizeId,
-				colorId, materialId, tagId, bottomPrice, topPrice, pageable);
+	public Page<CustomProductFilterRequest> findPageableByOption(ProductWebstieFilterDTO productWebstieFilterDTO, Pageable pageable) {
+		List<Integer> listCategoryId = productWebstieFilterDTO.getListCategoryId();
+		List<Integer> listColorId = productWebstieFilterDTO.getListColorId();
+		List<Integer> listSizeId = productWebstieFilterDTO.getListSizeId();
+		List<Integer> listMaterialId = productWebstieFilterDTO.getListMaterialId();
+		List<Integer> listTagId = productWebstieFilterDTO.getListTagId();
+		Double bottomPrice = productWebstieFilterDTO.getBottomPrice();
+		Double topPrice = productWebstieFilterDTO.getTopPrice();
+		if (listCategoryId == null || listCategoryId.isEmpty()) {
+			listCategoryId = new ArrayList<>();
+		}
+		if (listColorId == null || listColorId.isEmpty()) {
+			listColorId = new ArrayList<>();
+		}
+		if (listSizeId == null || listSizeId.isEmpty()) {
+			listSizeId = new ArrayList<>();
+		}
+		if (listMaterialId == null || listMaterialId.isEmpty()) {
+			listMaterialId = new ArrayList<>();
+		}
+		if (listTagId == null || listTagId.isEmpty()) {
+			listTagId = new ArrayList<>();
+		}
+		if (bottomPrice == null) {
+			bottomPrice = 0.0;
+		}
+		if (topPrice == null) {
+			topPrice = 999999999.0;
+		}
+		return productRepository.findPageableByOption(listCategoryId, listSizeId,
+				listColorId, listMaterialId, listTagId, bottomPrice, topPrice, pageable);
 	}
 
 	@Override

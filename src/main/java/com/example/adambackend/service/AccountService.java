@@ -47,4 +47,10 @@ public interface AccountService {
     List<Dashboard> statisticInAccountAdmin(List<String> months);
 
 	Optional<Account> findByUsername(String username);
+
+	String getForgotPasswordResponse(String phoneNumber, String password, String confirm, int code);
+
+	String getMessageChangePassword(Integer id, String password, String passNew, String confirm);
+
+	Integer sendCode(Account account);
 }

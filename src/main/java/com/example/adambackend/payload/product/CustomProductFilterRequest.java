@@ -11,7 +11,7 @@ public interface CustomProductFilterRequest {
 
 	String getProductName();
 
-	String getProductImage();
+	String getImage();
 
 	String getDescription();
 
