@@ -28,17 +28,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "select p from Product p where p.status = 1 order by p.createDate desc")
     List<Product> findAll();
 
-    @Query(value = "select distinct(p.id) as id, p.product_name as productName, p.description as description,p.is_deleted as isDelete," +
-            "p.image as image,p.vote_average as VoteAverage, p.create_date as CreateDate,p.is_completed as IsComplete,p.is_active," +
+    @Query(value = "select distinct(p.id) as id, p.product_name as productName, p.description as description, p.status as status," +
+            "p.image as image,p.vote_average as VoteAverage, p.create_date as CreateDate," +
             "MIN(dp.price_export) as  minPrice, MAX(dp.price_export)as maxPrice" +
 
-            "   from products p join detail_products dp on p.id=dp.product_id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 " +
-            " and dp.price_export !=0 GROUP BY p.id,p.product_name,p.description,p.is_deleted,p.image,p.vote_average,p.create_date,p.is_completed,p.is_active" +
+            "   from products p join detail_products dp on p.id = dp.product_id where p.status = 1 " +
+            " and dp.price_export !=0 GROUP BY p.id,p.product_name,p.description,p.status,p.image,p.vote_average,p.create_date" +
             " order by p.create_date desc limit 10", nativeQuery = true)
     List<ProductTop10Create> findTop10productByCreateDate();
 
 
-    @Query(value = "select  pro.id as id, p.productName as productName,p.image as image, " +
+    @Query(value = "select  p.id as id, p.productName as productName,p.image as image, " +
             " p.createDate as createDate,p.description as Description ,min(dp.priceExport) as " +
             " minPrice, max (dp.priceExport)as maxPrice " +
             "            from Product p " +
@@ -61,13 +61,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                                           Double bottomPrice, Double topPrice, Pageable pageable);
 
     @Query(value = "select p from products p join tag_products tp on p.id= tp.product_id " +
-            "join tags t on t.id=tp.tag_id where p.is_completed=1 " +
-            "and p.is_active=1 and p.is_deleted=0 and  t.tag_name=?1 ", nativeQuery = true)
+            "join tags t on t.id=tp.tag_id where p.status = 1 and  t.tag_name=?1 ", nativeQuery = true)
     List<Product> findAllByTagName(String tagName);
 
-    @Query(value = "select p.id,p.product_name,p.create_date,p.image,p.description,p.is_active,p.is_completed,p.is_deleted,p.category_id,p.vote_average from products p \n" +
-            "join detail_products dp on p.id=dp.product_id join detail_orders dos on dos.detail_product_id=dp.id where p.is_completed=1 and p.is_active=1 and p.is_deleted=0 " +
-            "group by p.id,dos.quantity,p.product_name,p.create_date,p.image,p.description,p.is_deleted,p.category_id,p.vote_average\n" +
+    @Query(value = "select p.id,p.product_name,p.create_date,p.image,p.description,p.status,p.category_id,p.vote_average from products p \n" +
+            "join detail_products dp on p.id=dp.product_id join detail_orders dos on dos.detail_product_id=dp.id where p.status = 1 " +
+            "group by p.id,dos.quantity,p.product_name,p.create_date,p.image,p.description,p.category_id,p.vote_average\n" +
             " ORDER BY count(dos.quantity) limit 10", nativeQuery = true)
     List<Product> findTop10ProductBestSale();
 

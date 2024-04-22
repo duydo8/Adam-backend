@@ -20,8 +20,10 @@ public class Tag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "tag_name")
 	private String tagName;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@JsonIgnore

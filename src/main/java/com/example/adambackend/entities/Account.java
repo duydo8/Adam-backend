@@ -20,18 +20,22 @@ public class Account {
 	private Integer id;
 	@Column(unique = true)
 	private String username;
+	@Column(name = "full_name")
 	private String fullName;
 	@Column(unique = true)
 	private String email;
-	@Column(unique = true)
+	@Column(name = "phone_number", unique = true)
 	private String phoneNumber;
 	private String password;
 	private ERoleName role;
 	// 0 : not active, 1 : active, 9 : delete
 	private Integer status;
+	@Column(name = "verification_code")
 	private Integer verificationCode;
+	@Column(name = "time_valid")
 	private LocalDateTime timeValid;
 	private Double priority;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@JsonIgnore

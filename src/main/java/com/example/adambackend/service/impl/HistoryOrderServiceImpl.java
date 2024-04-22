@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class HistoryOrderServiceImpl implements HistoryOrderService {
+
 	@Autowired
 	private HistoryOrderRepository historyOrderRepository;
 

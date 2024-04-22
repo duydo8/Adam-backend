@@ -17,11 +17,15 @@ public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "event_name")
 	private String eventName;
+	@Column(name = "start_time")
 	private LocalDateTime startTime;
+	@Column(name = "end_time")
 	private LocalDateTime endTime;
 	private String description;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 	private Boolean type;
 	private String image;

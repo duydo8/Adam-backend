@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,11 +28,16 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "address_detail")
 	private String addressDetail;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
+	@Column(name = "phone_number")
 	private String phoneNumber;
+	@Column(name = "full_name")
 	private String fullName;
+	@Column(name = "is_default")
 	private Boolean isDefault;
 
 	@ManyToOne

@@ -17,14 +17,21 @@ public class DiscountOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "discount_name")
 	private String discountName;
 	private String description;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
+	@Column(name = "start_time")
 	private LocalDateTime startTime;
+	@Column(name = "end_time")
 	private LocalDateTime endTime;
 	private Integer status;
+	@Column(name = "sale_price")
 	private Double salePrice;
+	@Column(name = "order_min_range")
 	private Double orderMinRange;
+	@Column(name = "order_max_range")
 	private Double orderMaxRange;
 
 	@JsonIgnore

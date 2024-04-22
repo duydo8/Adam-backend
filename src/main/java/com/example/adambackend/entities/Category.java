@@ -20,9 +20,12 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "category_name")
 	private String categoryName;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
+	@Column(name = "category_parent_id")
 	private Integer categoryParentId;
 
 	@JsonIgnore

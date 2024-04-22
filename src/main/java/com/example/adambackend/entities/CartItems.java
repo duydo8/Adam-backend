@@ -17,8 +17,10 @@ public class CartItems {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer quantity;
+	@Column(name = "total_price")
 	private Double totalPrice;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@JsonIgnore

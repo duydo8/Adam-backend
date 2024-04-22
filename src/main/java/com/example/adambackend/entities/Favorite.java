@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 public class Favorite {
 	@EmbeddedId
 	private FavoriteId favoriteId;
-	private LocalDateTime time_create;
+	@Column(name = "create_date")
+	private LocalDateTime createDate;
 	private Integer status;
 
 	@ManyToOne

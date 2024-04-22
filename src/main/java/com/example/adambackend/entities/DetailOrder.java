@@ -20,9 +20,12 @@ public class DetailOrder {
 	private Integer id;
 	private Integer quantity;
 	private Double price;
+	@Column(name = "total_price")
 	private Double totalPrice;
+	@Column(name = "detail_order_code")
 	private String detailOrderCode;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 	private String reason;
 

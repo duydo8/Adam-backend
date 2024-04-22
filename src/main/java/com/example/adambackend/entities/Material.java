@@ -20,8 +20,10 @@ public class Material {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "material_name")
 	private String materialName;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@JsonIgnore

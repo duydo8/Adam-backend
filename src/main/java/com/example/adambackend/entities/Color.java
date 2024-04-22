@@ -20,8 +20,10 @@ public class Color {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "color_name")
 	private String colorName;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@JsonIgnore

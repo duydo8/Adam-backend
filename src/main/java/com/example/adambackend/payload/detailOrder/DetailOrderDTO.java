@@ -11,11 +11,9 @@ public interface DetailOrderDTO {
 
 	Double getTotalPrice();
 
-	Boolean getIsDeleted();
+	Integer getStatus();
 
 	String getDetailOrderCode();
-
-	Boolean getIsActive();
 
 	LocalDateTime getCreateDate();
 

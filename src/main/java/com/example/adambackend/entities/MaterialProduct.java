@@ -16,6 +16,7 @@ public class MaterialProduct {
 	@EmbeddedId
 	private MaterialProductPK materialProductPK;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@ManyToOne

@@ -20,10 +20,14 @@ public class DetailProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer quantity;
+	@Column(name = "price_import")
 	private Double priceImport;
+	@Column(name = "price_export")
 	private Double priceExport;
+	@Column(name = "image_product")
 	private String imageProduct;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@ManyToOne

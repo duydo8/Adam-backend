@@ -5,11 +5,13 @@ import com.example.adambackend.config.TwilioSendSms;
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.enums.ERoleName;
 import com.example.adambackend.payload.account.AccountAdminCreate;
+import com.example.adambackend.payload.account.AccountAdminDTO;
 import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.payload.satistic.Dashboard;
 import com.example.adambackend.repository.AccountRepository;
 import com.example.adambackend.service.AccountService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -156,7 +158,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public Account getAccountFromAccountAdminCreate(AccountAdminCreate accountAdminCreate) {
+	public AccountResponse getAccountFromAccountAdminCreate(AccountAdminCreate accountAdminCreate) {
 		Account account = new Account();
 		account.setUsername(accountAdminCreate.getUsername());
 		account.setEmail(accountAdminCreate.getEmail());
@@ -170,7 +172,11 @@ public class AccountServiceImpl implements AccountService {
 		} else {
 			account.setRole(ERoleName.User);
 		}
-		return account;
+		account = accountRepository.save(account);
+		AccountResponse accountResponse =  new AccountResponse();
+		BeanUtils.copyProperties(account,accountResponse);
+		accountResponse.setRole(accountAdminCreate.getRole());
+		return accountResponse;
 	}
 
 	@Override
@@ -278,5 +284,14 @@ public class AccountServiceImpl implements AccountService {
 		account.setTimeValid(LocalDateTime.now().plusMinutes(30));
 		accountRepository.save(account);
 		return code;
+	}
+
+	@Override
+	public Account update(Account account, AccountAdminDTO accountAdminDTO){
+		account.setFullName(accountAdminDTO.getFullName());
+		account.setEmail(accountAdminDTO.getEmail());
+		account.setStatus(accountAdminDTO.getStatus());
+		account.setPassword(passwordEncoder.encode(accountAdminDTO.getPassword()));
+		return accountRepository.save(account);
 	}
 }

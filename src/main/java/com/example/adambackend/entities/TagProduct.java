@@ -16,6 +16,7 @@ public class TagProduct {
 	@EmbeddedId
 	private TagProductPK tagProductPK;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@ManyToOne

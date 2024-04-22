@@ -19,8 +19,10 @@ public class HistoryOrder {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer status;
+	@Column(name = "update_time")
 	private LocalDateTime updateTime;
 	private String description;
+	@Column(name = "total_price")
 	private Double totalPrice;
 
 	@JsonIgnore

@@ -19,12 +19,15 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "product_name")
 	private String productName;
 	private String description;
 	// 0: not active - not complete, 1: active
 	private Integer status;
 	private String image;
+	@Column(name = "vote_average")
 	private Double voteAverage;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
 	@ManyToOne

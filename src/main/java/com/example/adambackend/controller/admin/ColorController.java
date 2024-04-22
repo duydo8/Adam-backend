@@ -71,7 +71,7 @@ public class ColorController {
 			Optional<Color> colorOptional = colorService.findById(colorId);
 			if (colorOptional.isPresent()) {
 				colorService.deleteById(colorId);
-				return ResponseEntity.ok().body(new IGenericResponse(200, "success"));
+				return ResponseEntity.ok().body(new IGenericResponse(200, "successfully"));
 			}
 			return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found"));
 		} catch (Exception e) {

@@ -13,19 +13,17 @@ public class AccountResponse {
 	String fullName;
 	String email;
 	String phoneNumber;
-	String password;
 	String role;
 	Integer status;
 	Double priority;
 
-	public AccountResponse(Integer id, String username, String fullName, String email, String phoneNumber, String password,
+	public AccountResponse(Integer id, String username, String fullName, String email, String phoneNumber,
 	                       ERoleName role, Integer status, Double priority) {
 		this.id = id;
 		this.username = username;
 		this.fullName = fullName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.password = password;
 		this.role = String.valueOf(role);
 		this.status = status;
 		this.priority = priority;

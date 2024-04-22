@@ -20,14 +20,23 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer status;
+	@Column(name = "create_date")
 	private LocalDateTime createDate;
+	@Column(name = "full_name")
 	private String fullName;
+	@Column(name = "phone_number")
 	private String phoneNumber;
+	@Column(name = "amount_price")
 	private Double amountPrice;
+	@Column(name = "sale_price")
 	private Double salePrice;
+	@Column(name = "total_price")
 	private Double totalPrice;
+	@Column(name = "address_detail")
 	private String addressDetail;
+	@Column(name = "order_code")
 	private String orderCode;
+	@Column(name = "return_order_price")
 	private Double returnOrderPrice = 0.0;
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

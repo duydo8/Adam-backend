@@ -2,6 +2,7 @@ package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Account;
 import com.example.adambackend.payload.account.AccountAdminCreate;
+import com.example.adambackend.payload.account.AccountAdminDTO;
 import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.payload.satistic.Dashboard;
@@ -40,7 +41,7 @@ public interface AccountService {
 
 	String validateErrorPassword(Account account, String password, String passNew, String passNewConfirm);
 
-	Account getAccountFromAccountAdminCreate(AccountAdminCreate accountAdminCreate);
+	AccountResponse getAccountFromAccountAdminCreate(AccountAdminCreate accountAdminCreate);
 
 	Integer generateCodeByPhoneNumber(String phoneNumber);
 
@@ -53,4 +54,6 @@ public interface AccountService {
 	String getMessageChangePassword(Integer id, String password, String passNew, String confirm);
 
 	Integer sendCode(Account account);
+
+	Account update(Account account, AccountAdminDTO accountAdminDTO);
 }

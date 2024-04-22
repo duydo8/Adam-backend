@@ -45,7 +45,7 @@ public class AccountController {
 			if (CommonUtil.isNotNull(error)) {
 				return ResponseEntity.ok().body(new IGenericResponse(400, error));
 			}
-			Account account = accountService.getAccountFromAccountAdminCreate(accountAdminCreate);
+			AccountResponse account = accountService.getAccountFromAccountAdminCreate(accountAdminCreate);
 			return ResponseEntity.ok().body(new IGenericResponse(account, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,12 +85,8 @@ public class AccountController {
 		try {
 			Account account = accountService.getById(accountAdminDTO.getId());
 			if (CommonUtil.isNotNull(account)) {
-				account.setFullName(accountAdminDTO.getFullName());
-				account.setEmail(accountAdminDTO.getEmail());
-				account.setStatus(accountAdminDTO.getStatus());
-				account.setPassword(passwordEncoder.encode(accountAdminDTO.getPassword()));
-				accountService.save(account);
-				return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "successfully"));
+				return ResponseEntity.ok().body(new IGenericResponse<>(accountService.update(account,accountAdminDTO),
+						200, "successfully"));
 			}
 			return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found"));
 		} catch (Exception e) {
@@ -168,7 +164,7 @@ public class AccountController {
 	}
 
 	@PostMapping("changePassword")
-	public ResponseEntity<?> updatePriority(@RequestParam("id") Integer id,
+	public ResponseEntity<?> changePassword(@RequestParam("id") Integer id,
 											@RequestParam("password") String password,
 											@RequestParam("passwordNew") String passNew,
 											@RequestParam("confirm") String confirm) {
@@ -191,7 +187,7 @@ public class AccountController {
 			if (CommonUtil.isNotNull(error)) {
 				return ResponseEntity.ok().body(new IGenericResponse(200, error));
 			}
-			Account account = accountService.getAccountFromAccountAdminCreate(accountAdminCreate);
+			AccountResponse account = accountService.getAccountFromAccountAdminCreate(accountAdminCreate);
 			return ResponseEntity.ok().body(new IGenericResponse<>(account, 200, "successfully"));
 		} catch (Exception e) {
 			e.printStackTrace();

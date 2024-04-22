@@ -18,6 +18,7 @@ public class UserInfo {
 	private Integer id;
 	private String username;
 	private String token;
+	@Column(name = "time_valid")
 	private LocalDateTime timeValid;
 	private Integer status;
 }
