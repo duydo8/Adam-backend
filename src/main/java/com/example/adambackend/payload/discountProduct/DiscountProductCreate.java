@@ -11,12 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiscountProductCreate {
-    private String discountName;
-    private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Double salePrice;
-    private List<Integer> detailOrderListId;
-    private Integer eventId;
-    private Integer productId;
+	private String discountName;
+	private String description;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private Double salePrice;
+	private List<Integer> detailOrderListId;
+	private Integer eventId;
+	private Integer productId;
 }

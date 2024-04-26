@@ -1,17 +1,26 @@
 package com.example.adambackend.payload.detailOrder;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-public interface DetailOrderAdmin {
-    Integer getId();
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DetailOrderAdmin {
+	private Integer id;
 
-    Integer getQuantity();
+	private Integer quantity;
 
-    Double getTotalPrice();
+	private Double totalPrice;
 
-    Integer getDetailProductId();
+	private Integer detailProductId;
 
-    Boolean getIsActive();
+	private Integer status;
 
-    LocalDateTime getCreateDate();
+	private LocalDateTime createDate;
+
+	private String detailOrderCode;
 }

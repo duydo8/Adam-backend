@@ -1,8 +1,11 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Account;
+import com.example.adambackend.payload.account.AccountAdminCreate;
+import com.example.adambackend.payload.account.AccountAdminDTO;
 import com.example.adambackend.payload.account.AccountDTOs;
 import com.example.adambackend.payload.account.AccountResponse;
+import com.example.adambackend.payload.satistic.Dashboard;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -10,41 +13,47 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
+	List<AccountResponse> findAll();
 
-    Optional<Account> findByUsername(String username);
+	Account save(Account account);
 
-    List<AccountResponse> findAll();
+	void deleteById(Integer id);
 
-    Account save(Account account);
+	Optional<Account> findById(Integer id);
 
-    void deleteById(Integer id);
+	Boolean existsByEmail(String email);
 
-    Optional<Account> findById(Integer id);
+	AccountDTOs findByIds(Integer id);
 
-    List<Account> findByRoleName(String roleName);
+	public void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
 
-    Boolean existsByUsername(String username);
+	Optional<Account> findByEmail(String email);
 
-    Boolean existsByEmail(String email);
+	Optional<Account> findByPhoneNumber(String phoneNumber);
 
-    Boolean existsByPhoneNumber(String phoneNumber);
+	void updateAccountDeleted(String ids);
 
-    AccountDTOs findByIds(Integer id);
+	Account getById(Integer id);
 
+	Account findByUserNameAndEmailAndPhoneNumber(String username, String email, String phoneNumber);
 
-    void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
+	String checkAccountRegistration(String username, String email, String phoneNumber);
 
+	String validateErrorPassword(Account account, String password, String passNew, String passNewConfirm);
 
-    Optional<Account> findByEmail(String email);
+	AccountResponse getAccountFromAccountAdminCreate(AccountAdminCreate accountAdminCreate);
 
-    Optional<Account> findByPhoneNumber(String phoneNumber);
+	Integer generateCodeByPhoneNumber(String phoneNumber);
 
-    Double countTotalAccount(Integer month);
+    List<Dashboard> statisticInAccountAdmin(List<String> months);
 
-    Double countTotalSignUpAccount(Integer month);
+	Optional<Account> findByUsername(String username);
 
-    Double countTotalAccountInOrder(Integer month);
+	String getForgotPasswordResponse(String phoneNumber, String password, String confirm, int code);
 
-    void updateAccountDeleted(Integer id);
+	String getMessageChangePassword(Integer id, String password, String passNew, String confirm);
 
+	Integer sendCode(Account account);
+
+	Account update(Account account, AccountAdminDTO accountAdminDTO);
 }

@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TagUpdate {
-    private Integer id;
-    private String tagName;
-    private Boolean isDeleted;
-    private Boolean isActive;
+	private Integer id;
+	private String tagName;
+	private Integer status;
 }
-

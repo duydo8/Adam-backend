@@ -1,13 +1,13 @@
 package com.example.adambackend.payload.account;
 
 public interface AccountDTOs {
-    Integer getId();
+	Integer getId();
 
-    String getUsername();
+	String getUsername();
 
-    String getFullName();
+	String getFullName();
 
-    String getEmail();
+	String getEmail();
 
-    String getPhoneNumber();
+	String getPhoneNumber();
 }

@@ -10,26 +10,26 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("/district")
 public class DistrictWebsiteController {
-    @Autowired
-    DistrictRepository districtRepository;
+	@Autowired
+	DistrictRepository districtRepository;
 
-    @GetMapping("findAll")
-    public ResponseEntity<?> findAll() {
-        try {
-            return ResponseEntity.ok().body(new IGenericResponse<>(districtRepository.findAll(), 200, ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findAll")
+	public ResponseEntity<?> findAll() {
+		try {
+			return ResponseEntity.ok().body(new IGenericResponse<>(districtRepository.findAll(), 200, "successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @GetMapping("findByProviceId")
-    public ResponseEntity<?> findByProviceId(@RequestParam("province_id") Integer provinceId) {
-        try {
-            return ResponseEntity.ok().body(new IGenericResponse<>(districtRepository.findByProvineId(provinceId), 200, ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@GetMapping("findByProviceId")
+	public ResponseEntity<?> findByProviceId(@RequestParam("province_id") Integer provinceId) {
+		try {
+			return ResponseEntity.ok().body(new IGenericResponse<>(districtRepository.findByProvineId(provinceId), 200, "successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 }

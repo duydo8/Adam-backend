@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    private Integer id;
-    private List<Integer> detailOrderIds = new ArrayList<>();
+	private Integer id;
+	private List<Integer> detailOrderIds = new ArrayList<>();
 }

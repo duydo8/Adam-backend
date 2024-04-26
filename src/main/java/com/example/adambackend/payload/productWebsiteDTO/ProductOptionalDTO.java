@@ -10,13 +10,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductOptionalDTO {
-    private Integer id;
-    private String description;
-    private Boolean isActive;
-    private Double maxPrice;
-    private Double minPrice;
-    private String productName;
-    private Double voteAverage;
-    private Boolean isFavorite;
-    private List<OptionProduct> options;
+	private Integer id;
+	private String description;
+	private Integer status;
+	private Double maxPrice;
+	private Double minPrice;
+	private String productName;
+	private Double voteAverage;
+	private Boolean isFavorite;
+	private List<OptionProduct> options;
 }

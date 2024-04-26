@@ -11,8 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderReturn {
-    private String orderCode;
-    private List<DetailOrderAdminPayBack> detailOrderAdminPayBacks;
-    private Integer status;
-    private String reason;
+	private String orderCode;
+	private List<DetailOrderAdminPayBack> detailOrderAdminPayBacks;
+	private Integer status;
+	private String reason;
 }

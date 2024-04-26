@@ -12,11 +12,11 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
     @Override
-    public List<Tag> findAll() {
-        return tagRepository.findAll();
+    public List<Tag> findAll(String name) {
+        return tagRepository.findAll(name);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void deleteById(Integer id) {
-        tagRepository.deleteById(id);
+        tagRepository.updateDeletedByTagId(id);
     }
 
     @Override

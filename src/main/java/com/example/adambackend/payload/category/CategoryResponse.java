@@ -11,12 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryResponse {
-    private Integer id;
-
-    private String categoryName;
-
-    private Boolean isDeleted;
-    private Boolean isActive;
-    private Integer categoryParentId;
-    private List<Category> categoryChildren;
+	private Integer id;
+	private String categoryName;
+	private Integer status;
+	private Integer categoryParentId;
+	private List<Category> categoryChildren;
 }

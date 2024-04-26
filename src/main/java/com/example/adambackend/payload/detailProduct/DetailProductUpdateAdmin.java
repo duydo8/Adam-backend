@@ -8,14 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailProductUpdateAdmin {
-    private Integer id;
-    private int quantity;
-    private Double priceImport;
-    private Double priceExport;
-    private Boolean isDelete;
-    private String productImage;
-
-    private Boolean isActive;
-    private Integer colorId;
-    private Integer sizeId;
+	private Integer id;
+	private Integer quantity;
+	private Double priceImport;
+	private Double priceExport;
+	private Integer status;
+	private String productImage;
+	private Integer colorId;
+	private Integer sizeId;
 }

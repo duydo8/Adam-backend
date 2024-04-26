@@ -1,27 +1,22 @@
 package com.example.adambackend.payload.product;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-public interface ProductTop10Create {
-    Integer getId();
-
-    String getProductName();
-
-    String getDescription();
-
-    Boolean getIsDelete();
-
-    String getImage();
-
-    Double getVoteAverage();
-
-    LocalDateTime getCreateDate();
-
-    Boolean getIsComplete();
-
-    Boolean getIsActive();
-
-    Double getMinPrice();
-
-    Double getMaxPrice();
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductTop10Create {
+	private Integer id;
+	private String productName;
+	private String description;
+	private Integer status;
+	private String image;
+	private Double voteAverage;
+	private LocalDateTime createDate;
+	private Double minPrice;
+	private Double maxPrice;
 }

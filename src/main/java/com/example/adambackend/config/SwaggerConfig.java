@@ -17,30 +17,26 @@ import java.util.ArrayList;
 @Configuration
 
 public class SwaggerConfig {
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.adambackend.controller"))
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.example.adambackend.controller"))
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build();
+	}
 
-    private ApiInfo metaInfo() {
-
-        ApiInfo apiInfo = new ApiInfo(
-                "Atividades API REST",
-                "API REST de cadastro de atividades.",
-                "1.0",
-                "Terms of Service",
-                new Contact("Duy", "localhost:8080",
-                        " "),
-                "Apache License Version 2.0",
-                "https://www.apache.org/licesen.html", new ArrayList<VendorExtension>()
-        );
-
-        return apiInfo;
-    }
-
+	private ApiInfo metaInfo() {
+		ApiInfo apiInfo = new ApiInfo(
+				"Atividades API REST",
+				"API REST de cadastro de atividades.",
+				"1.0",
+				"Terms of Service",
+				new Contact("Duy", "localhost:8080", " "),
+				"Apache License Version 2.0",
+				"https://www.apache.org/licesen.html", new ArrayList<VendorExtension>()
+		);
+		return apiInfo;
+	}
 }

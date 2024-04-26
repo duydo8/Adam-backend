@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountAdminCreate {
-    private String username;
-    private String email;
-    private String role;
-    private String password;
-    private String phoneNumber;
-    private String fullName;
+	private String username;
+	private String email;
+	private String role;
+	private String password;
+	private String phoneNumber;
+	private String fullName;
 }

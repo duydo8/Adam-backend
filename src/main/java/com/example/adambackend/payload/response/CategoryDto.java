@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto {
-    private int id;
-    private String categoryName;
-    private boolean isDeleted;
-    private Integer categoryParentId;
+	private Integer id;
+	private String categoryName;
+	private Integer status;
+	private Integer categoryParentId;
 }

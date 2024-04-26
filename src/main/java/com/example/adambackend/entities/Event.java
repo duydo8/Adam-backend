@@ -14,24 +14,22 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 public class Event {
-    @OneToMany(mappedBy = "event")
-    List<DiscountOrder> discountOrders;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "event_name")
-    private String eventName;
-    @Column(name = "start_time")
-    private LocalDateTime startTime;
-    @Column(name = "end_time")
-    private LocalDateTime endTime;
-    private String description;
-    @Column(name = "is_deleted")
-    private Boolean isDelete;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-    private Boolean type;
-    private String image;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "event_name")
+	private String eventName;
+	@Column(name = "start_time")
+	private LocalDateTime startTime;
+	@Column(name = "end_time")
+	private LocalDateTime endTime;
+	private String description;
+	private Integer status;
+	@Column(name = "create_date")
+	private LocalDateTime createDate;
+	private Boolean type;
+	private String image;
+
+	@OneToMany(mappedBy = "event")
+	List<DiscountOrder> discountOrders;
 }

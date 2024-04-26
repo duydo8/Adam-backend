@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IGenericResponse<T> {
-    private T data;
-    private int status;
-    private String message;
+	private T data;
+	private int status;
+	private String message;
 
-    public IGenericResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
+	public IGenericResponse(int status, String message) {
+		this.status = status;
+		this.message = message;
+	}
 }

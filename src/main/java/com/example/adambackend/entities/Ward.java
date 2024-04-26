@@ -15,18 +15,21 @@ import java.util.List;
 @Entity
 @Table(name = "wards")
 public class Ward {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
-    private String prefix;
-    @ManyToOne
-    @JoinColumn(name = "province_id")
-    private Province province;
-    @ManyToOne
-    @JoinColumn(name = "district_id")
-    private District district;
-    @JsonIgnore
-    @OneToMany(mappedBy = "ward")
-    private List<Address> addresses = new ArrayList<>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String name;
+	private String prefix;
+
+	@ManyToOne
+	@JoinColumn(name = "province_id")
+	private Province province;
+
+	@ManyToOne
+	@JoinColumn(name = "district_id")
+	private District district;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "ward")
+	private List<Address> addresses = new ArrayList<>();
 }

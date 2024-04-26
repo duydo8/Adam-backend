@@ -11,15 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailProductRequest {
-    Integer productId;
-    Integer quantity;
-    Double priceImport;
-    Double priceExport;
-
-
-    @ElementCollection
-    List<Integer> colorIdList;
-    @ElementCollection
-    List<Integer> sizeIdList;
-
+	Integer productId;
+	Integer quantity;
+	Double priceImport;
+	Double priceExport;
+	@ElementCollection
+	List<Integer> colorIdList;
+	@ElementCollection
+	List<Integer> sizeIdList;
 }

@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.color.ColorDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,19 +17,22 @@ import java.util.List;
 @Table(name = "colors")
 @Entity
 public class Color {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "color_name")
-    private String colorName;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "color_name")
+	private String colorName;
+	private Integer status;
+	@Column(name = "create_date")
+	private LocalDateTime createDate;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
-    private List<DetailProduct> detailProducts = new ArrayList<>();
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
+	@JsonIgnore
+	@OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
+	private List<DetailProduct> detailProducts = new ArrayList<>();
+
+	public Color(ColorDTO colorDTO){
+		this.colorName = colorDTO.getColorName();
+		this.status = 1;
+		this.createDate = LocalDateTime.now();
+	}
 }

@@ -9,26 +9,26 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
-    @Query(value = "select * from events where event_name like '%?1%'", nativeQuery = true)
-    List<Event> findByName(String name);
+	@Query(value = "select e from Event e where e.status = 1 and (:name is null or e.eventName like concat('%', :name ,'%'))")
+	List<Event> findAll(@Param("name") String name);
 
-    @Query(value = "select c from Event c where c.isActive=true and c.isDelete=false and  c.eventName like concat('%',:name,'%') ")
-    List<Event> findAll(@Param("name") String name);
+	@Query(value = "select * from events  where  " +
+			"DATEDIFF(CURRENT_DATE(),start_time)>0 " +
+			"and DATEDIFF(end_time,CURRENT_DATE())>0 and status = 1 ", nativeQuery = true)
+	List<Event> findAllByTime();
 
-    @Query(value = "select c from Event c where c.isActive=true and c.isDelete=false order by c.createDate")
-    List<Event> findAll();
+	@Modifying
+	@Transactional
+	@Query(value = "update events set status = 0 where id = ?1", nativeQuery = true)
+	void updateEventDeleted(Integer id);
 
-    @Query(value = "select * from events  where  " +
-            "DATEDIFF(CURRENT_DATE(),start_time)>0 " +
-            "and DATEDIFF(end_time,CURRENT_DATE())>0 and is_active=1 and is_deleted=0 ", nativeQuery = true)
-    List<Event> findAllByTime();
+	@Query("select e from Event e where e.status = 1 and e.id = ?1")
+	Optional<Event> findById(Integer id);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update events set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
-    void updateEventDeleted(Integer id);
-
+	@Query("select e from Event e where e.status = 1 and e.id = ?1")
+	Event findExistById(Integer id);
 }

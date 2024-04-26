@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailOrderWebsiteCreate {
-    private Integer quantity;
-    private Double price;
-    private Integer detailProductId;
-    private Integer orderId;
-
+	private Integer quantity;
+	private Double price;
+	private Integer detailProductId;
+	private Integer orderId;
 }

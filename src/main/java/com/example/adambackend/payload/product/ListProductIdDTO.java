@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListProductIdDTO {
-    List<Integer> listProductId;
+	List<Integer> listProductId;
 }

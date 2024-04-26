@@ -1,7 +1,7 @@
 package com.example.adambackend.service;
 
 import com.example.adambackend.entities.Comment;
-import com.example.adambackend.enums.CommentStatus;
+import com.example.adambackend.payload.comment.CommentDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,25 +9,30 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Optional<Comment> findById(Integer id);
+	Optional<Comment> findById(Integer id);
 
-    void deleteById(Integer id);
+	void deleteById(Integer id);
 
-    Comment save(Comment comment);
+	Comment save(Comment comment);
 
-    List<Comment> findAll();
+	List<Comment> findAll();
 
-    Integer countCommentByAccountIdAndProductId(Integer idAccount, Integer idProduct);
+	Integer countCommentByAccountIdAndProductId(Integer idAccount, Integer idProduct);
 
-    List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct);
+	List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct);
 
-    Comment createAccountwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId, Integer accountId, CommentStatus commentStatus, int vote);
+	Comment createCommentwithAccountIdAndProductId(String content, LocalDateTime localDateTime, Integer productId,
+												   Integer accountId, Integer commentStatus, int vote);
 
-    List<Comment> findAllCommentByProductIdAndStatusIsActive(Integer productId);
+	List<Comment> findAllCommentByProductId(Integer productId);
 
-    List<Comment> findTop10CommentByProductId(Integer productId);
+	List<Comment> findTop10CommentByProductId(Integer productId);
 
-    Integer countCommentByProduct(Integer productId);
+	Integer countCommentByProduct(Integer productId);
 
-    void deleteByProductId(Integer productId);
+	void deleteByProductId(Integer productId);
+
+	Comment update(CommentDTO commentDTO);
+
+	String updateCommentDeleted(List<Integer> listCommentId);
 }

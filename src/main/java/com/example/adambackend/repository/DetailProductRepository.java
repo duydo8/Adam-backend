@@ -8,33 +8,24 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DetailProductRepository extends JpaRepository<DetailProduct, Integer> {
-    @Query(value = "select * from detail_products  dp join products p on dp.product_id=p.id " +
-            "where p.id=?1 and p.is_active=true and p.is_deleted=false and p.is_completed=true" +
-            "", nativeQuery = true)
-    List<DetailProduct> findAllByProductId(Integer id);
+	@Query(value = "select * from detail_products  dp join products p on dp.product_id=p.id " +
+			"where p.id=?1 and p.is_active=true and p.is_deleted=false and p.is_completed=true", nativeQuery = true)
+	List<DetailProduct> findAllByProductId(Integer id);
 
-    @Transactional
-    @Modifying
-    @Query(value = "delete from detail_products where size_id=?1", nativeQuery = true)
-    Integer deleteBySizeId(Integer sizeId);
+	@Transactional
+	@Modifying
+	@Query(value = "delete from detail_products where product_id = ?1", nativeQuery = true)
+	void deleteByProductId(Integer productId);
 
-    @Transactional
-    @Modifying
-    @Query(value = "delete from detail_products where color_id=?1", nativeQuery = true)
-    Integer deleteByColorId(Integer colorId);
+	@Modifying
+	@Transactional
+	@Query(value = "update detail_products set status = 0 where id = ?1", nativeQuery = true)
+	void updateDetailProductsDeleted(Integer id);
 
-    @Transactional
-    @Modifying
-    @Query(value = "delete from detail_products where product_id=?1", nativeQuery = true)
-    void deleteByProductId(Integer productId);
-
-    @Modifying
-    @Transactional
-    @Query(value = "update detail_products set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
-    void updateDetailProductsDeleted(Integer id);
-
-
+	@Query("select dp from DetailProduct dp where dp.status = 1 and dp.id = ?1")
+	Optional<DetailProduct> findById(Integer id);
 }

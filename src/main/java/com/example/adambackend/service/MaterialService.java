@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MaterialService {
-    List<Material> findAll();
+	List<Material> findAll(String name);
 
-    Material save(Material Tag);
+	Material save(Material Tag);
 
-    void deleteById(Integer id);
+	void deleteById(Integer id);
 
-    Optional<Material> findById(Integer id);
+	Optional<Material> findById(Integer id);
 
 
+	void updateDeletedByListId(List<Integer> materialIs);
 }

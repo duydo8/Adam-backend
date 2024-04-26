@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderUpdatePayBack {
-    @ElementCollection
-    List<Integer> cartItemIds;
-    private Integer orderId;
+	@ElementCollection
+	List<Integer> cartItemIds;
+	private Integer orderId;
 }

@@ -3,17 +3,17 @@ package com.example.adambackend.payload.cart;
 import java.time.LocalDateTime;
 
 public interface CartItemResponse {
-    Integer getId();
+	Integer getId();
 
-    Integer getQuantity();
+	Integer getQuantity();
 
-    Double getTotalPrice();
+	Double getTotalPrice();
 
-    Integer getAccountId();
+	Integer getAccountId();
 
-    Integer getDetailProductId();
+	Integer getDetailProductId();
 
-    Boolean getIsActive();
+	Boolean getIsActive();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 }

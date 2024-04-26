@@ -1,6 +1,9 @@
 package com.example.adambackend.service;
 
+import com.example.adambackend.entities.Account;
 import com.example.adambackend.entities.CartItems;
+import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.payload.cart.CartItemCreate;
 import com.example.adambackend.payload.cart.CartItemResponse;
 
 import java.util.List;
@@ -8,18 +11,23 @@ import java.util.Optional;
 
 public interface CartItemService {
 
-    Optional<CartItems> findById(Integer id);
-    Optional<CartItems> findByIds(Integer id);
+	Optional<CartItems> findById(Integer id);
 
-    List<CartItemResponse> findByOrderId(Integer orderId);
+	Optional<CartItems> findByIds(Integer id);
 
-    void deleteById(Integer id);
+	List<CartItemResponse> findByOrderId(Integer orderId);
 
-    CartItems save(CartItems cartItems);
+	void deleteById(Integer id);
 
-    List<CartItems> findAll();
+	CartItems save(CartItems cartItems);
 
-    List<CartItems> findByAccountId(Integer accountId);
+	List<CartItems> findAll();
 
-    void updateIsActive(Integer id);
+	List<CartItems> findByAccountId(Integer accountId);
+
+	void updateStatus(Integer status, Integer id);
+
+	String validateCreateCartItem(Optional<Account> account, CartItemCreate cartItemCreate, Optional<DetailProduct> detailProduct);
+
+	CartItems createCartItem(Account account, DetailProduct detailProduct, CartItemCreate cartItemCreate);
 }

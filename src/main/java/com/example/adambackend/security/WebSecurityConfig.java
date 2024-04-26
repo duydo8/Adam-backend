@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -22,65 +24,70 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(
 //        securedEnabled = true,
 //        jsr250Enabled = true,
-        prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    AccountDetailsServiceImpl accountDetailsService;
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+		prePostEnabled = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
+	@Autowired
+	private AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public AuthTokenFilter tokenAuthenticationFilter() {
-        return new AuthTokenFilter();
-    }
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
 
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public AuthTokenFilter tokenAuthenticationFilter() {
+		return new AuthTokenFilter();
+	}
 
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 
-                .exceptionHandling()
-                .authenticationEntryPoint(new AuthEntryPointJwt())
-                .and()
-                .authorizeRequests()
-                .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
+	@Bean(BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-                .permitAll().and()
-
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+				.exceptionHandling()
+				.authenticationEntryPoint(new AuthEntryPointJwt())
+				.and()
+				.authorizeRequests()
+				.antMatchers("/",
+						"/error",
+						"/favicon.ico",
+						"/**/*.png",
+						"/**/*.gif",
+						"/**/*.svg",
+						"/**/*.jpg",
+						"/**/*.html",
+						"/**/*.css",
+						"/**/*.js")
+				.permitAll().and()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //                .authorizeRequests().antMatchers("/api/admin/**").hasAuthority("Admin")
-//                .and().authorizeRequests().antMatchers("/api/user/**").hasAuthority("User").
-//                and().authorizeRequests().antMatchers( "/**","/*").permitAll()
+//                .and().authorizeRequests().antMatchers("/api/user/**").hasAuthority("User")
+//                .and().authorizeRequests().antMatchers( "/**","/*").permitAll()
 //                .anyRequest().authenticated();
-                .authorizeRequests().anyRequest().permitAll();
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+				.authorizeRequests().anyRequest().permitAll();
+		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		// Global CORS configuration
+		registry.addMapping("/**") // Allow CORS for all endpoints
+				.allowedOrigins("*") // Allow requests from any origin
+				.allowedMethods("GET", "POST", "PUT", "DELETE") // Allowed HTTP methods
+				.allowedHeaders("*"); // Allowed headers
+	}
+
 }

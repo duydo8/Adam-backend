@@ -1,115 +1,93 @@
 package com.example.adambackend.controller.admin;
 
+import com.example.adambackend.common.CommonUtil;
 import com.example.adambackend.entities.Material;
-import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.material.ListMaterialIdDTO;
 import com.example.adambackend.payload.material.MaterialDTO;
-import com.example.adambackend.payload.material.MaterialUpdate;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.MaterialProductRepository;
-import com.example.adambackend.repository.MaterialRepository;
-import com.example.adambackend.service.ProductSevice;
+import com.example.adambackend.service.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 @RequestMapping("admin/material")
 public class MaterialControler {
-    @Autowired
-    MaterialRepository materialService;
-    @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    MaterialProductRepository materialProductRepository;
 
-    @GetMapping("findAll")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
-        if (name == null) {
-            return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
+	@Autowired
+	private MaterialService materialService;
 
-        }
-        return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(name), 200, ""));
-    }
+	@GetMapping("findAll")
+	public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
+		return ResponseEntity.ok().body(new IGenericResponse(materialService.findAll(name), 200, "successfully"));
+	}
 
-    @PostMapping("create")
-    public ResponseEntity<?> createWard(@RequestBody MaterialDTO materialDTO) {
-        try {
-            Material material = new Material();
-            material.setMaterialName(materialDTO.getMaterialName());
-            material.setIsActive(true);
-            material.setCreateDate(LocalDateTime.now());
-            material.setIsDeleted(false);
-            return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
-        }
-    }
+	@PostMapping("create")
+	public ResponseEntity<?> createWard(@RequestBody MaterialDTO materialDTO) {
+		try {
+			Material material = materialService.save(new Material(materialDTO));
+			if(CommonUtil.isNotNull(material)){
+				return ResponseEntity.ok().body(new IGenericResponse(material, 200, "successfully"));
+			}
+			return ResponseEntity.badRequest().body(new IGenericResponse(400, "can't duplicate name"));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(new IGenericResponse(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @PutMapping("update")
-    public ResponseEntity<?> updateEvent(@RequestBody MaterialUpdate materialUpdate) {
-        try {
-            Optional<Material> materialOptional = materialService.findById(materialUpdate.getId());
-            if (materialOptional.isPresent()) {
-                materialOptional.get().setMaterialName(materialUpdate.getMaterialName());
-                materialOptional.get().setIsActive(materialUpdate.getIsActive());
-                materialOptional.get().setIsDeleted(materialUpdate.getIsDeleted());
-                return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(materialOptional.get()), 200, ""));
-            } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@PutMapping("update")
+	public ResponseEntity<?> updateEvent(@RequestBody MaterialDTO materialDTO) {
+		try {
+			Optional<Material> materialOptional = materialService.findById(materialDTO.getId());
+			if (materialOptional.isPresent()) {
+				materialOptional.get().setMaterialName(materialDTO.getMaterialName());
+				materialOptional.get().setStatus(materialDTO.getStatus());
+				return ResponseEntity.ok().body(new IGenericResponse(materialService.save(materialOptional.get()),
+						200, "successfully"));
+			} else {
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("material_id") Integer id) {
-        try {
-            Optional<Material> materialOptional = materialService.findById(id);
-            if (materialOptional.isPresent()) {
-                materialService.deleteById(id);
-                return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
-            } else {
-                return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
+	@DeleteMapping("delete")
+	public ResponseEntity<?> deleteEvent(@RequestParam("material_id") Integer id) {
+		try {
+			Optional<Material> materialOptional = materialService.findById(id);
+			if (materialOptional.isPresent()) {
+				materialService.deleteById(id);
+				return ResponseEntity.ok().body(new IGenericResponse(200, "successfully"));
+			} else {
+				return ResponseEntity.badRequest().body(new IGenericResponse(400, "not found"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 
-    @DeleteMapping("deleteByListId")
-    public ResponseEntity<?> deleteArrayTagId(@RequestBody ListMaterialIdDTO listMaterialIdDTO) {
-        try {
-            List<Integer> listMaterialIdDTOx = listMaterialIdDTO.getListMaterialId();
-
-            System.out.println(listMaterialIdDTOx.size());
-            if (listMaterialIdDTOx.size() > 0) {
-                for (Integer x : listMaterialIdDTOx
-                ) {
-                    Optional<Material> materialOptional = materialService.findById(x);
-                    if (materialOptional.isPresent()) {
-                        materialProductRepository.updateMaterialProductsDeleted(x);
-                        materialService.updateDeleteByArrayId(x);
-
-                    }
-                }
-                return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
-
-            }
-            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
-        }
-    }
-
-
+	@DeleteMapping("deleteByListId")
+	public ResponseEntity<?> deleteArrayTagId(@RequestBody ListMaterialIdDTO listMaterialIdDTO) {
+		try {
+			materialService.updateDeletedByListId(listMaterialIdDTO.getListMaterialId());
+			return ResponseEntity.badRequest().body(new IGenericResponse(200, "successfully "));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(new IGenericResponse<>(400, "Oops! Lại lỗi api rồi..."));
+		}
+	}
 }

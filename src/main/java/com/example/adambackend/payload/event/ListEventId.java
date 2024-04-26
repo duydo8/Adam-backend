@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListEventId {
-    @ElementCollection
-    private List<Integer> listId;
+	@ElementCollection
+	private List<Integer> listId;
 }

@@ -11,13 +11,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailOrderPayLoad {
-    Integer id;
-    Integer quantity;
-    Double totalPrice;
-
-    DetailProduct detailProduct;
-    Boolean isActive;
-    LocalDateTime createDate;
-    String detailOrderCode;
-
+	Integer id;
+	Integer quantity;
+	Double totalPrice;
+	Integer status;
+	LocalDateTime createDate;
+	String detailOrderCode;
+	DetailProduct detailProduct;
 }

@@ -11,14 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductUpdateDTO {
-    private Integer id;
-    private String productName;
-    private String description;
-    private Boolean isDelete;
-    private String image;
-    private Double voteAverage;
-    private Integer categoryId;
-    private List<Integer> tagProductIds = new ArrayList<>();
-    private List<Integer> materialProductIds = new ArrayList<>();
-    private Boolean isActive;
+	private Integer id;
+	private String productName;
+	private String description;
+	private String image;
+	private Double voteAverage;
+	private Integer categoryId;
+	private Integer status;
+	private List<Integer> tagProductIds = new ArrayList<>();
+	private List<Integer> materialProductIds = new ArrayList<>();
 }

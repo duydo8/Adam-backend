@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderPayBackResponse {
-    private Integer quantity;
-    private Double totalPrice;
-
+	private Integer quantity;
+	private Double totalPrice;
 }

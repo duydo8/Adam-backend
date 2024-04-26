@@ -11,26 +11,31 @@ import java.util.Optional;
 
 @Service
 public class WardServiceImpl implements WardService {
-    @Autowired
-    WardRepository wardRepository;
+	@Autowired
+	private WardRepository wardRepository;
 
-    @Override
-    public List<Ward> findAll() {
-        return wardRepository.findAll();
-    }
+	@Override
+	public List<Ward> findAll() {
+		return wardRepository.findAll();
+	}
 
-    @Override
-    public Ward save(Ward ward) {
-        return wardRepository.save(ward);
-    }
+	@Override
+	public Ward save(Ward ward) {
+		return wardRepository.save(ward);
+	}
 
-    @Override
-    public void deleteById(Integer id) {
-        wardRepository.deleteById(id);
-    }
+	@Override
+	public void deleteById(Integer id) {
+		wardRepository.deleteById(id);
+	}
 
-    @Override
-    public Optional<Ward> findById(Integer id) {
-        return wardRepository.findById(id);
-    }
+	@Override
+	public Optional<Ward> findById(Integer id) {
+		return wardRepository.findById(id);
+	}
+
+	@Override
+	public List<Ward> findByDistrictId(Integer districtId){
+		return wardRepository.findByDistrictId(districtId);
+	}
 }

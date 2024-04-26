@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListSizeIdDTO {
-    List<Integer> listSizeId;
+	List<Integer> listSizeId;
 }

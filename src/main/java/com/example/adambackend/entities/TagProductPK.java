@@ -13,10 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class TagProductPK implements Serializable {
-    @Column(name = "tag_id")
-    private Integer tagId;
-    @Column(name = "product_id")
-    private Integer productId;
-
+	@Column(name = "tag_id")
+	private Integer tagId;
+	@Column(name = "product_id")
+	private Integer productId;
 }
 

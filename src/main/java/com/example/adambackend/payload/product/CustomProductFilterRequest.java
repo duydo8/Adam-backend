@@ -3,19 +3,19 @@ package com.example.adambackend.payload.product;
 import java.time.LocalDateTime;
 
 public interface CustomProductFilterRequest {
-    Integer getId();
+	Integer getId();
 
-    Double getMinPrice();
+	Double getMinPrice();
 
-    Double getMaxPrice();
+	Double getMaxPrice();
 
-    String getProductName();
+	String getProductName();
 
-    String getProductImage();
+	String getImage();
 
-    String getDescription();
+	String getDescription();
 
-    LocalDateTime getCreateDate();
+	LocalDateTime getCreateDate();
 
 
 }

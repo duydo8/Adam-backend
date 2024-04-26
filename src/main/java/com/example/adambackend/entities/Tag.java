@@ -1,5 +1,6 @@
 package com.example.adambackend.entities;
 
+import com.example.adambackend.payload.tag.TagDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,20 +17,23 @@ import java.util.List;
 @Table(name = "tags")
 @Entity
 public class Tag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "tag_name")
-    private String tagName;
-    @Column(name = "is_deleted")
-    private Boolean isDelete;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @JsonIgnore
-    @OneToMany(mappedBy = "tag")
-    private List<TagProduct> tagProducts = new ArrayList<>();
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "tag_name")
+	private String tagName;
+	private Integer status;
+	@Column(name = "create_date")
+	private LocalDateTime createDate;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "tag")
+	private List<TagProduct> tagProducts = new ArrayList<>();
 
 
+	public Tag(TagDTO tagDTO){
+		this.createDate = LocalDateTime.now();
+		this.status = 1;
+		this.tagName = tagDTO.getTagName();
+	}
 }

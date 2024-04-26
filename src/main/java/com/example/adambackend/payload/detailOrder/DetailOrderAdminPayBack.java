@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailOrderAdminPayBack {
-    private String detailOrderCode;
-    private Integer quantity;
-
-
+	private String detailOrderCode;
+	private Integer quantity;
 }

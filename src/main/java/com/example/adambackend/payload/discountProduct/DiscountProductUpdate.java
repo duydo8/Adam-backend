@@ -11,15 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiscountProductUpdate {
-    private Integer id;
-    private String discountName;
-    private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Double salePrice;
-    private Boolean isActive;
-    private Boolean isDelete;
-    private List<Integer> detailOrderListId;
-    private Integer eventId;
-    private Integer productId;
+	private Integer id;
+	private String discountName;
+	private String description;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private Double salePrice;
+	private Integer status;
+	private List<Integer> detailOrderListId;
+	private Integer eventId;
+	private Integer productId;
 }

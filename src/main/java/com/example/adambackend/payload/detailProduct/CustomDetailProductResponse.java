@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomDetailProductResponse {
-    private List<NewDetailProductDTO> newDetailProductDTOList;
+	private List<NewDetailProductDTO> newDetailProductDTOList;
 }
