@@ -23,30 +23,27 @@ import java.util.Optional;
 @RequestMapping("user/order")
 public class OrderWebsiteController {
     @Autowired
-    OrderService orderService;
+    private OrderService orderService;
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
     @Autowired
-    DiscountOrderRepository discountOrderRepository;
+    private DiscountOrderRepository discountOrderRepository;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    DetailOrderService detailOrderService;
+    private DetailOrderService detailOrderService;
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
     @Autowired
-    CartItemService cartItemService;
+    private CartItemService cartItemService;
     @Autowired
-    HistoryOrderRepository historyOrderRepository;
+    private HistoryOrderRepository historyOrderRepository;
     @Autowired
-    DetailProductService detailProductService;
-
+    private DetailProductService detailProductService;
 
     @PostMapping("create")
     public ResponseEntity<?> createOrder(@RequestBody OrderWebsiteCreate orderWebsiteCreate) {
         try {
-
-
             Optional<Account> account = accountService.findById(orderWebsiteCreate.getAccountId());
             Optional<Address> address = addressService.findById(orderWebsiteCreate.getAddressId());
             if (address.isPresent() && account.isPresent()) {
@@ -57,7 +54,6 @@ public class OrderWebsiteController {
                 order.setAddress(address.get());
                 order.setFullName(orderWebsiteCreate.getFullName());
                 order.setPhoneNumber(orderWebsiteCreate.getPhoneNumber());
-
                 Double ammountPrice = 0.0;
                 order.setAmountPrice(ammountPrice);
                 order.setAddressDetail(orderWebsiteCreate.getAddressDetail());
@@ -66,13 +62,9 @@ public class OrderWebsiteController {
                 order = orderService.save(order);
                 List<CartItems> cartItemsList = new ArrayList<>();
 
-
-//
-                for (Integer x : orderWebsiteCreate.getCartItemIdList()
-                ) {
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()) {
                     Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
                     if (cartItemsOptional.isPresent()) {
-
                         cartItemsList.add(cartItemsOptional.get());
                         DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
@@ -97,8 +89,6 @@ public class OrderWebsiteController {
                         String x1 = RandomString.make(64) + order.getId();
                         detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
-
-
                     }
                 }
 
@@ -111,11 +101,9 @@ public class OrderWebsiteController {
                 }
 
                 String code = RandomString.make(64) + order.getId();
-
                 List<Integer> idx = new ArrayList<>();
                 List<Event> events = eventRepository.findAllByTime();
-                for (Event e : events
-                ) {
+                for (Event e : events) {
                     List<DiscountOrder> discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
                     for (DiscountOrder d : discountOrders
                     ) {
@@ -126,13 +114,10 @@ public class OrderWebsiteController {
                 System.out.println(idx);
                 Double salePrice = 0.0;
                 Double salePricePercent = 0.0;
-                for (Integer x : idx
-                ) {
+                for (Integer x : idx) {
                     DiscountOrder discountOrder = discountOrderRepository.getById(x);
-
                     if (discountOrder.getSalePrice() < 1) {
                         salePricePercent += discountOrder.getSalePrice();
-
                     } else {
                         salePrice += discountOrder.getSalePrice();
                     }
@@ -156,15 +141,13 @@ public class OrderWebsiteController {
                 historyOrders.add(historyOrder);
                 order.setHistoryOrders(historyOrders);
                 order = orderService.save(order);
-                for (Integer x : orderWebsiteCreate.getCartItemIdList()
-                ) {
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()) {
                     Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
                     if (cartItemsOptional.isPresent()) {
                         cartItemsOptional.get().setOrder(order);
                         cartItemService.save(cartItemsOptional.get());
                     }
                 }
-
                 return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, ""));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
@@ -173,7 +156,6 @@ public class OrderWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteOrder(@RequestParam("order_id") Integer orderId) {
@@ -197,7 +179,6 @@ public class OrderWebsiteController {
             Optional<Order> order = orderService.findById(id);
             if (order.isPresent()) {
                 return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -219,6 +200,4 @@ public class OrderWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-
 }

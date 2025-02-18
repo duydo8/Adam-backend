@@ -18,15 +18,15 @@ import java.util.Optional;
 @RequestMapping("address")
 public class AddressWebsiteController {
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    ProvinceService provinceService;
+    private ProvinceService provinceService;
     @Autowired
-    DistrictService districtService;
+    private DistrictService districtService;
     @Autowired
-    WardService wardService;
+    private WardService wardService;
 
     @GetMapping("findByAccountId")
     public ResponseEntity<?> findByAccountId(@RequestParam("account_id") Integer accountId) {
@@ -60,13 +60,11 @@ public class AddressWebsiteController {
             Optional<District> district = districtService.findById(addressWebsiteCreate.getDistrictId());
             Optional<Ward> ward = wardService.findById(addressWebsiteCreate.getWardId());
             if (account.isPresent() && province.isPresent() && district.isPresent() && ward.isPresent()) {
-
                 Address address = new Address();
                 address.setAddressDetail(addressWebsiteCreate.getAddressDetail());
                 address.setCreateDate(LocalDateTime.now());
                 address.setIsActive(true);
                 address.setIsDeleted(false);
-
                 address.setProvince(province.get());
                 address.setDistrict(district.get());
                 address.setWard(ward.get());
@@ -96,7 +94,6 @@ public class AddressWebsiteController {
             if (account.isPresent() && province.isPresent() && district.isPresent() && ward.isPresent() && address.isPresent()) {
                 Address address1 = address.get();
                 address1.setAddressDetail(addressWebsiteUpdate.getAddressDetail());
-
                 address1.setProvince(province.get());
                 address1.setDistrict(district.get());
                 address1.setWard(ward.get());
@@ -106,7 +103,7 @@ public class AddressWebsiteController {
                 address1.setIsDefault(addressWebsiteUpdate.getIsDefault());
                 Address address2 = addressService.save(address1);
 
-                return ResponseEntity.ok().body(new IGenericResponse<Address>(address2, 200, "successfully"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(address2, 200, "successfully"));
 
 
             }

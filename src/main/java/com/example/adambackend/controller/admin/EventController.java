@@ -12,7 +12,15 @@ import com.example.adambackend.repository.DiscountOrderRepository;
 import com.example.adambackend.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,9 +32,9 @@ import java.util.Optional;
 @RequestMapping("/admin/event")
 public class EventController {
     @Autowired
-    EventRepository eventService;
+    private EventRepository eventService;
     @Autowired
-    DiscountOrderRepository discountOrderRepository;
+    private DiscountOrderRepository discountOrderRepository;
 
     @PostMapping("create")
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
@@ -41,7 +49,7 @@ public class EventController {
             event.setImage(eventDTO.getImage());
             event.setType(eventDTO.getType());
             event.setDescription(eventDTO.getDescription());
-            return ResponseEntity.ok().body(new IGenericResponse<Event>(eventService.save(event), 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(eventService.save(event), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -58,7 +66,7 @@ public class EventController {
                 eventOptional.get().setIsActive(eventUpdateDTO.getIsActive());
                 eventOptional.get().setImage(eventUpdateDTO.getImage());
 
-                return ResponseEntity.ok().body(new IGenericResponse<Event>(eventService.save(eventOptional.get()), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(eventService.save(eventOptional.get()), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Event"));
             }
@@ -89,15 +97,12 @@ public class EventController {
         List<Event> events = new ArrayList<>();
         if (name == null) {
             events = eventService.findAll();
-
         } else {
             events = eventService.findAll(name);
         }
         List<EventFindAll> eventFindAlls = new ArrayList<>();
 
-
-        for (Event e : events
-        ) {
+        for (Event e : events) {
             EventFindAll eventFindAll = new EventFindAll();
             eventFindAll.setId(e.getId());
             eventFindAll.setEventName(e.getEventName());
@@ -111,8 +116,7 @@ public class EventController {
             eventFindAll.setEndTime(e.getEndTime());
             List<DiscountOrder> discountOrders = discountOrderRepository.findByEventId(e.getId());
             Double salePrice = 0.0;
-            for (DiscountOrder d : discountOrders
-            ) {
+            for (DiscountOrder d : discountOrders) {
                 salePrice += d.getSalePrice();
             }
             eventFindAll.setSalePrice(salePrice);
@@ -126,16 +130,11 @@ public class EventController {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListEventId listEventId) {
         try {
             List<Integer> list = listEventId.getListId();
-
-            if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+            if (!list.isEmpty()) {
+                for (Integer x : list) {
                     Optional<Event> eventOptional = eventService.findById(x);
-
                     if (eventOptional.isPresent()) {
-
                         eventService.updateEventDeleted(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));

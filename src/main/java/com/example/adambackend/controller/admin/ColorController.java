@@ -22,21 +22,15 @@ import java.util.Optional;
 @RequestMapping("admin/color")
 public class ColorController {
     @Autowired
-    ColorRepository colorService;
-    @Autowired
-    DetailProductRepository detailProductRepository;
-    @Autowired
-    ModelMapper modelMapper;
+    private ColorRepository colorService;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
             if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(colorService.findAll(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(colorService.findAll(name), 200, ""));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -97,14 +91,10 @@ public class ColorController {
             List<Integer> list = listColorIdDTO.getListColorId();
             System.out.println(list.size());
             if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+                for (Integer x : list) {
                     Optional<Color> colorOptional = colorService.findById(x);
-
                     if (colorOptional.isPresent()) {
-
                         colorService.updateColorsDeleted(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));

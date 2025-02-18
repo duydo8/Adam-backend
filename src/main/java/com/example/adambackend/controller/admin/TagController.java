@@ -22,21 +22,17 @@ import java.util.Optional;
 @RequestMapping("admin/tag")
 public class TagController {
     @Autowired
-    TagRepository tagService;
+    private TagRepository tagService;
     @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    TagProductRepository tagProductRepository;
+    private TagProductRepository tagProductRepository;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
             if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(tagService.findAll(name), 200, ""));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -59,8 +55,7 @@ public class TagController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody TagUpdate tagUpdate
-    ) {
+    public ResponseEntity<?> update(@RequestBody TagUpdate tagUpdate) {
         try {
             Optional<Tag> tagOptional = tagService.findById(tagUpdate.getId());
             if (tagOptional.isPresent()) {
@@ -97,14 +92,12 @@ public class TagController {
         try {
             List<Integer> listTagId = listTagIdDTO.getTagIdList();
             System.out.println(listTagId.size());
-            if (listTagId.size() > 0) {
-                for (Integer x : listTagId
-                ) {
+            if (!listTagId.isEmpty()) {
+                for (Integer x : listTagId) {
                     Optional<Tag> tagOptional = tagService.findById(x);
                     if (tagOptional.isPresent()) {
                         tagProductRepository.updateDeletedTagId(x);
                         tagService.updateDeletedTagId(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
@@ -115,5 +108,4 @@ public class TagController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
 }

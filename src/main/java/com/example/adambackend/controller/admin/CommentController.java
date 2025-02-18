@@ -7,13 +7,18 @@ import com.example.adambackend.payload.comment.CommentAdminDTO;
 import com.example.adambackend.payload.comment.CommentAdminUpdate;
 import com.example.adambackend.payload.response.CommentDto;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.service.AccountService;
 import com.example.adambackend.service.CommentService;
-import com.example.adambackend.service.ProductSevice;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +29,9 @@ import java.util.stream.Collectors;
 @RequestMapping("admin/comment")
 public class CommentController {
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    ProductSevice productService;
+    private ModelMapper modelMapper;
 
     @GetMapping("countCommentByAccountIdAndProductId")
     public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {

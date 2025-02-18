@@ -23,12 +23,11 @@ import java.util.Optional;
 @RequestMapping("/admin/cart")
 public class CartItemController {
     @Autowired
-    CartItemService cartItemService;
+    private CartItemService cartItemService;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    DetailProductService detailProductService;
-
+    private DetailProductService detailProductService;
 
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody CartItemWebsiteCreate cartItemWebsiteCreate) {

@@ -22,17 +22,14 @@ import java.util.Optional;
 @RequestMapping("admin/material")
 public class MaterialControler {
     @Autowired
-    MaterialRepository materialService;
+    private MaterialRepository materialService;
     @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    MaterialProductRepository materialProductRepository;
+    private MaterialProductRepository materialProductRepository;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         if (name == null) {
             return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(), 200, ""));
-
         }
         return ResponseEntity.ok().body(new IGenericResponse<>(materialService.findAll(name), 200, ""));
     }
@@ -45,7 +42,7 @@ public class MaterialControler {
             material.setIsActive(true);
             material.setCreateDate(LocalDateTime.now());
             material.setIsDeleted(false);
-            return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(material), 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(materialService.save(material), 200, ""));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
@@ -59,7 +56,7 @@ public class MaterialControler {
                 materialOptional.get().setMaterialName(materialUpdate.getMaterialName());
                 materialOptional.get().setIsActive(materialUpdate.getIsActive());
                 materialOptional.get().setIsDeleted(materialUpdate.getIsDeleted());
-                return ResponseEntity.ok().body(new IGenericResponse<Material>(materialService.save(materialOptional.get()), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(materialService.save(materialOptional.get()), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
             }
@@ -89,20 +86,16 @@ public class MaterialControler {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListMaterialIdDTO listMaterialIdDTO) {
         try {
             List<Integer> listMaterialIdDTOx = listMaterialIdDTO.getListMaterialId();
-
             System.out.println(listMaterialIdDTOx.size());
-            if (listMaterialIdDTOx.size() > 0) {
-                for (Integer x : listMaterialIdDTOx
-                ) {
+            if (!listMaterialIdDTOx.isEmpty()) {
+                for (Integer x : listMaterialIdDTOx) {
                     Optional<Material> materialOptional = materialService.findById(x);
                     if (materialOptional.isPresent()) {
                         materialProductRepository.updateMaterialProductsDeleted(x);
                         materialService.updateDeleteByArrayId(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
         } catch (Exception e) {
@@ -110,6 +103,4 @@ public class MaterialControler {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-
 }

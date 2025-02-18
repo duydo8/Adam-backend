@@ -23,7 +23,7 @@ import java.util.Random;
 @RequestMapping("account")
 public class AccountWebsiteController {
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -44,7 +44,7 @@ public class AccountWebsiteController {
                         .body(new IGenericResponse(400, "Email has been used"));
             }
             System.out.println(signUpRequest.getPhoneNumber());
-            Optional<Account> account = accountService.findByPhoneNumber("84"+signUpRequest.getPhoneNumber().substring(1,signUpRequest.getPhoneNumber().length()));
+            Optional<Account> account = accountService.findByPhoneNumber("84" + signUpRequest.getPhoneNumber().substring(1, signUpRequest.getPhoneNumber().length()));
 
             if (account.isPresent()) {
                 account.get().setUsername(signUpRequest.getUsername());
@@ -74,11 +74,9 @@ public class AccountWebsiteController {
                         return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "thanh cong"));
                     }
                     return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng nhập lại"));
-
                 }
                 accountService.deleteById(account.get().getId());
                 return ResponseEntity.badRequest().body(new IGenericResponse(" ", 400, "Đã quá thời gian chờ"));
-
             }
             return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Vui lòng xác nhận lại số điện thoại của bạn"));
 
@@ -95,7 +93,6 @@ public class AccountWebsiteController {
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
 
             if (accountOptional.isPresent() && accountOptional.get().getTimeValid() == null) {
-
                 return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "số điện thoại này đã được đăng ký"));
             }
             TwilioSendSms twilioSendSms = new TwilioSendSms();
@@ -118,34 +115,36 @@ public class AccountWebsiteController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @GetMapping("sendCode")
-    public ResponseEntity<?> sendCode(@RequestParam("phone_number")String phoneNumber){
+    public ResponseEntity<?> sendCode(@RequestParam("phone_number") String phoneNumber) {
         try {
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
-            if(accountOptional.isPresent()){
+            if (accountOptional.isPresent()) {
                 TwilioSendSms twilioSendSms = new TwilioSendSms();
                 int code = new Random().nextInt(999999);
                 twilioSendSms.sendCode(phoneNumber, code);
                 accountOptional.get().setVerificationCode(code);
                 accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
                 accountService.save(accountOptional.get());
-                return ResponseEntity.ok().body(new IGenericResponse<>(code,200,"thanh cong"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, "thanh cong"));
             }
-            return ResponseEntity.ok().body(new IGenericResponse<>(200,"không tìm thấy tài khoản"));
-        } catch (Exception  e) {
+            return ResponseEntity.ok().body(new IGenericResponse<>(200, "không tìm thấy tài khoản"));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Định dạng gửi là +84......."));
         }
     }
+
     @GetMapping("forgotPassword")
     public ResponseEntity<?> forgotPassword(@RequestParam("phone_number") String phoneNumber,
                                             @RequestParam("password") String password,
                                             @RequestParam("confirm") String confirm,
-                                            @RequestParam("code")int code) {
+                                            @RequestParam("code") int code) {
         try {
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
             if (accountOptional.isPresent()) {
-                if(code == accountOptional.get().getVerificationCode()) {
+                if (code == accountOptional.get().getVerificationCode()) {
                     if (LocalDateTime.now().isBefore(accountOptional.get().getTimeValid())) {
                         if (password.equals(confirm)) {
                             accountOptional.get().setPassword(passwordEncoder.encode(password));
@@ -156,7 +155,7 @@ public class AccountWebsiteController {
                     } else {
                         return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Quá hạn"));
                     }
-                }else{
+                } else {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, " code không đúng "));
                 }
             } else {

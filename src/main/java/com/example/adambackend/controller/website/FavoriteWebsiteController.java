@@ -25,20 +25,17 @@ import java.util.stream.Collectors;
 @RequestMapping("favorite")
 public class FavoriteWebsiteController {
     @Autowired
-    FavoriteService favoriteService;
+    private FavoriteService favoriteService;
     @Autowired
-    ModelMapper modelMapper;
+    private ProductSevice productSevice;
     @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @GetMapping("findProductFavoriteByAccountId")
     public ResponseEntity<?> findProductFavoriteByAccountId(@RequestParam("account_id") Integer accountId) {
         try {
             Optional<Account> account = accountService.findById(accountId);
             if (account.isPresent()) {
-//            ProductDto productDto = modelMapper.map(, ProductDto.class);
                 return ResponseEntity.ok().body(new IGenericResponse(favoriteService.findProductFavoriteByAccountId(accountId), 200, ""));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Account"));
@@ -70,24 +67,18 @@ public class FavoriteWebsiteController {
                 if (favorite.isPresent()) {
                     favoriteService.deleteByIdAccountAndProduct(accountId, productId);
                     return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "xóa thành công"));
-
                 } else {
                     FavoriteId favoriteId = new FavoriteId(accountId, productId);
                     Favorite fa = favoriteService.save(new Favorite(favoriteId,
                             LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
                     ));
-                    return ResponseEntity.ok().body(new IGenericResponse<Favorite>(fa, 200, "Thêm thành công"));
-
+                    return ResponseEntity.ok().body(new IGenericResponse<>(fa, 200, "Thêm thành công"));
                 }
             }
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 200, ""));
-
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-
 }

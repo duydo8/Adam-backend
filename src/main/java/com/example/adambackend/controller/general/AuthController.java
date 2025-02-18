@@ -38,26 +38,21 @@ import java.util.Random;
 @RequestMapping("auth")
 public class AuthController {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    AccountRepository accountRepository;
-
-
-    @Autowired
-    PasswordEncoder encoder;
-
+    private AccountRepository accountRepository;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    UserInfoRepository userInfoRepository;
+    private UserInfoRepository userInfoRepository;
     @Value("${jwt.expirationDateInMS}")
     private int expirationDateInMS;
 
@@ -76,8 +71,7 @@ public class AuthController {
             List<UserInfo> userInfoList = userInfoRepository.findAll();
             if (userInfoList.size() > 0) {
                 boolean check = false;
-                for (UserInfo u : userInfoList
-                ) {
+                for (UserInfo u : userInfoList) {
                     if (u.getUsername().equals(loginRequest.getUsername())) {
                         u.setToken(jwt);
                         u.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
@@ -87,28 +81,29 @@ public class AuthController {
                         break;
                     }
                 }
-                if (check = false) {
+                if (check) {
                     UserInfo userInfo = new UserInfo();
                     userInfo.setUsername(loginRequest.getUsername());
                     userInfo.setToken(jwt);
                     userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
                     userInfo.setIsDeleted(false);
                     userInfoRepository.save(userInfo);
-
                 }
-
             }
+
             UserInfo userInfo = new UserInfo();
             userInfo.setUsername(loginRequest.getUsername());
             userInfo.setToken(jwt);
             userInfo.setTimeValid(LocalDateTime.now().plusSeconds(expirationDateInMS / 1000));
             userInfo.setIsDeleted(false);
             userInfoRepository.save(userInfo);
-            return ResponseEntity.ok(new IGenericResponse<>(new JwtResponse(jwt,
-                    userDetails.getId(),
-                    userDetails.getUsername(),
-                    userDetails.getEmail(),
-                    String.valueOf(roles)), 200, "successfully"));
+            return ResponseEntity.ok(new IGenericResponse<>(
+                    new JwtResponse(jwt,
+                            userDetails.getId(),
+                            userDetails.getUsername(),
+                            userDetails.getEmail(),
+                            String.valueOf(roles)
+                    ), 200, "successfully"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -136,7 +131,6 @@ public class AuthController {
                         .body(new IGenericResponse(400, "PhoneNumber has been used"));
             }
 
-
             Account account = new Account(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
                     passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber(),
@@ -144,7 +138,6 @@ public class AuthController {
             );
             account.setCreateDate(LocalDateTime.now());
             account.setIsActive(false);
-
             account.setIsDelete(false);
             if (signUpRequest.getRole().equalsIgnoreCase(String.valueOf(ERoleName.Admin))) {
                 account.setRole(ERoleName.Admin);
@@ -157,11 +150,10 @@ public class AuthController {
             TwilioSendSms twilioSendSms = new TwilioSendSms();
             twilioSendSms.sendCode(account.getPhoneNumber(), code);
             account.setPriority(0.0);
-            Account account1 = accountService.save(account);
+            account = accountService.save(account);
+            AccountDto accountDto = modelMapper.map(account, AccountDto.class);
 
-            AccountDto accountDto = modelMapper.map(account1, AccountDto.class);
-
-            return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up succrssfully"));
+            return ResponseEntity.ok().body(new IGenericResponse(accountDto, 200, "sign up successfully"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -177,7 +169,6 @@ public class AuthController {
                 return ResponseEntity.ok().body(new IGenericResponse<>(userInfoRepository.save(userInfo.get()), 200, ""));
             }
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "not found"));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -194,13 +185,10 @@ public class AuthController {
             if (accountOptional.isPresent()) {
                 if (password.equals(confirm)) {
                     accountOptional.get().setPassword(passwordEncoder.encode(password));
-
                     return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, ""));
                 } else {
                     return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "confirm is not equal password"));
-
                 }
-
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy account"));
             }
@@ -218,11 +206,9 @@ public class AuthController {
                 if (accountOptional.get().getVerificationCode().equals(code)
                         && accountOptional.get().getTimeValid().isBefore(LocalDateTime.now())) {
                     accountOptional.get().setIsActive(true);
-                    ;
                     return ResponseEntity.ok().body(new IGenericResponse<>(accountService.save(accountOptional.get()), 200, "thành công"));
                 }
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "code không đúng hoặc quá hạn"));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {

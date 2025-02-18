@@ -27,15 +27,13 @@ import java.util.stream.Collectors;
 @RequestMapping("admin/detailProduct")
 public class DetailProductController {
     @Autowired
-    DetailProductRepository detailProductService;
+    private DetailProductRepository detailProductService;
     @Autowired
-    ProductSevice productSevice;
+    private ProductSevice productSevice;
     @Autowired
-    ColorService colorService;
+    private ColorService colorService;
     @Autowired
-    SizeService sizeService;
-    @Autowired
-    ModelMapper modelMapper;
+    private SizeService sizeService;
 
     @PostMapping("create")
     public ResponseEntity<?> createDetailProduct(@RequestBody DetailProductDTO detailProductDTO) {
@@ -130,24 +128,18 @@ public class DetailProductController {
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
 
-
-            for (Integer colorId : detailProductRequest.getColorIdList()
-            ) {
-
+            for (Integer colorId : detailProductRequest.getColorIdList()) {
                 Optional<Color> color = colorService.findById(colorId);
                 if (color.isPresent()) {
                     colorList.add(color.get());
                 }
             }
-            for (Integer s : detailProductRequest.getSizeIdList()
-            ) {
+            for (Integer s : detailProductRequest.getSizeIdList()) {
                 Optional<Size> size = sizeService.findById(s);
                 if (size.isPresent()) {
                     sizeList.add(size.get());
                 }
-
             }
-
 
             List<DetailProduct> detailProductList = new ArrayList<>();
             if (productOptional.isPresent()) {
@@ -160,19 +152,15 @@ public class DetailProductController {
                         detailProduct.setQuantity(detailProductRequest.getQuantity());
                         detailProduct.setIsDelete(false);
                         detailProduct.setIsActive(true);
-
                         detailProduct.setCreateDate(LocalDateTime.now());
                         detailProduct.setColor(colorList.get(j));
                         detailProduct.setSize(sizeList.get(i));
                         detailProductList.add(detailProduct);
                         detailProductService.save(detailProduct);
-
                     }
-
                 }
                 productOptional.get().setIsComplete(false);
                 return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
-
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Product không tổn tại"));
             }
@@ -185,16 +173,12 @@ public class DetailProductController {
     @PutMapping("updateListDetailProductAfterCreate")
     public ResponseEntity<?> updateListDetailProductAfterCreate(@RequestBody CustomDetailProductResponse customDetailProductResponse) {
         try {
-
             List<NewDetailProductDTO> newDetailProductDTOList = customDetailProductResponse.getNewDetailProductDTOList();
-
             List<DetailProduct> detailProducts = new ArrayList<>();
             if (newDetailProductDTOList.size() > 0) {
-                for (NewDetailProductDTO n : newDetailProductDTOList
-                ) {
+                for (NewDetailProductDTO n : newDetailProductDTOList) {
                     Optional<DetailProduct> detailProduct = detailProductService.findById(n.getId());
                     if (detailProduct.isPresent()) {
-
                         detailProduct.get().setIsActive(n.getIsActive());
                         detailProduct.get().setPriceImport(n.getPriceImport());
                         detailProduct.get().setPriceExport(n.getPriceExport());
@@ -207,13 +191,10 @@ public class DetailProductController {
                         DetailProduct detailProduct1 = detailProductService.save(detailProduct.get());
                         detailProducts.add(detailProduct1);
                     }
-
                 }
-                List<NewDetailProductDTO> newDetailProductDTOList1 = detailProducts.stream().map(e -> new NewDetailProductDTO(e.getId(), e.getPriceImport(),
-                        e.getPriceExport(), e.getProductImage(), e.getQuantity(), e.getIsActive())).collect(Collectors.toList());
+//                List<NewDetailProductDTO> newDetailProductDTOList1 = detailProducts.stream().map(e -> new NewDetailProductDTO(e.getId(), e.getPriceImport(),
+//                        e.getPriceExport(), e.getProductImage(), e.getQuantity(), e.getIsActive())).collect(Collectors.toList());
                 return ResponseEntity.ok().body(new IGenericResponse<>(detailProducts, 200, ""));
-
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "nothing updated"));
         } catch (Exception e) {
@@ -229,23 +210,18 @@ public class DetailProductController {
             detailProductService.deleteByProductId(detailProductRequest.getProductId());
             List<Color> colorList = new ArrayList<>();
             List<Size> sizeList = new ArrayList<>();
-            for (Integer colorId : detailProductRequest.getColorIdList()
-            ) {
-
+            for (Integer colorId : detailProductRequest.getColorIdList()) {
                 Optional<Color> color = colorService.findById(colorId);
                 if (color.isPresent()) {
                     colorList.add(color.get());
                 }
             }
-            for (Integer s : detailProductRequest.getSizeIdList()
-            ) {
+            for (Integer s : detailProductRequest.getSizeIdList()) {
                 Optional<Size> size = sizeService.findById(s);
                 if (size.isPresent()) {
                     sizeList.add(size.get());
                 }
-
             }
-
 
             List<DetailProduct> detailProductList = new ArrayList<>();
             if (productOptional.isPresent()) {
@@ -258,19 +234,15 @@ public class DetailProductController {
                         detailProduct.setQuantity(detailProductRequest.getQuantity());
                         detailProduct.setIsDelete(false);
                         detailProduct.setIsActive(true);
-
                         detailProduct.setCreateDate(LocalDateTime.now());
                         detailProduct.setColor(colorList.get(j));
                         detailProduct.setSize(sizeList.get(i));
                         detailProductList.add(detailProduct);
                         detailProductService.save(detailProduct);
-
                     }
-
                 }
                 productOptional.get().setIsComplete(false);
-                return ResponseEntity.ok().body(new IGenericResponse<List<DetailProduct>>(detailProductList, 200, ""));
-
+                return ResponseEntity.ok().body(new IGenericResponse<>(detailProductList, 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
             }
@@ -284,16 +256,11 @@ public class DetailProductController {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListDetailProductIdDTO listDetailProductIdDTO) {
         try {
             List<Integer> list = listDetailProductIdDTO.getListDetailProductId();
-
-
-            if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+            if (!list.isEmpty()) {
+                for (Integer x : list) {
                     Optional<DetailProduct> detailProductOptional = detailProductService.findById(x);
-
                     if (detailProductOptional.isPresent()) {
                         detailProductService.updateDetailProductsDeleted(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));

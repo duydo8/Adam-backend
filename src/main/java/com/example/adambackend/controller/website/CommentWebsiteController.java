@@ -23,47 +23,10 @@ import java.util.stream.Collectors;
 @RequestMapping("comment")
 public class CommentWebsiteController {
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    DetailOrderService detailOrderService;
+    private ProductSevice productSevice;
 
-    //
-//    @PostMapping("create")
-//    public ResponseEntity<?> createComment(@RequestBody Comment comment, @RequestParam("account_id") Integer accountId, @RequestParam("product_id") Integer productId) {
-////        if(productId)
-//        List<Integer> listProductId = detailOrderService.findProductIdByOrder();
-//        for (Integer id : listProductId
-//        ) {
-//            if (id == productId) {
-//                Optional<Product> productOptional = productSevice.findById(productId);
-//                Optional<Account> accountOptional = accountService.findById(accountId);
-//                if (comment.getVote() == 0 || productOptional.isPresent() || accountOptional.isPresent()) {
-//                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "can't create comment"));
-//                } else {
-//                    int commentTotal = commentService.countCommentByProduct(productId);
-//
-//                    double voteAverage = productOptional.get().getVoteAverage();
-//                    voteAverage = (voteAverage * commentTotal + comment.getVote()) / (commentTotal + 1);
-//                    System.out.println(voteAverage);
-//                    productOptional.get().setVoteAverage(voteAverage);
-//                    productSevice.save(productOptional.get());
-//                    return ResponseEntity.ok().body(new IGenericResponse<Comment>(commentService.createAccountwithAccountIdAndProductId(comment.getContent(),
-//
-//                            LocalDateTime.now(), productId, accountId, CommentStatus.PENDING, comment.getVote()), 200, ""));
-//                }
-//            }
-//        }
-//        return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not contains in order"));
-//    }
-
-
-    //
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteComment(@RequestParam("comment_id") Integer id) {
         try {
@@ -93,7 +56,7 @@ public class CommentWebsiteController {
             Optional<Product> product = productSevice.findById(productId);
             if (product.isPresent()) {
 
-                return ResponseEntity.ok(new IGenericResponse<List<Comment>>(commentService.findAllCommentByProductIdAndStatusIsActive(productId), 200, ""));
+                return ResponseEntity.ok(new IGenericResponse<>(commentService.findAllCommentByProductIdAndStatusIsActive(productId), 200, ""));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
         } catch (Exception e) {
@@ -107,7 +70,7 @@ public class CommentWebsiteController {
         try {
             Optional<Product> product = productSevice.findById(productId);
             if (product.isPresent()) {
-                return ResponseEntity.ok().body(new IGenericResponse<List<Comment>>(commentService.findTop10CommentByProductId(productId), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(commentService.findTop10CommentByProductId(productId), 200, ""));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Product"));
         } catch (Exception e) {
@@ -122,7 +85,7 @@ public class CommentWebsiteController {
             List<Comment> comments = commentService.findCommentByIdAccountAndIdProduct(accountId, productId);
             if (comments.size() > 0) {
                 List<CommentDto> commentDtos = comments.stream().map(c -> new CommentDto(c.getId(), c.getContent(), c.getTimeCreated(), c.getCommentStatus())).collect(Collectors.toList());
-                return ResponseEntity.ok().body(new IGenericResponse<List<CommentDto>>(commentDtos, 200, "find all comment successfully"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(commentDtos, 200, "find all comment successfully"));
             } else {
                 return ResponseEntity.ok().body(new IGenericResponse(400, "Không tìm thấy comment by account id: " + accountId
                         + " product id: " + productId));

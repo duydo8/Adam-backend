@@ -30,12 +30,9 @@ public class FileUploadController {
             File file1 = convertToFile(file);
             Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
             return ResponseEntity.ok().body(new IGenericResponse<>(uploadResult.get("url"), 200, "upload thành công"));
-
         } catch (IOException e) {
             throw new RuntimeException(e);
-
         }
-
     }
 
     public File convertToFile(MultipartFile multipartFile) {
@@ -57,11 +54,7 @@ public class FileUploadController {
         try {
             List<File> fileList = multipartFiles.stream().map(e -> convertToFile(e)).collect(Collectors.toList());
             List<Object> listUrl = new ArrayList<>();
-            for (File f : fileList
-            ) {
-
-                ObjectUtils objectUtils = new ObjectUtils();
-                Map map = objectUtils.emptyMap();
+            for (File f : fileList) {
                 Map uploadResult = cloudinary.uploader().upload(f, new HashMap());
                 listUrl.add(uploadResult.get("url"));
             }

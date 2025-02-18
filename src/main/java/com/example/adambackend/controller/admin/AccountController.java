@@ -11,11 +11,18 @@ import com.example.adambackend.payload.account.AccountResponse;
 import com.example.adambackend.payload.order.Dashboard;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.service.AccountService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -29,27 +36,23 @@ import java.util.Random;
 public class AccountController {
     private final List<String> thang = Arrays.asList("January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November", "December");
+
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody AccountAdminCreate accountAdminCreate) {
         try {
             if (accountService.existsByUsername(accountAdminCreate.getUsername())) {
-                return ResponseEntity
-                        .ok()
-                        .body(new IGenericResponse(200, "Username has been used"));
+                return ResponseEntity.ok().body(new IGenericResponse(200, "Username has been used"));
             }
 
             if (accountService.existsByEmail(accountAdminCreate.getEmail())) {
-                return ResponseEntity
-                        .ok()
-                        .body(new IGenericResponse(200, "Email has been used"));
+                return ResponseEntity.ok().body(new IGenericResponse(200, "Email has been used"));
             }
+
             Account account = new Account();
             account.setPriority(0.0);
             account.setUsername(accountAdminCreate.getUsername());
@@ -74,6 +77,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
+
     @PostMapping("verify")
     public ResponseEntity<?> verify(@RequestParam("phone_number") String phoneNumber) {
         try {
@@ -95,7 +99,7 @@ public class AccountController {
             account.setVerificationCode(code);
             account.setTimeValid(LocalDateTime.now().plusMinutes(30));
             accountService.save(account);
-            return ResponseEntity.ok().body(new IGenericResponse(code, 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -108,7 +112,7 @@ public class AccountController {
         try {
             List<AccountResponse> accountList = accountService.findAll();
 
-            return ResponseEntity.ok(new IGenericResponse<List<AccountResponse>>(accountList, 200, ""));
+            return ResponseEntity.ok(new IGenericResponse<>(accountList, 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

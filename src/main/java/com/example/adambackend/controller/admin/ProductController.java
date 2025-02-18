@@ -26,44 +26,37 @@ import java.util.*;
 @RequestMapping("admin/product")
 public class ProductController {
     @Autowired
-    ProductRepository productSevice;
+    private ProductRepository productSevice;
     @Autowired
-    MaterialService materialService;
+    private MaterialService materialService;
     @Autowired
-    TagService tagService;
+    private TagService tagService;
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
     @Autowired
-    MaterialProductRepository materialProductRepository;
+    private MaterialProductRepository materialProductRepository;
     @Autowired
-    TagProductRepository tagProductRepository;
+    private TagProductRepository tagProductRepository;
     @Autowired
-    SizeService sizeService;
+    private SizeService sizeService;
     @Autowired
-    ColorService colorService;
+    private ColorService colorService;
     @Autowired
-    DetailProductService detailProductService;
-    @Autowired
-    FavoriteService favoriteService;
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    ModelMapper modelMapper;
+    private DetailProductService detailProductService;
 
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
-                                              @RequestParam("size") int size
-            , @RequestParam(value = "name", required = false) String name) {
+                                              @RequestParam("size") int size,
+                                              @RequestParam(value = "name", required = false) String name) {
         try {
-            Pageable pageable= PageRequest.of(page, size,Sort.by("createDate").descending());
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").descending());
             if (name == null) {
-
-                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(pageable), 200, ""));
-
-            }else {
-                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, pageable), 200, ""));
-            }    } catch (Exception e) {
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(pageable), 200, "success"));
+            } else {
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAll(name, pageable), 200, "success"));
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
@@ -83,7 +76,7 @@ public class ProductController {
                 product.setImage(productDTO.getImage());
                 product.setCreateDate(LocalDateTime.now());
                 product.setCategory(categoryService.findById(productDTO.getCategoryId()).get());
-                return ResponseEntity.ok().body(new IGenericResponse<Product>(productSevice.save(product), 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.save(product), 200, "success"));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
             }
@@ -111,22 +104,18 @@ public class ProductController {
                 product1.get().setCategory(categoryOptional.get());
                 List<TagProduct> tagProductList = product1.get().getTagProducts();
                 List<MaterialProduct> materialProductList = product1.get().getMaterialProducts();
-                for (TagProduct tagProduct : tagProductList
-                ) {
+                for (TagProduct tagProduct : tagProductList) {
                     tagProductRepository.deleteById(tagProduct.getTagProductPK());
                 }
-                for (MaterialProduct materialProduct : materialProductList
-                ) {
+                for (MaterialProduct materialProduct : materialProductList) {
                     materialProductRepository.deleteById(materialProduct.getMaterialProductPK());
                 }
                 productSevice.save(product1.get());
                 List<Material> materialList = new ArrayList<>();
                 List<Tag> tagList = new ArrayList<>();
-                for (Integer materialId : productUpdateDTO.getMaterialProductIds()
-                ) {
-
+                for (Integer materialId : productUpdateDTO.getMaterialProductIds()) {
                     Optional<Material> materialOptional = materialService.findById(materialId);
-                    if (materialOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false) {
+                    if (materialOptional.isPresent() && materialOptional.get().getIsActive() && !materialOptional.get().getIsDeleted()) {
                         MaterialProduct materialProduct = new MaterialProduct();
                         materialProduct.setProduct(product1.get());
                         materialProduct.setMaterial(materialOptional.get());
@@ -139,10 +128,9 @@ public class ProductController {
                         materialList.add(materialOptional.get());
                     }
                 }
-                for (Integer s : productUpdateDTO.getTagProductIds()
-                ) {
+                for (Integer s : productUpdateDTO.getTagProductIds()) {
                     Optional<Tag> tagOptional = tagService.findById(s);
-                    if (tagOptional.isPresent() && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
+                    if (tagOptional.isPresent() && tagOptional.get().getIsActive() && !tagOptional.get().getIsDelete()) {
                         TagProduct tagProduct = new TagProduct();
                         tagProduct.setProduct(product1.get());
                         tagProduct.setTag(tagOptional.get());
@@ -154,7 +142,6 @@ public class ProductController {
                         tagProductRepository.save(tagProduct);
                         tagList.add(tagOptional.get());
                     }
-
                 }
                 product1.get().setTagProducts(tagProductList);
                 product1.get().setMaterialProducts(materialProductList);
@@ -172,7 +159,7 @@ public class ProductController {
                 productResponse.setTagList(tagList);
                 productResponse.setMaterialList(materialList);
                 productResponse.setIsComplete(product.getIsComplete());
-                return ResponseEntity.ok().body(new IGenericResponse<ProductResponse>(productResponse, 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(productResponse, 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -184,8 +171,8 @@ public class ProductController {
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam("product_id") Integer productId) {
         try {
-            Optional<Product> product1 = productSevice.findById(productId);
-            if (product1.isPresent()) {
+            Optional<Product> product = productSevice.findById(productId);
+            if (product.isPresent()) {
                 productSevice.deleteById(productId);
                 return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
             }
@@ -199,7 +186,7 @@ public class ProductController {
     @PutMapping("updateIsActive")
     public ResponseEntity updateIsActive(@RequestBody ProductUpdateIsActive productUpdateIsActive) {
         try {
-            System.out.println(productUpdateIsActive.getIs_active()+" "+ productUpdateIsActive.getId());
+            System.out.println(productUpdateIsActive.getIs_active() + " " + productUpdateIsActive.getId());
             Optional<Product> product1 = productSevice.findById(productUpdateIsActive.getId());
             if (product1.isPresent()) {
 
@@ -218,24 +205,18 @@ public class ProductController {
         try {
             List<Tag> tagList = new ArrayList<>();
             List<Material> materialList = new ArrayList<>();
-
-            for (Integer materialId : productRequest.getMaterialProductIdList()
-            ) {
-
+            for (Integer materialId : productRequest.getMaterialProductIdList()) {
                 Optional<Material> materialOptional = materialService.findById(materialId);
-                if (materialOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false) {
+                if (materialOptional.isPresent() && materialOptional.get().getIsActive() && !materialOptional.get().getIsDeleted()) {
                     materialList.add(materialOptional.get());
                 }
             }
-            for (Integer s : productRequest.getTagProductIdList()
-            ) {
+            for (Integer s : productRequest.getTagProductIdList()) {
                 Optional<Tag> tagOptional = tagService.findById(s);
-                if (tagOptional.isPresent() && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
+                if (tagOptional.isPresent() && tagOptional.get().getIsActive() && !tagOptional.get().getIsDelete()) {
                     tagList.add(tagOptional.get());
                 }
-
             }
-
 
             Product product = new Product();
             product.setVoteAverage(0.0);
@@ -250,27 +231,24 @@ public class ProductController {
             productSevice.save(product);
             List<TagProduct> tagProductList = new ArrayList<>();
             List<MaterialProduct> materialProductList = new ArrayList<>();
-            MaterialProduct materialProduct = null;
-            TagProduct tagProduct = null;
+
             if (categoryService.findById(productRequest.getCategoryId()).isPresent()) {
                 for (int i = 0; i < tagList.size(); i++) {
                     for (int j = 0; j < materialList.size(); j++) {
                         Optional<Material> materialOptional = materialService.findById(materialList.get(j).getId());
                         Optional<Tag> tagOptional = tagService.findById(tagList.get(i).getId());
-                        if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() == true && materialOptional.get().getIsDeleted() == false
-                                && tagOptional.get().getIsActive() == true && tagOptional.get().getIsDelete() == false) {
-                            materialProduct = new MaterialProduct
+                        if (materialOptional.isPresent() && tagOptional.isPresent() && materialOptional.get().getIsActive() && !materialOptional.get().getIsDeleted()
+                                && tagOptional.get().getIsActive() && !tagOptional.get().getIsDelete()) {
+                            MaterialProduct materialProduct = new MaterialProduct
                                     (new MaterialProductPK(materialOptional.get().getId(), product.getId()),
                                             false, materialOptional.get(), true, LocalDateTime.now(), product);
-                            tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
+                            TagProduct tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
                             materialProductRepository.save(materialProduct);
                             tagProductRepository.save(tagProduct);
                             materialProductList.add(materialProduct);
                             tagProductList.add(tagProduct);
                         }
                     }
-
-
                 }
                 product.setTagProducts(tagProductList);
                 product.setMaterialProducts(materialProductList);
@@ -291,13 +269,11 @@ public class ProductController {
                 return ResponseEntity.ok().body(new IGenericResponse<>(productResponse, 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "not exists"));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
-
     }
 
     @GetMapping("findOptionProductById")
@@ -312,8 +288,7 @@ public class ProductController {
                 Set<Material> materialList = new HashSet<>();
                 Set<Color> colorList = new HashSet<>();
                 Set<Size> sizeList = new HashSet<>();
-                for (DetailProduct dp : detailProductList
-                ) {
+                for (DetailProduct dp : detailProductList) {
                     Optional<Color> c = colorService.findByDetailProductId(dp.getId());
                     Optional<Size> s = sizeService.findByDetailProductId(dp.getId());
                     if (c.isPresent()) {
@@ -323,23 +298,21 @@ public class ProductController {
                         sizeList.add(s.get());
                     }
                 }
-                for (Integer x : listTagId
-                ) {
+                for (Integer x : listTagId) {
                     Optional<Tag> tagOptional = tagService.findById(x);
                     tagList.add(tagOptional.get());
 
                 }
-                for (Integer x : listMaterialId
-                ) {
+                for (Integer x : listMaterialId) {
                     Optional<Material> materialOptional = materialService.findById(x);
                     materialList.add(materialOptional.get());
 
                 }
                 System.out.println(colorList.size());
-                if (colorList.size() == 0) {
+                if (colorList.isEmpty()) {
                     colorList = Collections.<Color>emptySet();
                 }
-                if (sizeList.size() == 0) {
+                if (sizeList.isEmpty()) {
                     sizeList = Collections.<Size>emptySet();
                 }
 
@@ -359,13 +332,9 @@ public class ProductController {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListProductIdDTO listProductIdDTO) {
         try {
             List<Integer> list = listProductIdDTO.getListProductId();
-
-
-            if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+            if (!list.isEmpty()) {
+                for (Integer x : list) {
                     Optional<Product> productOptional = productSevice.findById(x);
-
                     if (productOptional.isPresent()) {
                         System.out.println(x);
                         productSevice.updateProductsDeleted(x);

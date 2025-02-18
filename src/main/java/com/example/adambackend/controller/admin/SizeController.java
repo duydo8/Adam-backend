@@ -21,9 +21,7 @@ import java.util.Optional;
 @RequestMapping("admin/size")
 public class SizeController {
     @Autowired
-    SizeRepository sizeService;
-    @Autowired
-    DetailProductRepository detailProductRepository;
+    private SizeRepository sizeService;
 
     @PostMapping("create")
     public ResponseEntity<?> createSize(@RequestBody SizeDTO sizeDTO) {
@@ -33,7 +31,7 @@ public class SizeController {
             size.setCreateDate(LocalDateTime.now());
             size.setIsActive(true);
             size.setIsDeleted(false);
-            return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size), 200, "success"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.save(size), 200, "success"));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }
@@ -42,12 +40,12 @@ public class SizeController {
     @PutMapping("update")
     public ResponseEntity<?> update(@RequestBody SizeUpdate sizeUpdate) {
         try {
-            Optional<Size> size1 = sizeService.findById(sizeUpdate.getId());
-            if (size1.isPresent()) {
-                size1.get().setSizeName(sizeUpdate.getSizeName());
-                size1.get().setIsActive(sizeUpdate.getIsActive());
-                size1.get().setIsDeleted(sizeUpdate.getIsDeleted());
-                return ResponseEntity.ok().body(new IGenericResponse<Size>(sizeService.save(size1.get()), 200, "success"));
+            Optional<Size> size = sizeService.findById(sizeUpdate.getId());
+            if (size.isPresent()) {
+                size.get().setSizeName(sizeUpdate.getSizeName());
+                size.get().setIsActive(sizeUpdate.getIsActive());
+                size.get().setIsDeleted(sizeUpdate.getIsDeleted());
+                return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.save(size.get()), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -76,10 +74,8 @@ public class SizeController {
         try {
             if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.findAll(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(sizeService.findAll(name), 200, ""));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -90,15 +86,11 @@ public class SizeController {
     public ResponseEntity<?> deleteArrayTagId(@RequestBody ListSizeIdDTO listSizeIdDTO) {
         try {
             List<Integer> list = listSizeIdDTO.getListSizeId();
-
             System.out.println(list.size());
-            if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+            if (!list.isEmpty()) {
+                for (Integer x : list) {
                     Optional<Size> sizeOptional = sizeService.findById(x);
-
                     if (sizeOptional.isPresent()) {
-
                         sizeService.updateProductsDeleted(x);
                     }
                 }

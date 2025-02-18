@@ -8,12 +8,16 @@ import com.example.adambackend.payload.discountOrder.DiscountOrderUpdate;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.DiscountOrderRepository;
 import com.example.adambackend.repository.EventRepository;
-import com.example.adambackend.repository.OrderRepository;
-import com.example.adambackend.service.DetailProductService;
-import com.example.adambackend.service.ProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,26 +28,18 @@ import java.util.Optional;
 @RequestMapping("admin/discountOrder")
 public class DiscountOrderController {
     @Autowired
-    DiscountOrderRepository discountOrderRepository;
+    private DiscountOrderRepository discountOrderRepository;
 
     @Autowired
-    EventRepository eventRepository;
-    @Autowired
-    ProductSevice productSevice;
-    @Autowired
-    DetailProductService detailProductService;
-    @Autowired
-    OrderRepository orderRepository;
+    private EventRepository eventRepository;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name) {
         try {
             if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(discountOrderRepository.findAll(name), 200, ""));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -56,7 +52,6 @@ public class DiscountOrderController {
             Optional<DiscountOrder> discountOrderOptional = discountOrderRepository.findById(id);
             if (discountOrderOptional.isPresent()) {
                 return ResponseEntity.ok(new IGenericResponse<>(discountOrderOptional.get(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
@@ -71,8 +66,7 @@ public class DiscountOrderController {
             Optional<Event> eventOptional = eventRepository.findById(eventId);
             if (eventOptional.isPresent()) {
                 List<DiscountOrder> discountOrders = discountOrderRepository.findByEventId(eventId);
-                return ResponseEntity.ok().body(new IGenericResponse<>(eventOptional.get(), 200, ""));
-
+                return ResponseEntity.ok().body(new IGenericResponse<>(discountOrders, 200, ""));
             }
             return ResponseEntity.ok().body(new HandleExceptionDemo(400, "not found"));
         } catch (Exception e) {
@@ -85,7 +79,6 @@ public class DiscountOrderController {
     public ResponseEntity<?> create(@RequestBody DiscountOrderCreate discountOrderCreate) {
         try {
             DiscountOrder discountOrder = new DiscountOrder();
-
             Optional<Event> eventOptional = eventRepository.findById(discountOrderCreate.getEventId());
             if (eventOptional.isPresent()) {
                 discountOrder.setOrderMinRange(discountOrderCreate.getOrderMinRange());
@@ -101,15 +94,12 @@ public class DiscountOrderController {
                 discountOrder.setEndTime(discountOrderCreate.getEndTime());
                 if (discountOrderCreate.getOrderMaxRange() < discountOrderCreate.getOrderMinRange()) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
-
                 }
                 if (eventOptional.get().getType() && discountOrderCreate.getSalePrice() < 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
-
                 }
                 if (!eventOptional.get().getType() && discountOrderCreate.getSalePrice() > 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
-
                 }
 
                 discountOrder = discountOrderRepository.save(discountOrder);
@@ -117,7 +107,6 @@ public class DiscountOrderController {
                 discountOrders.add(discountOrder);
                 eventOptional.get().setDiscountOrders(discountOrders);
                 eventRepository.save(eventOptional.get());
-
 
                 return ResponseEntity.ok().body(new IGenericResponse<>(discountOrder, 200, ""));
             }
@@ -136,15 +125,12 @@ public class DiscountOrderController {
                 Event event = discountOrderOptional.get().getEvent();
                 if (discountOrderUpdate.getOrderMaxRange() < discountOrderUpdate.getOrderMinRange()) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "giá lớn nhất phải lớn hơn giá nhỏ nhất"));
-
                 }
                 if (event.getType() && discountOrderUpdate.getSalePrice() < 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo Số tiền"));
-
                 }
                 if (!event.getType() && discountOrderUpdate.getSalePrice() > 1) {
                     return ResponseEntity.ok().body(new HandleExceptionDemo(400, "Discount này phải giảm theo % (salePrice<1)"));
-
                 }
                 discountOrderOptional.get().setDiscountName(discountOrderUpdate.getDiscountName());
                 discountOrderOptional.get().setIsActive(discountOrderUpdate.getIsActive());
@@ -165,7 +151,6 @@ public class DiscountOrderController {
         try {
             discountOrderRepository.updateIsActive(id);
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

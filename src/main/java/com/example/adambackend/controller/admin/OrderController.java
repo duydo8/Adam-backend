@@ -1,20 +1,51 @@
 package com.example.adambackend.controller.admin;
 
-import com.example.adambackend.entities.*;
+import com.example.adambackend.entities.Account;
+import com.example.adambackend.entities.Address;
+import com.example.adambackend.entities.CartItems;
+import com.example.adambackend.entities.DetailOrder;
+import com.example.adambackend.entities.DetailProduct;
+import com.example.adambackend.entities.DiscountOrder;
+import com.example.adambackend.entities.Event;
+import com.example.adambackend.entities.HistoryOrder;
+import com.example.adambackend.entities.Order;
 import com.example.adambackend.exception.HandleExceptionDemo;
 import com.example.adambackend.payload.detailOrder.DetailOrderAdminPayBack;
 import com.example.adambackend.payload.detailOrder.DetailOrderPayLoad;
-import com.example.adambackend.payload.order.*;
+import com.example.adambackend.payload.order.Dashboard;
+import com.example.adambackend.payload.order.OrderAdmin;
+import com.example.adambackend.payload.order.OrderFindAll;
+import com.example.adambackend.payload.order.OrderFindAllResponse;
+import com.example.adambackend.payload.order.OrderPayBackResponse;
+import com.example.adambackend.payload.order.OrderReturn;
+import com.example.adambackend.payload.order.OrderUpdatePayBack;
+import com.example.adambackend.payload.order.OrderWebsiteCreate;
 import com.example.adambackend.payload.response.IGenericResponse;
-import com.example.adambackend.repository.*;
-import com.example.adambackend.service.*;
+import com.example.adambackend.repository.AddressRepository;
+import com.example.adambackend.repository.DiscountOrderRepository;
+import com.example.adambackend.repository.EventRepository;
+import com.example.adambackend.repository.HistoryOrderRepository;
+import com.example.adambackend.repository.OrderRepository;
+import com.example.adambackend.service.AccountService;
+import com.example.adambackend.service.AddressService;
+import com.example.adambackend.service.CartItemService;
+import com.example.adambackend.service.DetailOrderService;
+import com.example.adambackend.service.DetailProductService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,25 +63,25 @@ public class OrderController {
     private final List<String> thang = Arrays.asList("January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November", "December");
     @Autowired
-    OrderRepository orderService;
+    private OrderRepository orderService;
     @Autowired
-    DetailProductService detailProductService;
+    private DetailProductService detailProductService;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    DetailOrderService detailOrderService;
+    private DetailOrderService detailOrderService;
     @Autowired
-    HistoryOrderRepository historyOrderRepository;
+    private HistoryOrderRepository historyOrderRepository;
     @Autowired
-    AddressRepository addressRepository;
+    private AddressRepository addressRepository;
     @Autowired
-    CartItemService cartItemService;
+    private CartItemService cartItemService;
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
     @Autowired
-    DiscountOrderRepository discountOrderRepository;
+    private DiscountOrderRepository discountOrderRepository;
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
 
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam(value = "status", required = false)
@@ -58,7 +89,6 @@ public class OrderController {
                                               @RequestParam("page") Integer page,
                                               @RequestParam("size") Integer size) {
         try {
-
             Pageable pageable = PageRequest.of(page, size, Sort.by("createDate").descending());
             Integer totalElement = orderService.countTotalElementOrder(status);
             List<OrderFindAll> orderFindAlls = orderService.findByStatus(pageable, status);
@@ -90,8 +120,7 @@ public class OrderController {
                 orderOptional.get().setStatus(status);
                 List<DetailOrder> detailOrderList = orderOptional.get().getDetailOrders();
                 if (status == 2) {
-                    for (DetailOrder detailOrder : detailOrderList
-                    ) {
+                    for (DetailOrder detailOrder : detailOrderList) {
                         DetailProduct detailProduct = detailOrder.getDetailProduct();
                         detailProduct.setQuantity(detailProduct.getQuantity() - detailOrder.getQuantity());
                         detailProductService.save(detailProduct);
@@ -99,11 +128,9 @@ public class OrderController {
                 }
                 if (status == 0) {
                     List<HistoryOrder> historyOrders = historyOrderRepository.findByOrderId(orderId);
-                    for (HistoryOrder ho : historyOrders
-                    ) {
+                    for (HistoryOrder ho : historyOrders) {
                         if (ho.getStatus() == 2) {
-                            for (DetailOrder detailOrder : detailOrderList
-                            ) {
+                            for (DetailOrder detailOrder : detailOrderList) {
                                 DetailProduct detailProduct = detailOrder.getDetailProduct();
                                 detailProduct.setQuantity(detailProduct.getQuantity() - detailOrder.getQuantity());
                                 detailProductService.save(detailProduct);
@@ -111,9 +138,7 @@ public class OrderController {
                         }
                     }
                     Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
-                    if (account.getPriority() == -5) {
-
-                    } else {
+                    if (account.getPriority() != -5) {
                         double priority = account.getPriority() - orderOptional.get().getTotalPrice() * 0.0000001;
                         if (priority < -5) {
                             account.setPriority(5.0);
@@ -123,9 +148,7 @@ public class OrderController {
                 }
                 if (status == 6) {
                     Account account = accountService.findById(orderOptional.get().getAccount().getId()).get();
-                    if (account.getPriority() == 5) {
-
-                    } else {
+                    if (account.getPriority() != 5) {
                         double priority = account.getPriority() + orderOptional.get().getTotalPrice() * 0.0000001;
                         if (priority > 5) {
                             account.setPriority(5.0);
@@ -134,10 +157,7 @@ public class OrderController {
                     }
                 }
 
-
                 HistoryOrder historyOrder = new HistoryOrder();
-
-
                 historyOrder.setOrder(orderOptional.get());
                 historyOrder.setDescription("update time");
                 historyOrder.setUpdateTime(LocalDateTime.now());
@@ -149,7 +169,7 @@ public class OrderController {
                 historyOrders.add(historyOrder);
                 orderOptional.get().setHistoryOrders(historyOrders);
 
-                return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(orderOptional.get()), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(orderOptional.get()), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy event"));
             }
@@ -165,15 +185,13 @@ public class OrderController {
             Optional<Order> orderOptional = orderService.findByCode(orderReturn.getOrderCode());
             if (orderOptional.isPresent()) {
                 List<DetailOrderAdminPayBack> detailOrderCode = orderReturn.getDetailOrderAdminPayBacks();
-                if(LocalDate.now().minusDays(3).isAfter(orderOptional.get().getCreateDate().toLocalDate())) {
-                    return ResponseEntity.ok().body(new IGenericResponse<>( 200, "quá hạn đổi trả"));
+                if (LocalDate.now().minusDays(3).isAfter(orderOptional.get().getCreateDate().toLocalDate())) {
+                    return ResponseEntity.ok().body(new IGenericResponse<>(200, "quá hạn đổi trả"));
                 }
                 Integer totalQuantity = 0;
                 Double returnPrice = 0.0;
                 Double amountPrice = 0.0;
-                for (DetailOrderAdminPayBack x : detailOrderCode
-                ) {
-
+                for (DetailOrderAdminPayBack x : detailOrderCode) {
                     DetailOrder detailOrder = detailOrderService.findByCode(x.getDetailOrderCode());
                     if (detailOrder.getQuantity() < x.getQuantity()) {
                         return ResponseEntity.ok().body(new IGenericResponse<>(totalQuantity, 200, "không được trừ số lượng lớn hơn số lượng đã mua"));
@@ -220,14 +238,11 @@ public class OrderController {
         Optional<Order> orderOptional = orderService.findById(orderUpdatePayBack.getOrderId());
         List<CartItems> cartItemsList = orderOptional.get().getCartItems();
         Double ammountPrice = orderOptional.get().getAmountPrice();
-        for (Integer x : orderUpdatePayBack.getCartItemIds()
-        ) {
+        for (Integer x : orderUpdatePayBack.getCartItemIds()) {
             Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
             if (cartItemsOptional.isPresent()) {
-
                 cartItemsList.add(cartItemsOptional.get());
                 DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
-
                 if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
                     return ResponseEntity.badRequest().
                             body(new HandleExceptionDemo(400, "Không đủ số lượng "));
@@ -289,8 +304,6 @@ public class OrderController {
             if (orderOptional.isPresent()) {
 
                 HistoryOrder historyOrder = new HistoryOrder();
-                order = orderService.save(order);
-
                 historyOrder.setOrder(orderService.findById(order.getId()).get());
                 historyOrder.setDescription("create time");
                 historyOrder.setUpdateTime(LocalDateTime.now());
@@ -302,7 +315,7 @@ public class OrderController {
                 historyOrders.add(historyOrder);
                 order.setHistoryOrders(historyOrders);
 
-                return ResponseEntity.ok().body(new IGenericResponse<Order>(orderService.save(order), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(orderService.save(order), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy event"));
             }
@@ -319,8 +332,7 @@ public class OrderController {
             if (orderOptional.isPresent()) {
                 List<DetailOrder> detailOrderList = orderOptional.get().getDetailOrders();
                 orderOptional.get().setStatus(6);
-                for (DetailOrder detailOrder : detailOrderList
-                ) {
+                for (DetailOrder detailOrder : detailOrderList) {
                     Integer detailProductId = detailOrder.getDetailProduct().getId();
                     Integer quantity = detailOrder.getQuantity();
                     Optional<DetailProduct> detailProductOptional = detailProductService.findById(detailProductId);
@@ -350,7 +362,6 @@ public class OrderController {
                 order.setHistoryOrders(historyOrders);
                 orderService.save(order);
                 return ResponseEntity.ok().body(new HandleExceptionDemo(200, "success"));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
         } catch (Exception e) {
@@ -379,16 +390,13 @@ public class OrderController {
                     orderService.sumTotalPriceByTime(10),
                     orderService.sumTotalPriceByTime(11),
                     orderService.sumTotalPriceByTime(12)
-
             );
 
             dashboard.setData(doubleList);
             dashboard.setLabels(thang);
 
-
             Dashboard dashboard1 = new Dashboard();
             dashboard1.setName("Đơn thành công");
-
 
             List<Double> doubleList1 = Arrays.asList(orderService.sumSuccessOrderByTime(1),
                     orderService.sumSuccessOrderByTime(2),
@@ -457,33 +465,25 @@ public class OrderController {
 
     public Double getSalePrice(Double ammountPrice) {
         List<Integer> idx = new ArrayList<>();
-        List<DiscountOrder> discountOrders = new ArrayList<>();
         List<Event> events = eventRepository.findAllByTime();
-        for (Event e : events
-        ) {
-            discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
-            for (DiscountOrder d : discountOrders
-            ) {
+        for (Event e : events) {
+            List<DiscountOrder> discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+            for (DiscountOrder d : discountOrders) {
                 idx.add(d.getId());
             }
-
         }
 
         Double salePrice = 0.0;
         Double salePricePercent = 0.0;
-        for (Integer x : idx
-        ) {
+        for (Integer x : idx) {
             DiscountOrder discountOrder = discountOrderRepository.getById(x);
-
             if (discountOrder.getSalePrice() < 1) {
                 salePricePercent += discountOrder.getSalePrice();
-
             } else {
                 salePrice += discountOrder.getSalePrice();
             }
         }
-        double totalSalePrice = salePrice + (salePricePercent * ammountPrice);
-        return totalSalePrice;
+        return salePrice + (salePricePercent * ammountPrice);
     }
 
     @PostMapping("create")
@@ -508,19 +508,14 @@ public class OrderController {
                 order = orderService.save(order);
                 List<CartItems> cartItemsList = new ArrayList<>();
 
-
-//
-                for (Integer x : orderWebsiteCreate.getCartItemIdList()
-                ) {
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()) {
                     Optional<CartItems> cartItemsOptional = cartItemService.findByIds(x);
                     if (cartItemsOptional.isPresent()) {
-
                         cartItemsList.add(cartItemsOptional.get());
                         DetailProduct detailProduct = cartItemsOptional.get().getDetailProduct();
 
                         if (detailProduct.getQuantity() - cartItemsOptional.get().getQuantity() < 0) {
-                            return ResponseEntity.badRequest().
-                                    body(new HandleExceptionDemo(400, "Không đủ số lượng "));
+                            return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không đủ số lượng "));
                         }
 
                         ammountPrice += cartItemsOptional.get().getTotalPrice();
@@ -539,38 +534,33 @@ public class OrderController {
                         String x1 = RandomString.make(64) + order.getId();
                         detailOrder.setDetailOrderCode(x1);
                         detailOrderService.save(detailOrder);
-
-
                     }
                 }
-
                 order.setAmountPrice(ammountPrice);
                 order.setCartItems(cartItemsList);
-                Double totalPrice = 0.0;
-
-
-                String code = RandomString.make(64) + order.getId();
-
                 Double totalSalePrice = getSalePrice(ammountPrice);
                 order.setSalePrice((double) Math.round(totalSalePrice));
-                totalPrice = ammountPrice - totalSalePrice;
-                order.setOrderCode(code);
+                Double totalPrice = ammountPrice - totalSalePrice;
+                order.setOrderCode(RandomString.make(64) + order.getId());
 
                 order.setTotalPrice(totalPrice);
                 if (totalPrice > 5000000) {
-                    return ResponseEntity.badRequest().body(new HandleExceptionDemo(400,
-                            "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất "));
+                    return ResponseEntity
+                            .badRequest()
+                            .body(
+                                    new HandleExceptionDemo(
+                                            400,
+                                            "đơn hàng không được quá 5tr, vui lòng liên hệ admin hoặc đến cửa hàng gần nhất ")
+                            );
                 }
 
-                for (Integer x : orderWebsiteCreate.getCartItemIdList()
-                ) {
+                for (Integer x : orderWebsiteCreate.getCartItemIdList()) {
                     Optional<CartItems> cartItemsOptional = cartItemService.findById(x);
                     if (cartItemsOptional.isPresent()) {
                         cartItemsOptional.get().setOrder(order);
                         cartItemService.save(cartItemsOptional.get());
                     }
                 }
-
                 return ResponseEntity.ok().body(new IGenericResponse<>(order, 200, "Thành công"));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy "));
@@ -584,26 +574,19 @@ public class OrderController {
     @GetMapping("findSalePrice")
     public ResponseEntity<?> findSalePrice(@RequestParam("amount_price") Double ammountPrice) {
         List<Integer> idx = new ArrayList<>();
-        List<DiscountOrder> discountOrders = new ArrayList<>();
         List<Event> events = eventRepository.findAllByTime();
-        for (Event e : events
-        ) {
-            discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
-            for (DiscountOrder d : discountOrders
-            ) {
+        for (Event e : events) {
+            List<DiscountOrder> discountOrders = discountOrderRepository.findByTotalPriceAndTime(ammountPrice, e.getId());
+            for (DiscountOrder d : discountOrders) {
                 idx.add(d.getId());
             }
-
         }
         Double salePrice = 0.0;
         Double salePricePercent = 0.0;
-        for (Integer x : idx
-        ) {
+        for (Integer x : idx) {
             DiscountOrder discountOrder = discountOrderRepository.getById(x);
-
             if (discountOrder.getSalePrice() < 1) {
                 salePricePercent += discountOrder.getSalePrice();
-
             } else {
                 salePrice += discountOrder.getSalePrice();
             }
@@ -632,8 +615,7 @@ public class OrderController {
         try {
             Optional<Order> order = orderService.findById(id);
             if (order.isPresent()) {
-                return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, ""));
-
+                return ResponseEntity.ok(new IGenericResponse<>(order.get(), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -655,6 +637,4 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-
 }

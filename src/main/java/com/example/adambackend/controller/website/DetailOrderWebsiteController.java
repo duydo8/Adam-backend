@@ -22,15 +22,15 @@ import java.util.Optional;
 @RequestMapping("orderDetail")
 public class DetailOrderWebsiteController {
     @Autowired
-    DetailOrderService detailOrderService;
+    private DetailOrderService detailOrderService;
     @Autowired
-    DetailProductService detailProductService;
+    private DetailProductService detailProductService;
     @Autowired
-    OrderService orderService;
+    private OrderService orderService;
 
     @GetMapping("findAllByOrderId")
     public ResponseEntity<?> findAllByOrderId(@RequestParam("order_id") Integer orderId) {
-        return ResponseEntity.ok().body(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAllByOrderId(orderId), 200, ""));
+        return ResponseEntity.ok().body(new IGenericResponse<>(detailOrderService.findAllByOrderId(orderId), 200, ""));
     }
 
 
@@ -38,7 +38,6 @@ public class DetailOrderWebsiteController {
     public ResponseEntity<?> creatSize(@RequestBody DetailOrderWebsiteCreate detailOrderWebsiteCreate) {
         try {
             Optional<Order> order = orderService.findById(detailOrderWebsiteCreate.getOrderId());
-
             if (order.isPresent()) {
                 DetailOrder detailOrder = new DetailOrder();
                 detailOrder.setIsActive(true);
@@ -48,8 +47,7 @@ public class DetailOrderWebsiteController {
                 detailOrder.setDetailProduct(detailProductService.findById(detailOrderWebsiteCreate.getDetailProductId()).get());
                 detailOrder.setOrder(order.get());
                 detailOrder.setPrice(detailOrderWebsiteCreate.getPrice());
-                return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
-
+                return ResponseEntity.ok().body(new IGenericResponse<>(detailOrderService.save(detailOrder), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -66,7 +64,7 @@ public class DetailOrderWebsiteController {
                 DetailOrder detailOrder = detailOrder1.get();
                 detailOrder.setPrice(detailOrderWebsiteUpdate.getPrice());
                 detailOrder.setQuantity(detailOrderWebsiteUpdate.getQuantity());
-                return ResponseEntity.ok().body(new IGenericResponse<DetailOrder>(detailOrderService.save(detailOrder), 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(detailOrderService.save(detailOrder), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -93,7 +91,7 @@ public class DetailOrderWebsiteController {
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         try {
-            return ResponseEntity.ok(new IGenericResponse<List<DetailOrder>>(detailOrderService.findAll(), 200, ""));
+            return ResponseEntity.ok(new IGenericResponse<>(detailOrderService.findAll(), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));

@@ -15,12 +15,12 @@ import java.util.Optional;
 @RequestMapping("admin/province")
 public class ProvinceController {
     @Autowired
-    ProvinceService provinceService;
+    private ProvinceService provinceService;
 
     @GetMapping("create")
     public ResponseEntity<?> createWard(@RequestBody Province province) {
         try {
-            return ResponseEntity.ok().body(new IGenericResponse<Province>(provinceService.save(province), 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(provinceService.save(province), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -32,8 +32,7 @@ public class ProvinceController {
         try {
             Optional<Province> provinceOptional = provinceService.findById(province.getId());
             if (provinceOptional.isPresent()) {
-
-                return ResponseEntity.ok().body(new IGenericResponse<Province>(provinceService.save(province), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(provinceService.save(province), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy Ward"));
             }
@@ -44,7 +43,7 @@ public class ProvinceController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEvent(@RequestParam("event_id") Integer id) {
+    public ResponseEntity<?> deleteEvent(@RequestParam("province_id") Integer id) {
         try {
             Optional<Province> provinceOptional = provinceService.findById(id);
             if (provinceOptional.isPresent()) {

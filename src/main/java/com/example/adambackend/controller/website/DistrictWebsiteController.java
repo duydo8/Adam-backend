@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/district")
 public class DistrictWebsiteController {
     @Autowired
-    DistrictRepository districtRepository;
+    private DistrictRepository districtRepository;
 
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
