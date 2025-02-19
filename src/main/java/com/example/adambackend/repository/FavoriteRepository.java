@@ -38,7 +38,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteId> 
             "group by product_id ORDER BY count(product_id) desc limit 10 ", nativeQuery = true)
     List<Integer> findTop10FavoriteProductId();
 
-
     @Query("select fa from  Favorite fa where fa.account.id=?1 and fa.product.id=?2")
     Optional<Favorite> findByAccountIdAndProductId(Integer accountId, Integer productId);
 

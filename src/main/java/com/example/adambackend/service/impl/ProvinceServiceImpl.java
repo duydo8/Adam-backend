@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
     @Autowired
-    ProvinceRepository provinceRepository;
+    private ProvinceRepository provinceRepository;
 
     @Override
     public List<Province> findAll() {

@@ -8,7 +8,7 @@ public enum CommentStatus {
     UPDATED_ACTIVE(3);
     private int value;
 
-    private CommentStatus(int value) {
+    CommentStatus(int value) {
         this.value = value;
     }
 }

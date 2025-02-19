@@ -31,9 +31,7 @@ public interface AccountService {
 
     AccountDTOs findByIds(Integer id);
 
-
     void sendVerificationEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
-
 
     Optional<Account> findByEmail(String email);
 
@@ -46,5 +44,4 @@ public interface AccountService {
     Double countTotalAccountInOrder(Integer month);
 
     void updateAccountDeleted(Integer id);
-
 }

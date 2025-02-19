@@ -271,5 +271,4 @@ public class DetailProductController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
 }

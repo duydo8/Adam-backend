@@ -11,18 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class EventFindAll {
     private Integer id;
-
     private String eventName;
-
     private LocalDateTime startTime;
-
     private LocalDateTime endTime;
     private String description;
-
     private Boolean isDelete;
-
     private Boolean isActive;
-
     private LocalDateTime createDate;
     private Boolean type;
     private String image;

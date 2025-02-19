@@ -14,5 +14,4 @@ public interface ProductHandleWebsite {
     String getProductName();
 
     Double getVoteAverage();
-
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
     @Override
     public List<Tag> findAll() {

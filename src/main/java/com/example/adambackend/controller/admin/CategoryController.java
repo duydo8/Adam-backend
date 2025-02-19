@@ -45,7 +45,7 @@ public class CategoryController {
             category.setIsDeleted(false);
             category.setCreateDate(LocalDateTime.now());
             category.setIsActive(true);
-            return ResponseEntity.ok().body(new IGenericResponse<Category>(categoryService.save(category), 200, ""));
+            return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.save(category), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -68,7 +68,7 @@ public class CategoryController {
                 categoryResponseList.add(categoryResponse);
                 categoryResponse.setIsActive(category.getIsActive());
             }
-            return ResponseEntity.ok().body(new IGenericResponse<List<CategoryResponse>>(categoryResponseList, 200, "findAll Category parent successfully"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(categoryResponseList, 200, "findAll Category parent successfully"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -115,7 +115,6 @@ public class CategoryController {
         try {
             if (name == null) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(), 200, ""));
-
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findAll(name), 200, ""));
         } catch (Exception e) {
@@ -129,14 +128,11 @@ public class CategoryController {
         try {
             List<Integer> list = listCategoryId.getListCategoryId();
             System.out.println(list.size());
-            if (list.size() > 0) {
-                for (Integer x : list
-                ) {
+            if (!list.isEmpty()) {
+                for (Integer x : list) {
                     Optional<Category> categoryOptional = categoryService.findById(x);
                     if (categoryOptional.isPresent()) {
-
                         categoryService.updateCategoriesDeleted(x);
-
                     }
                 }
                 return ResponseEntity.ok().body(new IGenericResponse<>("", 200, ""));
@@ -153,9 +149,7 @@ public class CategoryController {
         try {
             Optional<Category> categoryOptional = categoryService.findById(id);
             if (categoryOptional.isPresent()) {
-
                 return ResponseEntity.ok().body(new IGenericResponse<>(categoryService.findByCategoryParentId(id), 200, ""));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy category"));
         } catch (Exception e) {
@@ -163,6 +157,4 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
         }
     }
-
-
 }

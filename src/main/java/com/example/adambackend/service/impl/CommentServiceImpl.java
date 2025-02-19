@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @Override
     public List<Comment> findAll() {

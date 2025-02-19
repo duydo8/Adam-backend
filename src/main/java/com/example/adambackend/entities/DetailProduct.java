@@ -5,7 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +24,6 @@ import java.util.List;
 @Table(name = "detail_products")
 @Entity
 public class DetailProduct {
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "detailProduct")
-    List<CartItems> cartItems = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,19 +36,21 @@ public class DetailProduct {
     private Boolean isDelete;
     @Column(name = "image_product")
     private String productImage;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+
     @ManyToOne
     @JoinColumn(name = "color_id")
     private Color color;
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-
-
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    @JsonIgnore
+    @OneToMany(mappedBy = "detailProduct")
+    List<CartItems> cartItems = new ArrayList<>();
 }

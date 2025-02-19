@@ -36,7 +36,7 @@ public class CommentController {
     @GetMapping("countCommentByAccountIdAndProductId")
     public ResponseEntity<IGenericResponse> countCommentByAccountIdAndProductId(@RequestParam("account_id") Integer idAccount, @RequestParam("product_id") Integer idProduct) {
         try {
-            return ResponseEntity.ok().body(new IGenericResponse<Integer>(commentService.countCommentByAccountIdAndProductId(idAccount, idProduct), 200, "countCommentByAccountIdAndProductId"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(commentService.countCommentByAccountIdAndProductId(idAccount, idProduct), 200, "countCommentByAccountIdAndProductId"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -65,7 +65,7 @@ public class CommentController {
                 }
                 commentService.save(comment.get());
                 CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
-                return ResponseEntity.ok().body(new IGenericResponse<CommentDto>(commentDto, 200, "update successfully"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(commentDto, 200, "update successfully"));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy comment"));
             }

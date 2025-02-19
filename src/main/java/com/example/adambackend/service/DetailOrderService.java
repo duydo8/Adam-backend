@@ -9,7 +9,6 @@ import java.util.Optional;
 
 
 public interface DetailOrderService {
-
     Optional<DetailOrder> findById(Integer id);
 
     void updateReason(String reason, Integer id);
@@ -26,13 +25,11 @@ public interface DetailOrderService {
 
     DetailOrder findByCode(String code);
 
-
     List<DetailOrder> findAllByOrderId(Integer orderId);
 
     List<Product> findTop10ProductByCountQuantityInOrderDetail();
 
     void deleteAllByOrderId(Integer orderId);
-
 
     List<Integer> findProductIdByOrder();
 }

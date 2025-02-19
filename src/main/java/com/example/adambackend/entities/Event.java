@@ -4,7 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,8 +20,6 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 public class Event {
-    @OneToMany(mappedBy = "event")
-    List<DiscountOrder> discountOrders;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -34,4 +38,6 @@ public class Event {
     private LocalDateTime createDate;
     private Boolean type;
     private String image;
+    @OneToMany(mappedBy = "event")
+    List<DiscountOrder> discountOrders;
 }

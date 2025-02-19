@@ -48,15 +48,15 @@ public class CartItemController {
                 ) {
                     if (detailProductOptional.get().getId() == c.getDetailProduct().getId()) {
                         c.setQuantity(c.getQuantity() + 1);
-                        return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(c), 200, "success"));
+                        return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.save(c), 200, "success"));
                     }
                 }
 
                 CartItems cartItems = new CartItems(null, cartItemWebsiteCreate.getQuantity()
-                        , cartItemWebsiteCreate.getQuantity() * detailProductOptional.get().getPriceExport(), accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
-                        detailProductOptional.get(),
-                        true, LocalDateTime.now(), null);
-                return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+                        , cartItemWebsiteCreate.getQuantity() * detailProductOptional.get().getPriceExport(),
+                        true, LocalDateTime.now(), null, accountService.findById(cartItemWebsiteCreate.getAccountId()).get(),
+                        detailProductOptional.get());
+                return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class CartItemController {
                 CartItems cartItems = cartItemsOptional.get();
                 cartItems.setQuantity(cartItemWebsiteUpdate.getQuantity());
                 cartItems.setTotalPrice(cartItemWebsiteUpdate.getTotalPrice());
-                return ResponseEntity.ok().body(new IGenericResponse<CartItems>(cartItemService.save(cartItems), 200, "success"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.save(cartItems), 200, "success"));
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class CartItemController {
     @GetMapping("findAll")
     public ResponseEntity<?> findAll() {
         try {
-            return ResponseEntity.ok(new IGenericResponse<List<CartItems>>(cartItemService.findAll(), 200, ""));
+            return ResponseEntity.ok(new IGenericResponse<>(cartItemService.findAll(), 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Oops! Lại lỗi api rồi..."));
@@ -113,7 +113,6 @@ public class CartItemController {
             Optional<CartItems> cartItems = cartItemService.findById(id);
             if (cartItems.isPresent()) {
                 return ResponseEntity.ok(new IGenericResponse<>(cartItems.get(), 200, ""));
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {
@@ -128,8 +127,6 @@ public class CartItemController {
             Optional<Account> account = accountService.findById(accountId);
             if (account.isPresent()) {
                 return ResponseEntity.ok().body(new IGenericResponse<>(cartItemService.findByAccountId(accountId), 200, ""));
-
-
             }
             return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
         } catch (Exception e) {

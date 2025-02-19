@@ -10,6 +10,4 @@ import lombok.NoArgsConstructor;
 public class ProductUpdateIsActive {
     private Integer is_active;
     private Integer id;
-
-
 }

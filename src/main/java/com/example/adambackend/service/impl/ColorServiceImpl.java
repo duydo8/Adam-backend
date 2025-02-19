@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class ColorServiceImpl implements ColorService {
     @Autowired
-    ColorRepository colorRepository;
+    private ColorRepository colorRepository;
 
     @Override
     public List<Color> findAll() {

@@ -123,7 +123,6 @@ public class EventController {
             eventFindAlls.add(eventFindAll);
         }
         return ResponseEntity.ok().body(new IGenericResponse<>(eventFindAlls, 200, "thanh cong"));
-
     }
 
     @DeleteMapping("deleteByListId")

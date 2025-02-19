@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DetailProductService {
-
     Optional<DetailProduct> findById(Integer id);
 
     void deleteById(Integer id);

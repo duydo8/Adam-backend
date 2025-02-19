@@ -16,6 +16,4 @@ public interface CustomProductFilterRequest {
     String getDescription();
 
     LocalDateTime getCreateDate();
-
-
 }

@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductSevice {
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Override
     public List<Product> findAll() {
@@ -34,8 +34,8 @@ public class ProductServiceImpl implements ProductSevice {
 
     @Override
     public Boolean checkFavorite(Integer productId, Integer accountId) {
-        List<Integer> x = productRepository.checkFavorite(productId, accountId);
-        if (x == null || x.size() == 0) {
+        List<Integer> productIds = productRepository.checkFavorite(productId, accountId);
+        if (productIds == null || productIds.size() == 0) {
             return false;
         }
         return true;

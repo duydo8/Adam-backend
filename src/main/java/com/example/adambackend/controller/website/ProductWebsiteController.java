@@ -224,24 +224,23 @@ public class ProductWebsiteController {
                         if (!listMaterialId.isEmpty()) {
                             if (!listTagId.isEmpty()) {
                                 for (Integer integer : listCategoryId) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int l = 0; l < listMaterialId.size(); l++) {
-                                            for (int m = 0; m < listTagId.size(); m++) {
-                                                customProductFilterRequests = productSevice.findPageableByOption(integer, listSizeId.get(k),
-                                                        colorId, listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listMaterialId) {
+                                            for (Integer element : listTagId) {
+                                                customProductFilterRequests = productSevice.findPageableByOption(integer, value,
+                                                        null, item, element, bottomPrice, topPrice, pageable);
                                             }
                                         }
 
                                     }
                                 }
                             } else {
-                                Integer tagId = null;
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int l = 0; l < listMaterialId.size(); l++) {
+                                for (Integer integer : listCategoryId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listMaterialId) {
 
-                                            customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), listSizeId.get(k),
-                                                    colorId, listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                            customProductFilterRequests = productSevice.findPageableByOption(integer, value,
+                                                    null, item, null, bottomPrice, topPrice, pageable);
 
                                         }
 
@@ -250,24 +249,24 @@ public class ProductWebsiteController {
                             }
                         } else {
                             Integer materialId = null;
-                            if (listTagId.size() > 0) {
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int j = 0; j < listColorId.size(); j++) {
-                                            for (int m = 0; m < listTagId.size(); m++) {
-                                                customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), listSizeId.get(k), listColorId.get(j), materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listCategoryId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listColorId) {
+                                            for (Integer element : listTagId) {
+                                                customProductFilterRequests = productSevice.findPageableByOption(integer, value, item, materialId, element, bottomPrice, topPrice, pageable);
                                             }
                                         }
                                     }
                                 }
                             } else {
                                 Integer tagId = null;
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int j = 0; j < listColorId.size(); j++) {
-                                            for (int l = 0; l < listMaterialId.size(); l++) {
-                                                customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), listSizeId.get(k),
-                                                        listColorId.get(j), listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                for (Integer integer : listCategoryId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listColorId) {
+                                            for (Integer element : listMaterialId) {
+                                                customProductFilterRequests = productSevice.findPageableByOption(integer, value,
+                                                        item, element, tagId, bottomPrice, topPrice, pageable);
                                             }
                                         }
                                     }
@@ -276,14 +275,13 @@ public class ProductWebsiteController {
                         }
                     } else {
                         Integer sizeId = null;
-                        if (listMaterialId.size() > 0) {
-                            if (listTagId.size() > 0) {
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-
-                                    for (int l = 0; l < listMaterialId.size(); l++) {
-                                        for (int m = 0; m < listTagId.size(); m++) {
-                                            customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), sizeId,
-                                                    colorId, listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                        if (!listMaterialId.isEmpty()) {
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listCategoryId) {
+                                    for (Integer value : listMaterialId) {
+                                        for (Integer item : listTagId) {
+                                            customProductFilterRequests = productSevice.findPageableByOption(integer, sizeId,
+                                                    colorId, value, item, bottomPrice, topPrice, pageable);
                                         }
 
 
@@ -292,23 +290,19 @@ public class ProductWebsiteController {
                             }
                         } else {
                             Integer materialId = null;
-                            if (listTagId.size() > 0) {
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-
-
-                                    for (int m = 0; m < listTagId.size(); m++) {
-                                        customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), sizeId,
-                                                colorId, materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listCategoryId) {
+                                    for (Integer value : listTagId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(integer, sizeId,
+                                                colorId, materialId, value, bottomPrice, topPrice, pageable);
                                     }
 
 
                                 }
                             } else {
-                                Integer tagId = null;
-                                for (int i = 0; i < listCategoryId.size(); i++) {
-
-                                    customProductFilterRequests = productSevice.findPageableByOption(listCategoryId.get(i), sizeId,
-                                            colorId, materialId, tagId, bottomPrice, topPrice, pageable);
+                                for (Integer integer : listCategoryId) {
+                                    customProductFilterRequests = productSevice.findPageableByOption(integer, sizeId,
+                                            colorId, materialId, null, bottomPrice, topPrice, pageable);
                                 }
 
                             }
@@ -317,29 +311,27 @@ public class ProductWebsiteController {
                 }
             } else {
                 Integer cateId = null;
-                if (listColorId.size() > 0) {
-                    if (listSizeId.size() > 0) {
-                        if (listMaterialId.size() > 0) {
-                            if (listTagId.size() > 0) {
-                                for (int j = 0; j < listColorId.size(); j++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int l = 0; l < listMaterialId.size(); l++) {
-                                            for (int m = 0; m < listTagId.size(); m++) {
-                                                customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                        listColorId.get(j), listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                if (!listColorId.isEmpty()) {
+                    if (!listSizeId.isEmpty()) {
+                        if (!listMaterialId.isEmpty()) {
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listMaterialId) {
+                                            for (Integer element : listTagId) {
+                                                customProductFilterRequests = productSevice.findPageableByOption(cateId, value,
+                                                        integer, item, element, bottomPrice, topPrice, pageable);
                                             }
                                         }
 
                                     }
                                 }
                             } else {
-                                Integer tagId = null;
-                                for (int j = 0; j < listColorId.size(); j++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-                                        for (int l = 0; l < listMaterialId.size(); l++) {
-
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                    listColorId.get(j), listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listMaterialId) {
+                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, value,
+                                                    integer, item, null, bottomPrice, topPrice, pageable);
 
                                         }
 
@@ -347,43 +339,34 @@ public class ProductWebsiteController {
                                 }
                             }
                         } else {
-                            Integer materialId = null;
-                            if (listTagId.size() > 0) {
-                                for (int j = 0; j < listColorId.size(); j++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-
-                                        for (int m = 0; m < listTagId.size(); m++) {
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                    listColorId.get(j), materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listSizeId) {
+                                        for (Integer item : listTagId) {
+                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, value,
+                                                    integer, null, item, bottomPrice, topPrice, pageable);
                                         }
 
 
                                     }
                                 }
                             } else {
-                                Integer tagId = null;
-                                for (int j = 0; j < listColorId.size(); j++) {
-                                    for (int k = 0; k < listSizeId.size(); k++) {
-
-
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                listColorId.get(j), materialId, tagId, bottomPrice, topPrice, pageable);
-
-
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listSizeId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(null, value,
+                                                integer, null, null, bottomPrice, topPrice, pageable);
                                     }
                                 }
                             }
                         }
                     } else {
-                        Integer sizeId = null;
-                        if (listMaterialId.size() > 0) {
-                            if (listTagId.size() > 0) {
-                                for (int j = 0; j < listColorId.size(); j++) {
-
-                                    for (int l = 0; l < listMaterialId.size(); l++) {
-                                        for (int m = 0; m < listTagId.size(); m++) {
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                                    listColorId.get(j), listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                        if (!listMaterialId.isEmpty()) {
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listMaterialId) {
+                                        for (Integer item : listTagId) {
+                                            customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                                    integer, value, item, bottomPrice, topPrice, pageable);
                                         }
                                     }
 
@@ -391,25 +374,19 @@ public class ProductWebsiteController {
                             }
 
                         } else {
-                            Integer materialId = null;
-                            if (listTagId.size() > 0) {
-                                for (int j = 0; j < listColorId.size(); j++) {
-
-
-                                    for (int m = 0; m < listTagId.size(); m++) {
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                                listColorId.get(j), materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listColorId) {
+                                    for (Integer value : listTagId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                                integer, null, value, bottomPrice, topPrice, pageable);
                                     }
                                 }
-
                             } else {
                                 Integer tagId = null;
-                                for (int j = 0; j < listColorId.size(); j++) {
-
-
+                                for (Integer integer : listColorId) {
                                     for (int m = 0; m < listTagId.size(); m++) {
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                                listColorId.get(j), materialId, tagId, bottomPrice, topPrice, pageable);
+                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, null,
+                                                integer, null, tagId, bottomPrice, topPrice, pageable);
                                     }
                                 }
                             }
@@ -418,86 +395,72 @@ public class ProductWebsiteController {
                     }
                 } else {
                     Integer colorId = null;
-                    if (listMaterialId.size() > 0) {
-                        if (listSizeId.size() > 0) {
-                            if (listTagId.size() > 0) {
-                                for (int k = 0; k < listSizeId.size(); k++) {
-                                    for (int l = 0; l < listMaterialId.size(); l++) {
-                                        for (int m = 0; m < listTagId.size(); m++) {
-                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                    colorId, listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                    if (!listMaterialId.isEmpty()) {
+                        if (!listSizeId.isEmpty()) {
+                            if (!listTagId.isEmpty()) {
+                                for (Integer integer : listSizeId) {
+                                    for (Integer value : listMaterialId) {
+                                        for (Integer item : listTagId) {
+                                            customProductFilterRequests = productSevice.findPageableByOption(cateId, integer,
+                                                    colorId, value, item, bottomPrice, topPrice, pageable);
                                         }
                                     }
                                 }
                             } else {
-                                Integer tagId = null;
-                                for (int k = 0; k < listSizeId.size(); k++) {
-                                    for (int l = 0; l < listMaterialId.size(); l++) {
-
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                colorId, listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
+                                for (Integer integer : listSizeId) {
+                                    for (Integer value : listMaterialId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(null, integer,
+                                                null, value, null, bottomPrice, topPrice, pageable);
 
                                     }
                                 }
                             }
                         } else {
-                            Integer sizeId = null;
                             if (!listTagId.isEmpty()) {
 
-                                for (int l = 0; l < listMaterialId.size(); l++) {
-                                    for (int m = 0; m < listTagId.size(); m++) {
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                                colorId, listMaterialId.get(l), listTagId.get(m), bottomPrice, topPrice, pageable);
+                                for (Integer integer : listMaterialId) {
+                                    for (Integer value : listTagId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                                null, integer, value, bottomPrice, topPrice, pageable);
                                     }
                                 }
                             } else {
                                 Integer tagId = null;
-                                for (int l = 0; l < listMaterialId.size(); l++) {
-
-                                    customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                            colorId, listMaterialId.get(l), tagId, bottomPrice, topPrice, pageable);
-
+                                for (Integer integer : listMaterialId) {
+                                    customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                            null, integer, tagId, bottomPrice, topPrice, pageable);
                                 }
                             }
-
                         }
                     } else {
-                        Integer materialId = null;
                         if (!listSizeId.isEmpty()) {
                             if (!listTagId.isEmpty()) {
-                                for (int k = 0; k < listSizeId.size(); k++) {
-                                    for (int m = 0; m < listTagId.size(); m++) {
-                                        customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                                colorId, materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                                for (Integer integer : listSizeId) {
+                                    for (Integer value : listTagId) {
+                                        customProductFilterRequests = productSevice.findPageableByOption(null, integer,
+                                                null, null, value, bottomPrice, topPrice, pageable);
                                     }
                                 }
-
                             } else {
-                                Integer tagId = null;
-                                for (int k = 0; k < listSizeId.size(); k++) {
-
-                                    customProductFilterRequests = productSevice.findPageableByOption(cateId, listSizeId.get(k),
-                                            colorId, materialId, tagId, bottomPrice, topPrice, pageable);
-
+                                for (Integer integer : listSizeId) {
+                                    customProductFilterRequests = productSevice.findPageableByOption(null, integer,
+                                            null, null, null, bottomPrice, topPrice, pageable);
                                 }
                             }
                         } else {
-                            Integer sizeId = null;
-                            if (listTagId.size() > 0) {
+                            if (!listTagId.isEmpty()) {
                                 for (int m = 0; m < listTagId.size(); m++) {
-                                    customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                            colorId, materialId, listTagId.get(m), bottomPrice, topPrice, pageable);
+                                    customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                            null, null, listTagId.get(m), bottomPrice, topPrice, pageable);
                                 }
                             } else {
-                                Integer tagId = null;
-                                customProductFilterRequests = productSevice.findPageableByOption(cateId, sizeId,
-                                        colorId, materialId, tagId, bottomPrice, topPrice, pageable);
+                                customProductFilterRequests = productSevice.findPageableByOption(null, null,
+                                        null, null, null, bottomPrice, topPrice, pageable);
                             }
                         }
                     }
                 }
             }
-//
             return ResponseEntity.ok().body(new IGenericResponse<>(customProductFilterRequests, 200, ""));
         } catch (Exception e) {
             e.printStackTrace();
@@ -510,7 +473,7 @@ public class ProductWebsiteController {
         try {
             Optional<Tag> tagOptional = tagService.findByTagName(tagName);
             if (tagOptional.isPresent()) {
-                return ResponseEntity.ok().body(new IGenericResponse<List<Product>>(productSevice.findAllByTagName(tagName), 200, ""));
+                return ResponseEntity.ok().body(new IGenericResponse<>(productSevice.findAllByTagName(tagName), 200, ""));
             } else {
                 return ResponseEntity.badRequest().body(new HandleExceptionDemo(400, "Không tìm thấy"));
             }

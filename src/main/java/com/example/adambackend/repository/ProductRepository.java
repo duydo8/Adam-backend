@@ -37,7 +37,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             " order by p.create_date desc limit 10", nativeQuery = true)
     List<ProductTop10Create> findTop10productByCreateDate();
 
-
     @Query(value = "select  pro.id as id, pro.productName as productName,pro.image as productImage, " +
             " pro.createDate as createDate,pro.description as Description ,min(dp.priceExport) as " +
             " minPrice, max (dp.priceExport)as maxPrice " +

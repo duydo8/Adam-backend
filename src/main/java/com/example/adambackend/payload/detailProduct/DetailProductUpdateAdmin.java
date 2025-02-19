@@ -14,7 +14,6 @@ public class DetailProductUpdateAdmin {
     private Double priceExport;
     private Boolean isDelete;
     private String productImage;
-
     private Boolean isActive;
     private Integer colorId;
     private Integer sizeId;

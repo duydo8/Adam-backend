@@ -12,9 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CategoryResponse {
     private Integer id;
-
     private String categoryName;
-
     private Boolean isDeleted;
     private Boolean isActive;
     private Integer categoryParentId;

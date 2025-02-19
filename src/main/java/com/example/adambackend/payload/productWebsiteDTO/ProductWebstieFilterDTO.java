@@ -19,6 +19,4 @@ public class ProductWebstieFilterDTO {
     private Double topPrice;
     private Integer page;
     private Integer size;
-
-
 }

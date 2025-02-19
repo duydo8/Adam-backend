@@ -17,6 +17,4 @@ public class FavoriteId implements Serializable {
     private Integer accountId;
     @Column(name = "product_id")
     private Integer productId;
-
-
 }

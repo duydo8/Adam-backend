@@ -14,5 +14,4 @@ public class AccountDto {
     private String email;
     private String password;
     private String role;
-
 }

@@ -11,6 +11,4 @@ public class DetailOrderWebsiteUpdate {
     private Integer id;
     private Integer quantity;
     private Double price;
-
-
 }

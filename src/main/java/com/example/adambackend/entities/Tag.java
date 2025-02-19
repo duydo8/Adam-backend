@@ -5,7 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +31,9 @@ public class Tag {
     private Boolean isDelete;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
     @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<TagProduct> tagProducts = new ArrayList<>();
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-
-
 }

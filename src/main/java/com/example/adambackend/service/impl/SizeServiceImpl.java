@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class SizeServiceImpl implements SizeService {
     @Autowired
-    SizeRepository sizeRepository;
+    private SizeRepository sizeRepository;
 
     @Override
     public List<Size> findAll() {

@@ -30,5 +30,4 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Transactional
     @Query(value = "update events set is_deleted=1 , is_active=0 where id=?1", nativeQuery = true)
     void updateEventDeleted(Integer id);
-
 }

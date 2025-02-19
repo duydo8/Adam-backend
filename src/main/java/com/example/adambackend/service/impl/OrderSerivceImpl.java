@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class OrderSerivceImpl implements OrderService {
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     @Override
     public List<Order> findAll() {

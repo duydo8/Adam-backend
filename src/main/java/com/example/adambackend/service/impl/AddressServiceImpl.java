@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
-    AddressRepository addressRepository;
+    private AddressRepository addressRepository;
 
     @Override
     public List<AddressDTO> findAll() {

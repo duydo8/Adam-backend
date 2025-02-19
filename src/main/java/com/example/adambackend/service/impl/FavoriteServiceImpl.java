@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
-    FavoriteRepository favoriteRepository;
+    private FavoriteRepository favoriteRepository;
 
     @Override
     public void deleteByIdAccountAndProduct(Integer accountId, Integer productId) {

@@ -44,7 +44,6 @@ public class ProductController {
     @Autowired
     private DetailProductService detailProductService;
 
-
     @GetMapping("findAllByPageble")
     public ResponseEntity<?> findAllByPageble(@RequestParam("page") int page,
                                               @RequestParam("size") int size,
@@ -241,8 +240,9 @@ public class ProductController {
                                 && tagOptional.get().getIsActive() && !tagOptional.get().getIsDelete()) {
                             MaterialProduct materialProduct = new MaterialProduct
                                     (new MaterialProductPK(materialOptional.get().getId(), product.getId()),
-                                            false, materialOptional.get(), true, LocalDateTime.now(), product);
-                            TagProduct tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()), false, tagOptional.get(), true, product, LocalDateTime.now());
+                                            false, true, LocalDateTime.now(), materialOptional.get(), product);
+                            TagProduct tagProduct = new TagProduct(new TagProductPK(tagOptional.get().getId(), product.getId()),
+                                    false, true, LocalDateTime.now(), product, tagOptional.get());
                             materialProductRepository.save(materialProduct);
                             tagProductRepository.save(tagProduct);
                             materialProductList.add(materialProduct);

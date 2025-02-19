@@ -36,6 +36,7 @@ public class Address {
     private String fullName;
     @Column(name = "is_default")
     private Boolean isDefault;
+
     @JsonIgnore
     @OneToMany(mappedBy = "address")
     private List<Order> orders = new ArrayList<>();
@@ -43,9 +44,11 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "province_id")
     private Province province;
+
     @ManyToOne
     @JoinColumn(name = "district_id")
     private District district;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

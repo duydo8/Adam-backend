@@ -16,6 +16,4 @@ public class ProductRequest {
     private Integer categoryId;
     private List<Integer> tagProductIdList;
     private List<Integer> materialProductIdList;
-
-
 }

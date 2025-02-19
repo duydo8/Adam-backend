@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 @Service
 public class AccountDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @Override
     @Transactional

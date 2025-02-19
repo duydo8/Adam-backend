@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-
     Optional<Comment> findById(Integer id);
 
     void deleteById(Integer id);

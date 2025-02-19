@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class DetailProductServiceImpl implements DetailProductService {
     @Autowired
-    DetailProductRepository detailProductRepository;
+    private DetailProductRepository detailProductRepository;
 
     @Override
     public List<DetailProduct> findAll() {
@@ -44,6 +44,4 @@ public class DetailProductServiceImpl implements DetailProductService {
     public void deleteByProductId(Integer productId) {
         detailProductRepository.deleteByProductId(productId);
     }
-
-
 }

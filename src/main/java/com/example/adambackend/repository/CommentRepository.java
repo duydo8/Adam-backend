@@ -19,7 +19,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query("select c from Comment  c join Account a on c.account.id= a.id join Product  p on c.product.id= p.id  where a.id=?1 and p.id=?2")
     List<Comment> findCommentByIdAccountAndIdProduct(Integer idAccount, Integer idProduct);
 
-
     @Transactional
     @Modifying
     @Query(value = "insert into Comment(content,time_create,product_id,account_id,status,vote) values (?1,?2,?3,?4,?5,?6)", nativeQuery = true)

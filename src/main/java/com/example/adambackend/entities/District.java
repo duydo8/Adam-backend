@@ -29,6 +29,4 @@ public class District {
     @JsonIgnore
     @OneToMany(mappedBy = "district")
     private List<Address> addresses = new ArrayList<>();
-
-
 }

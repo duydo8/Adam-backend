@@ -12,5 +12,4 @@ public class DetailOrderWebsiteCreate {
     private Double price;
     private Integer detailProductId;
     private Integer orderId;
-
 }

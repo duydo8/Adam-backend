@@ -19,5 +19,4 @@ public class DetailOrderPayLoad {
     Boolean isActive;
     LocalDateTime createDate;
     String detailOrderCode;
-
 }

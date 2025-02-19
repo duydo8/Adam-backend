@@ -15,11 +15,8 @@ public class DetailProductRequest {
     Integer quantity;
     Double priceImport;
     Double priceExport;
-
-
     @ElementCollection
     List<Integer> colorIdList;
     @ElementCollection
     List<Integer> sizeIdList;
-
 }

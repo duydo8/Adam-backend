@@ -17,8 +17,6 @@ public class CommentAdminUpdate {
     private LocalDateTime timeCreated;
     private CommentStatus commentStatus;
     private Integer accountId;
-
     private Integer productId;
-
     private Boolean isActive;
 }

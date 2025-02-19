@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class WardServiceImpl implements WardService {
     @Autowired
-    WardRepository wardRepository;
+    private WardRepository wardRepository;
 
     @Override
     public List<Ward> findAll() {
@@ -32,5 +32,10 @@ public class WardServiceImpl implements WardService {
     @Override
     public Optional<Ward> findById(Integer id) {
         return wardRepository.findById(id);
+    }
+
+    @Override
+    public List<Ward> findByDistrictId(Integer districtId) {
+        return wardRepository.findByDistrictId(districtId);
     }
 }

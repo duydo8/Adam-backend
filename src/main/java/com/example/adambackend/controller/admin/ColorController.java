@@ -7,11 +7,17 @@ import com.example.adambackend.payload.color.ColorUpdate;
 import com.example.adambackend.payload.color.ListColorIdDTO;
 import com.example.adambackend.payload.response.IGenericResponse;
 import com.example.adambackend.repository.ColorRepository;
-import com.example.adambackend.repository.DetailProductRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,7 +52,7 @@ public class ColorController {
             color.setIsDeleted(false);
             color.setCreateDate(LocalDateTime.now());
             color.setIsActive(true);
-            return ResponseEntity.ok().body(new IGenericResponse<Color>(colorService.save(color), 200, "success"));
+            return ResponseEntity.ok().body(new IGenericResponse<>(colorService.save(color), 200, "success"));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new HandleExceptionDemo(500, "can't duplicate name"));
         }

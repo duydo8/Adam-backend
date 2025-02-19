@@ -17,6 +17,5 @@ public class TagProductPK implements Serializable {
     private Integer tagId;
     @Column(name = "product_id")
     private Integer productId;
-
 }
 

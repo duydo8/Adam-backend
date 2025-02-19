@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class MaterialServiceImpl implements MaterialService {
     @Autowired
-    MaterialRepository materialRepository;
+    private MaterialRepository materialRepository;
 
     @Override
     public List<Material> findAll() {
@@ -33,6 +33,4 @@ public class MaterialServiceImpl implements MaterialService {
     public Optional<Material> findById(Integer id) {
         return materialRepository.findById(id);
     }
-
-
 }

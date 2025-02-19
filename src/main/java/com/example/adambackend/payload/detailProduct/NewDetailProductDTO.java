@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NewDetailProductDTO {
     private Integer id;
-
     private Double priceImport;
     private Double priceExport;
     private String image;
     private Integer quantity;
     private Boolean isActive;
-
 }

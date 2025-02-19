@@ -15,7 +15,6 @@ public interface DetailOrderDTO {
 
     String getDetailOrderCode();
 
-
     Boolean getIsActive();
 
     LocalDateTime getCreateDate();

@@ -14,5 +14,4 @@ public class DiscountOrderUpdate {
     private Double salePrice;
     private Double orderMinRange;
     private Double orderMaxRange;
-
 }

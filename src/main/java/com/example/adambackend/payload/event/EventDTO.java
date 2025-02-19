@@ -16,6 +16,4 @@ public class EventDTO {
     private String description;
     private Boolean type;
     private String image;
-
-
 }

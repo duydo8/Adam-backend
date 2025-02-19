@@ -14,8 +14,7 @@ import java.util.Optional;
 @Service
 public class CartItemServiceImpl implements CartItemService {
     @Autowired
-    CartItemRepository cartItemRepository;
-
+    private CartItemRepository cartItemRepository;
 
     @Override
     public List<CartItems> findAll() {

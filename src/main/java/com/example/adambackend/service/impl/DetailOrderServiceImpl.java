@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class DetailOrderServiceImpl implements DetailOrderService {
     @Autowired
-    DetailOrderRepository detailOrderRepository;
+    private DetailOrderRepository detailOrderRepository;
 
     @Override
     public List<DetailOrder> findAll() {

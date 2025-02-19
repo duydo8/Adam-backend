@@ -46,11 +46,11 @@ public class AccountController {
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody AccountAdminCreate accountAdminCreate) {
         try {
             if (accountService.existsByUsername(accountAdminCreate.getUsername())) {
-                return ResponseEntity.ok().body(new IGenericResponse(200, "Username has been used"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(200, "Username has been used"));
             }
 
             if (accountService.existsByEmail(accountAdminCreate.getEmail())) {
-                return ResponseEntity.ok().body(new IGenericResponse(200, "Email has been used"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(200, "Email has been used"));
             }
 
             Account account = new Account();
@@ -85,11 +85,11 @@ public class AccountController {
 
             if (accountOptional.isPresent() && accountOptional.get().getTimeValid() == null) {
 
-                return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "số điện thoại này đã được đăng ký"));
+                return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "số điện thoại này đã được đăng ký"));
             }
             TwilioSendSms twilioSendSms = new TwilioSendSms();
             int code = new Random().nextInt(999999);
-            phoneNumber = phoneNumber.substring(1, phoneNumber.length());
+            phoneNumber = phoneNumber.substring(1);
             twilioSendSms.sendCode(phoneNumber, code);
             Account account = new Account();
             account.setPhoneNumber(phoneNumber);
@@ -127,11 +127,8 @@ public class AccountController {
             if (accountOptional.isPresent()) {
                 accountOptional.get().setFullName(accountAdminDTO.getFullName());
                 accountOptional.get().setEmail(accountAdminDTO.getEmail());
-
                 accountOptional.get().setIsActive(accountAdminDTO.getIsActive());
-
                 accountOptional.get().setPassword(passwordEncoder.encode(accountAdminDTO.getPassword()));
-
                 accountService.save(accountOptional.get());
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountAdminDTO, 200, "success"));
             }
@@ -162,7 +159,6 @@ public class AccountController {
         try {
             Optional<Account> accountOptional = accountService.findById(id);
             if (accountOptional.isPresent()) {
-
                 return ResponseEntity.ok().body(new IGenericResponse<>(accountOptional.get(), 200, ""));
             } else {
                 return ResponseEntity.ok().body(new HandleExceptionDemo(200, ""));
@@ -174,7 +170,6 @@ public class AccountController {
 
     }
 
-    //    @DeleteMapping("deleteListId")
     @GetMapping("accountSatistic")
     public ResponseEntity<?> countTotalAccountInOrder() {
         try {
@@ -280,15 +275,12 @@ public class AccountController {
         if (account.isPresent()) {
             if (!account.get().getPassword().equals(password)) {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "sai mật khẩu"));
-
             }
             if (!confirm.equals(passNew)) {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Nhập lại mật khẩu không đúng"));
-
             }
             if (passNew.equals(password)) {
                 return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "Mật khẩu mới giống mật khẩu cũ"));
-
             }
             String x = passwordEncoder.encode(passNew);
             account.get().setPassword(x);
