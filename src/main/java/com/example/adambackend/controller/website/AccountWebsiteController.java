@@ -44,7 +44,7 @@ public class AccountWebsiteController {
                         .body(new IGenericResponse(400, "Email has been used"));
             }
             System.out.println(signUpRequest.getPhoneNumber());
-            Optional<Account> account = accountService.findByPhoneNumber("84" + signUpRequest.getPhoneNumber().substring(1, signUpRequest.getPhoneNumber().length()));
+            Optional<Account> account = accountService.findByPhoneNumber("+84" + signUpRequest.getPhoneNumber().substring(1, signUpRequest.getPhoneNumber().length()));
 
             if (account.isPresent()) {
                 account.get().setUsername(signUpRequest.getUsername());
@@ -93,7 +93,7 @@ public class AccountWebsiteController {
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
 
             if (accountOptional.isPresent() && accountOptional.get().getTimeValid() == null) {
-                return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "số điện thoại này đã được đăng ký"));
+                return ResponseEntity.badRequest().body(new IGenericResponse("", 400, "Số điện thoại này đã được đăng ký"));
             }
             TwilioSendSms twilioSendSms = new TwilioSendSms();
             int code = new Random().nextInt(999999);
@@ -119,6 +119,7 @@ public class AccountWebsiteController {
     @GetMapping("sendCode")
     public ResponseEntity<?> sendCode(@RequestParam("phone_number") String phoneNumber) {
         try {
+            phoneNumber = formatPhoneNumber(phoneNumber);
             Optional<Account> accountOptional = accountService.findByPhoneNumber(phoneNumber);
             if (accountOptional.isPresent()) {
                 TwilioSendSms twilioSendSms = new TwilioSendSms();
@@ -127,7 +128,7 @@ public class AccountWebsiteController {
                 accountOptional.get().setVerificationCode(code);
                 accountOptional.get().setTimeValid(LocalDateTime.now().plusMinutes(30));
                 accountService.save(accountOptional.get());
-                return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, "thanh cong"));
+                return ResponseEntity.ok().body(new IGenericResponse<>(code, 200, "Thành công"));
             }
             return ResponseEntity.ok().body(new IGenericResponse<>(200, "không tìm thấy tài khoản"));
         } catch (Exception e) {
@@ -208,5 +209,12 @@ public class AccountWebsiteController {
             return ResponseEntity.ok().body(new IGenericResponse<>("", 200, "Thành công"));
         }
         return ResponseEntity.badRequest().body(new IGenericResponse<>("", 400, "ko tìm thấy"));
+    }
+
+    public String formatPhoneNumber(String phoneNumber) {
+        if (!phoneNumber.startsWith("0")) {
+            return "+84" + phoneNumber;
+        }
+        return phoneNumber.replace("0","+84");
     }
 }

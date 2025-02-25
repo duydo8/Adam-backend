@@ -70,7 +70,7 @@ public class FavoriteWebsiteController {
                 } else {
                     FavoriteId favoriteId = new FavoriteId(accountId, productId);
                     Favorite fa = favoriteService.save(new Favorite(favoriteId,
-                            LocalDateTime.now(), false, accountOptional.get(), false, productOptional.get()
+                            LocalDateTime.now(), false, true, accountOptional.get(), productOptional.get()
                     ));
                     return ResponseEntity.ok().body(new IGenericResponse<>(fa, 200, "Thêm thành công"));
                 }

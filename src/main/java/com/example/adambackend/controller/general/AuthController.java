@@ -110,7 +110,6 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/createAccount")
     public ResponseEntity<IGenericResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
         try {

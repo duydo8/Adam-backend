@@ -20,9 +20,9 @@ public class FileUploadController {
 
 
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-            "cloud_name", "dyzq75un4",
-            "api_key", "113684863585229",
-            "api_secret", "sboa3R1ujWeluS03XPMHh7sjSsc"));
+            "cloud_name", "demxhfvfs",
+            "api_key", "482747477385664",
+            "api_secret", "iaiotSS140T9Rhg_2tG8zRFDA1g"));
 
     @PostMapping("/uploadFile")
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file) {

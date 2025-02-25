@@ -36,7 +36,7 @@ public class CartItemController {
             Optional<DetailProduct> detailProductOptional = detailProductService.findById(cartItemWebsiteCreate.getDetailProductId());
             if (cartItemWebsiteCreate.getQuantity() >= 10) {
                 return ResponseEntity.badRequest().body(
-                        new HandleExceptionDemo(400, "Không thể mua số lượng >10"));
+                        new HandleExceptionDemo(400, "Không thể mua số lượng > 10"));
             }
             if (detailProductOptional.get().getQuantity() < cartItemWebsiteCreate.getQuantity()) {
                 return ResponseEntity.badRequest().body(
